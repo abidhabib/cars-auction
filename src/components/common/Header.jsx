@@ -73,10 +73,7 @@ const Header = () => {
     setLanguage(language === 'en' ? 'de' : 'en');
   };
 
-  const languages = [
-    { code: 'en', name: 'English' },
-    { code: 'de', name: 'Deutsch' }
-  ];
+  const { supportedLanguages, getLanguageName } = useLanguage();
 
   const buyMenuItems = [
     { name: 'Browse Inventory', icon: <FiShoppingCart />, href: '#' },
@@ -190,27 +187,27 @@ const Header = () => {
                   className="flex items-center px-3 py-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
                 >
                   <FiGlobe className="mr-1" />
-                  {language === 'en' ? 'EN' : 'DE'}
+                  {getLanguageName(language)}
                   <FiChevronDown className={`ml-1 transition-transform ${languageDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
                 {languageDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-32 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                  <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                     <div className="py-1">
-                      {languages.map((lang) => (
+                      {supportedLanguages.map((langCode) => (
                         <button
-                          key={lang.code}
+                          key={langCode}
                           onClick={() => {
-                            setLanguage(lang.code);
+                            setLanguage(langCode);
                             setLanguageDropdownOpen(false);
                           }}
                           className={`block w-full text-left px-4 py-2 text-sm ${
-                            language === lang.code 
+                            language === langCode 
                               ? 'text-blue-600 bg-blue-50' 
                               : 'text-gray-700 hover:bg-gray-50'
                           }`}
                         >
-                          {lang.name}
+                          {getLanguageName(langCode)}
                         </button>
                       ))}
                     </div>
@@ -364,32 +361,22 @@ const Header = () => {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-gray-700">Language</span>
                     <div className="flex space-x-2">
-                      <button
-                        onClick={() => {
-                          setLanguage('en');
-                          setMobileMenuOpen(false);
-                        }}
-                        className={`px-3 py-1 text-xs rounded-full ${
-                          language === 'en' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-200 text-gray-700'
-                        }`}
-                      >
-                        EN
-                      </button>
-                      <button
-                        onClick={() => {
-                          setLanguage('de');
-                          setMobileMenuOpen(false);
-                        }}
-                        className={`px-3 py-1 text-xs rounded-full ${
-                          language === 'de' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-200 text-gray-700'
-                        }`}
-                      >
-                        DE
-                      </button>
+                      {supportedLanguages.map((langCode) => (
+                        <button
+                          key={langCode}
+                          onClick={() => {
+                            setLanguage(langCode);
+                            setMobileMenuOpen(false);
+                          }}
+                          className={`px-3 py-1 text-xs rounded-full ${
+                            language === langCode 
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-gray-200 text-gray-700'
+                          }`}
+                        >
+                          {langCode.toUpperCase()}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>

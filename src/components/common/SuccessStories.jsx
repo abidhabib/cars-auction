@@ -1,5 +1,5 @@
 // src/components/common/SuccessStories.jsx
-import React, { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import dealer1 from '../../assets/success-stories/dealer1.jpg';
 import dealer2 from '../../assets/success-stories/dealer2.jpg';
 import dealer3 from '../../assets/success-stories/dealer3.jpg';
@@ -14,58 +14,15 @@ import dealer8 from '../../assets/success-stories/dealer8.jpg';
  
 
 const SuccessStories = () => {
-
-  // Sample data with Unsplash images
-  const successStories = [
-    {
-      id: 1,
-      name: "Sarah Mitchell",
-      image: dealer1,
-      description: "Increased sales by 150% in 6 months"
-    },
-    {
-      id: 2,
-      name: "James Wilson",
-      image: dealer2,
-      description: "Modernized dealership operations"
-    },
-    {
-      id: 3,
-      name: "Emily Rodriguez",
-      image: dealer3,
-      description: "Expanded to 3 new locations"
-    },
-    {
-      id: 4,
-      name: "Michael Chang",
-      image: dealer4,
-      description: "Doubled customer satisfaction rate"
-    },
-    {
-      id: 5,
-      name: "Lisa Thompson",
-      image: dealer5,
-      description: "Revolutionized online sales process"
-    },
-    {
-      id: 6,
-      name: "David Parker",
-      image: dealer6,
-      description: "Achieved record-breaking growth"
-    },
-    {
-      id: 7,
-      name: "Amanda Foster",
-      image: dealer7,
-      description: "Leading digital transformation"
-    },
-    {
-      id: 8,
-      name: "Robert Chen",
-      image: dealer8,
-      description: "Pioneer in electric vehicle sales"
-    }
-]
+  const { t } = useLanguage();
+  
+  const images = [dealer1, dealer2, dealer3, dealer4, dealer5, dealer6, dealer7, dealer8];
+  const successStories = t('successStories.stories').map((story, index) => ({
+    id: index + 1,
+    image: images[index],
+    name: story.name,
+    description: story.description
+  }));
   const duplicatedStories = [...successStories, ...successStories];
 
 
@@ -106,11 +63,11 @@ const SuccessStories = () => {
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-              Success Stories
+              {t('successStories.title')}
             </span>
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Discover how dealers like you are growing their businesses with CarNetwork
+            {t('successStories.subtitle')}
           </p>
         </div>
 

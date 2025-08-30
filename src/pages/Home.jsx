@@ -18,7 +18,7 @@ const Home = () => {
   // Page content
   const content = {
     daily_cars: {
-      title: "More than 3,000 cars added daily",
+      title: t('dailyCars.title'),
       cars: [
         {
           name: "Toyota RAV 4 2.0 D-4D Active",
@@ -128,7 +128,7 @@ const Home = () => {
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-16">
-            More than 3,000 cars added daily
+            {t('dailyCars.title')}
           </h2>
           
           <div className="relative">
@@ -167,7 +167,7 @@ const Home = () => {
                     </div>
                     <div className="p-5">
                       <h3 className="font-bold text-gray-900 text-lg mb-1 truncate">{car.name}</h3>
-                      <p className="text-sm text-gray-600">Active • Added today</p>
+                      <p className="text-sm text-gray-600">{t('dailyCars.activeStatus')} • {t('dailyCars.addedToday')}</p>
                     </div>
                   </div>
                 ))}
@@ -197,13 +197,13 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">{content.sections[0].title}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('businessGrowth.title')}</h2>
               <p className="text-xl text-blue-100 leading-relaxed">
-                {content.sections[0].text}
+                {t('businessGrowth.description')}
               </p>
               <div className="mt-8 flex space-x-4">
-                <Button variant="secondary">Learn More</Button>
-                <Button variant="outline">Contact Us</Button>
+                <Button variant="secondary">{t('businessGrowth.learnMore')}</Button>
+                <Button variant="outline">{t('businessGrowth.contactUs')}</Button>
               </div>
             </div>
             <div className="relative">
@@ -219,7 +219,7 @@ const Home = () => {
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                     </svg>
-                    <span>Watch our story</span>
+                    <span>{t('businessGrowth.watchStory')}</span>
                   </div>
                 </div>
               </div>
