@@ -324,7 +324,7 @@ const Header = () => {
                       <>
                         <button 
                           onClick={() => {
-                            if (item.name === 'Buy Cars') {
+                            if (item.name === t('header.mainMenu.buyCars')) {
                               setBuyDropdownOpen(!buyDropdownOpen);
                               setSellDropdownOpen(false);
                             } else {
@@ -346,7 +346,7 @@ const Header = () => {
                           }`} />
                         </button>
                         
-                        {item.name === 'Buy Cars' && buyDropdownOpen && (
+                        {item.name === t('header.mainMenu.buyCars') && buyDropdownOpen && (
                           <div className="pl-12 mt-1 space-y-1">
                             {buyMenuItems.map((subItem, subIndex) => (
                               <a
@@ -362,7 +362,7 @@ const Header = () => {
                           </div>
                         )}
                         
-                        {item.name === 'Sell Cars' && sellDropdownOpen && (
+                        {item.name === t('header.mainMenu.sellCars') && sellDropdownOpen && (
                           <div className="pl-12 mt-1 space-y-1">
                             {sellMenuItems.map((subItem, subIndex) => (
                               <a

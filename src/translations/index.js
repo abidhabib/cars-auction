@@ -2,6 +2,32 @@ export const translations = {
   en: {
     languageName: "English",
     // Header
+    header: {
+      mainMenu: {
+        home: "Home",
+        buyCars: "Buy Cars",
+        sellCars: "Sell Cars",
+        aboutUs: "About Us",
+        contact: "Contact",
+        help: "Help"
+      },
+      buyMenu: {
+        browseInventory: "Browse Inventory",
+        directBuy: "Direct Buy",
+        auctions: "Auctions"
+      },
+      sellMenu: {
+        sellYourCar: "Sell Your Car",
+        pricingGuide: "Pricing Guide",
+        evaApp: "EVA App"
+      },
+      userMenu: {
+        dashboard: "Dashboard",
+        profile: "Profile"
+      },
+      language: "Language",
+      welcome: "Welcome"
+    },
     navigation: {
       buyCars: "Buy cars",
       sellCars: "Sell cars",
@@ -124,6 +150,32 @@ export const translations = {
   de: {
     languageName: "Deutsch",
     // Header
+    header: {
+      mainMenu: {
+        home: "Startseite",
+        buyCars: "Autos kaufen",
+        sellCars: "Autos verkaufen",
+        aboutUs: "Über uns",
+        contact: "Kontakt",
+        help: "Hilfe"
+      },
+      buyMenu: {
+        browseInventory: "Bestand durchsuchen",
+        directBuy: "Direktkauf",
+        auctions: "Auktionen"
+      },
+      sellMenu: {
+        sellYourCar: "Ihr Auto verkaufen",
+        pricingGuide: "Preisführer",
+        evaApp: "EVA App"
+      },
+      userMenu: {
+        dashboard: "Dashboard",
+        profile: "Profil"
+      },
+      language: "Sprache",
+      welcome: "Willkommen"
+    },
     navigation: {
       buyCars: "Autos kaufen",
       sellCars: "Autos verkaufen",
@@ -246,6 +298,32 @@ export const translations = {
   nl: {
     languageName: "Nederlands",
     // Header
+    header: {
+      mainMenu: {
+        home: "Home",
+        buyCars: "Auto's kopen",
+        sellCars: "Auto's verkopen",
+        aboutUs: "Over ons",
+        contact: "Contact",
+        help: "Hulp"
+      },
+      buyMenu: {
+        browseInventory: "Voorraad bekijken",
+        directBuy: "Direct kopen",
+        auctions: "Veilingen"
+      },
+      sellMenu: {
+        sellYourCar: "Uw auto verkopen",
+        pricingGuide: "Prijsgids",
+        evaApp: "EVA App"
+      },
+      userMenu: {
+        dashboard: "Dashboard",
+        profile: "Profiel"
+      },
+      language: "Taal",
+      welcome: "Welkom"
+    },
     navigation: {
       buyCars: "Auto's kopen",
       sellCars: "Auto's verkopen",
