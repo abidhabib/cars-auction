@@ -94,7 +94,31 @@ export const translations = {
     common: {
       loading: "Loading...",
       error: "Something went wrong",
-      tryAgain: "Try again"
+      tryAgain: "Try again",
+      startBuying: "Start buying",
+      startSelling: "Start selling",
+      googlePlay: "Google Play",
+      appStore: "App Store"
+    },
+    // Info Sections
+    info: {
+      business: {
+        title: "Grow your business with CarNetwork",
+        description: "CarNetwork.com is Europe's largest wholesale platform for used cars. We support your business growth with digital buying and selling solutions, best-in-class Europe-wide transport solutions and dedicated account managers.",
+        stats: {
+          partners: "Partners",
+          inventory: "Cars in stock",
+          daily: "Cars added daily"
+        }
+      },
+      buying: {
+        title: "Buying cars with CarNetwork",
+        description: "Get access to Europe-wide inventory and choose from over 30,000 cars in stock and 3,000 new cars added daily! Buy cars fast and easy entirely online and without time-consuming physical auctions, minimum purchase quantities, or hidden fees."
+      },
+      selling: {
+        title: "Selling cars with CarNetwork",
+        description: "Sell cars that do not fit in your portfolio easily, and entirely online to 60,000 dealers. Achieve the highest prices and digitize your trade-ins with CarNetwork EVA app."
+      }
     }
   },
   de: {
@@ -192,7 +216,31 @@ export const translations = {
     common: {
       loading: "Wird geladen...",
       error: "Etwas ist schief gelaufen",
-      tryAgain: "Erneut versuchen"
+      tryAgain: "Erneut versuchen",
+      startBuying: "Jetzt kaufen",
+      startSelling: "Jetzt verkaufen",
+      googlePlay: "Google Play",
+      appStore: "App Store"
+    },
+    // Info Sections
+    info: {
+      business: {
+        title: "Entwickeln Sie Ihr Geschäft mit CarNetwork",
+        description: "CarNetwork.com ist Europas größte Großhandelsplattform für Gebrauchtwagen. Wir unterstützen Ihr Geschäftswachstum mit digitalen Kauf- und Verkaufslösungen, erstklassigen europaweiten Transportlösungen und persönlichen Account Managern.",
+        stats: {
+          partners: "Partner",
+          inventory: "Autos auf Lager",
+          daily: "Täglich neue Autos"
+        }
+      },
+      buying: {
+        title: "Autos kaufen mit CarNetwork",
+        description: "Erhalten Sie Zugang zu europaweitem Bestand und wählen Sie aus über 30.000 Autos auf Lager und 3.000 täglich neuen Autos! Kaufen Sie Autos schnell und einfach komplett online und ohne zeitaufwändige physische Auktionen, Mindestabnahmemengen oder versteckte Gebühren."
+      },
+      selling: {
+        title: "Autos verkaufen mit CarNetwork",
+        description: "Verkaufen Sie Autos, die nicht in Ihr Portfolio passen, einfach und komplett online an 60.000 Händler. Erzielen Sie die höchsten Preise und digitalisieren Sie Ihre Inzahlungnahmen mit der CarNetwork EVA App."
+      }
     }
   },
   nl: {
@@ -290,7 +338,31 @@ export const translations = {
     common: {
       loading: "Laden...",
       error: "Er is iets misgegaan",
-      tryAgain: "Opnieuw proberen"
+      tryAgain: "Opnieuw proberen",
+      startBuying: "Begin met kopen",
+      startSelling: "Begin met verkopen",
+      googlePlay: "Google Play",
+      appStore: "App Store"
+    },
+    // Info Sections
+    info: {
+      business: {
+        title: "Groei uw bedrijf met CarNetwork",
+        description: "CarNetwork.com is Europa's grootste groothandelsplatform voor gebruikte auto's. We ondersteunen uw bedrijfsgroei met digitale koop- en verkoopoplossingen, eersteklas Europese transportoplossingen en toegewijde accountmanagers.",
+        stats: {
+          partners: "Partners",
+          inventory: "Auto's op voorraad",
+          daily: "Dagelijks toegevoegd"
+        }
+      },
+      buying: {
+        title: "Auto's kopen met CarNetwork",
+        description: "Krijg toegang tot een Europese voorraad en kies uit meer dan 30.000 auto's op voorraad en 3.000 nieuwe auto's dagelijks! Koop auto's snel en gemakkelijk volledig online en zonder tijdrovende fysieke veilingen, minimale afnamehoeveelheden of verborgen kosten."
+      },
+      selling: {
+        title: "Auto's verkopen met CarNetwork",
+        description: "Verkoop auto's die niet in uw portfolio passen eenvoudig en volledig online aan 60.000 dealers. Behaal de hoogste prijzen en digitaliseer uw inruil met de CarNetwork EVA app."
+      }
     }
   }
 };

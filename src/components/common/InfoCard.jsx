@@ -1,43 +1,46 @@
 // src/components/InfoSections.jsx
 
-import {   FcRightUp } from "react-icons/fc";
+import { FcRightUp } from "react-icons/fc";
 import { IoCarSportOutline } from "react-icons/io5";
 import { MdSell } from "react-icons/md";
+import { useLanguage } from "../../context/LanguageContext";
 
 const InfoSections = () => {
+  const { t } = useLanguage();
+  
   const infoData = [
     {
-      title: "Grow your business with CarNetwork",
-      description: "CarNetwork.com is Europe's largest wholesale platform for used cars. We support your business growth with digital buying and selling solutions, best-in-class Europe-wide transport solutions and dedicated account managers.",
-      cta: "Start buying",
+      title: t('info.business.title'),
+      description: t('info.business.description'),
+      cta: t('common.startBuying'),
       ctaColor: "bg-blue-600 hover:bg-blue-700",
-      icon: FcRightUp ,
-        image: "https://img.freepik.com/premium-photo/automotive-market-growth_100396-361.jpg?ga=GA1.1.1739643458.1756553174&semt=ais_hybrid&w=740&q=80",
+      icon: FcRightUp,
+      image: "/info/business-growth.jpg",
       reverse: false,
       stats: [
-        { label: "60,000+", value: "Partners" },
-        { label: "30,000+", value: "Cars in stock" },
-        { label: "3,000+", value: "Cars added daily" }
+        { label: "60,000+", value: t('info.business.stats.partners') },
+        { label: "30,000+", value: t('info.business.stats.inventory') },
+        { label: "3,000+", value: t('info.business.stats.daily') }
       ]
     },
     {
-      title: "Buying cars with CarNetwork",
-      description: "Get access to Europe-wide inventory and choose from over 30,000 cars in stock and 3,000 new cars added daily! Buy cars fast and easy entirely online and without time-consuming physical auctions, minimum purchase quantities, or hidden fees.",
-      cta: "Start buying",
+      title: t('info.buying.title'),
+      description: t('info.buying.description'),
+      cta: t('common.startBuying'),
       ctaColor: "bg-blue-600 hover:bg-blue-700",
       icon: IoCarSportOutline,
       reverse: true,
-      image: "https://img.freepik.com/free-photo/young-couple-talking-sales-person-car-showroom_1303-20442.jpg?t=st=1756553193~exp=1756556793~hmac=2876d0ad659f795048545328adc374fba4e570f4f7da6f99a5ca1de68a96c199&w=2000",
+      image: "/info/buying-cars.jpg",
       appLinks: true
     },
     {
-      title: "Selling cars with CarNetwork",
-      description: "Sell cars that do not fit in your portfolio easily, and entirely online to 60,000 dealers. Achieve the highest prices and digitize your trade-ins with CarNetwork EVA app.",
-      cta: "Start selling",
+      title: t('info.selling.title'),
+      description: t('info.selling.description'),
+      cta: t('common.startSelling'),
       ctaColor: "bg-orange-500 hover:bg-orange-600",
-      icon: MdSell ,
+      icon: MdSell,
       reverse: false,
-      image: "https://plus.unsplash.com/premium_photo-1661405668601-fa0764ea03f1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGNhciUyMHNhbGV8ZW58MHx8MHx8fDA%3D",
+      image: "/info/selling-cars.jpg",
       appLinks: true
     }
   ];
@@ -59,7 +62,7 @@ const InfoSections = () => {
               } w-1 h-full ${item.reverse ? "bg-blue-600" : "bg-orange-500"} z-0`}
             />
             
-            <div className="flex flex-col md:flex-row items-center gap-8 p-8 md:p-12 relative z-10">
+            <div className="flex flex-col md:flex-row items-center gap-6 p-6 md:p-8 relative z-10">
               {/* Left Side - Text */}
               <div className="flex-1">
                 <div className="flex items-center mb-4">

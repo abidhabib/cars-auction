@@ -5,7 +5,6 @@ const content = {
   press: {
     title: "Featured In",
     logos: [
-      { name: "Volkswagen", logo: "https://cdn.brandfetch.io/volkswagen.com/logo/icon" },
       { name: "Mercedes", logo: "https://cdn.brandfetch.io/mercedes-benz.com/logo/icon" },
       { name: "BMW", logo: "https://cdn.brandfetch.io/bmw.com/logo/icon" },
       { name: "Ford", logo: "https://cdn.brandfetch.io/ford.com/logo/icon" },
@@ -19,23 +18,28 @@ const content = {
 
 export const Press = () => {
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-gray-900 text-center mb-16">
+        <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
           {content.press.title}
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-6">
           {content.press.logos.map((brand, index) => (
             <div
               key={index}
-              className="flex items-center justify-center bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition"
+              className="flex flex-col items-center justify-center bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 group"
             >
-              <img
-                src={brand.logo}
-                alt={brand.name}
-                className="max-h-12 object-contain"
-              />
+              <div className="flex items-center justify-center w-16 h-16 mb-3">
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="max-h-12 object-contain"
+                />
+              </div>
+              <span className="text-xs font-medium text-gray-600 text-center group-hover:text-gray-900 transition-colors">
+                {brand.name}
+              </span>
             </div>
           ))}
         </div>

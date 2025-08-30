@@ -11,7 +11,11 @@ import {
   FiUser, 
   FiLogOut,
   FiShoppingCart,
-  FiTag
+  FiTag,
+  FiHome,
+  FiInfo,
+  FiPhone,
+  FiHelpCircle
 } from 'react-icons/fi';
 
 const Header = () => {
@@ -68,7 +72,6 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // SIMPLIFIED LANGUAGE TOGGLE (LIKE YOUR WORKING VERSION)
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'de' : 'en');
   };
@@ -76,15 +79,24 @@ const Header = () => {
   const { supportedLanguages, getLanguageName } = useLanguage();
 
   const buyMenuItems = [
-    { name: 'Browse Inventory', icon: <FiShoppingCart />, href: '#' },
-    { name: 'Direct Buy', icon: <FiTag />, href: '#' },
-    { name: 'Auctions', icon: <FiTag />, href: '#' }
+    { name: t('header.buyMenu.browseInventory'), icon: <FiShoppingCart className="text-orange-500" />, href: '#' },
+    { name: t('header.buyMenu.directBuy'), icon: <FiTag className="text-orange-500" />, href: '#' },
+    { name: t('header.buyMenu.auctions'), icon: <FiTag className="text-orange-500" />, href: '#' }
   ];
 
   const sellMenuItems = [
-    { name: 'Sell Your Car', icon: <FiTag />, href: '#' },
-    { name: 'Pricing Guide', icon: <FiTag />, href: '#' },
-    { name: 'EVA App', icon: <FiTag />, href: '#' }
+    { name: t('header.sellMenu.sellYourCar'), icon: <FiTag className="text-orange-500" />, href: '#' },
+    { name: t('header.sellMenu.pricingGuide'), icon: <FiTag className="text-orange-500" />, href: '#' },
+    { name: t('header.sellMenu.evaApp'), icon: <FiTag className="text-orange-500" />, href: '#' }
+  ];
+
+  const mainMenuItems = [
+    { name: t('header.mainMenu.home'), icon: <FiHome className="text-orange-500" />, href: '#' },
+    { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-orange-500" />, href: '#', hasDropdown: true },
+    { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-orange-500" />, href: '#', hasDropdown: true },
+    { name: t('header.mainMenu.aboutUs'), icon: <FiInfo className="text-orange-500" />, href: '#' },
+    { name: t('header.mainMenu.contact'), icon: <FiPhone className="text-orange-500" />, href: '#' },
+    { name: t('header.mainMenu.help'), icon: <FiHelpCircle className="text-orange-500" />, href: '#' }
   ];
 
   return (
@@ -119,7 +131,7 @@ const Header = () => {
                     setBuyDropdownOpen(!buyDropdownOpen);
                     setSellDropdownOpen(false);
                   }}
-                  className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                  className="flex items-center px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
                 >
                   {t('buyCars')}
                   <FiChevronDown className={`ml-1 transition-transform ${buyDropdownOpen ? 'rotate-180' : ''}`} />
@@ -132,9 +144,9 @@ const Header = () => {
                         <a
                           key={index}
                           href={item.href}
-                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
                         >
-                          <span className="mr-3 text-gray-400">{item.icon}</span>
+                          <span className="mr-3">{item.icon}</span>
                           {item.name}
                         </a>
                       ))}
@@ -150,7 +162,7 @@ const Header = () => {
                     setSellDropdownOpen(!sellDropdownOpen);
                     setBuyDropdownOpen(false);
                   }}
-                  className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                  className="flex items-center px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
                 >
                   {t('sellCars')}
                   <FiChevronDown className={`ml-1 transition-transform ${sellDropdownOpen ? 'rotate-180' : ''}`} />
@@ -163,9 +175,9 @@ const Header = () => {
                         <a
                           key={index}
                           href={item.href}
-                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
                         >
-                          <span className="mr-3 text-gray-400">{item.icon}</span>
+                          <span className="mr-3">{item.icon}</span>
                           {item.name}
                         </a>
                       ))}
@@ -184,9 +196,9 @@ const Header = () => {
                     setLanguageDropdownOpen(!languageDropdownOpen);
                     setUserDropdownOpen(false);
                   }}
-                  className="flex items-center px-3 py-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                  className="flex items-center px-3 py-2 text-sm text-gray-700 hover:text-orange-600 transition-colors"
                 >
-                  <FiGlobe className="mr-1" />
+                  <FiGlobe className="mr-1 text-orange-500" />
                   {getLanguageName(language)}
                   <FiChevronDown className={`ml-1 transition-transform ${languageDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -203,8 +215,8 @@ const Header = () => {
                           }}
                           className={`block w-full text-left px-4 py-2 text-sm ${
                             language === langCode 
-                              ? 'text-blue-600 bg-blue-50' 
-                              : 'text-gray-700 hover:bg-gray-50'
+                              ? 'text-orange-600 bg-orange-50' 
+                              : 'text-gray-700 hover:bg-orange-50'
                           }`}
                         >
                           {getLanguageName(langCode)}
@@ -223,9 +235,9 @@ const Header = () => {
                       setUserDropdownOpen(!userDropdownOpen);
                       setLanguageDropdownOpen(false);
                     }}
-                    className="flex items-center text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                    className="flex items-center text-sm text-gray-700 hover:text-orange-600 transition-colors"
                   >
-                    <FiUser className="mr-1" />
+                    <FiUser className="mr-1 text-orange-500" />
                     {user.name}
                     <FiChevronDown className={`ml-1 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
@@ -233,20 +245,20 @@ const Header = () => {
                   {userDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                       <div className="py-1">
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                          Dashboard
+                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
+                          {t('header.userMenu.dashboard')}
                         </a>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                          Profile
+                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
+                          {t('header.userMenu.profile')}
                         </a>
                         <button
                           onClick={() => {
                             logout();
                             setUserDropdownOpen(false);
                           }}
-                          className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
                         >
-                          <FiLogOut className="mr-2" />
+                          <FiLogOut className="mr-2 text-orange-500" />
                           {t('logout')}
                         </button>
                       </div>
@@ -258,6 +270,7 @@ const Header = () => {
                   <Button 
                     variant="outline" 
                     size="sm"
+                    className="border-orange-500 text-orange-500 hover:bg-orange-50"
                     onClick={() => window.location.hash = '/login'}
                   >
                     {t('login')}
@@ -265,6 +278,7 @@ const Header = () => {
                   <Button 
                     variant="primary" 
                     size="sm"
+                    className="bg-orange-500 hover:bg-orange-600 text-white"
                     onClick={() => window.location.hash = '/register'}
                   >
                     {t('register')}
@@ -274,7 +288,7 @@ const Header = () => {
 
               {/* Mobile menu button */}
               <button 
-                className="lg:hidden p-2 rounded-md text-gray-700 hover:text-blue-600 focus:outline-none transition-colors"
+                className="lg:hidden p-2 rounded-md text-gray-700 hover:text-orange-600 focus:outline-none transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
@@ -290,76 +304,99 @@ const Header = () => {
           }`}
         >
           <div className="flex flex-col h-full">
-            <div className="flex justify-between items-center p-4 border-b">
+            <div className="flex justify-between items-center p-4 border-b border-gray-200">
               <div className="h-8 w-auto">
                 <img src="./logo.png" alt="CarNetwork" width={100} />
               </div>
               <button 
-                className="p-2 rounded-md text-gray-700 hover:text-blue-600"
+                className="p-2 rounded-md text-gray-700 hover:text-orange-600"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <FiX className="h-6 w-6" />
               </button>
             </div>
-            
-            <nav className="flex-1 px-4 py-6 space-y-1">
-              {/* Buy Cars Mobile */}
-              <div className="mb-2">
-                <button 
-                  onClick={() => setBuyDropdownOpen(!buyDropdownOpen)}
-                  className="flex justify-between items-center w-full py-3 px-4 rounded-lg text-base font-medium text-gray-900 hover:bg-gray-50"
-                >
-                  {t('buyCars')}
-                  <FiChevronDown className={`transition-transform ${buyDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {buyDropdownOpen && (
-                  <div className="pl-6 mt-1 space-y-1">
-                    {buyMenuItems.map((item, index) => (
-                      <a
-                        key={index}
-                        href={item.href}
-                        className="flex items-center py-2 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-blue-600"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <span className="mr-2 text-gray-400">{item.icon}</span>
-                        {item.name}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
 
-              {/* Sell Cars Mobile */}
-              <div className="mb-2">
-                <button 
-                  onClick={() => setSellDropdownOpen(!sellDropdownOpen)}
-                  className="flex justify-between items-center w-full py-3 px-4 rounded-lg text-base font-medium text-gray-900 hover:bg-gray-50"
-                >
-                  {t('sellCars')}
-                  <FiChevronDown className={`transition-transform ${sellDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {sellDropdownOpen && (
-                  <div className="pl-6 mt-1 space-y-1">
-                    {sellMenuItems.map((item, index) => (
+            <nav className="flex-1 px-4 py-6 bg-white ">
+              <div className="space-y-2">
+                {mainMenuItems.map((item, index) => (
+                  <div key={index}>
+                    {item.hasDropdown ? (
+                      <>
+                        <button 
+                          onClick={() => {
+                            if (item.name === 'Buy Cars') {
+                              setBuyDropdownOpen(!buyDropdownOpen);
+                              setSellDropdownOpen(false);
+                            } else {
+                              setSellDropdownOpen(!sellDropdownOpen);
+                              setBuyDropdownOpen(false);
+                            }
+                          }}
+                          className="flex justify-between items-center w-full py-4 px-4 rounded-xl text-lg font-semibold text-gray-900 hover:bg-orange-50"
+                        >
+                          <div className="flex items-center">
+                            <span className="mr-3">{item.icon}</span>
+                            {item.name}
+                          </div>
+                          <FiChevronDown className={`transition-transform ${
+                            (item.name === 'Buy Cars' && buyDropdownOpen) || 
+                            (item.name === 'Sell Cars' && sellDropdownOpen) 
+                              ? 'rotate-180' 
+                              : ''
+                          }`} />
+                        </button>
+                        
+                        {item.name === 'Buy Cars' && buyDropdownOpen && (
+                          <div className="pl-12 mt-1 space-y-1">
+                            {buyMenuItems.map((subItem, subIndex) => (
+                              <a
+                                key={subIndex}
+                                href={subItem.href}
+                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                <span className="mr-3">{subItem.icon}</span>
+                                {subItem.name}
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {item.name === 'Sell Cars' && sellDropdownOpen && (
+                          <div className="pl-12 mt-1 space-y-1">
+                            {sellMenuItems.map((subItem, subIndex) => (
+                              <a
+                                key={subIndex}
+                                href={subItem.href}
+                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                <span className="mr-3">{subItem.icon}</span>
+                                {subItem.name}
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    ) : (
                       <a
-                        key={index}
                         href={item.href}
-                        className="flex items-center py-2 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-blue-600"
+                        className="flex items-center py-4 px-4 rounded-xl text-lg font-semibold text-gray-900 hover:bg-orange-50"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        <span className="mr-2 text-gray-400">{item.icon}</span>
+                        <span className="mr-3">{item.icon}</span>
                         {item.name}
                       </a>
-                    ))}
+                    )}
                   </div>
-                )}
+                ))}
               </div>
               
-              <div className="pt-6 mt-6 border-t border-gray-200">
+              <div className="pt-8 mt-8 border-t border-gray-200">
                 {/* Language Selector Mobile */}
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">Language</span>
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-lg font-semibold text-gray-900">{t('header.language')}</span>
                     <div className="flex space-x-2">
                       {supportedLanguages.map((langCode) => (
                         <button
@@ -368,10 +405,10 @@ const Header = () => {
                             setLanguage(langCode);
                             setMobileMenuOpen(false);
                           }}
-                          className={`px-3 py-1 text-xs rounded-full ${
+                          className={`px-4 py-2 text-base rounded-full font-medium ${
                             language === langCode 
-                              ? 'bg-blue-600 text-white' 
-                              : 'bg-gray-200 text-gray-700'
+                              ? 'bg-orange-500 text-white' 
+                              : 'bg-gray-100 text-gray-700 hover:bg-orange-100'
                           }`}
                         >
                           {langCode.toUpperCase()}
@@ -382,29 +419,31 @@ const Header = () => {
                 </div>
                 
                 {user ? (
-                  <div className="space-y-3">
-                    <p className="text-sm text-gray-700">Welcome, {user.name}</p>
-                    <div className="flex space-x-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="flex-1"
-                        onClick={() => {
-                          logout();
-                          setMobileMenuOpen(false);
-                        }}
-                      >
-                        <FiLogOut className="mr-1" />
-                        {t('logout')}
-                      </Button>
+                  <div className="space-y-4">
+                    <div className="flex items-center p-4 bg-orange-50 rounded-xl">
+                      <FiUser className="text-orange-500 text-xl mr-3" />
+                      <div>
+                        <p className="font-semibold text-gray-900">{t('header.welcome')}</p>
+                        <p className="text-gray-700">{user.name}</p>
+                      </div>
                     </div>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg flex items-center justify-center"
+                    >
+                      <FiLogOut className="mr-2" />
+                      {t('logout')}
+                    </button>
                   </div>
                 ) : (
-                  <div className="flex space-x-2">
+                  <div className="flex flex-col space-y-3">
                     <Button 
                       variant="outline" 
-                      size="sm" 
-                      className="flex-1"
+                      size="lg" 
+                      className="w-full border-orange-500 text-orange-500 hover:bg-orange-50 py-4 text-lg font-semibold"
                       onClick={() => {
                         window.location.hash = '/login';
                         setMobileMenuOpen(false);
@@ -414,8 +453,8 @@ const Header = () => {
                     </Button>
                     <Button 
                       variant="primary" 
-                      size="sm" 
-                      className="flex-1"
+                      size="lg" 
+                      className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 text-lg font-semibold"
                       onClick={() => {
                         window.location.hash = '/register';
                         setMobileMenuOpen(false);

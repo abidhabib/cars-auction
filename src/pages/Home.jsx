@@ -74,37 +74,7 @@ const Home = () => {
         }
       ]
     },
-    sections: [
-      {
-        title: "Grow your business with CarNetwork.com",
-        text: "CarNetwork.com is Europe's largest wholesale platform for used cars. We support your business growth with digital buying and selling solutions, best-in-class transport solutions and dedicated account managers."
-      },
-      {
-        title: "Buying cars with CarNetwork.com",
-        text: "Get access to Europe-wide inventory and choose from over 30,000 cars in stock and 3,000 new cars added daily. Buy cars fast and easy entirely online.",
-        cta: "Start buying"
-      },
-      {
-        title: "Selling cars with CarNetwork.com",
-        text: "Sell cars that do not fit in your portfolio easily, and entirely online to 60,000 dealers. Achieve the highest prices and digitize your trade-ins with CarNetwork EVA app.",
-        cta: "Start selling"
-      },
-      {
-        title: "What makes CarNetwork.com different?",
-        points: [
-          "Dedicated account managers",
-          "Large brand-independent variety of cars",
-          "No hidden fees"
-        ],
-        form: {
-          title: "Register for free now",
-          fields: ["Company name", "E-Mail", "Password"],
-          options: ["Buying", "Selling"],
-          cta: "Sign up now",
-          login_link: "Log in"
-        }
-      }
-    ],
+  
   };
 
 
@@ -194,7 +164,7 @@ const Home = () => {
       
       {/* Business Growth Section */}
       <section className="py-20 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('businessGrowth.title')}</h2>
@@ -229,12 +199,10 @@ const Home = () => {
       </section>
 <SuccessStories/>
       {/* Buying/Selling Sections */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto px-4">
+      <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto">
             <InfoSections />
           </div>
-        </div>
       </section>
 
       {/* In the Press */}
