@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
+/* Custom animations and utilities */
+@layer utilities {
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    25% { transform: translateY(-10px) translateX(5px); }
+    50% { transform: translateY(0) translateX(10px); }
+    75% { transform: translateY(10px) translateX(5px); }
+  }
+
+  @keyframes float-delayed {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    25% { transform: translateY(10px) translateX(-5px); }
+    50% { transform: translateY(0) translateX(-10px); }
+    75% { transform: translateY(-10px) translateX(-5px); }
+  }
+
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    33% { transform: translateY(-15px) translateX(8px); }
+    66% { transform: translateY(15px) translateX(-8px); }
+  }
+
+  .animate-float {
+    animation: float 12s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float-delayed 14s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 16s ease-in-out infinite;
+  }
+  @keyframes smooth-scroll-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-50%));
+    }
+  }
+
+  @keyframes smooth-scroll-right {
+    from {
+      transform: translateX(calc(-50%));
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .animate-marquee-left {
+    animation: smooth-scroll-left 45s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-marquee-right {
+    animation: smooth-scroll-right 45s linear infinite;
+    will-change: transform;
+  }
+
+  .animation-paused {
+    animation-play-state: paused;
+  }
+}
+
+/* Grid pattern background */
+.bg-grid-pattern {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+}
