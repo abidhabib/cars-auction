@@ -199,11 +199,9 @@ const Home = () => {
       </section>
 <SuccessStories/>
       {/* Buying/Selling Sections */}
-      <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto">
             <InfoSections />
           </div>
-      </section>
 
       {/* In the Press */}
       <Press/>

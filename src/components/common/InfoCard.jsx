@@ -1,9 +1,9 @@
 // src/components/InfoSections.jsx
 
-import { FcRightUp } from "react-icons/fc";
 import { IoCarSportOutline } from "react-icons/io5";
 import { MdSell } from "react-icons/md";
 import { useLanguage } from "../../context/LanguageContext";
+import { FaMapMarkedAlt } from "react-icons/fa";
 
 const InfoSections = () => {
   const { t } = useLanguage();
@@ -14,7 +14,7 @@ const InfoSections = () => {
       description: t('info.business.description'),
       cta: t('common.startBuying'),
       ctaColor: "bg-blue-600 hover:bg-blue-700",
-      icon: FcRightUp,
+      icon: FaMapMarkedAlt,
       image: "/info/business-growth.jpg",
       reverse: false,
       stats: [
@@ -66,8 +66,8 @@ const InfoSections = () => {
               {/* Left Side - Text */}
               <div className="flex-1">
                 <div className="flex items-center mb-4">
-                  <item.icon className="w-10 h-10 mr-3 rounded" />
-                  <h2 className="text-2xl font-bold text-gray-900">{item.title}</h2>
+                  <item.icon className="w-10 h-10 mr-3 text-pink-800 rounded" />
+                  <h2 className="text-2xl font-bold  text-[#f97316]">{item.title}</h2>
                 </div>
                 
                 <p className="text-gray-600 mb-6 leading-relaxed">

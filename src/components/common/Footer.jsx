@@ -98,10 +98,8 @@ const Footer = () => {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="flex items-center mb-6">
-              <div className="bg-gradient-to-r from-orange-500 to-pink-500 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">
+              <div className=" w-12 h-12 rounded-xl flex items-center justify-center shadow-lg">
                   <img src="/icon.png" alt="CarNetwork" className="h-6 w-6" />
-                </span>
               </div>
               <span className="ml-3 text-2xl font-bold text-gray-900">
                 CarNetwork
@@ -215,14 +213,14 @@ const Footer = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             {/* App badges */}
             <div className="flex flex-col sm:flex-row sm:space-x-4 mb-6 lg:mb-0">
-              <a href="#" className="inline-flex items-center justify-center bg-gray-900 text-white rounded-xl px-5 py-3 mb-3 sm:mb-0 hover:bg-orange-600 transition-colors shadow-md hover:shadow-lg">
+              <a href="#" className="inline-flex items-center justify-center bg-gray-900 text-white text-sm rounded-xl px-5 py-2 mb-3 sm:mb-0 hover:bg-orange-600 transition-colors shadow-md hover:shadow-lg">
                 <FaApple className="mr-2 text-xl" />
                 <div className="text-left">
                   <div className="text-xs">Download on the</div>
                   <div className="font-semibold">App Store</div>
                 </div>
               </a>
-              <a href="#" className="inline-flex items-center justify-center bg-gray-900 text-white rounded-xl px-5 py-3 hover:bg-orange-600 transition-colors shadow-md hover:shadow-lg">
+              <a href="#" className="inline-flex items-center justify-center bg-gray-900 text-white text-sm rounded-xl px-5 py-2 hover:bg-orange-600 transition-colors shadow-md hover:shadow-lg">
                 <FaGooglePlay className="mr-2 text-xl" />
                 <div className="text-left">
                   <div className="text-xs">Get it on</div>
