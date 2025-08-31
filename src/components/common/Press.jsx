@@ -7,7 +7,6 @@ const content = {
     logos: [
       { name: "Mercedes", logo: "https://cdn.brandfetch.io/mercedes-benz.com/logo/icon" },
       { name: "BMW", logo: "https://cdn.brandfetch.io/bmw.com/logo/icon" },
-      { name: "Ford", logo: "https://cdn.brandfetch.io/ford.com/logo/icon" },
       { name: "Audi", logo: "https://cdn.brandfetch.io/audi.com/logo/icon" },
       { name: "Toyota", logo: "https://cdn.brandfetch.io/toyota.com/logo/icon" },
       { name: "Nissan", logo: "https://cdn.brandfetch.io/nissan-global.com/logo/icon" },
@@ -18,13 +17,13 @@ const content = {
 
 export const Press = () => {
   return (
-    <section className="bg-gray-50">
+    <section className="p-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
           {content.press.title}
         </h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8  items-center justify-center">
           {content.press.logos.map((brand, index) => (
             <div
               key={index}

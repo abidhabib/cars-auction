@@ -22,6 +22,7 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center text-white overflow-hidden pt-16 lg:pt-20">
       {/* Background Slideshow */}
+      
       <div className="absolute inset-0 z-0">
         {images.map((image, i) => (
           <div
@@ -47,9 +48,11 @@ const HeroSection = () => {
         {/* Additional mobile overlay for better contrast */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50 sm:hidden" />
       </div>
+      
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-16 py-20 text-center min-h-screen flex flex-col justify-center">
+      
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-break-all mb-8 bg-gradient-to-r from-white via-white/90 to-white/80 bg-clip-text text-transparent drop-shadow-2xl">
           {t('hero.title')}
         </h1>

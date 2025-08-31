@@ -1,5 +1,5 @@
 // src/components/common/Header.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, use } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import Button from './Button';
@@ -17,9 +17,10 @@ import {
   FiPhone,
   FiHelpCircle
 } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  const { t, language, setLanguage } = useLanguage();
+  const { t, language, setLanguage, supportedLanguages, getLanguageName } = useLanguage();
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -71,32 +72,26 @@ const Header = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'de' : 'en');
-  };
-
-  const { supportedLanguages, getLanguageName } = useLanguage();
-
+const navigate=useNavigate();
   const buyMenuItems = [
-    { name: t('header.buyMenu.browseInventory'), icon: <FiShoppingCart className="text-orange-500" />, href: '#' },
-    { name: t('header.buyMenu.directBuy'), icon: <FiTag className="text-orange-500" />, href: '#' },
-    { name: t('header.buyMenu.auctions'), icon: <FiTag className="text-orange-500" />, href: '#' }
+    { name: t('header.buyMenu.browseInventory'), icon: <FiShoppingCart className="text-orange-500" />, href: '/buy/inventory' },
+    { name: t('header.buyMenu.directBuy'), icon: <FiTag className="text-orange-500" />, href: '/buy/direct' },
+    { name: t('header.buyMenu.auctions'), icon: <FiTag className="text-orange-500" />, href: '/buy/auctions' }
   ];
 
   const sellMenuItems = [
-    { name: t('header.sellMenu.sellYourCar'), icon: <FiTag className="text-orange-500" />, href: '#' },
-    { name: t('header.sellMenu.pricingGuide'), icon: <FiTag className="text-orange-500" />, href: '#' },
-    { name: t('header.sellMenu.evaApp'), icon: <FiTag className="text-orange-500" />, href: '#' }
+    { name: t('header.sellMenu.sellYourCar'), icon: <FiTag className="text-orange-500" />, href: '/sell/car' },
+    { name: t('header.sellMenu.pricingGuide'), icon: <FiTag className="text-orange-500" />, href: '/sell/pricing' },
+    { name: t('header.sellMenu.evaApp'), icon: <FiTag className="text-orange-500" />, href: '/sell/eva-app' }
   ];
 
   const mainMenuItems = [
-    { name: t('header.mainMenu.home'), icon: <FiHome className="text-orange-500" />, href: '#' },
-    { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-orange-500" />, href: '#', hasDropdown: true },
-    { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-orange-500" />, href: '#', hasDropdown: true },
-    { name: t('header.mainMenu.aboutUs'), icon: <FiInfo className="text-orange-500" />, href: '#' },
-    { name: t('header.mainMenu.contact'), icon: <FiPhone className="text-orange-500" />, href: '#' },
-    { name: t('header.mainMenu.help'), icon: <FiHelpCircle className="text-orange-500" />, href: '#' }
+    { name: t('header.mainMenu.home'), icon: <FiHome className="text-orange-500" />, href: '/home' },
+    { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-orange-500" />, href: '/buy', hasDropdown: true },
+    { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-orange-500" />, href: '/sell', hasDropdown: true },
+    { name: t('header.mainMenu.aboutUs'), icon: <FiInfo className="text-orange-500" />, href: '/about' },
+    { name: t('header.mainMenu.contact'), icon: <FiPhone className="text-orange-500" />, href: '/contact' },
+    { name: t('header.mainMenu.help'), icon: <FiHelpCircle className="text-orange-500" />, href: '/help' }
   ];
 
   return (
@@ -104,22 +99,24 @@ const Header = () => {
       {/* Mobile menu backdrop */}
       {mobileMenuOpen && (
         <div 
-          className=" inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
       {/* Header */}
       <header 
-        className={`fixed w-full z-50 transition-all duration-300 ${
-          scrolled ? 'bg-white shadow-md py-2' : 'bg-white shadow-sm py-3'
+        className={`fixed w-full z-[100] transition-all duration-300 ${
+          scrolled ? 'bg-white/95 backdrop-blur-sm shadow-md py-2' : 'bg-white shadow-sm py-3'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center">
-              <img src="./logo.png" alt="CarNetwork" className="h-8 md:h-10" />
+              <a href="/home">
+                <img src="/logo.svg" alt="CarNetwork" className="h-8 md:h-10" />
+              </a>
             </div>
 
             {/* Desktop Navigation */}
@@ -133,7 +130,7 @@ const Header = () => {
                   }}
                   className="flex items-center px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
                 >
-                  {t('buyCars')}
+                  {t('header.mainMenu.buyCars')}
                   <FiChevronDown className={`ml-1 transition-transform ${buyDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
@@ -164,7 +161,7 @@ const Header = () => {
                   }}
                   className="flex items-center px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
                 >
-                  {t('sellCars')}
+                  {t('header.mainMenu.sellCars')}
                   <FiChevronDown className={`ml-1 transition-transform ${sellDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
@@ -185,6 +182,19 @@ const Header = () => {
                   </div>
                 )}
               </div>
+
+              {/* Static Menu Items */}
+              {mainMenuItems
+                .filter(item => !item.hasDropdown)
+                .map((item, index) => (
+                  <a
+                    key={index}
+                    href={item.href}
+                    className="px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
+                  >
+                    {item.name}
+                  </a>
+                ))}
             </nav>
 
             {/* User Actions */}
@@ -245,10 +255,10 @@ const Header = () => {
                   {userDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                       <div className="py-1">
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
+                        <a href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
                           {t('header.userMenu.dashboard')}
                         </a>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
+                    <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
                           {t('header.userMenu.profile')}
                         </a>
                         <button
@@ -271,17 +281,17 @@ const Header = () => {
                     variant="outline" 
                     size="sm"
                     className="border-orange-500 text-orange-500 hover:bg-orange-50"
-                    onClick={() => window.location.hash = '/login'}
+                    onClick={() => navigate('/login')}
                   >
-                    {t('login')}
+                    {t('navigation.login')}
                   </Button>
                   <Button 
                     variant="primary" 
                     size="sm"
                     className="bg-orange-500 hover:bg-orange-600 text-white"
-                    onClick={() => window.location.hash = '/register'}
+                    onClick={() => navigate('/register')}
                   >
-                    {t('register')}
+                    {t('navigation.signup')}
                   </Button>
                 </div>
               )}
@@ -306,7 +316,7 @@ const Header = () => {
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
               <div className="h-8 w-auto">
-                <img src="./logo.png" alt="CarNetwork" className="h-8" />
+                <img src="./logo.svg" alt="CarNetwork" className="h-8" />
               </div>
               <button 
                 className="p-2 rounded-md text-gray-700 hover:text-orange-600"
@@ -332,15 +342,15 @@ const Header = () => {
                               setBuyDropdownOpen(false);
                             }
                           }}
-                          className="flex justify-between items-center w-full py-2 px-4 rounded-xl font-semibold  text-gray-900 hover:bg-orange-50"
+                          className="flex justify-between items-center w-full py-2 px-4 rounded-xl font-semibold text-gray-900 hover:bg-orange-50"
                         >
                           <div className="flex items-center">
                             <span className="mr-3">{item.icon}</span>
                             {item.name}
                           </div>
                           <FiChevronDown className={`transition-transform ${
-                            (item.name === 'Buy Cars' && buyDropdownOpen) || 
-                            (item.name === 'Sell Cars' && sellDropdownOpen) 
+                            (item.name === t('header.mainMenu.buyCars') && buyDropdownOpen) || 
+                            (item.name === t('header.mainMenu.sellCars') && sellDropdownOpen) 
                               ? 'rotate-180' 
                               : ''
                           }`} />
@@ -381,7 +391,7 @@ const Header = () => {
                     ) : (
                       <a
                         href={item.href}
-                        className="flex items-center py-2 px-4 rounded-xl   font-semibold text-gray-900 hover:bg-orange-50"
+                        className="flex items-center py-2 px-4 rounded-xl font-semibold text-gray-900 hover:bg-orange-50"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <span className="mr-3">{item.icon}</span>
@@ -396,7 +406,7 @@ const Header = () => {
                 {/* Language Selector Mobile */}
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-4">
-                    <span className=" font-semibold text-gray-900">{t('header.language')}</span>
+                    <span className="font-semibold text-gray-900">{t('header.language')}</span>
                     <div className="flex space-x-2">
                       {supportedLanguages.map((langCode) => (
                         <button
@@ -431,7 +441,7 @@ const Header = () => {
                         logout();
                         setMobileMenuOpen(false);
                       }}
-                      className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white  py-2 rounded-xl text-lg flex items-center justify-center"
+                      className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl text-lg flex items-center justify-center"
                     >
                       <FiLogOut className="mr-2" />
                       {t('logout')}
@@ -442,24 +452,24 @@ const Header = () => {
                     <Button 
                       variant="outline" 
                       size="lg" 
-                      className="w-full border-orange-500 text-orange-500 hover:bg-orange-50 py-2 "
+                      className="w-full border-orange-500 text-orange-500 hover:bg-orange-50 py-2"
                       onClick={() => {
                         window.location.hash = '/login';
                         setMobileMenuOpen(false);
                       }}
                     >
-                      {t('login')}
+                      {t('navigation.login')}
                     </Button>
                     <Button 
                       variant="primary" 
                       size="lg" 
-                      className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2  "
+                      className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2"
                       onClick={() => {
                         window.location.hash = '/register';
                         setMobileMenuOpen(false);
                       }}
                     >
-                      {t('register')}
+                      {t('navigation.signup')}
                     </Button>
                   </div>
                 )}

@@ -1,14 +1,12 @@
-// src/pages/Home.jsx
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import Header from '../components/common/Header';
-import Footer from '../components/common/Footer';
 import Button from '../components/common/Button';
 import BrandsSection from '../components/common/BrandsSection';
 import { Press } from '../components/common/Press';
 import InfoSections from '../components/common/InfoCard';
 import HeroSection from '../components/common/HeroSection';
 import SuccessStories from '../components/common/SuccessStories';
+import AppLayout from '../components/layout/AppLayout';
 
 const Home = () => {
   const { t } = useLanguage();
@@ -89,10 +87,9 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
-      
-<HeroSection/>
+    <AppLayout>
+      <div className="min-h-screen bg-gray-100">
+        <HeroSection />
 
       {/* Daily Cars Carousel */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
@@ -206,8 +203,8 @@ const Home = () => {
       {/* In the Press */}
       <Press/>
       
-      <Footer />
-    </div>
+      </div>
+    </AppLayout>
   );
 };
 

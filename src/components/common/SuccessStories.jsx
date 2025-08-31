@@ -58,13 +58,15 @@ const SuccessStories = () => {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <section className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
-            <span className="text-[#f97316]">
-              {t('successStories.title')}
-            </span>
+           <div className="text-center mt-24 mb-16">
+          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+            {t('successStories.title')}
+          </h1>
+        </div>
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto text-lg">
             {t('successStories.subtitle')}
