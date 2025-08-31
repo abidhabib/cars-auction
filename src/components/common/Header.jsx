@@ -112,7 +112,7 @@ const Header = () => {
       {/* Header */}
       <header 
         className={`fixed w-full z-50 transition-all duration-300 ${
-          scrolled ? 'bg-white shadow-md py-2' : 'bg-white backdrop-blur-sm py-3'
+          scrolled ? 'bg-white shadow-md py-2' : 'bg-white shadow-sm py-3'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -288,7 +288,7 @@ const Header = () => {
 
               {/* Mobile menu button */}
               <button 
-                className="lg:hidden p-2 rounded-md text-gray-700 hover:text-orange-600 focus:outline-none transition-colors"
+                className="lg:hidden p-2 rounded-md text-orange-600 focus:outline-none transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
@@ -332,7 +332,7 @@ const Header = () => {
                               setBuyDropdownOpen(false);
                             }
                           }}
-                          className="flex justify-between items-center w-full py-4 px-4 rounded-xl text-lg font-semibold text-gray-900 hover:bg-orange-50"
+                          className="flex justify-between items-center w-full py-2 px-4 rounded-xl font-semibold  text-gray-900 hover:bg-orange-50"
                         >
                           <div className="flex items-center">
                             <span className="mr-3">{item.icon}</span>
@@ -352,7 +352,7 @@ const Header = () => {
                               <a
                                 key={subIndex}
                                 href={subItem.href}
-                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-semibold"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
                                 <span className="mr-3">{subItem.icon}</span>
@@ -368,7 +368,7 @@ const Header = () => {
                               <a
                                 key={subIndex}
                                 href={subItem.href}
-                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-semibold"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
                                 <span className="mr-3">{subItem.icon}</span>
@@ -381,7 +381,7 @@ const Header = () => {
                     ) : (
                       <a
                         href={item.href}
-                        className="flex items-center py-4 px-4 rounded-xl text-lg font-semibold text-gray-900 hover:bg-orange-50"
+                        className="flex items-center py-2 px-4 rounded-xl   font-semibold text-gray-900 hover:bg-orange-50"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <span className="mr-3">{item.icon}</span>
@@ -392,20 +392,19 @@ const Header = () => {
                 ))}
               </div>
               
-              <div className="pt-8 mt-8 border-t border-gray-200">
+              <div className="pt-3 mt-3 border-t border-gray-200">
                 {/* Language Selector Mobile */}
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-lg font-semibold text-gray-900">{t('header.language')}</span>
+                    <span className=" font-semibold text-gray-900">{t('header.language')}</span>
                     <div className="flex space-x-2">
                       {supportedLanguages.map((langCode) => (
                         <button
                           key={langCode}
                           onClick={() => {
                             setLanguage(langCode);
-                            setMobileMenuOpen(false);
                           }}
-                          className={`px-4 py-2 text-base rounded-full font-medium ${
+                          className={`px-4 py-2 text-base rounded-full text-sm ${
                             language === langCode 
                               ? 'bg-orange-500 text-white' 
                               : 'bg-gray-100 text-gray-700 hover:bg-orange-100'
@@ -432,7 +431,7 @@ const Header = () => {
                         logout();
                         setMobileMenuOpen(false);
                       }}
-                      className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg flex items-center justify-center"
+                      className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white  py-2 rounded-xl text-lg flex items-center justify-center"
                     >
                       <FiLogOut className="mr-2" />
                       {t('logout')}
@@ -443,7 +442,7 @@ const Header = () => {
                     <Button 
                       variant="outline" 
                       size="lg" 
-                      className="w-full border-orange-500 text-orange-500 hover:bg-orange-50 py-4 text-lg font-semibold"
+                      className="w-full border-orange-500 text-orange-500 hover:bg-orange-50 py-2 "
                       onClick={() => {
                         window.location.hash = '/login';
                         setMobileMenuOpen(false);
@@ -454,7 +453,7 @@ const Header = () => {
                     <Button 
                       variant="primary" 
                       size="lg" 
-                      className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 text-lg font-semibold"
+                      className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2  "
                       onClick={() => {
                         window.location.hash = '/register';
                         setMobileMenuOpen(false);
