@@ -20,7 +20,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center text-white overflow-hidden">
+    <section className="relative min-h-screen w-full flex items-center justify-center text-white overflow-hidden pt-16 lg:pt-20">
       {/* Background Slideshow */}
       <div className="absolute inset-0 z-0">
         {images.map((image, i) => (

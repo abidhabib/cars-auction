@@ -104,7 +104,7 @@ const Header = () => {
       {/* Mobile menu backdrop */}
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden transition-opacity duration-300"
+          className=" inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -119,7 +119,7 @@ const Header = () => {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center">
-              <img src="./logo.png" alt="CarNetwork" width={120} />
+              <img src="./logo.png" alt="CarNetwork" className="h-8 md:h-10" />
             </div>
 
             {/* Desktop Navigation */}
@@ -238,7 +238,7 @@ const Header = () => {
                     className="flex items-center text-sm text-gray-700 hover:text-orange-600 transition-colors"
                   >
                     <FiUser className="mr-1 text-orange-500" />
-                    {user.name}
+                    <span className="truncate max-w-[120px]">{user.name}</span>
                     <FiChevronDown className={`ml-1 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
                   
@@ -306,7 +306,7 @@ const Header = () => {
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
               <div className="h-8 w-auto">
-                <img src="./logo.png" alt="CarNetwork" width={100} />
+                <img src="./logo.png" alt="CarNetwork" className="h-8" />
               </div>
               <button 
                 className="p-2 rounded-md text-gray-700 hover:text-orange-600"
@@ -316,7 +316,7 @@ const Header = () => {
               </button>
             </div>
 
-            <nav className="flex-1 px-4 py-6 bg-white ">
+            <nav className="flex-1 px-4 py-6 overflow-y-auto">
               <div className="space-y-2">
                 {mainMenuItems.map((item, index) => (
                   <div key={index}>
@@ -422,9 +422,9 @@ const Header = () => {
                   <div className="space-y-4">
                     <div className="flex items-center p-4 bg-orange-50 rounded-xl">
                       <FiUser className="text-orange-500 text-xl mr-3" />
-                      <div>
+                      <div className="truncate">
                         <p className="font-semibold text-gray-900">{t('header.welcome')}</p>
-                        <p className="text-gray-700">{user.name}</p>
+                        <p className="text-gray-700 truncate">{user.name}</p>
                       </div>
                     </div>
                     <button

@@ -163,17 +163,17 @@ const Home = () => {
       </section>
       
       {/* Business Growth Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+      <section className="py-20 bg-[#f97316] text-white">
         <div className="max-w-7xl mx-auto px-4 4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('businessGrowth.title')}</h2>
+              <h2 className="text-3xl md:text-4xl  font-bold mb-6">{t('businessGrowth.title')}</h2>
               <p className="text-xl text-blue-100 leading-relaxed">
                 {t('businessGrowth.description')}
               </p>
               <div className="mt-8 flex space-x-4">
-                <Button variant="secondary">{t('businessGrowth.learnMore')}</Button>
-                <Button variant="outline">{t('businessGrowth.contactUs')}</Button>
+                <Button variant="GrowBtn">{t('businessGrowth.learnMore')}</Button>
+                <Button className='btn bg-gray-200  text-black'>{t('businessGrowth.contactUs')}</Button>
               </div>
             </div>
             <div className="relative">
