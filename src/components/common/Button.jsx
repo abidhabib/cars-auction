@@ -18,13 +18,14 @@ const Button = ({
     secondary: 'bg-orange-500 text-white hover:bg-orange-600 focus:ring-orange-500',
     outline: 'bg-white text-blue-600 border border-blue-600 hover:bg-blue-50 focus:ring-blue-500',
     ghost: 'text-blue-600 hover:bg-blue-50 focus:ring-blue-500',
-    GrowBtn: 'bg-orange-600 text-white hover:bg-orange-700 focus:ring-orange-500'
+    GrowBtn: 'bg-orange-600 text-white hover:bg-orange-700 focus:ring-orange-500',
+    ContactBtn: 'bg-gray-200 text-black hover:bg-gray-300 focus:ring-gray-500',
   };
   
   const sizes = {
-    sm: 'px-3 py-1 text-sm',
-    md: 'px-4 py-1 text-sm',
-    lg: 'px-6 py-1 text-base'
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-1.5 text-sm',
+    lg: 'px-6 py-1.5 text-base'
   };
   
   const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`;

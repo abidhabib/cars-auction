@@ -173,7 +173,7 @@ const Home = () => {
               </p>
               <div className="mt-8 flex space-x-4">
                 <Button variant="GrowBtn">{t('businessGrowth.learnMore')}</Button>
-                <Button className='btn bg-gray-200  text-black'>{t('businessGrowth.contactUs')}</Button>
+                <Button variant='ContactBtn'>{t('businessGrowth.contactUs')}</Button>
               </div>
             </div>
             <div className="relative">
