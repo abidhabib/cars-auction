@@ -454,7 +454,7 @@ const navigate=useNavigate();
                       size="lg" 
                       className="w-full border-orange-500 text-orange-500 hover:bg-orange-50 py-2"
                       onClick={() => {
-                        window.location.hash = '/login';
+                        navigate('/login');
                         setMobileMenuOpen(false);
                       }}
                     >
@@ -465,7 +465,7 @@ const navigate=useNavigate();
                       size="lg" 
                       className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2"
                       onClick={() => {
-                        window.location.hash = '/register';
+                        navigate('/register');
                         setMobileMenuOpen(false);
                       }}
                     >
