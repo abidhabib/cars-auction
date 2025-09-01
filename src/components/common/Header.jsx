@@ -266,6 +266,7 @@ const Header = () => {
                         </a>
                         <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]">
                           {t('header.userMenu.profile')}
+                          
                         </a>
                         <button
                           onClick={() => {
@@ -435,7 +436,10 @@ const Header = () => {
                 
                 {user ? (
                   <div className="space-y-4">
-                    <div className="flex items-center p-3 bg-[#f8f9ff] rounded-lg" onClick={() => navigate('/profile')}>
+                    <div className="flex items-center p-3 bg-[#f8f9ff] rounded-lg" onClick={() => {
+                      navigate('/profile');
+                      setMobileMenuOpen(false);
+                    }}>
                       <FiUser className="text-[#3b396d] text-xl mr-3" />
                       <div className="truncate">
                         <p className="font-medium text-gray-900">{t('header.welcome')}</p>

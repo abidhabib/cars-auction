@@ -12,7 +12,6 @@ const Dashboard = () => {
   // Loading state
   if (loading) {
     return (
-      <AppLayout>
         <div className="min-h-screen bg-gray-50 py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-center h-64">
@@ -20,14 +19,12 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </AppLayout>
     );
   }
 
   // Error state
   if (error) {
     return (
-      <AppLayout>
         <div className="min-h-screen bg-gray-50 py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-red-50 border border-red-200 rounded-lg p-6">
@@ -44,7 +41,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </AppLayout>
     );
   }
 
@@ -75,7 +71,6 @@ const Dashboard = () => {
   };
 
   return (
-    <AppLayout>
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
@@ -211,7 +206,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </AppLayout>
   );
 };
 

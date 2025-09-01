@@ -1,3 +1,4 @@
+// src/pages/profile/Profile.jsx
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
@@ -5,9 +6,9 @@ import { Navigate } from 'react-router-dom';
 import AppLayout from '../../components/layout/AppLayout';
 import PropTypes from 'prop-types';
 
-const ProfileSection = ({ title, children }) => (
-  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-    <h3 className="text-lg font-semibold text-gray-800 mb-4">{title}</h3>
+const ProfileSection = ({ title, children, className = "" }) => (
+  <div className={`bg-white rounded-xl shadow-sm p-6 ${className}`}>
+    <h3 className="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">{title}</h3>
     {children}
   </div>
 );
@@ -15,6 +16,7 @@ const ProfileSection = ({ title, children }) => (
 ProfileSection.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  className: PropTypes.string
 };
 
 const Profile = () => {
@@ -59,7 +61,6 @@ const Profile = () => {
     postalCode: '10001',
     country: 'United States',
     joined: '2020-01-01',
-
   };
 
   // Initialize with mock data
@@ -93,8 +94,8 @@ const Profile = () => {
       <AppLayout>
         <div className="min-h-screen bg-gray-50 py-8 flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">{t('profile.loading')}</p>
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#3b396d] mx-auto"></div>
+            <p className="mt-3 text-gray-600">{t('profile.loading')}</p>
           </div>
         </div>
       </AppLayout>
@@ -182,7 +183,7 @@ const Profile = () => {
     
     try {
       // Mock API call - simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 800));
       
       // Update local auth context with mock data
       updateUser({ ...user, ...formData });
@@ -206,7 +207,7 @@ const Profile = () => {
     
     try {
       // Mock API call - simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 800));
       
       setSubmitMessage(t('profile.passwordChangeSuccess'));
       setPasswordData({
@@ -251,23 +252,22 @@ const Profile = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 py-6 sm:py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Profile Header */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <div className="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center">
-                <span className="text-2xl font-semibold text-orange-600">
+          <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <div className="flex flex-col sm:flex-row items-center gap-5">
+              <div className="w-16 h-16 rounded-full bg-[#3b396d]/10 flex items-center justify-center">
+                <span className="text-xl font-semibold text-[#3b396d]">
                   {formData.firstName?.[0] || 'U'}{formData.lastName?.[0] || 'U'}
                 </span>
               </div>
               <div className="text-center sm:text-left">
-                <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                <h1 className="text-xl font-bold text-gray-900">
                   {formData.firstName} {formData.lastName}
                 </h1>
-                <p className="text-gray-600">{formData.email}</p>
-                <p className="text-sm text-gray-500 mt-1">{formData.companyName}</p>
+                <p className="text-gray-600 text-sm">{formData.email}</p>
+                <p className="text-xs text-gray-500 mt-1">{formData.companyName}</p>
               </div>
             </div>
           </div>
@@ -290,7 +290,7 @@ const Profile = () => {
                           name="firstName"
                           value={formData.firstName}
                           onChange={handleInputChange}
-                          className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                          className={`w-full px-3 py-2 border rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d] ${
                             errors.firstName ? 'border-red-500' : 'border-gray-300'
                           }`}
                         />
@@ -307,7 +307,7 @@ const Profile = () => {
                           name="lastName"
                           value={formData.lastName}
                           onChange={handleInputChange}
-                          className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                          className={`w-full px-3 py-2 border rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d] ${
                             errors.lastName ? 'border-red-500' : 'border-gray-300'
                           }`}
                         />
@@ -315,7 +315,7 @@ const Profile = () => {
                           <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
                         )}
                       </div>
-                      <div>
+                      <div className="sm:col-span-2">
                         <label className="block text-xs font-medium text-gray-700 mb-1">
                           {t('auth.register.email')} *
                         </label>
@@ -324,7 +324,7 @@ const Profile = () => {
                           name="email"
                           value={formData.email}
                           onChange={handleInputChange}
-                          className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                          className={`w-full px-3 py-2 border rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d] ${
                             errors.email ? 'border-red-500' : 'border-gray-300'
                           }`}
                         />
@@ -332,7 +332,7 @@ const Profile = () => {
                           <p className="text-red-500 text-xs mt-1">{errors.email}</p>
                         )}
                       </div>
-                      <div>
+                      <div className="sm:col-span-2">
                         <label className="block text-xs font-medium text-gray-700 mb-1">
                           {t('auth.register.phone')}
                         </label>
@@ -341,7 +341,7 @@ const Profile = () => {
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
                         />
                       </div>
                     </div>
@@ -352,25 +352,25 @@ const Profile = () => {
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.firstName')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.firstName || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.firstName || '-'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.lastName')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.lastName || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.lastName || '-'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.email')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.email || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.email || '-'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.phone')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.phone || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.phone || '-'}</p>
                     </div>
                   </div>
                 )}
@@ -380,7 +380,7 @@ const Profile = () => {
               <ProfileSection title={t('profile.businessInfo')}>
                 {isEditing ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
+                    <div className="sm:col-span-2">
                       <label className="block text-xs font-medium text-gray-700 mb-1">
                         {t('auth.register.companyName')}
                       </label>
@@ -389,7 +389,7 @@ const Profile = () => {
                         name="companyName"
                         value={formData.companyName}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
                       />
                     </div>
                     <div>
@@ -401,10 +401,10 @@ const Profile = () => {
                         name="vatNumber"
                         value={formData.vatNumber}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
                       />
                     </div>
-                    <div className="sm:col-span-2">
+                    <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">
                         {t('auth.register.UBO')}
                       </label>
@@ -413,7 +413,7 @@ const Profile = () => {
                         name="UBO"
                         value={formData.UBO}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
                       />
                     </div>
                   </div>
@@ -423,19 +423,19 @@ const Profile = () => {
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.companyName')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.companyName || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.companyName || '-'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.vatNumber')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.vatNumber || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.vatNumber || '-'}</p>
                     </div>
                     <div className="sm:col-span-2">
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.UBO')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.UBO || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.UBO || '-'}</p>
                     </div>
                   </div>
                 )}
@@ -454,7 +454,7 @@ const Profile = () => {
                         name="street"
                         value={formData.street}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
                       />
                     </div>
                     <div>
@@ -466,7 +466,7 @@ const Profile = () => {
                         name="city"
                         value={formData.city}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
                       />
                     </div>
                     <div>
@@ -478,7 +478,7 @@ const Profile = () => {
                         name="postalCode"
                         value={formData.postalCode}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
                       />
                     </div>
                     <div>
@@ -490,7 +490,7 @@ const Profile = () => {
                         name="country"
                         value={formData.country}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
                       />
                     </div>
                   </div>
@@ -500,25 +500,25 @@ const Profile = () => {
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.street')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.street || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.street || '-'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.city')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.city || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.city || '-'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.postalCode')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.postalCode || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.postalCode || '-'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide">
                         {t('auth.register.country')}
                       </label>
-                      <p className="mt-1 text-gray-900">{formData.country || '-'}</p>
+                      <p className="mt-1 text-gray-900 text-sm">{formData.country || '-'}</p>
                     </div>
                   </div>
                 )}
@@ -529,28 +529,36 @@ const Profile = () => {
             <div className="lg:col-span-1 space-y-6">
               {/* Account Settings */}
               <ProfileSection title={t('profile.accountSettings')}>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {isEditing ? (
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-3">
                       <button
                         type="submit"
                         form="profile-form"
                         disabled={isSubmitting}
-                        className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium disabled:opacity-50"
+                        className="w-full px-4 py-2.5 bg-[#3b396d] text-white rounded-lg hover:bg-[#2a285a] transition-colors text-sm font-medium disabled:opacity-70"
                       >
-                        {isSubmitting ? t('profile.saving') : t('profile.save')}
+                        {isSubmitting ? (
+                          <span className="flex items-center justify-center">
+                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            {t('profile.saving')}
+                          </span>
+                        ) : t('profile.save')}
                       </button>
                       <button
                         type="button"
                         onClick={cancelEdit}
-                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
+                        className="w-full px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
                       >
                         {t('profile.cancel')}
                       </button>
                     </div>
                   ) : (
                     <button
-                      className="w-full px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium"
+                      className="w-full px-4 py-2.5 bg-[#3b396d] text-white rounded-lg hover:bg-[#2a285a] transition-colors text-sm font-medium"
                       onClick={() => setIsEditing(true)}
                     >
                       {t('profile.editProfile')}
@@ -558,80 +566,86 @@ const Profile = () => {
                   )}
                   
                   {isChangingPassword ? (
-                    <form onSubmit={handlePasswordSubmit}>
-                      <div className="space-y-3 mt-4">
-                        <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                            {t('profile.currentPassword')} *
-                          </label>
-                          <input
-                            type="password"
-                            name="currentPassword"
-                            value={passwordData.currentPassword}
-                            onChange={handlePasswordChange}
-                            className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                              errors.currentPassword ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                          />
-                          {errors.currentPassword && (
-                            <p className="text-red-500 text-xs mt-1">{errors.currentPassword}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                            {t('profile.newPassword')} *
-                          </label>
-                          <input
-                            type="password"
-                            name="newPassword"
-                            value={passwordData.newPassword}
-                            onChange={handlePasswordChange}
-                            className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                              errors.newPassword ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                          />
-                          {errors.newPassword && (
-                            <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                            {t('profile.confirmPassword')} *
-                          </label>
-                          <input
-                            type="password"
-                            name="confirmPassword"
-                            value={passwordData.confirmPassword}
-                            onChange={handlePasswordChange}
-                            className={`w-full px-3 py-2 border rounded-lg text-sm ${
-                              errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                          />
-                          {errors.confirmPassword && (
-                            <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
-                          )}
-                        </div>
-                        <div className="flex gap-2">
-                          <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium disabled:opacity-50"
-                          >
-                            {isSubmitting ? t('profile.changing') : t('profile.changePassword')}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={cancelEdit}
-                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
-                          >
-                            {t('profile.cancel')}
-                          </button>
-                        </div>
+                    <form onSubmit={handlePasswordSubmit} className="space-y-4 pt-2">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          {t('profile.currentPassword')} *
+                        </label>
+                        <input
+                          type="password"
+                          name="currentPassword"
+                          value={passwordData.currentPassword}
+                          onChange={handlePasswordChange}
+                          className={`w-full px-3 py-2 border rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d] ${
+                            errors.currentPassword ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                        />
+                        {errors.currentPassword && (
+                          <p className="text-red-500 text-xs mt-1">{errors.currentPassword}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          {t('profile.newPassword')} *
+                        </label>
+                        <input
+                          type="password"
+                          name="newPassword"
+                          value={passwordData.newPassword}
+                          onChange={handlePasswordChange}
+                          className={`w-full px-3 py-2 border rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d] ${
+                            errors.newPassword ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                        />
+                        {errors.newPassword && (
+                          <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          {t('profile.confirmPassword')} *
+                        </label>
+                        <input
+                          type="password"
+                          name="confirmPassword"
+                          value={passwordData.confirmPassword}
+                          onChange={handlePasswordChange}
+                          className={`w-full px-3 py-2 border rounded-lg text-sm focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d] ${
+                            errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                        />
+                        {errors.confirmPassword && (
+                          <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2 pt-1">
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="w-full px-4 py-2.5 bg-[#3b396d] text-white rounded-lg hover:bg-[#2a285a] transition-colors text-sm font-medium disabled:opacity-70"
+                        >
+                          {isSubmitting ? (
+                            <span className="flex items-center justify-center">
+                              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              {t('profile.changing')}
+                            </span>
+                          ) : t('profile.changePassword')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={cancelEdit}
+                          className="w-full px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+                        >
+                          {t('profile.cancel')}
+                        </button>
                       </div>
                     </form>
                   ) : (
                     <button
-                      className="w-full px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                      className="w-full px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
                       onClick={() => setIsChangingPassword(true)}
                     >
                       {t('profile.changePassword')}
@@ -639,7 +653,7 @@ const Profile = () => {
                   )}
                   
                   <button
-                    className="w-full px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+                    className="w-full px-4 py-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
                     onClick={logout}
                   >
                     {t('profile.logout')}
@@ -660,13 +674,13 @@ const Profile = () => {
               {/* Account Status */}
               <ProfileSection title={t('profile.accountStatus')}>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                  <div className="flex justify-between items-center py-2">
                     <span className="text-sm text-gray-600">{t('profile.memberSince')}</span>
                     <span className="text-sm font-medium">{mockUserData.joined}</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                  <div className="flex justify-between items-center py-2">
                     <span className="text-sm text-gray-600">{t('profile.accountType')}</span>
-                    <span className="text-sm font-medium text-orange-600">{t('profile.dealer')}</span>
+                    <span className="text-sm font-medium text-[#3b396d]">{t('profile.dealer')}</span>
                   </div>
                   <div className="flex justify-between items-center py-2">
                     <span className="text-sm text-gray-600">{t('profile.verificationStatus')}</span>
@@ -678,7 +692,6 @@ const Profile = () => {
           </div>
         </div>
       </div>
-    </AppLayout>
   );
 };
 
