@@ -39,15 +39,15 @@ const HeroSection = () => {
             
             <div className="grid grid-cols-3 gap-4 sm:gap-6 md:gap-8 pt-6 border-t border-white/20">
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">3,000+</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">3,532+</div>
                 <div className="text-xs sm:text-sm text-white/80">{t('hero.buySection.points')[0]}</div>
               </div>
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">30,000+</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">4,71+</div>
                 <div className="text-xs sm:text-sm text-white/80">{t('hero.buySection.points')[1]}</div>
               </div>
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">60,000+</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">6,342+</div>
                 <div className="text-xs sm:text-sm text-white/80">{t('hero.sellSection.points')[2]}</div>
               </div>
             </div>
