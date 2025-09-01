@@ -1,4 +1,4 @@
-// src/components/common/Header.jsx
+// src/components/common/Header.jsx (Fixed Version)
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
@@ -23,8 +23,14 @@ const Header = () => {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [buyDropdownOpen, setBuyDropdownOpen] = useState(false);
-  const [sellDropdownOpen, setSellDropdownOpen] = useState(false);
+  const [mobileDropdownStates, setMobileDropdownStates] = useState({
+    buy: false,
+    sell: false
+  });
+  const [desktopDropdownStates, setDesktopDropdownStates] = useState({
+    buy: false,
+    sell: false
+  });
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   
@@ -61,10 +67,23 @@ const Header = () => {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Check if click is on a dropdown toggle button
+      const isDropdownToggle = event.target.closest('[data-dropdown-toggle]');
+      
+      if (isDropdownToggle) {
+        return; // Don't close dropdowns if clicking toggle buttons
+      }
+
       Object.entries(dropdownRefs).forEach(([key, ref]) => {
         if (ref.current && !ref.current.contains(event.target)) {
-          if (key === 'buy') setBuyDropdownOpen(false);
-          if (key === 'sell') setSellDropdownOpen(false);
+          if (key === 'buy') {
+            setDesktopDropdownStates(prev => ({ ...prev, buy: false }));
+            setMobileDropdownStates(prev => ({ ...prev, buy: false }));
+          }
+          if (key === 'sell') {
+            setDesktopDropdownStates(prev => ({ ...prev, sell: false }));
+            setMobileDropdownStates(prev => ({ ...prev, sell: false }));
+          }
           if (key === 'language') setLanguageDropdownOpen(false);
           if (key === 'user') setUserDropdownOpen(false);
         }
@@ -89,8 +108,8 @@ const Header = () => {
 
   const mainMenuItems = [
     { name: t('header.mainMenu.home'), icon: <FiHome className="text-[#3b396d]" />, href: '/home' },
-    { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-[#3b396d]" />, href: '/buy', hasDropdown: true },
-    { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-[#3b396d]" />, href: '/sell', hasDropdown: true },
+    { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-[#3b396d]" />, href: '/buy', hasDropdown: true, key: 'buy' },
+    { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-[#3b396d]" />, href: '/sell', hasDropdown: true, key: 'sell' },
     { name: t('header.mainMenu.aboutUs'), icon: <FiInfo className="text-[#3b396d]" />, href: '/about' },
     { name: t('header.mainMenu.contact'), icon: <FiPhone className="text-[#3b396d]" />, href: '/contact' },
     { name: t('header.mainMenu.help'), icon: <FiHelpCircle className="text-[#3b396d]" />, href: '/help' }
@@ -100,6 +119,28 @@ const Header = () => {
   const isActiveRoute = (href) => {
     if (href === '/home') return location.pathname === '/' || location.pathname === '/home';
     return location.pathname.startsWith(href);
+  };
+
+  // Toggle mobile dropdowns with event stop propagation
+  const toggleMobileDropdown = (dropdownKey, e) => {
+    e?.stopPropagation(); // Prevent event from bubbling up
+    setMobileDropdownStates(prev => ({
+      ...prev,
+      [dropdownKey]: !prev[dropdownKey]
+    }));
+  };
+
+  // Toggle desktop dropdowns with event stop propagation
+  const toggleDesktopDropdown = (dropdownKey, e) => {
+    e?.stopPropagation(); // Prevent event from bubbling up
+    
+    // Close the other dropdown
+    const otherKey = dropdownKey === 'buy' ? 'sell' : 'buy';
+    setDesktopDropdownStates(prev => ({
+      ...prev,
+      [otherKey]: false,
+      [dropdownKey]: !prev[dropdownKey]
+    }));
   };
 
   return (
@@ -114,7 +155,7 @@ const Header = () => {
 
       {/* Header */}
       <header 
-        className={`fixed w-full z-50 transition-all duration-300  bg-white py-3      }`}
+        className={`fixed w-full z-50 transition-all duration-300 bg-white py-3 ${scrolled ? 'shadow-md' : ''}`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
@@ -128,19 +169,12 @@ const Header = () => {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex lg:items-center lg:space-x-1">
               {mainMenuItems.map((item, index) => (
-                <div key={index} className="relative" ref={item.hasDropdown ? dropdownRefs[item.name === t('header.mainMenu.buyCars') ? 'buy' : 'sell'] : null}>
+                <div key={index} className="relative" ref={item.hasDropdown ? dropdownRefs[item.key] : null}>
                   {item.hasDropdown ? (
                     <>
                       <button 
-                        onClick={() => {
-                          if (item.name === t('header.mainMenu.buyCars')) {
-                            setBuyDropdownOpen(!buyDropdownOpen);
-                            setSellDropdownOpen(false);
-                          } else {
-                            setSellDropdownOpen(!sellDropdownOpen);
-                            setBuyDropdownOpen(false);
-                          }
-                        }}
+                        data-dropdown-toggle="true"
+                        onClick={(e) => toggleDesktopDropdown(item.key, e)}
                         className={`flex items-center px-4 py-2 text-sm font-medium transition-colors ${
                           isActiveRoute(item.href) 
                             ? 'text-[#3b396d]' 
@@ -148,41 +182,39 @@ const Header = () => {
                         }`}
                       >
                         {item.name}
-                        <FiChevronDown className={`ml-1 transition-transform ${item.name === t('header.mainMenu.buyCars') && buyDropdownOpen || item.name === t('header.mainMenu.sellCars') && sellDropdownOpen ? 'rotate-180' : ''}`} />
+                        <FiChevronDown className={`ml-1 transition-transform ${
+                          desktopDropdownStates[item.key] ? 'rotate-180' : ''
+                        }`} />
                       </button>
                       
-                      {(item.name === t('header.mainMenu.buyCars') && buyDropdownOpen) && (
+                      {desktopDropdownStates[item.key] && (
                         <div className="absolute left-0 mt-2 w-56 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                           <div className="py-1">
-                            {buyMenuItems.map((subItem, subIndex) => (
-                              <a
-                                key={subIndex}
-                                href={subItem.href}
-                                className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
-                                onClick={() => setBuyDropdownOpen(false)}
-                              >
-                                <span className="mr-3">{subItem.icon}</span>
-                                {subItem.name}
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {(item.name === t('header.mainMenu.sellCars') && sellDropdownOpen) && (
-                        <div className="absolute left-0 mt-2 w-56 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-                          <div className="py-1">
-                            {sellMenuItems.map((subItem, subIndex) => (
-                              <a
-                                key={subIndex}
-                                href={subItem.href}
-                                className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
-                                onClick={() => setSellDropdownOpen(false)}
-                              >
-                                <span className="mr-3">{subItem.icon}</span>
-                                {subItem.name}
-                              </a>
-                            ))}
+                            {item.key === 'buy' ? (
+                              buyMenuItems.map((subItem, subIndex) => (
+                                <a
+                                  key={subIndex}
+                                  href={subItem.href}
+                                  className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
+                                  onClick={() => setDesktopDropdownStates(prev => ({ ...prev, buy: false }))}
+                                >
+                                  <span className="mr-3">{subItem.icon}</span>
+                                  {subItem.name}
+                                </a>
+                              ))
+                            ) : (
+                              sellMenuItems.map((subItem, subIndex) => (
+                                <a
+                                  key={subIndex}
+                                  href={subItem.href}
+                                  className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
+                                  onClick={() => setDesktopDropdownStates(prev => ({ ...prev, sell: false }))}
+                                >
+                                  <span className="mr-3">{subItem.icon}</span>
+                                  {subItem.name}
+                                </a>
+                              ))
+                            )}
                           </div>
                         </div>
                       )}
@@ -208,7 +240,9 @@ const Header = () => {
               {/* Language Dropdown */}
               <div className="relative hidden sm:block" ref={dropdownRefs.language}>
                 <button 
-                  onClick={() => {
+                  data-dropdown-toggle="true"
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setLanguageDropdownOpen(!languageDropdownOpen);
                     setUserDropdownOpen(false);
                   }}
@@ -225,7 +259,8 @@ const Header = () => {
                       {supportedLanguages.map((langCode) => (
                         <button
                           key={langCode}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setLanguage(langCode);
                             setLanguageDropdownOpen(false);
                           }}
@@ -247,7 +282,9 @@ const Header = () => {
               {user ? (
                 <div className="hidden md:block relative" ref={dropdownRefs.user}>
                   <button 
-                    onClick={() => {
+                    data-dropdown-toggle="true"
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setUserDropdownOpen(!userDropdownOpen);
                       setLanguageDropdownOpen(false);
                     }}
@@ -266,10 +303,10 @@ const Header = () => {
                         </a>
                         <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]">
                           {t('header.userMenu.profile')}
-                          
                         </a>
                         <button
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             logout();
                             setUserDropdownOpen(false);
                           }}
@@ -336,15 +373,8 @@ const Header = () => {
                     {item.hasDropdown ? (
                       <>
                         <button 
-                          onClick={() => {
-                            if (item.name === t('header.mainMenu.buyCars')) {
-                              setBuyDropdownOpen(!buyDropdownOpen);
-                              setSellDropdownOpen(false);
-                            } else {
-                              setSellDropdownOpen(!sellDropdownOpen);
-                              setBuyDropdownOpen(false);
-                            }
-                          }}
+                          data-dropdown-toggle="true"
+                          onClick={(e) => toggleMobileDropdown(item.key, e)}
                           className="flex justify-between items-center w-full py-3 px-4 rounded-lg font-medium text-gray-900 hover:bg-[#f8f9ff]"
                         >
                           <div className="flex items-center">
@@ -352,42 +382,45 @@ const Header = () => {
                             {item.name}
                           </div>
                           <FiChevronDown className={`transition-transform ${
-                            (item.name === t('header.mainMenu.buyCars') && buyDropdownOpen) || 
-                            (item.name === t('header.mainMenu.sellCars') && sellDropdownOpen) 
-                              ? 'rotate-180' 
-                              : ''
+                            mobileDropdownStates[item.key] ? 'rotate-180' : ''
                           }`} />
                         </button>
                         
-                        {item.name === t('header.mainMenu.buyCars') && buyDropdownOpen && (
+                        {mobileDropdownStates[item.key] && (
                           <div className="pl-12 mt-1 space-y-1">
-                            {buyMenuItems.map((subItem, subIndex) => (
-                              <a
-                                key={subIndex}
-                                href={subItem.href}
-                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-medium"
-                                onClick={() => setMobileMenuOpen(false)}
-                              >
-                                <span className="mr-3">{subItem.icon}</span>
-                                {subItem.name}
-                              </a>
-                            ))}
-                          </div>
-                        )}
-                        
-                        {item.name === t('header.mainMenu.sellCars') && sellDropdownOpen && (
-                          <div className="pl-12 mt-1 space-y-1">
-                            {sellMenuItems.map((subItem, subIndex) => (
-                              <a
-                                key={subIndex}
-                                href={subItem.href}
-                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-medium"
-                                onClick={() => setMobileMenuOpen(false)}
-                              >
-                                <span className="mr-3">{subItem.icon}</span>
-                                {subItem.name}
-                              </a>
-                            ))}
+                            {item.key === 'buy' ? (
+                              buyMenuItems.map((subItem, subIndex) => (
+                                <a
+                                  key={subIndex}
+                                  href={subItem.href}
+                                  className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-medium"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setMobileDropdownStates(prev => ({ ...prev, buy: false }));
+                                    setMobileMenuOpen(false);
+                                  }}
+                                >
+                                  <span className="mr-3">{subItem.icon}</span>
+                                  {subItem.name}
+                                </a>
+                              ))
+                            ) : (
+                              sellMenuItems.map((subItem, subIndex) => (
+                                <a
+                                  key={subIndex}
+                                  href={subItem.href}
+                                  className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-medium"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setMobileDropdownStates(prev => ({ ...prev, sell: false }));
+                                    setMobileMenuOpen(false);
+                                  }}
+                                >
+                                  <span className="mr-3">{subItem.icon}</span>
+                                  {subItem.name}
+                                </a>
+                              ))
+                            )}
                           </div>
                         )}
                       </>
