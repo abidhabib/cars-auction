@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Dashboard from './pages/Dashboard';
+import Profile from './pages/profile/Profile';
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }) => {
@@ -42,9 +43,7 @@ function App() {
               } />
               <Route path="/profile" element={
                 <ProtectedRoute>
-                  <div className="min-h-screen">
-                    Profile Page
-                  </div>
+                  <Profile />
                 </ProtectedRoute>
               } />
               <Route path="/buy/*" element={

@@ -1,9 +1,10 @@
+// src/pages/auth/Login.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
-import Button from '../../components/common/Button';
+import api from '../../services/api'; // Use the new API service
 import AppLayout from '../../components/layout/AppLayout';
 
 const Login = () => {
@@ -25,62 +26,93 @@ const Login = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    
+    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+    
+    // Clear general submit error
+    if (errors.submit) {
+      setErrors(prev => ({ ...prev, submit: '' }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.email) {
-      newErrors.email = t('auth.login.errors.required');
+    
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = t('auth.login.errors.emailRequired');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = t('auth.login.errors.invalidEmail');
     }
+    
+    // Password validation
     if (!formData.password) {
-      newErrors.password = t('auth.login.errors.required');
+      newErrors.password = t('auth.login.errors.passwordRequired');
+    } else if (formData.password.length < 6) {
+      newErrors.password = t('auth.register.errors.passwordTooShort');
     }
+    
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = validateForm();
+    const formErrors = validateForm();
     
-    if (Object.keys(newErrors).length === 0) {
-      setIsLoading(true);
-      try {
-        await login(formData);
-        navigate('/dashboard');
-      } catch (error) {
-        setErrors({
-          submit: error.message || t('auth.login.errors.invalidCredentials')
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      setErrors(newErrors);
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+    
+    setIsLoading(true);
+    setErrors({});
+    
+    try {
+      // Use the new API service - automatically uses mock data
+      const response = await api.auth.login({
+        email: formData.email,
+        password: formData.password
+      });
+      
+      // Login with the response data
+      login(response.user || response, formData.rememberMe);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrors({
+        submit: error.message || t('auth.login.errors.invalidCredentials')
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
+
     <AppLayout>
-      <div className="min-h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+
+
+      
+
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
-          <div>
-           
-            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+          <div className="text-center">
+            <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
               {t('auth.login.title')}
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600">
               {t('auth.login.noAccount')}{' '}
-              <button
-                onClick={() => navigate('/register')}
+              <Link 
+                to="/register" 
                 className="font-medium text-orange-600 hover:text-orange-500"
               >
                 {t('auth.login.createAccount')}
-              </button>
+              </Link>
             </p>
           </div>
 
@@ -103,9 +135,12 @@ const Login = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
+                    disabled={isLoading}
                     className={`block w-full pl-10 pr-3 py-2 border ${
                       errors.email ? 'border-red-300' : 'border-gray-300'
-                    } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm`}
+                    } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm ${
+                      isLoading ? 'bg-gray-100' : ''
+                    }`}
                     placeholder={t('auth.login.email')}
                   />
                 </div>
@@ -131,14 +166,18 @@ const Login = () => {
                     required
                     value={formData.password}
                     onChange={handleChange}
+                    disabled={isLoading}
                     className={`block w-full pl-10 pr-10 py-2 border ${
                       errors.password ? 'border-red-300' : 'border-gray-300'
-                    } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm`}
+                    } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm ${
+                      isLoading ? 'bg-gray-100' : ''
+                    }`}
                     placeholder={t('auth.login.password')}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
+                    disabled={isLoading}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   >
                     {showPassword ? (
@@ -162,6 +201,7 @@ const Login = () => {
                     type="checkbox"
                     checked={formData.rememberMe}
                     onChange={handleChange}
+                    disabled={isLoading}
                     className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
                   />
                   <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-700">
@@ -172,7 +212,8 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => navigate('/forgot-password')}
-                  className="text-sm font-medium text-orange-600 hover:text-orange-500"
+                  disabled={isLoading}
+                  className="text-sm font-medium text-orange-600 hover:text-orange-500 disabled:opacity-50"
                 >
                   {t('auth.login.forgotPassword')}
                 </button>
@@ -180,14 +221,37 @@ const Login = () => {
 
               {/* Submit Button */}
               <div>
-                <Button
+                <button
                   type="submit"
-                  variant="primary"
-                  className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                   disabled={isLoading}
+                  className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  {isLoading ? t('common.loading') : t('auth.login.signIn')}
-                </Button>
+                  {isLoading ? (
+                    <span className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {t('common.loading')}
+                    </span>
+                  ) : (
+                    t('auth.login.signIn')
+                  )}
+                </button>
+              </div>
+
+              {/* Test Credentials Info */}
+              <div className="rounded-md bg-blue-50 p-4">
+                <div className="flex">
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-blue-800">
+                      Test User !
+                    </h3>
+                    <div className="mt-2 text-sm text-blue-700">
+                      <p><strong>User:</strong> user@example.com / password123</p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Error Message */}
@@ -205,8 +269,9 @@ const Login = () => {
             </form>
           </div>
         </div>
-      </div>
-    </AppLayout>
+      </main>
+    </div>
+        </AppLayout>
   );
 };
 

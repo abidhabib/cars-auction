@@ -149,6 +149,41 @@ export const translations = {
       }
     },
     // Authentication
+    profile: {
+      personalInfo: "Personal Information",
+      businessInfo: "Business Information",
+      addressInfo: "Address Information",
+      accountSettings: "Account Settings",
+      accountStatus: "Account Status",
+      editProfile: "Edit Profile",
+      changePassword: "Change Password",
+      memberSince: "Member Since",
+      accountType: "Account Type",
+      dealer: "Dealer",
+      verificationStatus: "Verification Status",
+      verified: "Verified",
+      notVerified: "Not Verified",
+      save:"Save",
+      cancel:"Cancel",
+      currentPassword:"Current Password",
+      newPassword:"New Password",
+      confirmPassword:"Confirm Password",
+      logout: "Logout",
+      error: "Error",
+      retry: "Retry",
+      saving: "Saving...",
+      changing: "Changing...",
+      updateError: "Update failed. Please try again.",
+      passwordChangeSuccess: "Password changed successfully.",
+      errors: {
+        currentPasswordRequired: "Current password is required.",
+        newPasswordRequired: "New password is required.",
+        confirmPasswordRequired: "Confirm password is required.",
+        passwordsDontMatch: "Passwords do not match.",
+        passwordTooShort: "Password must be at least 8 characters."
+      }
+
+    },
     auth: {
       login: {
         title: "Welcome back",
@@ -368,7 +403,7 @@ export const translations = {
       contactUs: "Kontakt",
       watchStory: "Unsere Geschichte ansehen"
     },
-    // Common
+    // save
     common: {
       loading: "Wird geladen...",
       error: "Etwas ist schief gelaufen",
@@ -399,6 +434,40 @@ export const translations = {
       }
     },
     // Authentication
+    profile: {
+      personalInfo: "Persönliche Informationen",
+      businessInfo: "Geschäftsinformationen",
+      addressInfo: "Adressinformationen",
+      accountSettings: "Kontoeinstellungen",
+      accountStatus: "Kontostatus",
+      editProfile: "Profil bearbeiten",
+      changePassword: "Passwort ändern",
+      memberSince: "Mitglied seit",
+      accountType: "Kontotyp",
+      dealer: "Händler",
+      verificationStatus: "Verifizierungsstatus",
+      verified: "Verifiziert",
+      notVerified: "Nicht verifiziert",
+      save:"Speichern",
+      cancel:"Abbrechen",
+      currentPassword:"Aktuelles Passwort",
+      newPassword:"Neues Passwort",
+      confirmPassword:"Passwort bestätigen",
+      logout: "Ausloggen",
+      error: "Fehler",
+      retry: "Erneut versuchen",
+      saving: "Speichern...",
+      updateError: "Aktualisierung fehlgeschlagen. Bitte erneut versuchen.",
+      passwordChangeSuccess: "Passwort erfolgreich geändert.",
+      errors: {
+        currentPasswordRequired: "Aktuelles Passwort ist erforderlich.",
+        newPasswordRequired: "Neues Passwort ist erforderlich.",
+        confirmPasswordRequired: "Passwort bestätigen ist erforderlich.",
+        passwordsDontMatch: "Passwörter stimmen nicht überein.",
+        passwordTooShort: "Das Passwort muss mindestens 8 Zeichen lang sein."
+      }
+
+    },
     auth: {
       login: {
         title: "Willkommen zurück",
@@ -413,7 +482,8 @@ export const translations = {
         errors: {
           invalidCredentials: "Ungültige E-Mail oder Passwort",
           required: "Dieses Feld ist erforderlich",
-          invalidEmail: "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+          invalidEmail: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+          
         }
       },
       register: {
@@ -648,6 +718,40 @@ export const translations = {
       }
     },
     // Authentication
+    profile: {
+      personalInfo: "Persoonlijke informatie",
+      businessInfo: "Bedrijfsinformatie",
+      addressInfo: "Adresgegevens",
+      accountSettings: "Account instellingen",
+      accountStatus: "Account status",
+      editProfile: "Profiel bewerken",
+      changePassword: "Wachtwoord wijzigen",
+      memberSince: "Lid sinds",
+      accountType: "Account type",
+      dealer: "Dealer",
+      verificationStatus: "Verificatiestatus",
+      verified: "Geverifieerd",
+      notVerified: "Niet geverifieerd",
+       save:"Opslaan",
+      cancel:"Annuleren",
+      currentPassword:"Huidig wachtwoord",
+      newPassword:"Nieuw wachtwoord",
+      confirmPassword:"Bevestig wachtwoord",
+      logout: "Uitloggen",
+      error: "Fout",
+      retry: "Opnieuw proberen",
+      saving: "Opslaan...",
+      updateError: "Bijwerken mislukt. Probeer het opnieuw.",
+      passwordChangeSuccess: "Wachtwoord succesvol gewijzigd.",
+      errors: {
+        currentPasswordRequired: "Huidig wachtwoord is verplicht.",
+        newPasswordRequired: "Nieuw wachtwoord is verplicht.",
+        confirmPasswordRequired: "Bevestig wachtwoord is verplicht.",
+        passwordsDontMatch: "Wachtwoorden komen niet overeen.",
+        passwordTooShort: "Wachtwoord moet minimaal 8 tekens lang zijn."
+      }
+
+    },
     auth: {
       login: {
         title: "Welkom terug",

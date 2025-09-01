@@ -427,12 +427,13 @@ const navigate=useNavigate();
                 
                 {user ? (
                   <div className="space-y-4">
-                    <div className="flex items-center p-4 bg-orange-50 rounded-xl">
+                    <div className="flex items-center p-4 bg-orange-50 rounded-xl" onClick={() => navigate('/profile')}>
                       <FiUser className="text-orange-500 text-xl mr-3" />
                       <div className="truncate">
                         <p className="font-semibold text-gray-900">{t('header.welcome')}</p>
                         <p className="text-gray-700 truncate">{user.name}</p>
                       </div>
+                     
                     </div>
                     <button
                       onClick={() => {

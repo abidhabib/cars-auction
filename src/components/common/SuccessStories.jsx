@@ -24,7 +24,7 @@ const SuccessStories = () => {
   const duplicatedStories = [...successStories, ...successStories, ...successStories, ...successStories, ...successStories];
 
   return (
-    <section className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-16">
+    <section className="bg-gray-100 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
@@ -53,7 +53,6 @@ const SuccessStories = () => {
 
             .slider::before,
             .slider::after {
-              background: linear-gradient(to right, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0) 100%);
               content: "";
               height: 280px;
               position: absolute;
@@ -79,7 +78,6 @@ const SuccessStories = () => {
 
             .slide-track-1 {
               animation: scrollLeftToRight 40s linear infinite;
-              animation-delay: -20s;
             }
 
             .slide-track-2 {
