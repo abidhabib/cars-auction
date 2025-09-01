@@ -15,7 +15,6 @@ export const mockApi = {
   cars: {
     list: async (params = {}) => {
       await mockDelay();
-      // Simulate pagination/search if needed
       return mockCars;
     },
     get: async (id) => {
@@ -35,7 +34,6 @@ export const mockApi = {
     },
     placeBid: async (id, bidData) => {
       await mockDelay();
-      // Simulate bid placement
       return { success: true, message: 'Bid placed successfully' };
     }
   },

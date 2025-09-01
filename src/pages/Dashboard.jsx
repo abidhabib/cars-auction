@@ -1,95 +1,78 @@
+// src/pages/Dashboard.jsx
 import React from 'react';
 import { FiUsers, FiDollarSign, FiClock, FiBarChart2, FiTruck, FiCalendar } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
+import { useDashboardStats } from '../hooks/useApi';
 import AppLayout from '../components/layout/AppLayout';
 
 const Dashboard = () => {
   const { t } = useLanguage();
+  const { data: dashboardData, loading, error } = useDashboardStats();
 
-  // Dummy data for the dashboard
-  const stats = [
-    {
-      id: 1,
-      name: 'Active Auctions',
-      value: '24',
-      change: '+12%',
-      changeType: 'increase',
-      icon: <FiClock className="h-6 w-6 text-orange-500" />,
-    },
-    {
-      id: 2,
-      name: 'Total Sales',
-      value: '€234,500',
-      change: '+8.2%',
-      changeType: 'increase',
-      icon: <FiDollarSign className="h-6 w-6 text-orange-500" />,
-    },
-    {
-      id: 3,
-      name: 'Active Bidders',
-      value: '156',
-      change: '+5.4%',
-      changeType: 'increase',
-      icon: <FiUsers className="h-6 w-6 text-orange-500" />,
-    },
-    {
-      id: 4,
-      name: 'Average Bid',
-      value: '€12,400',
-      change: '-2.3%',
-      changeType: 'decrease',
-      icon: <FiBarChart2 className="h-6 w-6 text-orange-500" />,
-    },
-  ];
+  // Loading state
+  if (loading) {
+    return (
+      <AppLayout>
+        <div className="min-h-screen bg-gray-50 py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+            </div>
+          </div>
+        </div>
+      </AppLayout>
+    );
+  }
 
-  const recentAuctions = [
-    {
-      id: 1,
-      carName: 'BMW M4 Competition',
-      year: 2023,
-      currentBid: '€82,500',
-      timeLeft: '2h 15m',
-      bidders: 12,
-      image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80',
-    },
-    {
-      id: 2,
-      carName: 'Porsche 911 GT3',
-      year: 2022,
-      currentBid: '€165,000',
-      timeLeft: '4h 30m',
-      bidders: 18,
-      image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80',
-    },
-    {
-      id: 3,
-      carName: 'Mercedes-AMG GT',
-      year: 2023,
-      currentBid: '€145,750',
-      timeLeft: '1h 45m',
-      bidders: 15,
-      image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80',
-    },
-  ];
+  // Error state
+  if (error) {
+    return (
+      <AppLayout>
+        <div className="min-h-screen bg-gray-50 py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+              <div className="flex">
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">
+                    Error loading dashboard data
+                  </h3>
+                  <p className="text-sm text-red-700 mt-1">
+                    {error.message}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </AppLayout>
+    );
+  }
 
-  const upcomingDeliveries = [
-    {
-      id: 1,
-      carName: 'Audi RS e-tron GT',
-      deliveryDate: 'Sep 5, 2025',
-      status: 'In Transit',
-      location: 'Hamburg',
-      image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80',
-    },
-    {
-      id: 2,
-      carName: 'Tesla Model S Plaid',
-      deliveryDate: 'Sep 8, 2025',
-      status: 'Processing',
-      location: 'Berlin',
-      image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80',
-    },
-  ];
+  // Use mock data from the hook
+  const stats = dashboardData?.stats || [];
+  const recentAuctions = dashboardData?.recentAuctions || [];
+  const upcomingDeliveries = dashboardData?.upcomingDeliveries || [];
+
+  // Helper function to render icons
+  const renderIcon = (iconName, className) => {
+    switch (iconName) {
+      case 'clock': return <FiClock className={className} />;
+      case 'dollar': return <FiDollarSign className={className} />;
+      case 'users': return <FiUsers className={className} />;
+      case 'chart': return <FiBarChart2 className={className} />;
+      default: return <FiBarChart2 className={className} />;
+    }
+  };
+
+  // Format currency
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
 
   return (
     <AppLayout>
@@ -97,9 +80,9 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{t('dashboard.title')}</h1>
             <p className="mt-1 text-sm text-gray-500">
-              Overview of your auction activities and statistics
+              {t('dashboard.subtitle')}
             </p>
           </div>
 
@@ -111,7 +94,9 @@ const Dashboard = () => {
                 className="bg-white overflow-hidden shadow-sm rounded-xl p-6"
               >
                 <div className="flex items-center">
-                  <div className="flex-shrink-0">{stat.icon}</div>
+                  <div className="flex-shrink-0">
+                    {renderIcon(stat.icon, "h-6 w-6 text-orange-500")}
+                  </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">
@@ -120,7 +105,11 @@ const Dashboard = () => {
                       <dd>
                         <div className="flex items-baseline">
                           <p className="text-2xl font-semibold text-gray-900">
-                            {stat.value}
+                            {typeof stat.value === 'number' && stat.name.includes('Sales') 
+                              ? formatCurrency(stat.value)
+                              : typeof stat.value === 'number' && stat.name.includes('Bid')
+                              ? formatCurrency(stat.value)
+                              : stat.value}
                           </p>
                           <p
                             className={`ml-2 flex items-baseline text-sm font-semibold ${
@@ -145,9 +134,9 @@ const Dashboard = () => {
             {/* Active Auctions */}
             <div className="bg-white shadow-sm rounded-xl p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-medium text-gray-900">Active Auctions</h2>
+                <h2 className="text-lg font-medium text-gray-900">{t('dashboard.activeAuctions')}</h2>
                 <button className="text-sm font-medium text-orange-600 hover:text-orange-500">
-                  View all
+                  {t('dashboard.viewAll')}
                 </button>
               </div>
               <div className="space-y-6">
@@ -163,18 +152,18 @@ const Dashboard = () => {
                         {auction.carName} ({auction.year})
                       </p>
                       <p className="text-sm text-gray-500">
-                        Current Bid: {auction.currentBid}
+                        {t('dashboard.currentBid')}: {formatCurrency(auction.currentBid)}
                       </p>
                       <div className="flex items-center mt-1">
                         <FiClock className="text-gray-400 mr-1 h-4 w-4" />
                         <span className="text-xs text-gray-500">{auction.timeLeft}</span>
                         <span className="mx-2 text-gray-300">•</span>
                         <FiUsers className="text-gray-400 mr-1 h-4 w-4" />
-                        <span className="text-xs text-gray-500">{auction.bidders} bidders</span>
+                        <span className="text-xs text-gray-500">{auction.bidders} {t('dashboard.bidders')}</span>
                       </div>
                     </div>
                     <button className="flex-shrink-0 bg-orange-50 text-orange-600 hover:bg-orange-100 px-3 py-1 rounded-full text-sm font-medium">
-                      Bid Now
+                      {t('dashboard.bidNow')}
                     </button>
                   </div>
                 ))}
@@ -184,9 +173,9 @@ const Dashboard = () => {
             {/* Upcoming Deliveries */}
             <div className="bg-white shadow-sm rounded-xl p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-medium text-gray-900">Upcoming Deliveries</h2>
+                <h2 className="text-lg font-medium text-gray-900">{t('dashboard.upcomingDeliveries')}</h2>
                 <button className="text-sm font-medium text-orange-600 hover:text-orange-500">
-                  View all
+                  {t('dashboard.viewAll')}
                 </button>
               </div>
               <div className="space-y-6">
@@ -213,7 +202,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <button className="flex-shrink-0 bg-orange-50 text-orange-600 hover:bg-orange-100 px-3 py-1 rounded-full text-sm font-medium">
-                      Track
+                      {t('dashboard.track')}
                     </button>
                   </div>
                 ))}
