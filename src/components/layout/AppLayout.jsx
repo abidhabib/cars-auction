@@ -6,12 +6,10 @@ const AppLayout = ({ children, hideHeader = false }) => {
   return (
     <div className="min-h-screen flex flex-col">
       {!hideHeader && <Header />}
-      <main >
-
+      <main className="flex-1">
         {children}
-                      <Footer/>
-
       </main>
+      <Footer />
     </div>
   );
 };

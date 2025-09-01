@@ -8,9 +8,6 @@ import dealer5 from '../../assets/success-stories/dealer5.jpg';
 import dealer6 from '../../assets/success-stories/dealer6.jpg';
 import dealer7 from '../../assets/success-stories/dealer7.jpg';
 import dealer8 from '../../assets/success-stories/dealer8.jpg';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
-import 'swiper/css';
 
 const SuccessStories = () => {
   const { t } = useLanguage();
@@ -23,101 +20,172 @@ const SuccessStories = () => {
     description: story.description
   }));
 
-  // First carousel - moves left to right (normal direction)
-  const firstCarouselSettings = {
-    modules: [Autoplay],
-    spaceBetween: 20,
-    slidesPerView: 2,
-    loop: true,
-    autoplay: {
-      delay: 1,
-      disableOnInteraction: false,
-      pauseOnMouseEnter: true,
-    },
-    speed: 5000,
-    breakpoints: {
-      640: { slidesPerView: 3 },
-      768: { slidesPerView: 4 },
-      1024: { slidesPerView: 5 },
-    },
-    className: "py-4 mb-6",
-    allowTouchMove: false,
-    grabCursor: false,
-  };
-
-  // Second carousel - moves right to left (reverse direction)
-  const secondCarouselSettings = {
-    ...firstCarouselSettings,
-    autoplay: {
-      delay: 1,
-      disableOnInteraction: false,
-      pauseOnMouseEnter: true,
-      reverseDirection: true,
-    },
-    className: "py-4",
-  };
+  // Create infinite loop by duplicating stories multiple times
+  const duplicatedStories = [...successStories, ...successStories, ...successStories, ...successStories, ...successStories];
 
   return (
-    <section className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <section className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
-           <div className="text-center mt-24 mb-16">
-          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
             {t('successStories.title')}
-          </h1>
-        </div>
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto text-lg">
             {t('successStories.subtitle')}
           </p>
         </div>
 
-        {/* First row - moves left to right */}
-        <Swiper {...firstCarouselSettings}>
-          {successStories.map((story) => (
-            <SwiperSlide key={`first-${story.id}`}>
-              <div className="relative group aspect-square rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-white/50 bg-white/20 backdrop-blur-sm">
-                <img 
-                  src={story.image} 
-                  alt={story.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-semibold text-white text-base truncate">{story.name}</h3>
-                  <p className="text-slate-200 text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">
-                    {story.description}
-                  </p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="slider-container overflow-hidden">
+          <style jsx>{`
+            .slider {
+              background: transparent;
+              height: 280px;
+              margin: auto;
+              overflow: hidden;
+              position: relative;
+              width: 100%;
+              margin-bottom: 20px;
+            }
 
-        {/* Second row - moves right to left */}
-        <Swiper {...secondCarouselSettings}>
-          {successStories.map((story) => (
-            <SwiperSlide key={`second-${story.id}`}>
-              <div className="relative group aspect-square rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-white/50 bg-white/20 backdrop-blur-sm">
-                <img 
-                  src={story.image} 
-                  alt={story.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-semibold text-white text-base truncate">{story.name}</h3>
-                  <p className="text-slate-200 text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">
-                    {story.description}
-                  </p>
+            .slider-row-2 {
+              margin-bottom: 0;
+            }
+
+            .slider::before,
+            .slider::after {
+              background: linear-gradient(to right, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0) 100%);
+              content: "";
+              height: 280px;
+              position: absolute;
+              width: 150px;
+              z-index: 2;
+            }
+
+            .slider::after {
+              right: 0;
+              top: 0;
+              transform: rotateZ(180deg);
+            }
+
+            .slider::before {
+              left: 0;
+              top: 0;
+            }
+
+            .slide-track {
+              display: flex;
+              width: calc(300px * ${duplicatedStories.length});
+            }
+
+            .slide-track-1 {
+              animation: scrollLeftToRight 40s linear infinite;
+              animation-delay: -20s;
+            }
+
+            .slide-track-2 {
+              animation: scrollRightToLeft 40s linear infinite;
+            }
+
+            .slide {
+              height: 280px;
+              width: 300px;
+              padding: 0 15px;
+              flex-shrink: 0;
+            }
+
+            @keyframes scrollLeftToRight {
+              0% { transform: translateX(-${300 * successStories.length}px); }
+              100% { transform: translateX(0px); }
+            }
+
+            @keyframes scrollRightToLeft {
+              0% { transform: translateX(0px); }
+              100% { transform: translateX(-${300 * successStories.length}px); }
+            }
+
+            @media (max-width: 1024px) {
+              .slide {
+                width: 280px;
+              }
+              
+              .slide-track {
+                width: calc(280px * ${duplicatedStories.length});
+              }
+              
+              @keyframes scrollLeftToRight {
+                0% { transform: translateX(-${280 * successStories.length}px); }
+                100% { transform: translateX(0px); }
+              }
+
+              @keyframes scrollRightToLeft {
+                0% { transform: translateX(0px); }
+                100% { transform: translateX(-${280 * successStories.length}px); }
+              }
+            }
+
+            @media (max-width: 768px) {
+              .slide {
+                width: 250px;
+              }
+              
+              .slide-track {
+                width: calc(250px * ${duplicatedStories.length});
+              }
+              
+              @keyframes scrollLeftToRight {
+                0% { transform: translateX(-${250 * successStories.length}px); }
+                100% { transform: translateX(0px); }
+              }
+
+              @keyframes scrollRightToLeft {
+                0% { transform: translateX(0px); }
+                100% { transform: translateX(-${250 * successStories.length}px); }
+              }
+            }
+          `}</style>
+
+          {/* First row - moves left to right */}
+          <div className="slider">
+            <div className="slide-track slide-track-1">
+              {duplicatedStories.map((story, index) => (
+                <div className="slide" key={`row1-${story.id}-${index}`}>
+                  <div className="bg-white rounded-xl overflow-hidden shadow-md h-full flex flex-col">
+                    <img 
+                      src={story.image} 
+                      alt={story.name}
+                      className="w-full h-40 object-cover"
+                    />
+                    <div className="p-4 flex-grow">
+                      <h3 className="font-semibold text-slate-800 text-lg truncate">{story.name}</h3>
+                      <p className="text-slate-600 text-sm mt-2 line-clamp-2">{story.description}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+              ))}
+            </div>
+          </div>
+
+          {/* Second row - moves right to left */}
+          <div className="slider slider-row-2">
+            <div className="slide-track slide-track-2">
+              {duplicatedStories.map((story, index) => (
+                <div className="slide" key={`row2-${story.id}-${index}`}>
+                  <div className="bg-white rounded-xl overflow-hidden shadow-md h-full flex flex-col">
+                    <img 
+                      src={story.image} 
+                      alt={story.name}
+                      className="w-full h-40 object-cover"
+                    />
+                    <div className="p-4 flex-grow">
+                      <h3 className="font-semibold text-slate-800 text-lg truncate">{story.name}</h3>
+                      <p className="text-slate-600 text-sm mt-2 line-clamp-2">{story.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

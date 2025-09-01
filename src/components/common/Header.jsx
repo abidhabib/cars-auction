@@ -106,9 +106,7 @@ const navigate=useNavigate();
 
       {/* Header */}
       <header 
-        className={`fixed w-full z-[100] transition-all duration-300 ${
-          scrolled ? 'bg-white/95 backdrop-blur-sm shadow-md py-2' : 'bg-white shadow-sm py-3'
-        }`}
+        className='fixed w-full z-[100] transition-all duration-300 bg-white shadow-sm py-3'
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">

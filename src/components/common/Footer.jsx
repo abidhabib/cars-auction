@@ -23,7 +23,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative overflow-hidden  bg-gradient-to-br from-blue-50/40 via-purple-50/30 to-orange-50/40">
+    <footer className="relative z-10 w-full bg-gradient-to-br from-blue-50/40 via-purple-50/30 to-orange-50/40">
       {/* Abstract Pattern Background */}
       <div className="absolute inset-0 -z-10 opacity-40">
         <svg 
@@ -93,8 +93,8 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24  relative z-10  ">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12">
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="flex items-center mb-6">
@@ -209,8 +209,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-16 pt-8 border-t border-gray-300 border-opacity-50">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-12 md:mt-16 pt-8 border-t border-gray-300 border-opacity-50">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-8 lg:space-y-0">
             {/* App badges */}
             <div className="flex flex-col sm:flex-row sm:space-x-4 mb-6 lg:mb-0">
               <a href="#" className="inline-flex items-center justify-center bg-gray-900 text-white text-sm rounded-xl px-5 py-2 mb-3 sm:mb-0 hover:bg-orange-600 transition-colors shadow-md hover:shadow-lg">
