@@ -123,7 +123,13 @@ export const translations = {
       partners: "Partners",
       satisfaction: "Satisfaction",
       experience: "Experience",
-      countries: "Countries"
+      countries: "Countries",
+      stats:{
+        partners: "Partners",
+        satisfaction: "Satisfaction",
+        experience: "Experience",
+        countries: "Countries"
+      }
     },
     // Common
     common: {
@@ -461,7 +467,13 @@ export const translations = {
       partners: "Partner",
       satisfaction: "Zufriedenheit",
       experience: "Erfahrung",
-      countries: "Länder"
+      countries: "Länder",
+       stats:{
+        partners: "Partners",
+        satisfaction: "Satisfaction",
+        experience: "Experience",
+        countries: "Countries"
+      }
     },
     // save
     common: {
@@ -794,7 +806,13 @@ export const translations = {
       partners: "Partners",
       satisfaction: "Zorgvuldigheid",
       experience: "Ervaring",
-      countries: "Landen"
+      countries: "Landen",
+       stats:{
+        partners: "Partners",
+        satisfaction: "Satisfaction",
+        experience: "Experience",
+        countries: "Countries"
+      }
     },
     // Common
     common: {

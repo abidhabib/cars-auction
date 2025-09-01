@@ -134,63 +134,69 @@ const Home = () => {
       </section>
       
       {/* Business Growth Section */}
-      <section className="py-16 bg-[#3b396d] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('businessGrowth.title')}</h2>
-              <p className="text-lg text-blue-100 leading-relaxed mb-6">
-                {t('businessGrowth.description')}
-              </p>
-              <div className="grid grid-cols-2 gap-6 mb-8">
-                <div>
-                  <div className="text-3xl font-bold mb-1">5,000+</div>
-                  <div className="text-blue-200">{t('businessGrowth.stats.partners')}</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold mb-1">98%</div>
-                  <div className="text-blue-200">{t('businessGrowth.stats.satisfaction')}</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold mb-1">15+</div>
-                  <div className="text-blue-200">{t('businessGrowth.stats.experience')}</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold mb-1">27</div>
-                  <div className="text-blue-200">{t('businessGrowth.stats.countries')}</div>
-                </div>
-              </div>
-              <div className="flex space-x-4">
-                <button className="px-6 py-3 bg-white text-[#3b396d] font-medium rounded-lg hover:bg-gray-100 transition-colors">
-                  Learn More
-                </button>
-                <button className="px-6 py-3 border border-white text-white font-medium rounded-lg hover:bg-white/10 transition-colors">
-                  Contact Us
-                </button>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl">
-                <img 
-                  src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80" 
-                  alt="Business Growth" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                <div className="absolute bottom-6 left-6">
-                  <div className="flex items-center space-x-2 text-white cursor-pointer hover:underline">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                    </svg>
-                    <span>{t('businessGrowth.watchStory')}</span>
-                  </div>
-                </div>
-              </div>
+   <section className="py-16 bg-[#3b396d] text-white">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="flex flex-col h-full">
+        <div className="flex-grow">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+            {t('businessGrowth.title')}
+          </h2>
+          <p className="text-lg text-blue-100 leading-relaxed mb-8">
+            {t('businessGrowth.description')}
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-6 mb-8">
+          <div className="text-center md:text-left">
+            <div className="text-3xl font-bold mb-1">5,000+</div>
+            <div className="text-blue-200 text-sm">{t('businessGrowth.stats.partners')}</div>
+          </div>
+          <div className="text-center md:text-left">
+            <div className="text-3xl font-bold mb-1">98%</div>
+            <div className="text-blue-200 text-sm">{t('businessGrowth.stats.satisfaction')}</div>
+          </div>
+          <div className="text-center md:text-left">
+            <div className="text-3xl font-bold mb-1">15+</div>
+            <div className="text-blue-200 text-sm">{t('businessGrowth.stats.experience')}</div>
+          </div>
+          <div className="text-center md:text-left">
+            <div className="text-3xl font-bold mb-1">27</div>
+            <div className="text-blue-200 text-sm">{t('businessGrowth.stats.countries')}</div>
+          </div>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row gap-4">
+          <button className="px-6 py-3 bg-white text-[#3b396d] font-medium rounded-lg hover:bg-gray-100 transition-colors text-center">
+            {t('businessGrowth.learnMore')}
+          </button>
+          <button className="px-6 py-3 border border-white text-white font-medium rounded-lg hover:bg-white/10 transition-colors text-center">
+            {t('businessGrowth.contactUs')}
+          </button>
+        </div>
+      </div>
+      
+      <div className="relative">
+        <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl">
+          <img 
+            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80" 
+            alt="Business Growth" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+          <div className="absolute bottom-6 left-6">
+            <div className="flex items-center space-x-2 text-white cursor-pointer hover:underline">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+              </svg>
+              <span>{t('businessGrowth.watchStory')}</span>
             </div>
           </div>
         </div>
-      </section>
-
+      </div>
+    </div>
+  </div>
+</section>
       <SuccessStories/>
       
       {/* Buying/Selling Sections */}
