@@ -450,6 +450,7 @@ const Header = () => {
                       className="w-full flex items-center justify-center px-4 py-3 text-sm font-medium text-white bg-[#3b396d] rounded-lg hover:bg-[#2a285a] transition-colors"
                       onClick={() => {
                         logout();
+                        navigate('/');
                         setMobileMenuOpen(false);
                       }}
                     >
