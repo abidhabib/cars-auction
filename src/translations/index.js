@@ -49,8 +49,8 @@ export const translations = {
       buySection: {
         title: "Buy Cars",
         points: [
-          "3,000+ cars added daily",
-          "30,000+ cars in stock",
+          "cars added daily",
+          "cars in stock",
           "Reliable documentation of car condition"
         ],
         cta: "Start Buying"
@@ -60,7 +60,7 @@ export const translations = {
         points: [
           "Sell within 24 hours for the highest prices",
           "Full transport and document handling",
-          "60,000+ dealers bid on your car"
+          "dealers bid on your car"
         ],
         cta: "Start Selling"
       }
@@ -68,7 +68,10 @@ export const translations = {
     // Success Stories
     successStories: {
       title: "Success Stories",
-      subtitle: "Discover how dealers like you are growing their businesses with CarNetwork",
+      subtitle: "Discover how dealers like you are growing their businesses with Car Network",
+      featured:"Featured Success Stories",
+      community: "Community Success Stories",
+      tagline: "Get inspired by the success stories of your peers",
       stories: [
         {
           name: "Sarah Mitchell",
@@ -112,11 +115,15 @@ export const translations = {
     },
     // Business Growth Section
     businessGrowth: {
-      title: "Grow your business with CarNetwork",
-      description: "CarNetwork is Europe's largest wholesale platform for used cars. We support your business growth with digital buying and selling solutions, best-in-class transport solutions and dedicated account managers.",
+      title: "Grow your business with Car Network",
+      description: "Car Network is Europe's largest wholesale platform for used cars. We support your business growth with digital buying and selling solutions, best-in-class transport solutions and dedicated account managers.",
       learnMore: "Learn More",
       contactUs: "Contact Us",
-      watchStory: "Watch our story"
+      watchStory: "Watch our story",
+      partners: "Partners",
+      satisfaction: "Satisfaction",
+      experience: "Experience",
+      countries: "Countries"
     },
     // Common
     common: {
@@ -131,8 +138,8 @@ export const translations = {
     // Info Sections
     info: {
       business: {
-        title: "Grow your business with CarNetwork",
-        description: "CarNetwork.com is Europe's largest wholesale platform for used cars. We support your business growth with digital buying and selling solutions, best-in-class Europe-wide transport solutions and dedicated account managers.",
+        title: "Grow your business with Car Network",
+        description: "Carnetwork.com is Europe's largest wholesale platform for used cars. We support your business growth with digital buying and selling solutions, best-in-class Europe-wide transport solutions and dedicated account managers.",
         stats: {
           partners: "Partners",
           inventory: "Cars in stock",
@@ -140,12 +147,12 @@ export const translations = {
         }
       },
       buying: {
-        title: "Buying cars with CarNetwork",
+        title: "Buying cars with Car Network",
         description: "Get access to Europe-wide inventory and choose from over 30,000 cars in stock and 3,000 new cars added daily! Buy cars fast and easy entirely online and without time-consuming physical auctions, minimum purchase quantities, or hidden fees."
       },
       selling: {
-        title: "Selling cars with CarNetwork",
-        description: "Sell cars that do not fit in your portfolio easily, and entirely online to 60,000 dealers. Achieve the highest prices and digitize your trade-ins with CarNetwork EVA app."
+        title: "Selling cars with Car Network",
+        description: "Sell cars that do not fit in your portfolio easily, and entirely online to 60,000 dealers. Achieve the highest prices and digitize your trade-ins with Car Network EVA app."
       }
     },
     // Authentication
@@ -183,6 +190,51 @@ export const translations = {
         passwordTooShort: "Password must be at least 8 characters."
       }
 
+    },
+
+
+
+    footer: {
+      services: {
+        title: "Services",
+        buyCars: "Buy Cars",
+        sellCars: "Sell Cars",
+        auctions: "Auctions",
+        directBuy: "Direct Buy"
+      },
+      account: {
+        title: "Account",
+        login: "Login",
+        register: "Register",
+        dashboard: "Dashboard",
+        profile: "Profile"
+      },
+      company: {
+        title: "Company",
+        name: "Car Network Europe",
+        about: "About Us",
+        contact: "Contact",
+        careers: "Careers",
+        press: "Press"
+      },
+      support: {
+        title: "Support",
+        help: "Help Center",
+        faq: "FAQ",
+        privacy: "Privacy Policy",
+        terms: "Terms of Service"
+      },
+      cta: {
+        title: "Ready to get started?",
+        subtitle: "Join thousands of dealers growing their business with Car Network",
+        button: "Create Account"
+      },
+      downloadApp: "Download our App",
+      language: "Language",
+      copyright: "Car Network Europe. All rights reserved.",
+      privacy: "Privacy Policy",
+      terms: "Terms of Service",
+      description: "Europe's largest wholesale platform for used cars. Connecting dealers across Europe with digital solutions for buying and selling vehicles."
     },
     auth: {
       login: {
@@ -259,6 +311,7 @@ export const translations = {
         step4: "Security",
         step5: "Shareholders",
         step4Desc: "Password",
+        
         
         errors: {
           firstNameRequired: "First name is required",
@@ -353,7 +406,10 @@ export const translations = {
     // Success Stories
     successStories: {
       title: "Erfolgsgeschichten",
-      subtitle: "Entdecken Sie, wie Händler wie Sie ihr Geschäft mit CarNetwork ausbauen",
+      subtitle: "Entdecken Sie, wie Händler wie Sie ihr Geschäft mit Car Networkausbauen",
+      featured: "Ausgewählte Erfolgsgeschichten",
+      community: "Community-Erfolgsgeschichten",
+      tagline: "Lassen Sie sich von den Erfolgsgeschichten Ihrer Kollegen inspirieren",
       stories: [
         {
           name: "Sarah Mitchell",
@@ -397,11 +453,15 @@ export const translations = {
     },
     // Business Growth Section
     businessGrowth: {
-      title: "Entwickeln Sie Ihr Geschäft mit CarNetwork",
-      description: "CarNetwork ist Europas größte Großhandelsplattform für Gebrauchtwagen. Wir unterstützen Ihr Geschäftswachstum mit digitalen Kauf- und Verkaufslösungen, erstklassigen Transportlösungen und persönlichen Account Managern.",
+      title: "Entwickeln Sie Ihr Geschäft mit Car Network",
+      description: "Car Networkist Europas größte Großhandelsplattform für Gebrauchtwagen. Wir unterstützen Ihr Geschäftswachstum mit digitalen Kauf- und Verkaufslösungen, erstklassigen Transportlösungen und persönlichen Account Managern.",
       learnMore: "Mehr erfahren",
       contactUs: "Kontakt",
-      watchStory: "Unsere Geschichte ansehen"
+      watchStory: "Unsere Geschichte ansehen",
+      partners: "Partner",
+      satisfaction: "Zufriedenheit",
+      experience: "Erfahrung",
+      countries: "Länder"
     },
     // save
     common: {
@@ -416,8 +476,8 @@ export const translations = {
     // Info Sections
     info: {
       business: {
-        title: "Entwickeln Sie Ihr Geschäft mit CarNetwork",
-        description: "CarNetwork.com ist Europas größte Großhandelsplattform für Gebrauchtwagen. Wir unterstützen Ihr Geschäftswachstum mit digitalen Kauf- und Verkaufslösungen, erstklassigen europaweiten Transportlösungen und persönlichen Account Managern.",
+        title: "Entwickeln Sie Ihr Geschäft mit Car Network",
+        description: "Car Network ist Europas größte Großhandelsplattform für Gebrauchtwagen. Wir unterstützen Ihr Geschäftswachstum mit digitalen Kauf- und Verkaufslösungen, erstklassigen europaweiten Transportlösungen und persönlichen Account Managern.",
         stats: {
           partners: "Partner",
           inventory: "Autos auf Lager",
@@ -425,12 +485,12 @@ export const translations = {
         }
       },
       buying: {
-        title: "Autos kaufen mit CarNetwork",
+        title: "Autos kaufen mit Car Network",
         description: "Erhalten Sie Zugang zu europaweitem Bestand und wählen Sie aus über 30.000 Autos auf Lager und 3.000 täglich neuen Autos! Kaufen Sie Autos schnell und einfach komplett online und ohne zeitaufwändige physische Auktionen, Mindestabnahmemengen oder versteckte Gebühren."
       },
       selling: {
-        title: "Autos verkaufen mit CarNetwork",
-        description: "Verkaufen Sie Autos, die nicht in Ihr Portfolio passen, einfach und komplett online an 60.000 Händler. Erzielen Sie die höchsten Preise und digitalisieren Sie Ihre Inzahlungnahmen mit der CarNetwork EVA App."
+        title: "Autos verkaufen mit Car Network",
+        description: "Verkaufen Sie Autos, die nicht in Ihr Portfolio passen, einfach und komplett online an 60.000 Händler. Erzielen Sie die höchsten Preise und digitalisieren Sie Ihre Inzahlungnahmen mit der Car NetworkEVA App."
       }
     },
     // Authentication
@@ -467,6 +527,48 @@ export const translations = {
         passwordTooShort: "Das Passwort muss mindestens 8 Zeichen lang sein."
       }
 
+    },
+    footer: {
+      services: {
+        title: "Diensten",
+        buyCars: "Auto's Kopen",
+        sellCars: "Auto's Verkopen",
+        auctions: "Veilingen",
+        directBuy: "Direct Kopen"
+      },
+      account: {
+        title: "Account",
+        login: "Inloggen",
+        register: "Registreren",
+        dashboard: "Dashboard",
+        profile: "Profiel"
+      },
+      company: {
+        title: "Bedrijf",
+        name: "Car Network Europe",
+        about: "Over Ons",
+        contact: "Contact",
+        careers: "Carrières",
+        press: "Pers"
+      },
+      support: {
+        title: "Ondersteuning",
+        help: "Helpcentrum",
+        faq: "FAQ",
+        privacy: "Privacybeleid",
+        terms: "Servicevoorwaarden"
+      },
+      cta: {
+        title: "Klaar om aan de slag te gaan?",
+        subtitle: "Sluit je aan bij duizenden dealers die hun bedrijf laten groeien met Car Network",
+        button: "Account Aanmaken"
+      },
+      downloadApp: "Download onze App",
+      language: "Taal",
+      copyright: "Car Network Europe. Alle rechten voorbehouden.",
+      privacy: "Privacybeleid",
+      terms: "Servicevoorwaarden",
+      description: "Europa's grootste groothandelsplatform voor gebruikte auto's. Verbindt dealers in heel Europa met digitale oplossingen voor het kopen en verkopen van voertuigen."
     },
     auth: {
       login: {
@@ -637,7 +739,10 @@ export const translations = {
     // Success Stories
     successStories: {
       title: "Succesverhalen",
-      subtitle: "Ontdek hoe dealers zoals u hun bedrijf laten groeien met CarNetwork",
+      subtitle: "Ontdek hoe dealers zoals u hun bedrijf laten groeien met Car Network",
+      featured: "Uitgelichte succesverhalen",
+      community: "Community-succesverhalen",
+      tagline: "Laat u inspireren door de succesverhalen van uw collega's",
       stories: [
         {
           name: "Sarah Mitchell",
@@ -681,11 +786,15 @@ export const translations = {
     },
     // Business Growth Section
     businessGrowth: {
-      title: "Groei uw bedrijf met CarNetwork",
-      description: "CarNetwork is Europa's grootste groothandelsplatform voor gebruikte auto's. We ondersteunen uw bedrijfsgroei met digitale koop- en verkoopoplossingen, eersteklas transportoplossingen en toegewijde accountmanagers.",
+      title: "Groei uw bedrijf met Car Network",
+      description: "Car Network is Europa's grootste groothandelsplatform voor gebruikte auto's. We ondersteunen uw bedrijfsgroei met digitale koop- en verkoopoplossingen, eersteklas transportoplossingen en toegewijde accountmanagers.",
       learnMore: "Meer informatie",
       contactUs: "Contact",
-      watchStory: "Bekijk ons verhaal"
+      watchStory: "Bekijk ons verhaal",
+      partners: "Partners",
+      satisfaction: "Zorgvuldigheid",
+      experience: "Ervaring",
+      countries: "Landen"
     },
     // Common
     common: {
@@ -700,8 +809,8 @@ export const translations = {
     // Info Sections
     info: {
       business: {
-        title: "Groei uw bedrijf met CarNetwork",
-        description: "CarNetwork.com is Europa's grootste groothandelsplatform voor gebruikte auto's. We ondersteunen uw bedrijfsgroei met digitale koop- en verkoopoplossingen, eersteklas Europese transportoplossingen en toegewijde accountmanagers.",
+        title: "Groei uw bedrijf met Car Network",
+        description: "Carnetwork.com is Europa's grootste groothandelsplatform voor gebruikte auto's. We ondersteunen uw bedrijfsgroei met digitale koop- en verkoopoplossingen, eersteklas Europese transportoplossingen en toegewijde accountmanagers.",
         stats: {
           partners: "Partners",
           inventory: "Auto's op voorraad",
@@ -709,12 +818,12 @@ export const translations = {
         }
       },
       buying: {
-        title: "Auto's kopen met CarNetwork",
+        title: "Auto's kopen met Car Network",
         description: "Krijg toegang tot een Europese voorraad en kies uit meer dan 30.000 auto's op voorraad en 3.000 nieuwe auto's dagelijks! Koop auto's snel en gemakkelijk volledig online en zonder tijdrovende fysieke veilingen, minimale afnamehoeveelheden of verborgen kosten."
       },
       selling: {
-        title: "Auto's verkopen met CarNetwork",
-        description: "Verkoop auto's die niet in uw portfolio passen eenvoudig en volledig online aan 60.000 dealers. Behaal de hoogste prijzen en digitaliseer uw inruil met de CarNetwork EVA app."
+        title: "Auto's verkopen met Car Network",
+        description: "Verkoop auto's die niet in uw portfolio passen eenvoudig en volledig online aan 60.000 dealers. Behaal de hoogste prijzen en digitaliseer uw inruil met de Car NetworkEVA app."
       }
     },
     // Authentication
@@ -751,6 +860,48 @@ export const translations = {
         passwordTooShort: "Wachtwoord moet minimaal 8 tekens lang zijn."
       }
 
+    },
+    footer: {
+      services: {
+        title: "Diensten",
+        buyCars: "Auto's Kopen",
+        sellCars: "Auto's Verkopen",
+        auctions: "Veilingen",
+        directBuy: "Direct Kopen"
+      },
+      account: {
+        title: "Account",
+        login: "Inloggen",
+        register: "Registreren",
+        dashboard: "Dashboard",
+        profile: "Profiel"
+      },
+      company: {
+        title: "Bedrijf",
+        name: "Car Network Europe",
+        about: "Over Ons",
+        contact: "Contact",
+        careers: "Carrières",
+        press: "Pers"
+      },
+      support: {
+        title: "Ondersteuning",
+        help: "Helpcentrum",
+        faq: "FAQ",
+        privacy: "Privacybeleid",
+        terms: "Servicevoorwaarden"
+      },
+      cta: {
+        title: "Klaar om aan de slag te gaan?",
+        subtitle: "Sluit je aan bij duizenden dealers die hun bedrijf laten groeien met Car Network",
+        button: "Account Aanmaken"
+      },
+      downloadApp: "Download onze App",
+      language: "Taal",
+      copyright: "Car Network Europe. Alle rechten voorbehouden.",
+      privacy: "Privacybeleid",
+      terms: "Servicevoorwaarden",
+      description: "Europa's grootste groothandelsplatform voor gebruikte auto's. Verbindt dealers in heel Europa met digitale oplossingen voor het kopen en verkopen van voertuigen."
     },
     auth: {
       login: {

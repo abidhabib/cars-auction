@@ -5,8 +5,6 @@ import { useLanguage } from '../../context/LanguageContext';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiPhone, FiBriefcase, FiMapPin, FiCheck, FiAward, FiPlus, FiTrash2, FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import Button from '../../components/common/Button';
 import AppLayout from '../../components/layout/AppLayout';
-import { Press } from '../../components/common/Press';
-import AuctionService from '../../components/common/Auction';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -200,7 +198,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
                       errors.firstName ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                   />
                 </div>
                 {errors.firstName && (
@@ -226,7 +224,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
                       errors.lastName ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                   />
                 </div>
                 {errors.lastName && (
@@ -253,7 +251,7 @@ const Register = () => {
                   onChange={handleChange}
                   className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
                     errors.email ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                 />
               </div>
               {errors.email && (
@@ -279,7 +277,7 @@ const Register = () => {
                   onChange={handleChange}
                   className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
                     errors.phone ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                 />
               </div>
               {errors.phone && (
@@ -315,7 +313,7 @@ const Register = () => {
                   onChange={handleChange}
                   className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
                     errors.companyName ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                 />
               </div>
               {errors.companyName && (
@@ -339,7 +337,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full px-4 py-3 border ${
                       errors.vatNumber ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                   />
                 </div>
                 {errors.vatNumber && (
@@ -362,7 +360,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full px-4 py-3 border ${
                       errors.UBO ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                   />
                 </div>
                 {errors.UBO && (
@@ -399,7 +397,7 @@ const Register = () => {
                   onChange={handleChange}
                   className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
                     errors.street ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                 />
               </div>
               {errors.street && (
@@ -423,7 +421,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full px-4 py-3 border ${
                       errors.city ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                   />
                 </div>
                 {errors.city && (
@@ -446,7 +444,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full px-4 py-3 border ${
                       errors.postalCode ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                   />
                 </div>
                 {errors.postalCode && (
@@ -468,7 +466,7 @@ const Register = () => {
                   onChange={handleChange}
                   className={`appearance-none block w-full px-4 py-3 border ${
                     errors.country ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                 >
                   <option value="">{t('auth.register.selectCountry')}</option>
                   <option value="NL">Netherlands</option>
@@ -519,7 +517,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-10 py-3 border ${
                       errors.password ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                   />
                   <button
                     type="button"
@@ -557,7 +555,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-10 py-3 border ${
                       errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                   />
                   <button
                     type="button"
@@ -587,13 +585,13 @@ const Register = () => {
                     type="checkbox"
                     checked={formData.termsAccepted}
                     onChange={handleChange}
-                    className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
                   />
                 </div>
                 <div className="ml-3 text-sm">
                   <label htmlFor="termsAccepted" className="text-gray-700">
                     {t('auth.register.acceptTerms')}{' '}
-                    <a href="#" className="text-orange-600 hover:text-orange-700 font-medium">
+                    <a href="#" className="text-[#3b396d] hover:text-[#2a285a] font-medium">
                       {t('auth.register.termsAndConditions')}
                     </a>
                   </label>
@@ -611,13 +609,13 @@ const Register = () => {
                     type="checkbox"
                     checked={formData.privacyAccepted}
                     onChange={handleChange}
-                    className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
                   />
                 </div>
                 <div className="ml-3 text-sm">
                   <label htmlFor="privacyAccepted" className="text-gray-700">
                     {t('auth.register.acceptPrivacy')}{' '}
-                    <a href="#" className="text-orange-600 hover:text-orange-700 font-medium">
+                    <a href="#" className="text-[#3b396d] hover:text-[#2a285a] font-medium">
                       {t('auth.register.privacyPolicy')}
                     </a>
                   </label>
@@ -635,7 +633,7 @@ const Register = () => {
                     type="checkbox"
                     checked={formData.marketingAccepted}
                     onChange={handleChange}
-                    className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
                   />
                 </div>
                 <div className="ml-3 text-sm">
@@ -688,7 +686,7 @@ const Register = () => {
                       }}
                       className={`appearance-none block w-full px-4 py-3 border ${
                         errors[`shareholder-${index}-fullName`] ? 'border-red-300' : 'border-gray-300'
-                      } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition`}
+                      } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
                       placeholder={t('auth.register.enterFullName')}
                     />
                     {errors[`shareholder-${index}-fullName`] && (
@@ -701,7 +699,7 @@ const Register = () => {
                       {t('auth.register.shareholderIdUpload')}
                     </label>
                     <div className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg ${
-                      shareholder.idFile ? 'border-orange-300 bg-orange-50' : 'border-gray-300'
+                      shareholder.idFile ? 'border-[#3b396d] bg-[#3b396d]/5' : 'border-gray-300'
                     }`}>
                       <div className="space-y-1 text-center">
                         {shareholder.idFile ? (
@@ -728,7 +726,7 @@ const Register = () => {
                               <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             <div className="flex text-sm text-gray-600 justify-center">
-                              <label htmlFor={`shareholder-${index}-idFile`} className="relative cursor-pointer bg-white rounded-md font-medium text-orange-600 hover:text-orange-500 focus-within:outline-none">
+                              <label htmlFor={`shareholder-${index}-idFile`} className="relative cursor-pointer bg-white rounded-md font-medium text-[#3b396d] hover:text-[#2a285a] focus-within:outline-none">
                                 <span>{t('auth.register.uploadFile')}</span>
                                 <input
                                   id={`shareholder-${index}-idFile`}
@@ -780,7 +778,7 @@ const Register = () => {
                       shareholders: [...prev.shareholders, { fullName: '', idFile: null }]
                     }));
                   }}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
                 >
                   <FiPlus className="mr-2 h-4 w-4" />
                   {t('auth.register.addAnotherShareholder')}
@@ -815,198 +813,137 @@ const Register = () => {
 
   return (
     <AppLayout>
-      <div className="relative min-h-screen py-8">
-        <div className="absolute inset-0">
-        </div>
-      
-        <div className="relative mt-16  max-w-4xl mx-auto px- pb-8  rounded-xl sm:px-6 lg:px-d8 bg-white">
-
-          <div className="bg-white  rounded-xl border-2 border-gray-200 overflow-hidden">
-            {/* Header with auction theme */}
-            <div className="relative overflow-hidden bg-gradient-to-r from-orange-500/90 to-amber-500/90 text-white">
-              <div className="absolute inset-0">
-                <img
-                  src="/car1.jpg" 
-                  alt="Luxury Car Showroom"
-                  className="w-full h-full object-cover scale-105"
-                />
-                <div className="absolute inset-0 backdrop-blur-[2px]"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-600/95 to-amber-500/95 mix-blend-multiply"></div>
-                <div className="absolute inset-0 bg-black/30"></div>
-              </div>
-              <div className="relative px-6 py-24 md:py-12 md:px-12">
-                <div className="max-w-3xl mx-auto text-center">
-                  <div className="flex flex-col items-center justify-center mb-4 gap-3">
-                    <div className="p-3 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                      <img
-                        src="/icon.svg"
-                        alt="Car Network Logo"
-                        className="h-10 w-auto"
-                      />
-                    </div>
-                    <div>
-                      <h1 className="text-3xl font-extrabold tracking-tight">
-                        Car Network
-                      </h1>
-                      <p className="text-orange-100 mt-1">Europe's Premier Auto Marketplace</p>
-                    </div>
-                  </div>
-
-                  <p className="text-orange-50 text-lg max-w-2xl mx-auto mb-6 opacity-95">
-                    Join Europe's largest wholesale platform for used cars. Connect with trusted dealers and access an extensive inventory at competitive prices.
-                  </p>
-
-                  <div className="hidden sm:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 text-center">
-                    <div className="flex flex-col items-center p-4 rounded-lg bg-white bg-opacity-10 backdrop-blur-sm">
-                      <svg className="w-8 h-8 text-white mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-sm font-medium">Exclusive Auctions</span>
-                    </div>
-                    <div className="flex flex-col items-center p-4 rounded-lg bg-white bg-opacity-10 backdrop-blur-sm">
-                      <svg className="w-8 h-8 text-white mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                      <span className="text-sm font-medium">Secure Transactions</span>
-                    </div>
-                    <div className="flex flex-col items-center p-4 rounded-lg bg-white bg-opacity-10 backdrop-blur-sm">
-                      <svg className="w-8 h-8 text-white mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                      <span className="text-sm font-medium">Vetted Network</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16  rounded-2xl mb-4">
+              <img
+                src="/icon.svg"
+                alt="Car Network Logo"
+                className="h-10 w-auto"
+              />
             </div>
-            
-            {/* Progress Steps */}
-            <div className="px-8 pt-6">
-              <div className="flex justify-between items-center mb-2">
-                {[1, 2, 3, 4, 5].map((step) => (
+            <h1 className="text-3xl font-bold text-gray-900">Car Network Europe</h1>
+            <p className="text-gray-600 mt-2">Join Europe's premier automotive marketplace</p>
+          </div>
+
+          {/* Progress Steps */}
+          <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <div className="flex justify-between items-center mb-8">
+              {[1, 2, 3, 4, 5].map((step) => (
+                <div key={step} className="flex flex-col items-center">
                   <div
-                    key={step}
-                    className={`flex flex-col items-center flex-1 ${
-                      step === 1 ? 'items-start' : step === 5 ? 'items-end' : ''
+                    className={`w-10 h-10 flex items-center justify-center rounded-full ${
+                      step < currentStep
+                        ? 'bg-[#3b396d] text-white'
+                        : step === currentStep
+                        ? 'bg-[#3b396d] text-white border-4 border-[#3b396d]/20'
+                        : 'bg-gray-100 text-gray-400'
                     }`}
                   >
-                    <div
-                      className={`w-10 h-10 flex items-center justify-center rounded-full ${
-                        step < currentStep
-                          ? 'bg-orange-500 text-white'
-                          : step === currentStep
-                          ? 'bg-orange-500 text-white border-4 border-orange-200'
-                          : 'bg-gray-200 text-gray-500'
-                      }`}
-                    >
-                      {step < currentStep ? (
-                        <FiCheck className="w-5 h-5" />
-                      ) : (
-                        <span className="font-medium text-sm">{step}</span>
-                      )}
-                    </div>
-                    <div className={`mt-2 text-xs font-medium ${
-                      step <= currentStep ? 'text-orange-600' : 'text-gray-400'
-                    }`}>
-                      {t(`auth.register.step${step}`)}
-                    </div>
+                    {step < currentStep ? (
+                      <FiCheck className="w-5 h-5" />
+                    ) : (
+                      <span className="font-medium text-sm">{step}</span>
+                    )}
                   </div>
-                ))}
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5 mb-6 mt-4">
-                <div 
-                  className="bg-orange-500 h-2.5 rounded-full transition-all duration-300" 
-                  style={{ width: `${(currentStep - 1) * 25}%` }}
-                ></div>
-              </div>
+                  <div className={`mt-2 text-xs font-medium ${
+                    step <= currentStep ? 'text-[#3b396d]' : 'text-gray-400'
+                  }`}>
+                    {t(`auth.register.step${step}`)}
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
+              <div 
+                className="bg-[#3b396d] h-2 rounded-full transition-all duration-300" 
+                style={{ width: `${(currentStep - 1) * 25}%` }}
+              ></div>
             </div>
 
             {/* Form Content */}
-            <div className="px-8 py-6 border-t">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {renderStep()}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {renderStep()}
 
-                {/* Navigation Buttons */}
-                <div className="flex justify-between pt-8 border-t border-gray-200">
-                  {currentStep > 1 ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleBack}
-                      className="flex items-center px-5 py-2.5 border-gray-300 text-gray-700 hover:bg-gray-50"
-                    >
-                      <FiChevronLeft className="w-4 h-4 mr-2" />
-                      {t('back')}
-                    </Button>
-                  ) : (
-                    <div></div>
-                  )}
-                  
-                  <Button
-                    type={currentStep === 5 ? "submit" : "button"}
-                    variant="primary"
-                    onClick={currentStep < 5 ? handleNext : undefined}
-                    className="flex items-center px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white shadow-sm hover:shadow-md transition-shadow"
-                    disabled={isLoading}
+              {/* Navigation Buttons */}
+              <div className="flex justify-between pt-8 border-t border-gray-200">
+                {currentStep > 1 ? (
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    className="inline-flex items-center px-5 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
                   >
-                    {currentStep < 5 ? (
-                      <>
-                        {t('next')}
-                        <FiChevronRight className="w-4 h-4 ml-2" />
-                      </>
-                    ) : isLoading ? (
-                      <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        {t('auth.register.creatingAccount')}
-                      </>
-                    ) : (
-                      <>
-                        <FiAward className="w-4 h-4 mr-2" />
-                        {t('auth.register.createAccount')}
-                      </>
-                    )}
-                  </Button>
-                </div>
+                    <FiChevronLeft className="w-4 h-4 mr-2" />
+                    {t('back')}
+                  </button>
+                ) : (
+                  <div></div>
+                )}
+                
+                <button
+                  type={currentStep === 5 ? "submit" : "button"}
+                  onClick={currentStep < 5 ? handleNext : undefined}
+                  disabled={isLoading}
+                  className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#3b396d] hover:bg-[#2a285a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
+                >
+                  {currentStep < 5 ? (
+                    <>
+                      {t('next')}
+                      <FiChevronRight className="w-4 h-4 ml-2" />
+                    </>
+                  ) : isLoading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {t('auth.register.creatingAccount')}
+                    </>
+                  ) : (
+                    <>
+                      <FiAward className="w-4 h-4 mr-2" />
+                      {t('auth.register.createAccount')}
+                    </>
+                  )}
+                </button>
+              </div>
 
-                {/* Error Message */}
-                {errors.submit && (
-                  <div className="rounded-lg bg-red-50 p-4 border border-red-200 mt-6">
-                    <div className="flex">
-                      <div className="flex-shrink-0">
-                        <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="ml-3">
-                        <h3 className="text-sm font-medium text-red-800">
-                          {errors.submit}
-                        </h3>
-                      </div>
+              {/* Error Message */}
+              {errors.submit && (
+                <div className="rounded-md bg-red-50 p-4 mt-6">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-red-800">
+                        {errors.submit}
+                      </h3>
                     </div>
                   </div>
-                )}
-              </form>
-            </div>
+                </div>
+              )}
+            </form>
           </div>
 
-
           {/* Login Link */}
-          <div className="mt-8 text-center">
+          <div className="text-center">
             <p className="text-gray-600">
               {t('auth.register.alreadyHaveAccount')}{' '}
               <button
                 onClick={() => navigate('/login')}
-                className="font-medium text-orange-600 hover:text-orange-700"
+                className="font-medium text-[#3b396d] hover:text-[#2a285a]"
               >
                 {t('auth.register.loginHere')}
               </button>
             </p>
           </div>
         </div>
-        <AuctionService/>
       </div>
     </AppLayout>
   );

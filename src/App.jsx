@@ -1,7 +1,7 @@
 // src/App.jsx
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import SplashScreen from './components/common/SplashScreen';
 import Home from './pages/Home';
@@ -9,19 +9,14 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/profile/Profile';
-
-// Protected Route wrapper
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated() ? children : <Navigate to="/login" />;
-};
+import AppLayout from './components/layout/AppLayout';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
 
-  if (showSplash) {
-    return <SplashScreen onSplashComplete={() => setShowSplash(false)} />;
-  }
+  // if (showSplash) {
+  //   return <SplashScreen onSplashComplete={() => setShowSplash(false)} />;
+  // }
 
   return (
     <AuthProvider>
@@ -29,36 +24,42 @@ function App() {
         <Router>
           <div className="App min-h-screen">
             <Routes>
-              {/* Public Routes */}
-              <Route path="/home" element={<Home />} />
-              <Route path="/" element={<Navigate to="/home" replace />} />
+              {/* Public Routes - No Layout */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               
-              {/* Protected Routes */}
+              {/* Public Routes - With Layout */}
+              <Route path="/home" element={
+                <AppLayout>
+                  <Home />
+                </AppLayout>
+              } />
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              
+              {/* Protected Routes - With Layout */}
               <Route path="/dashboard" element={
-                <ProtectedRoute>
+                <AppLayout>
                   <Dashboard />
-                </ProtectedRoute>
+                </AppLayout>
               } />
               <Route path="/profile" element={
-                <ProtectedRoute>
+                <AppLayout>
                   <Profile />
-                </ProtectedRoute>
+                </AppLayout>
               } />
               <Route path="/buy/*" element={
-                <ProtectedRoute>
-                  <div className="min-h-screen">
+                <AppLayout>
+                  <div className="min-h-screen pt-16">
                     Buy Section
                   </div>
-                </ProtectedRoute>
+                </AppLayout>
               } />
               <Route path="/sell/*" element={
-                <ProtectedRoute>
-                  <div className="min-h-screen">
+                <AppLayout>
+                  <div className="min-h-screen pt-16">
                     Sell Section
                   </div>
-                </ProtectedRoute>
+                </AppLayout>
               } />
             </Routes>
           </div>

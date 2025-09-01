@@ -1,5 +1,5 @@
 // src/components/common/Header.jsx
-import React, { useState, useEffect, useRef, use } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import Button from './Button';
@@ -35,6 +35,8 @@ const Header = () => {
     language: useRef(null),
     user: useRef(null)
   };
+
+  const navigate = useNavigate();
 
   // Handle scroll effect for header
   useEffect(() => {
@@ -72,7 +74,7 @@ const Header = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-const navigate=useNavigate();
+
   const buyMenuItems = [
     { name: t('header.buyMenu.browseInventory'), icon: <FiShoppingCart className="text-orange-500" />, href: '/buy/inventory' },
     { name: t('header.buyMenu.directBuy'), icon: <FiTag className="text-orange-500" />, href: '/buy/direct' },
@@ -126,7 +128,7 @@ const navigate=useNavigate();
                     setBuyDropdownOpen(!buyDropdownOpen);
                     setSellDropdownOpen(false);
                   }}
-                  className="flex items-center px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
+                  className="flex items-center px-4 py-2 text-gray-700 hover:text-[#3b396d] font-medium transition-colors"
                 >
                   {t('header.mainMenu.buyCars')}
                   <FiChevronDown className={`ml-1 transition-transform ${buyDropdownOpen ? 'rotate-180' : ''}`} />
@@ -139,7 +141,7 @@ const navigate=useNavigate();
                         <a
                           key={index}
                           href={item.href}
-                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
                         >
                           <span className="mr-3">{item.icon}</span>
                           {item.name}
@@ -157,7 +159,7 @@ const navigate=useNavigate();
                     setSellDropdownOpen(!sellDropdownOpen);
                     setBuyDropdownOpen(false);
                   }}
-                  className="flex items-center px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
+                  className="flex items-center px-4 py-2 text-gray-700 hover:text-[#3b396d] font-medium transition-colors"
                 >
                   {t('header.mainMenu.sellCars')}
                   <FiChevronDown className={`ml-1 transition-transform ${sellDropdownOpen ? 'rotate-180' : ''}`} />
@@ -170,7 +172,7 @@ const navigate=useNavigate();
                         <a
                           key={index}
                           href={item.href}
-                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
                         >
                           <span className="mr-3">{item.icon}</span>
                           {item.name}
@@ -188,7 +190,7 @@ const navigate=useNavigate();
                   <a
                     key={index}
                     href={item.href}
-                    className="px-4 py-2 text-gray-700 hover:text-orange-600 font-medium transition-colors"
+                    className="px-4 py-2 text-gray-700 hover:text-[#3b396d] font-medium transition-colors"
                   >
                     {item.name}
                   </a>
@@ -204,9 +206,9 @@ const navigate=useNavigate();
                     setLanguageDropdownOpen(!languageDropdownOpen);
                     setUserDropdownOpen(false);
                   }}
-                  className="flex items-center px-3 py-2 text-sm text-gray-700 hover:text-orange-600 transition-colors"
+                  className="flex items-center px-3 py-2 text-sm text-gray-700 hover:text-[#3b396d] transition-colors"
                 >
-                  <FiGlobe className="mr-1 text-orange-500" />
+                  <FiGlobe className="mr-1 text-[#3b396d]" />
                   {getLanguageName(language)}
                   <FiChevronDown className={`ml-1 transition-transform ${languageDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -223,8 +225,8 @@ const navigate=useNavigate();
                           }}
                           className={`block w-full text-left px-4 py-2 text-sm ${
                             language === langCode 
-                              ? 'text-orange-600 bg-orange-50' 
-                              : 'text-gray-700 hover:bg-orange-50'
+                              ? 'text-[#3b396d] bg-[#f8f9ff]' 
+                              : 'text-gray-700 hover:bg-[#f8f9ff]'
                           }`}
                         >
                           {getLanguageName(langCode)}
@@ -243,9 +245,9 @@ const navigate=useNavigate();
                       setUserDropdownOpen(!userDropdownOpen);
                       setLanguageDropdownOpen(false);
                     }}
-                    className="flex items-center text-sm text-gray-700 hover:text-orange-600 transition-colors"
+                    className="flex items-center text-sm text-gray-700 hover:text-[#3b396d] transition-colors"
                   >
-                    <FiUser className="mr-1 text-orange-500" />
+                    <FiUser className="mr-1 text-[#3b396d]" />
                     <span className="truncate max-w-[120px]">{user.name}</span>
                     <FiChevronDown className={`ml-1 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
@@ -253,10 +255,10 @@ const navigate=useNavigate();
                   {userDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                       <div className="py-1">
-                        <a href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
+                        <a href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]">
                           {t('header.userMenu.dashboard')}
                         </a>
-                    <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
+                        <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]">
                           {t('header.userMenu.profile')}
                         </a>
                         <button
@@ -264,9 +266,9 @@ const navigate=useNavigate();
                             logout();
                             setUserDropdownOpen(false);
                           }}
-                          className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                          className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]"
                         >
-                          <FiLogOut className="mr-2 text-orange-500" />
+                          <FiLogOut className="mr-2 text-[#3b396d]" />
                           {t('logout')}
                         </button>
                       </div>
@@ -278,7 +280,6 @@ const navigate=useNavigate();
                   <Button 
                     variant="outline" 
                     size="sm"
-                    className="border-orange-500 text-orange-500 hover:bg-orange-50"
                     onClick={() => navigate('/login')}
                   >
                     {t('navigation.login')}
@@ -286,7 +287,6 @@ const navigate=useNavigate();
                   <Button 
                     variant="primary" 
                     size="sm"
-                    className="bg-orange-500 hover:bg-orange-600 text-white"
                     onClick={() => navigate('/register')}
                   >
                     {t('navigation.signup')}
@@ -296,7 +296,7 @@ const navigate=useNavigate();
 
               {/* Mobile menu button */}
               <button 
-                className="lg:hidden p-2 rounded-md text-orange-600 focus:outline-none transition-colors"
+                className="lg:hidden p-2 rounded-md text-[#3b396d] focus:outline-none transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
@@ -317,7 +317,7 @@ const navigate=useNavigate();
                 <img src="./logo.svg" alt="CarNetwork" className="h-8" />
               </div>
               <button 
-                className="p-2 rounded-md text-gray-700 hover:text-orange-600"
+                className="p-2 rounded-md text-gray-700 hover:text-[#3b396d]"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <FiX className="h-6 w-6" />
@@ -340,7 +340,7 @@ const navigate=useNavigate();
                               setBuyDropdownOpen(false);
                             }
                           }}
-                          className="flex justify-between items-center w-full py-2 px-4 rounded-xl font-semibold text-gray-900 hover:bg-orange-50"
+                          className="flex justify-between items-center w-full py-2 px-4 rounded-xl font-semibold text-gray-900 hover:bg-[#f8f9ff]"
                         >
                           <div className="flex items-center">
                             <span className="mr-3">{item.icon}</span>
@@ -360,7 +360,7 @@ const navigate=useNavigate();
                               <a
                                 key={subIndex}
                                 href={subItem.href}
-                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-semibold"
+                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-semibold"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
                                 <span className="mr-3">{subItem.icon}</span>
@@ -376,7 +376,7 @@ const navigate=useNavigate();
                               <a
                                 key={subIndex}
                                 href={subItem.href}
-                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-semibold"
+                                className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-semibold"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
                                 <span className="mr-3">{subItem.icon}</span>
@@ -389,7 +389,7 @@ const navigate=useNavigate();
                     ) : (
                       <a
                         href={item.href}
-                        className="flex items-center py-2 px-4 rounded-xl font-semibold text-gray-900 hover:bg-orange-50"
+                        className="flex items-center py-2 px-4 rounded-xl font-semibold text-gray-900 hover:bg-[#f8f9ff]"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <span className="mr-3">{item.icon}</span>
@@ -414,8 +414,8 @@ const navigate=useNavigate();
                           }}
                           className={`px-4 py-2 text-base rounded-full text-sm ${
                             language === langCode 
-                              ? 'bg-orange-500 text-white' 
-                              : 'bg-gray-100 text-gray-700 hover:bg-orange-100'
+                              ? 'bg-[#3b396d] text-white' 
+                              : 'bg-gray-100 text-gray-700 hover:bg-[#f8f9ff]'
                           }`}
                         >
                           {langCode.toUpperCase()}
@@ -427,31 +427,32 @@ const navigate=useNavigate();
                 
                 {user ? (
                   <div className="space-y-4">
-                    <div className="flex items-center p-4 bg-orange-50 rounded-xl" onClick={() => navigate('/profile')}>
-                      <FiUser className="text-orange-500 text-xl mr-3" />
+                    <div className="flex items-center p-4 bg-[#f8f9ff] rounded-xl" onClick={() => navigate('/profile')}>
+                      <FiUser className="text-[#3b396d] text-xl mr-3" />
                       <div className="truncate">
                         <p className="font-semibold text-gray-900">{t('header.welcome')}</p>
                         <p className="text-gray-700 truncate">{user.name}</p>
                       </div>
-                     
                     </div>
-                    <button
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      className="w-full mt-6"
                       onClick={() => {
                         logout();
                         setMobileMenuOpen(false);
                       }}
-                      className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl text-lg flex items-center justify-center"
                     >
                       <FiLogOut className="mr-2" />
                       {t('logout')}
-                    </button>
+                    </Button>
                   </div>
                 ) : (
                   <div className="flex flex-col space-y-3">
                     <Button 
                       variant="outline" 
                       size="lg" 
-                      className="w-full border-orange-500 text-orange-500 hover:bg-orange-50 py-2"
+                      className="w-full"
                       onClick={() => {
                         navigate('/login');
                         setMobileMenuOpen(false);
@@ -462,7 +463,7 @@ const navigate=useNavigate();
                     <Button 
                       variant="primary" 
                       size="lg" 
-                      className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2"
+                      className="w-full"
                       onClick={() => {
                         navigate('/register');
                         setMobileMenuOpen(false);

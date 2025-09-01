@@ -1,98 +1,112 @@
-// HeroSection.jsx
-import React, { useEffect, useState } from "react";
+// src/components/common/HeroSection.jsx
+import React from "react";
 import { useLanguage } from "../../context/LanguageContext";
-import car1 from "../../assets/car1.jpg";
-import car2 from "../../assets/car2.jpg";
-import car3 from "../../assets/car3.jpg";
-
-const images = [car1, car2, car3];
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const { t } = useLanguage();
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(
-      () => setIndex((prev) => (prev + 1) % images.length),
-      5000
-    );
-    return () => clearInterval(interval);
-  }, []);
+  const navigate = useNavigate();
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center text-white overflow-hidden pt-16 lg:pt-20">
-      {/* Background Slideshow */}
-      
-      <div className="absolute inset-0 z-0">
-        {images.map((image, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-              i === index ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-            }`}
-          >
-            <img
-              src={image}
-              alt={`Car background ${i + 1}`}
-              className="h-full w-full object-cover object-center"
-              onError={(e) => {
-                console.error("Image failed to load:", e.target.src);
-                e.target.parentElement.style.backgroundColor = '#1a1a1a';
-              }}
-              loading={i === 0 ? 'eager' : 'lazy'}
-            />
+    <section className="min-h-screen w-full flex items-center justify-center bg-[#3b396d] pt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          {/* Text Content */}
+          <div className="text-white">
+            <div className="mb-4">
+              <span className="inline-block px-3 py-1 text-xs font-semibold bg-white/20 rounded-full">
+                Car Network Europe
+              </span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              {t('hero.title')}
+            </h1>
+            
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <button 
+                onClick={() => navigate('/buy')}
+                className="px-8 py-4 bg-white text-[#3b396d] font-semibold rounded-lg hover:bg-gray-100 transition-all duration-300 text-lg shadow-lg"
+              >
+                {t('hero.buySection.cta')}
+              </button>
+              <button 
+                onClick={() => navigate('/sell')}
+                className="px-8 py-4 bg-transparent text-white font-semibold rounded-lg border-2 border-white hover:bg-white/10 transition-all duration-300 text-lg"
+              >
+                {t('hero.sellSection.cta')}
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-white/20">
+              <div>
+                <div className="text-3xl font-bold text-white mb-2">3,000+</div>
+                <div className="text-white/80">{t('hero.buySection.points')[0]}</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-white mb-2">30,000+</div>
+                <div className="text-white/80">{t('hero.buySection.points')[1]}</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-white mb-2">60,000+</div>
+                <div className="text-white/80">{t('hero.sellSection.points')[2]}</div>
+              </div>
+            </div>
           </div>
-        ))}
-        {/* Enhanced gradient overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/80" />
-        {/* Additional mobile overlay for better contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50 sm:hidden" />
-      </div>
-      
-
-      {/* Content */}
-      <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-16 py-20 text-center min-h-screen flex flex-col justify-center">
-      
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-break-all mb-8 bg-gradient-to-r from-white via-white/90 to-white/80 bg-clip-text text-transparent drop-shadow-2xl">
-          {t('hero.title')}
-        </h1>
-
-        <div className="grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto w-full">
-          {/* Buy Cars */}
-          <article className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-6 backdrop-blur-md ring-1 ring-white/20 hover:ring-blue-300/50 transition-all duration-300 group">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-200 bg-clip-text text-transparent">
-              {t('hero.buySection.title')}
-            </h2>
-            <ul className="mt-4 space-y-3 text-white/90 text-left">
-              {t('hero.buySection.points').map((point, index) => (
-                <li key={index} className="flex items-center">
-                  <span className="w-2 h-2 rounded-full bg-blue-400 mr-2 group-hover:scale-125 transition-transform"></span>
-                  {point}
-                </li>
-              ))}
-            </ul>
-            <button className="mt-6 w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25">
-              {t('hero.buySection.cta')}
-            </button>
-          </article>
-
-          {/* Sell Cars */}
-          <article className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-6 backdrop-blur-md ring-1 ring-white/20 hover:ring-orange-300/50 transition-all duration-300 group">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-200 bg-clip-text text-transparent">
-              {t('hero.sellSection.title')}
-            </h2>
-            <ul className="mt-4 space-y-3 text-white/90 text-left">
-              {t('hero.sellSection.points').map((point, index) => (
-                <li key={index} className="flex items-center">
-                  <span className="w-2 h-2 rounded-full bg-orange-400 mr-2 group-hover:scale-125 transition-transform"></span>
-                  {point}
-                </li>
-              ))}
-            </ul>
-            <button className="mt-6 w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded-xl transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-orange-500/25">
-              {t('hero.sellSection.cta')}
-            </button>
-          </article>
+          
+          {/* Visual Content */}
+          <div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+              <div className="space-y-8">
+                {/* Buy Section */}
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-6">{t('hero.buySection.title')}</h3>
+                  <div className="space-y-5">
+                    {t('hero.buySection.points').map((point, index) => (
+                      <div key={index} className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mt-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <p className="text-white/90">{point}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <button 
+                    onClick={() => navigate('/buy')}
+                    className="mt-6 w-full py-3 bg-white text-[#3b396d] font-medium rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    {t('hero.buySection.cta')}
+                  </button>
+                </div>
+                
+                <div className="h-px bg-white/20"></div>
+                
+                {/* Sell Section */}
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-6">{t('hero.sellSection.title')}</h3>
+                  <div className="space-y-5">
+                    {t('hero.sellSection.points').map((point, index) => (
+                      <div key={index} className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mt-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-white/90">{point}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <button 
+                    onClick={() => navigate('/sell')}
+                    className="mt-6 w-full py-3 bg-transparent text-white font-medium rounded-lg border border-white hover:bg-white/10 transition-colors"
+                  >
+                    {t('hero.sellSection.cta')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

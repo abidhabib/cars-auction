@@ -6,12 +6,10 @@ import { Press } from '../components/common/Press';
 import InfoSections from '../components/common/InfoCard';
 import HeroSection from '../components/common/HeroSection';
 import SuccessStories from '../components/common/SuccessStories';
-import AppLayout from '../components/layout/AppLayout';
 
 const Home = () => {
   const { t } = useLanguage();
   const [currentSlide, setCurrentSlide] = useState(0);
-
 
   // Page content
   const content = {
@@ -41,41 +39,10 @@ const Home = () => {
         {
           name: "BMW X1 sDrive 16d",
           image: "https://images.unsplash.com/photo-1558981000-f5f2a3c4b4e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-        },
-        {
-          name: "Peugeot 308 1.6 e-HDi Business-Line",
-          image: "https://images.unsplash.com/photo-1568605117036-5fe5e7517d40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-        },
-        {
-          name: "Land Rover Discovery Sport 2.0 Td4 Pure",
-          image: "https://images.unsplash.com/photo-1596774459709-7d8e5e2c3c4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-        },
-        {
-          name: "Smart fortwo 0.8 CDI Passion",
-          image: "https://images.unsplash.com/photo-1549493029-75f60f1aaaeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-        },
-        {
-          name: "Audi Q5 2.0 TDI Avus",
-          image: "https://images.unsplash.com/photo-1550358860-2595bc55d5e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-        },
-        {
-          name: "Abarth 500 1.4 Turbo",
-          image: "https://images.unsplash.com/photo-1553440569-bcc63803a83d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1925&q=80"
-        },
-        {
-          name: "Opel Astra K 1.6 CDTI DPF Edition Start/Stop",
-          image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-        },
-        {
-          name: "Nissan Leaf electric drive 80 kW Acenta",
-          image: "https://images.unsplash.com/photo-1596774459709-7d8e5e2c3c4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
         }
       ]
-    },
-  
+    }
   };
-
-
 
   // Carousel navigation
   const nextSlide = () => {
@@ -87,42 +54,39 @@ const Home = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="min-h-screen bg-gray-100">
-        <HeroSection />
-
-      {/* Daily Cars Carousel */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-white">
+      <HeroSection />
+      
+      {/* Daily Cars Section */}
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-16">
-            {t('dailyCars.title')}
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {t('dailyCars.title')}
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Discover our handpicked selection of premium vehicles, updated daily with the best deals across Europe.
+            </p>
+          </div>
           
           <div className="relative">
             {/* Navigation Buttons */}
             <button 
               onClick={prevSlide}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition z-10 -ml-4 hidden md:block"
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition z-10 -ml-4 hidden md:block"
               aria-label="Previous slide"
             >
-              <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-[#3b396d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             
-            <div className="overflow-x-auto no-scrollbar">
-              <div 
-                className="flex gap-6 py-4 px-4 snap-x snap-mandatory"
-                style={{
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
-                  WebkitOverflowScrolling: 'touch'
-                }}
-              >
+            <div className="overflow-x-hidden">
+              <div className="flex gap-6 py-4 transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${currentSlide * 288}px)` }}>
                 {content.daily_cars.cars.map((car, index) => (
                   <div 
                     key={index} 
-                    className="carousel-card flex-shrink-0 w-64 md:w-72 bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 snap-start"
+                    className="flex-shrink-0 w-72 bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
                   >
                     <div className="h-48 overflow-hidden bg-gray-100">
                       <img 
@@ -135,6 +99,12 @@ const Home = () => {
                     <div className="p-5">
                       <h3 className="font-bold text-gray-900 text-lg mb-1 truncate">{car.name}</h3>
                       <p className="text-sm text-gray-600">{t('dailyCars.activeStatus')} • {t('dailyCars.addedToday')}</p>
+                      <div className="mt-4 flex justify-between items-center">
+                        <span className="text-lg font-bold text-[#3b396d]">€24,890</span>
+                        <button className="text-sm font-medium text-[#3b396d] hover:text-[#2a285a] transition-colors">
+                          View Details
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -143,16 +113,20 @@ const Home = () => {
             
             <button 
               onClick={nextSlide}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition z-10 -mr-4 hidden md:block"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition z-10 -mr-4 hidden md:block"
               aria-label="Next slide"
             >
-              <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-[#3b396d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
           
-         
+          <div className="text-center mt-10">
+            <button className="px-6 py-3 bg-[#3b396d] text-white font-medium rounded-lg hover:bg-[#2a285a] transition-colors">
+              Browse All Vehicles
+            </button>
+          </div>
           
           {/* Brand Logos */}
           <BrandsSection/>
@@ -160,29 +134,51 @@ const Home = () => {
       </section>
       
       {/* Business Growth Section */}
-      <section className="py-20 bg-[#f97316] text-white">
-        <div className="max-w-7xl mx-auto px-4 4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="py-16 bg-[#3b396d] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl  font-bold mb-6">{t('businessGrowth.title')}</h2>
-              <p className="text-xl text-blue-100 leading-relaxed">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('businessGrowth.title')}</h2>
+              <p className="text-lg text-blue-100 leading-relaxed mb-6">
                 {t('businessGrowth.description')}
               </p>
-              <div className="mt-8 flex space-x-4">
-                <Button variant="GrowBtn">{t('businessGrowth.learnMore')}</Button>
-                <Button variant='ContactBtn'>{t('businessGrowth.contactUs')}</Button>
+              <div className="grid grid-cols-2 gap-6 mb-8">
+                <div>
+                  <div className="text-3xl font-bold mb-1">5,000+</div>
+                  <div className="text-blue-200">{t('businessGrowth.stats.partners')}</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold mb-1">98%</div>
+                  <div className="text-blue-200">{t('businessGrowth.stats.satisfaction')}</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold mb-1">15+</div>
+                  <div className="text-blue-200">{t('businessGrowth.stats.experience')}</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold mb-1">27</div>
+                  <div className="text-blue-200">{t('businessGrowth.stats.countries')}</div>
+                </div>
+              </div>
+              <div className="flex space-x-4">
+                <button className="px-6 py-3 bg-white text-[#3b396d] font-medium rounded-lg hover:bg-gray-100 transition-colors">
+                  Learn More
+                </button>
+                <button className="px-6 py-3 border border-white text-white font-medium rounded-lg hover:bg-white/10 transition-colors">
+                  Contact Us
+                </button>
               </div>
             </div>
             <div className="relative">
               <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl">
                 <img 
-                  src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                  src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80" 
                   alt="Business Growth" 
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <div className="absolute bottom-6 left-6">
-                  <div className="flex items-center space-x-2 text-white">
+                  <div className="flex items-center space-x-2 text-white cursor-pointer hover:underline">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                     </svg>
@@ -194,17 +190,17 @@ const Home = () => {
           </div>
         </div>
       </section>
-<SuccessStories/>
+
+      <SuccessStories/>
+      
       {/* Buying/Selling Sections */}
-          <div className="max-w-7xl mx-auto">
-            <InfoSections />
-          </div>
+      <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <InfoSections />
+      </div>
 
       {/* In the Press */}
       <Press/>
-      
-      </div>
-    </AppLayout>
+    </div>
   );
 };
 
