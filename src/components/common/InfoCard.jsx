@@ -16,9 +16,9 @@ const InfoSections = () => {
       image: "/info/business-growth.jpg",
       reverse: false,
       stats: [
-        { label: "60,000+", value: t('info.business.stats.partners') },
-        { label: "30,000+", value: t('info.business.stats.inventory') },
-        { label: "3,000+", value: t('info.business.stats.daily') }
+        { label: "6,434+", value: t('info.business.stats.partners') },
+        { label: "3,411", value: t('info.business.stats.inventory') },
+        { label: "5,921+", value: t('info.business.stats.daily') }
       ]
     },
     {
