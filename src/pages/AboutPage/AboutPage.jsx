@@ -19,7 +19,7 @@ const AboutPage = () => {
   ].filter(item => item.href !== '//');
 
   return (
-    <div className="pt-10">
+    <div className="pt-10 overflow-x-hidden max-w-full">
       {/* Hero Section with Blurred Background */}
       <div className="relative overflow-hidden">
         {/* Animated background elements */}
@@ -32,7 +32,7 @@ const AboutPage = () => {
           <img 
             src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1200&h=400&q=80"
             alt=""
-            className="w-full h-full object-cover filter blur-sm scale-110"
+            className="w-full h-full object-cover filter blur-sm"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#3b396d] to-[#2a285a] opacity-80"></div>
         </div>
