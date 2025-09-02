@@ -251,7 +251,72 @@ export const translations = {
     ctaDescription: "Join thousands of satisfied customers who have found their perfect car through our platform.",
     exploreAuctions: "Explore Auctions"
   },
-
+  
+support: {
+    title: 'Support Center',
+    subtitle: 'Get help with your account, auctions, and more',
+    contactTab: 'Contact Us',
+    faqTab: 'FAQ',
+    
+    // Contact Form
+    sendMessage: 'Send us a message',
+    name: 'Full Name',
+    namePlaceholder: 'Enter your full name',
+    email: 'Email Address',
+    emailPlaceholder: 'Enter your email address',
+    subject: 'Subject',
+    subjectPlaceholder: 'What is this regarding?',
+    message: 'Message',
+    messagePlaceholder: 'Type your message here...',
+    sendButton: 'Send Message',
+    sending: 'Sending...',
+    successMessage: 'Thank you! Your message has been sent successfully.',
+    
+    // Contact Info
+    contactInfo: 'Contact Information',
+    phone: 'Phone Number',
+    phoneDesc: 'Our support team is available 24/7',
+    emailDesc: 'We typically respond within 2 hours',
+    address: 'Office Address',
+    fullAddress: '123 Auto Street, Car City, CC 12345',
+    addressDesc: 'Visit us during business hours',
+    mapPlaceholder: 'Interactive Map Location'
+  },
+  
+  faq: {
+    frequentlyAsked: 'Frequently Asked Questions',
+    description: 'Browse through our most commonly asked questions and find quick answers to your concerns',
+    stillNeedHelp: 'Still need help?',
+    stillNeedHelpDesc: 'Can\'t find the answer you\'re looking for? Our support team is ready to assist you.',
+    contactSupport: 'Contact Support',
+    liveChat: 'Live Chat',
+    questions: {
+      0: {
+        question: 'How do I register for an account?',
+        answer: 'Registration is simple! Click on the "Sign Up" button at the top right corner, fill in your details, and verify your email. You\'ll be ready to browse and bid on cars in minutes.'
+      },
+      1: {
+        question: 'What documents do I need to sell my car?',
+        answer: 'To sell your car, you\'ll need the vehicle title, registration, valid ID, and recent photos of the car. Additional documentation may be required based on your location and vehicle type.'
+      },
+      2: {
+        question: 'How does the bidding process work?',
+        answer: 'Our auction system is straightforward. Place your bid, and if you\'re the highest bidder when the auction closes, you win! You\'ll receive notifications throughout the process.'
+      },
+      3: {
+        question: 'What are the payment options?',
+        answer: 'We accept major credit cards, bank transfers, and digital wallets. All payments are processed securely through our encrypted payment gateway.'
+      },
+      4: {
+        question: 'How long does shipping take?',
+        answer: 'Shipping times vary based on distance and vehicle type. Typically, domestic shipments take 3-7 business days, while international shipments may take 2-4 weeks.'
+      },
+      5: {
+        question: 'What is your return policy?',
+        answer: 'All sales are final due to the nature of vehicle transactions. However, we offer a 30-day satisfaction guarantee on mechanical issues discovered after purchase, subject to inspection.'
+      }
+    }
+  },
     footer: {
       services: {
         title: "Services",
@@ -491,6 +556,71 @@ export const translations = {
     readyToStart: "Bereit zu beginnen?",
     ctaDescription: "Schließen Sie sich tausenden zufriedener Kunden an, die ihr perfektes Auto über unsere Plattform gefunden haben.",
     exploreAuctions: "Auktionen entdecken"
+  },
+  support: {
+    title: 'Support-Center',
+    subtitle: 'Holen Sie sich Hilfe zu Ihrem Konto, Auktionen und mehr',
+    contactTab: 'Kontakt',
+    faqTab: 'FAQ',
+    
+    // Contact Form
+    sendMessage: 'Senden Sie uns eine Nachricht',
+    name: 'Vollständiger Name',
+    namePlaceholder: 'Geben Sie Ihren vollständigen Namen ein',
+    email: 'E-Mail-Adresse',
+    emailPlaceholder: 'Geben Sie Ihre E-Mail-Adresse ein',
+    subject: 'Betreff',
+    subjectPlaceholder: 'Worum geht es?',
+    message: 'Nachricht',
+    messagePlaceholder: 'Geben Sie Ihre Nachricht hier ein...',
+    sendButton: 'Nachricht senden',
+    sending: 'Wird gesendet...',
+    successMessage: 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet.',
+    
+    // Contact Info
+    contactInfo: 'Kontaktinformationen',
+    phone: 'Telefonnummer',
+    phoneDesc: 'Unser Support-Team ist 24/7 verfügbar',
+    emailDesc: 'Wir antworten in der Regel innerhalb von 2 Stunden',
+    address: 'Büroanschrift',
+    fullAddress: '123 Autostraße, Autostadt, AC 12345',
+    addressDesc: 'Besuchen Sie uns während der Geschäftszeiten',
+    mapPlaceholder: 'Interaktiver Kartenstandort'
+  },
+  
+  faq: {
+    frequentlyAsked: 'Häufig gestellte Fragen',
+    description: 'Durchsuchen Sie unsere häufigsten Fragen und finden Sie schnelle Antworten auf Ihre Anliegen',
+    stillNeedHelp: 'Brauchen Sie noch Hilfe?',
+    stillNeedHelpDesc: 'Können Sie die gesuchte Antwort nicht finden? Unser Support-Team steht bereit, um Ihnen zu helfen.',
+    contactSupport: 'Support kontaktieren',
+    liveChat: 'Live-Chat',
+    questions: {
+      0: {
+        question: 'Wie registriere ich mich für ein Konto?',
+        answer: 'Die Registrierung ist einfach! Klicken Sie oben rechts auf die Schaltfläche "Registrieren", füllen Sie Ihre Daten aus und bestätigen Sie Ihre E-Mail. Sie können in wenigen Minuten Autos durchsuchen und bieten.'
+      },
+      1: {
+        question: 'Welche Dokumente benötige ich, um mein Auto zu verkaufen?',
+        answer: 'Um Ihr Auto zu verkaufen, benötigen Sie die Fahrzeugpapiere, Zulassung, gültigen Ausweis und aktuelle Fotos des Autos. Je nach Standort und Fahrzeugtyp können zusätzliche Unterlagen erforderlich sein.'
+      },
+      2: {
+        question: 'Wie funktioniert der Bietprozess?',
+        answer: 'Unser Auktionssystem ist unkompliziert. Geben Sie Ihr Gebot ab, und wenn Sie der Höchstbietende sind, wenn die Auktion endet, gewinnen Sie! Sie erhalten Benachrichtigungen während des gesamten Prozesses.'
+      },
+      3: {
+        question: 'Welche Zahlungsmöglichkeiten gibt es?',
+        answer: 'Wir akzeptieren gängige Kreditkarten, Banküberweisungen und digitale Geldbörsen. Alle Zahlungen werden sicher über unser verschlüsseltes Zahlungsgateway abgewickelt.'
+      },
+      4: {
+        question: 'Wie lange dauert der Versand?',
+        answer: 'Die Versandzeiten variieren je nach Entfernung und Fahrzeugtyp. In der Regel dauern Inlandsversand 3-7 Werktage, während internationaler Versand 2-4 Wochen dauern kann.'
+      },
+      5: {
+        question: 'Wie lautet Ihre Rückgaberegelung?',
+        answer: 'Alle Verkäufe sind aufgrund der Art von Fahrzeugtransaktionen endgültig. Wir bieten jedoch eine 30-tägige Zufriedenheitsgarantie für mechanische Probleme, die nach dem Kauf entdeckt werden, vorbehaltlich einer Inspektion.'
+      }
+    }
   },
     // Hero Section
     hero: {
@@ -884,6 +1014,73 @@ export const translations = {
     ctaDescription: 'Sluit je aan bij duizenden tevreden klanten die hun perfecte auto hebben gevonden via ons platform.',
     exploreAuctions: 'Ontdek veilingen'
   },
+ support: {
+    title: 'Supportcentrum',
+    subtitle: 'Hulp krijgen met uw account, veilingen en meer',
+    contactTab: 'Contact',
+    faqTab: 'FAQ',
+    
+    // Contact Form
+    sendMessage: 'Stuur ons een bericht',
+    name: 'Volledige naam',
+    namePlaceholder: 'Voer uw volledige naam in',
+    email: 'E-mailadres',
+    emailPlaceholder: 'Voer uw e-mailadres in',
+    subject: 'Onderwerp',
+    subjectPlaceholder: 'Waar gaat dit over?',
+    message: 'Bericht',
+    messagePlaceholder: 'Typ uw bericht hier...',
+    sendButton: 'Bericht verzenden',
+    sending: 'Verzenden...',
+    successMessage: 'Bedankt! Uw bericht is succesvol verzonden.',
+    
+    // Contact Info
+    contactInfo: 'Contactgegevens',
+    phone: 'Telefoonnummer',
+    phoneDesc: 'Ons supportteam is 24/7 beschikbaar',
+    emailDesc: 'We reageren meestal binnen 2 uur',
+    address: 'Kantooradres',
+    fullAddress: '123 Autoweg, Autostad, AC 12345',
+    addressDesc: 'Bezoek ons tijdens kantoortijden',
+    mapPlaceholder: 'Interactieve kaartlocatie'
+  },
+  
+  faq: {
+    frequentlyAsked: 'Veelgestelde vragen',
+    description: 'Blader door onze meest gestelde vragen en vind snelle antwoorden op uw zorgen',
+    stillNeedHelp: 'Nog hulp nodig?',
+    stillNeedHelpDesc: 'Kunt u het antwoord dat u zoekt niet vinden? Ons supportteam staat klaar om u te helpen.',
+    contactSupport: 'Contact opnemen',
+    liveChat: 'Live Chat',
+    questions: {
+      0: {
+        question: 'Hoe registreer ik een account?',
+        answer: 'Registratie is eenvoudig! Klik op de knop "Aanmelden" rechtsboven, vul uw gegevens in en verifieer uw e-mail. U bent binnen enkele minuten klaar om auto\'s te bekijken en te bieden.'
+      },
+      1: {
+        question: 'Welke documenten heb ik nodig om mijn auto te verkopen?',
+        answer: 'Om uw auto te verkopen heeft u de voertuigtitel, registratie, geldig ID en recente foto\'s van de auto nodig. Aanvullende documentatie kan vereist zijn op basis van uw locatie en voertuigtype.'
+      },
+      2: {
+        question: 'Hoe werkt het biedingsproces?',
+        answer: 'Ons veilingssysteem is eenvoudig. Plaats uw bod, en als u de hoogste bieder bent wanneer de veiling sluit, wint u! U ontvangt meldingen tijdens het hele proces.'
+      },
+      3: {
+        question: 'Wat zijn de betalingsopties?',
+        answer: 'We accepteren grote creditcards, bankoverschrijvingen en digitale portemonnees. Alle betalingen worden veilig verwerkt via onze versleutelde betalingsgateway.'
+      },
+      4: {
+        question: 'Hoe lang duurt de verzending?',
+        answer: 'Verzendtijden variëren afhankelijk van afstand en voertuigtype. Meestal duurt binnenlandse verzending 3-7 werkdagen, terwijl internationale verzending 2-4 weken kan duren.'
+      },
+      5: {
+        question: 'Wat is uw retourbeleid?',
+        answer: 'Alle verkopen zijn definitief vanwege de aard van voertuigtransacties. We bieden echter een 30-dagen tevredenheidsgarantie op mechanische problemen die na aankoop worden ontdekt, onder voorbehoud van inspectie.'
+      }
+    }
+  },
+ 
+
     // Hero Section
     hero: {
       title: "Europa's grootste groothandelsplatform voor gebruikte auto's",
