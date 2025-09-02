@@ -14,7 +14,6 @@ import {
   FiHome,
   FiInfo,
   FiPhone,
-  FiHelpCircle
 } from 'react-icons/fi';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -107,12 +106,10 @@ const Header = () => {
   ];
 
   const mainMenuItems = [
-    { name: t('header.mainMenu.home'), icon: <FiHome className="text-[#3b396d]" />, href: '/home' },
     { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-[#3b396d]" />, href: '/buy', hasDropdown: true, key: 'buy' },
     { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-[#3b396d]" />, href: '/sell', hasDropdown: true, key: 'sell' },
     { name: t('header.mainMenu.aboutUs'), icon: <FiInfo className="text-[#3b396d]" />, href: '/about' },
     { name: t('header.mainMenu.contact'), icon: <FiPhone className="text-[#3b396d]" />, href: '/contact' },
-    { name: t('header.mainMenu.help'), icon: <FiHelpCircle className="text-[#3b396d]" />, href: '/help' }
   ];
 
   // Check if current route is active
@@ -143,6 +140,23 @@ const Header = () => {
     }));
   };
 
+  // Handle navigation for menu items
+  const handleNavigation = (path, e) => {
+    e?.preventDefault();
+    navigate(path);
+    setMobileMenuOpen(false);
+    setDesktopDropdownStates({ buy: false, sell: false });
+  };
+
+  // Handle sub-menu navigation
+  const handleSubNavigation = (path, dropdownKey, e) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    navigate(path);
+    setMobileMenuOpen(false);
+    setDesktopDropdownStates(prev => ({ ...prev, [dropdownKey]: false }));
+  };
+
   return (
     <>
       {/* Mobile menu backdrop */}
@@ -161,9 +175,12 @@ const Header = () => {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center">
-              <a href="/home" className="flex items-center">
+              <button 
+                onClick={() => navigate('/home')}
+                className="flex items-center focus:outline-none"
+              >
                 <img src="/logo.svg" alt="CarNetwork" className="h-8 md:h-9" />
-              </a>
+              </button>
             </div>
 
             {/* Desktop Navigation */}
@@ -192,27 +209,25 @@ const Header = () => {
                           <div className="py-1">
                             {item.key === 'buy' ? (
                               buyMenuItems.map((subItem, subIndex) => (
-                                <a
+                                <button
                                   key={subIndex}
-                                  href={subItem.href}
-                                  className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
-                                  onClick={() => setDesktopDropdownStates(prev => ({ ...prev, buy: false }))}
+                                  onClick={(e) => handleSubNavigation(subItem.href, 'buy', e)}
+                                  className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors w-full text-left"
                                 >
                                   <span className="mr-3">{subItem.icon}</span>
                                   {subItem.name}
-                                </a>
+                                </button>
                               ))
                             ) : (
                               sellMenuItems.map((subItem, subIndex) => (
-                                <a
+                                <button
                                   key={subIndex}
-                                  href={subItem.href}
-                                  className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
-                                  onClick={() => setDesktopDropdownStates(prev => ({ ...prev, sell: false }))}
+                                  onClick={(e) => handleSubNavigation(subItem.href, 'sell', e)}
+                                  className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors w-full text-left"
                                 >
                                   <span className="mr-3">{subItem.icon}</span>
                                   {subItem.name}
-                                </a>
+                                </button>
                               ))
                             )}
                           </div>
@@ -220,8 +235,8 @@ const Header = () => {
                       )}
                     </>
                   ) : (
-                    <a
-                      href={item.href}
+                    <button
+                      onClick={(e) => handleNavigation(item.href, e)}
                       className={`px-4 py-2 text-sm font-medium transition-colors ${
                         isActiveRoute(item.href) 
                           ? 'text-[#3b396d]' 
@@ -229,7 +244,7 @@ const Header = () => {
                       }`}
                     >
                       {item.name}
-                    </a>
+                    </button>
                   )}
                 </div>
               ))}
@@ -298,17 +313,32 @@ const Header = () => {
                   {userDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                       <div className="py-1">
-                        <a href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate('/dashboard');
+                            setUserDropdownOpen(false);
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]"
+                        >
                           {t('header.userMenu.dashboard')}
-                        </a>
-                        <a href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]">
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate('/profile');
+                            setUserDropdownOpen(false);
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]"
+                        >
                           {t('header.userMenu.profile')}
-                        </a>
+                        </button>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             logout();
                             setUserDropdownOpen(false);
+                            navigate('/');
                           }}
                           className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d]"
                         >
@@ -356,7 +386,12 @@ const Header = () => {
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
               <div className="h-8 w-auto">
-                <img src="/logo.svg" alt="CarNetwork" className="h-8" />
+                <button 
+                  onClick={() => navigate('/home')}
+                  className="focus:outline-none"
+                >
+                  <img src="/logo.svg" alt="CarNetwork" className="h-8" />
+                </button>
               </div>
               <button 
                 className="p-2 rounded-md text-gray-700 hover:text-[#3b396d]"
@@ -390,53 +425,48 @@ const Header = () => {
                           <div className="pl-12 mt-1 space-y-1">
                             {item.key === 'buy' ? (
                               buyMenuItems.map((subItem, subIndex) => (
-                                <a
+                                <button
                                   key={subIndex}
-                                  href={subItem.href}
-                                  className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-medium"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setMobileDropdownStates(prev => ({ ...prev, buy: false }));
-                                    setMobileMenuOpen(false);
+                                    handleSubNavigation(subItem.href, 'buy', e);
                                   }}
+                                  className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-medium w-full text-left"
                                 >
                                   <span className="mr-3">{subItem.icon}</span>
                                   {subItem.name}
-                                </a>
+                                </button>
                               ))
                             ) : (
                               sellMenuItems.map((subItem, subIndex) => (
-                                <a
+                                <button
                                   key={subIndex}
-                                  href={subItem.href}
-                                  className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-medium"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setMobileDropdownStates(prev => ({ ...prev, sell: false }));
-                                    setMobileMenuOpen(false);
+                                    handleSubNavigation(subItem.href, 'sell', e);
                                   }}
+                                  className="flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] font-medium w-full text-left"
                                 >
                                   <span className="mr-3">{subItem.icon}</span>
                                   {subItem.name}
-                                </a>
+                                </button>
                               ))
                             )}
                           </div>
                         )}
                       </>
                     ) : (
-                      <a
-                        href={item.href}
-                        className={`flex items-center py-3 px-4 rounded-lg font-medium transition-colors ${
+                      <button
+                        onClick={(e) => handleNavigation(item.href, e)}
+                        className={`flex items-center py-3 px-4 rounded-lg font-medium transition-colors w-full text-left ${
                           isActiveRoute(item.href)
                             ? 'text-[#3b396d] bg-[#f8f9ff]'
                             : 'text-gray-900 hover:bg-[#f8f9ff]'
                         }`}
-                        onClick={() => setMobileMenuOpen(false)}
                       >
                         <span className="mr-3">{item.icon}</span>
                         {item.name}
-                      </a>
+                      </button>
                     )}
                   </div>
                 ))}

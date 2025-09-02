@@ -91,14 +91,11 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <AppLayout>
         <div className="min-h-screen bg-gray-50 py-8 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#3b396d] mx-auto"></div>
-            <p className="mt-3 text-gray-600">{t('profile.loading')}</p>
           </div>
         </div>
-      </AppLayout>
     );
   }
 

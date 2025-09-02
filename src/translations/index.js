@@ -46,12 +46,18 @@ export const translations = {
     // Hero Section
     hero: {
       title: "Europe's largest wholesale platform for used cars",
+      tagline: "The future of car trading",
+      explore: "Explore",
+      howItWorks: "How it works",
+      benefit1:'Competitive Pricing',
+      benefit2:'Wide Selection',
+      benefit3:'Expert Support',
       buySection: {
         title: "Buy Cars",
         points: [
-          "cars added daily",
-          "cars in stock",
-          "Reliable documentation of car condition"
+          "Browse our extensive inventory",
+          "Get pre-approved for financing",
+          "Enjoy a seamless buying experience"
         ],
         cta: "Start Buying"
       },
@@ -62,8 +68,10 @@ export const translations = {
           "Full transport and document handling",
           "dealers bid on your car"
         ],
+       
         cta: "Start Selling"
       }
+
     },
     // Success Stories
     successStories: {
@@ -207,7 +215,9 @@ export const translations = {
     },
     learnMore: 'Learn More',
     contactUs: 'Contact Us',
-    
+    forBuyers: "For Buyers",
+    forSellers: "For Sellers",
+
     // Business Overview
     businessTitle: "Business operations in 30+ countries",
     businessDescription: "Diversification and risk management are essential factors in the professional trading of used cars. Operating on a local level and the lack of a broad assortment of used cars belong to the most common challenges of the used car industry.",
@@ -257,7 +267,9 @@ support: {
     subtitle: 'Get help with your account, auctions, and more',
     contactTab: 'Contact Us',
     faqTab: 'FAQ',
-    
+    officeLocation: 'Office Location',
+    getDirections: 'Get Directions',
+
     // Contact Form
     sendMessage: 'Send us a message',
     name: 'Full Name',
@@ -345,7 +357,9 @@ support: {
         help: "Help Center",
         faq: "FAQ",
         privacy: "Privacy Policy",
-        terms: "Terms of Service"
+        terms: "Terms of Service",
+        officeLocation: "Office Location",
+        getDirections: "Get Directions"
       },
       cta: {
         title: "Ready to get started?",
@@ -373,7 +387,9 @@ support: {
         errors: {
           invalidCredentials: "Invalid email or password",
           required: "This field is required",
-          invalidEmail: "Please enter a valid email address"
+          invalidEmail: "Please enter a valid email address",
+          passwordTooShort: "Password must be at least 8 characters long."
+
         }
       },
       register: {
@@ -513,7 +529,9 @@ support: {
     },
     learnMore: 'Mehr erfahren',
     contactUs: 'Kontaktieren Sie uns',
-    
+    forBuyers: 'Für Käufer',
+    forSellers: 'Für Verkäufer',
+
     // Business Overview
     businessTitle: "Geschäftstätigkeit in 30+ Ländern",
     businessDescription: "Diversifizierung und Risikomanagement sind entscheidende Faktoren im professionellen Handel mit Gebrauchtwagen. Der Betrieb auf lokaler Ebene und das Fehlen eines breiten Sortiments an Gebrauchtwagen gehören zu den häufigsten Herausforderungen der Branche.",
@@ -562,7 +580,9 @@ support: {
     subtitle: 'Holen Sie sich Hilfe zu Ihrem Konto, Auktionen und mehr',
     contactTab: 'Kontakt',
     faqTab: 'FAQ',
-    
+    officeLocation: 'Kantoorlocatie',
+    getDirections: 'Routebeschrijving',
+
     // Contact Form
     sendMessage: 'Senden Sie uns eine Nachricht',
     name: 'Vollständiger Name',
@@ -624,14 +644,16 @@ support: {
   },
     // Hero Section
     hero: {
+      tagline: "Die Zukunft des Autohandels",
       title: "Europas größte Großhandelsplattform für Gebrauchtwagen",
+      explore: "Auktionen",
+      howItWorks: "Wie es funktioniert",
+      benefit1:'Wettbewerbsfähige Preise',
+      benefit2:'Große Auswahl',
+      benefit3:'Expertenunterstützung',
       buySection: {
         title: "Autos kaufen",
-        points: [
-          "Täglich 3.000+ neue Autos",
-          "30.000+ Autos auf Lager",
-          "Zuverlässige Dokumentation des Fahrzeugzustands"
-        ],
+       
         cta: "Jetzt kaufen"
       },
       sellSection: {
@@ -641,7 +663,17 @@ support: {
           "Komplette Transport- und Dokumentenabwicklung",
           "60.000+ Händler bieten auf Ihr Auto"
         ],
+       
         cta: "Jetzt verkaufen"
+      },
+      buySection: {
+        title: "Autos kaufen",
+        points: [
+          "Durchsuchen Sie unseren umfangreichen Bestand",
+          "Lassen Sie sich für eine Finanzierung vorab genehmigen",
+          "Genießen Sie ein nahtloses Kauferlebnis"
+        ],
+        cta: "Jetzt kaufen"
       }
     },
     // Success Stories
@@ -803,7 +835,8 @@ support: {
         help: "Helpcentrum",
         faq: "FAQ",
         privacy: "Privacybeleid",
-        terms: "Servicevoorwaarden"
+        terms: "Servicevoorwaarden",
+        officeLocation: "Kantoorlocatie"
       },
       cta: {
         title: "Klaar om aan de slag te gaan?",
@@ -832,7 +865,8 @@ support: {
           invalidCredentials: "Ungültige E-Mail oder Passwort",
           required: "Dieses Feld ist erforderlich",
           invalidEmail: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
-          
+          passwordTooShort: "Das Passwort muss mindestens 8 Zeichen lang sein."
+
         }
       },
       register: {
@@ -970,7 +1004,9 @@ support: {
     },
     learnMore: 'Meer informatie',
     contactUs: 'Neem contact op',
-    
+    forBuyers: 'Voor kopers',
+    forSellers: 'Voor verkopers',
+
     // Business Overview
     businessTitle: "Bedrijfsactiviteiten in 30+ landen",
     businessDescription: "Diversificatie en risicobeheersing zijn essentiële factoren in de professionele handel in tweedehands auto's. Opereren op lokaal niveau en het gebrek aan een breed assortiment tweedehands auto's behoren tot de meest voorkomende uitdagingen van de sector.",
@@ -1019,7 +1055,8 @@ support: {
     subtitle: 'Hulp krijgen met uw account, veilingen en meer',
     contactTab: 'Contact',
     faqTab: 'FAQ',
-    
+    officeLocation: 'Kantoorlocatie',
+
     // Contact Form
     sendMessage: 'Stuur ons een bericht',
     name: 'Volledige naam',
@@ -1084,15 +1121,12 @@ support: {
     // Hero Section
     hero: {
       title: "Europa's grootste groothandelsplatform voor gebruikte auto's",
-      buySection: {
-        title: "Auto's kopen",
-        points: [
-          "Dagelijks 3.000+ nieuwe auto's",
-          "30.000+ auto's op voorraad",
-          "Betrouwbare documentatie van autostaat"
-        ],
-        cta: "Begin met kopen"
-      },
+      tagline: "De toekomst van de autohandel",
+      explore:'Explore',
+      howItWorks: 'Hoe het werkt',
+      benefit1: 'Wettbewerbsfähige Preise',
+      benefit2: 'Große Auswahl',
+      benefit3: 'Expertenunterstützung',
       sellSection: {
         title: "Auto's verkopen",
         points: [
@@ -1101,6 +1135,15 @@ support: {
           "60.000+ dealers bieden op uw auto"
         ],
         cta: "Begin met verkopen"
+      },
+      buySection: {
+        title: "Auto's kopen",
+        points: [
+          "Doorzoek onze uitgebreide voorraad",
+          "Krijg vooraf goedkeuring voor financiering",
+          "Geniet van een naadloze koopervaring"
+        ],
+        cta: "Begin met kopen"
       }
     },
     // Success Stories
@@ -1262,7 +1305,8 @@ support: {
         help: "Helpcentrum",
         faq: "FAQ",
         privacy: "Privacybeleid",
-        terms: "Servicevoorwaarden"
+        terms: "Servicevoorwaarden",
+        officeLocation: "Kantoorlocatie"
       },
       cta: {
         title: "Klaar om aan de slag te gaan?",
@@ -1290,7 +1334,8 @@ support: {
         errors: {
           invalidCredentials: "Ongeldig e-mailadres of wachtwoord",
           required: "Dit veld is verplicht",
-          invalidEmail: "Voer een geldig e-mailadres in"
+          invalidEmail: "Voer een geldig e-mailadres in",
+          passwordTooShort: "Wachtwoord moet minimaal 8 tekens lang zijn."
         }
       },
       register: {

@@ -1,6 +1,6 @@
 // src/App.jsx
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import SplashScreen from './components/common/SplashScreen';
@@ -13,24 +13,31 @@ import AppLayout from './components/layout/AppLayout';
 import AboutPage from './pages/AboutPage/AboutPage';
 import SupportPage from './pages/SupportPage/SupportPage';
 
+// Scroll to top component
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   const [showSplash, setShowSplash] = useState(true);
-
-  // if (showSplash) {
-  //   return <SplashScreen onSplashComplete={() => setShowSplash(false)} />;
-  // }
 
   return (
     <AuthProvider>
       <LanguageProvider>
         <Router>
+          <ScrollToTop /> {/* Add this line */}
           <div className="App min-h-screen">
             <Routes>
-              {/* Public Routes - No Layout */}
+              {/* Your existing routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               
-              {/* Public Routes - With Layout */}
               <Route path="/home" element={
                 <AppLayout>
                   <Home />
@@ -48,7 +55,6 @@ function App() {
               } />
               <Route path="/" element={<Navigate to="/home" replace />} />
               
-              {/* Protected Routes - With Layout */}
               <Route path="/dashboard" element={
                 <AppLayout>
                   <Dashboard />
