@@ -10,6 +10,7 @@ import Register from './pages/auth/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/profile/Profile';
 import AppLayout from './components/layout/AppLayout';
+import AboutPage from './pages/AboutPage/AboutPage';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -32,6 +33,11 @@ function App() {
               <Route path="/home" element={
                 <AppLayout>
                   <Home />
+                </AppLayout>
+              } />
+              <Route path="/about" element={
+                <AppLayout>
+                  <AboutPage />
                 </AppLayout>
               } />
               <Route path="/" element={<Navigate to="/home" replace />} />
