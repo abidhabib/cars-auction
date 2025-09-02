@@ -1,8 +1,10 @@
+// src/components/help/HelpCenter.jsx
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { Link } from 'react-router-dom';
+import { FiMessageSquare, FiX, FiSend, FiClock, FiMail, FiPhone } from 'react-icons/fi';
 
-const SupportPage = () => {
+const HelpCenter = () => {
   const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState('contact');
   const [formData, setFormData] = useState({
@@ -14,6 +16,16 @@ const SupportPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [openFAQIndex, setOpenFAQIndex] = useState(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      text: "Hello! How can I help you today?",
+      sender: 'bot',
+      timestamp: new Date()
+    }
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -43,12 +55,56 @@ const SupportPage = () => {
     setOpenFAQIndex(openFAQIndex === index ? null : index);
   };
 
+  // Handle sending a message
+  const handleSendMessage = () => {
+    if (inputMessage.trim() === '') return;
+
+    // Add user message
+    const newUserMessage = {
+      id: messages.length + 1,
+      text: inputMessage,
+      sender: 'user',
+      timestamp: new Date()
+    };
+
+    setMessages([...messages, newUserMessage]);
+    setInputMessage('');
+
+    // Simulate bot response after a delay
+    setTimeout(() => {
+      const botResponses = [
+        "I understand. Let me check that for you.",
+        "Thanks for your message. Our team will get back to you shortly.",
+        "For more detailed assistance, you can also contact our support team at support@carnetwork.com",
+        "Is there anything else I can help you with?",
+        "I've noted your concern. A support representative will contact you within 24 hours."
+      ];
+      
+      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+      
+      const newBotMessage = {
+        id: messages.length + 2,
+        text: randomResponse,
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, newBotMessage]);
+    }, 1000);
+  };
+
+  // Handle pressing Enter to send
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   const contactInfo = [
     {
       icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-        </svg>
+        <FiPhone className="w-5 h-5" />
       ),
       title: t('support.phone'),
       content: '+1 (555) 123-4567',
@@ -56,20 +112,15 @@ const SupportPage = () => {
     },
     {
       icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
+        <FiMail className="w-5 h-5" />
       ),
       title: t('support.email'),
-      content: 'support@carauction.com',
+      content: 'support@carnetwork.com',
       description: t('support.emailDesc')
     },
     {
       icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
+        <FiClock className="w-5 h-5" />
       ),
       title: t('support.address'),
       content: t('support.fullAddress'),
@@ -79,28 +130,28 @@ const SupportPage = () => {
 
   const faqs = [
     {
-      question: t('faq.questions.0.question'),
-      answer: t('faq.questions.0.answer')
+      question: "How do I create an account?",
+      answer: "Click on the 'Sign Up' button at the top right corner and fill in your details. You'll receive a confirmation email to verify your account."
     },
     {
-      question: t('faq.questions.1.question'),
-      answer: t('faq.questions.1.answer')
+      question: "How can I list my car for sale?",
+      answer: "After logging in, go to the 'Sell Cars' section and click 'Sell Your Car'. Fill in the vehicle details and upload photos to create your listing."
     },
     {
-      question: t('faq.questions.2.question'),
-      answer: t('faq.questions.2.answer')
+      question: "What payment methods do you accept?",
+      answer: "We accept all major credit cards, bank transfers, and PayPal. Payment details are securely processed through our payment partners."
     },
     {
-      question: t('faq.questions.3.question'),
-      answer: t('faq.questions.3.answer')
+      question: "How long does it take to verify my listing?",
+      answer: "Most listings are verified within 24 hours. Premium listings get priority verification and are typically approved within 2 hours."
     },
     {
-      question: t('faq.questions.4.question'),
-      answer: t('faq.questions.4.answer')
+      question: "Can I edit my listing after publishing?",
+      answer: "Yes, you can edit your listing at any time by going to your dashboard and selecting the listing you want to modify."
     },
     {
-      question: t('faq.questions.5.question'),
-      answer: t('faq.questions.5.answer')
+      question: "How do I contact a seller?",
+      answer: "Each listing has a 'Contact Seller' button. Click this to send a message directly through our secure messaging system."
     }
   ];
 
@@ -111,10 +162,10 @@ const SupportPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-              {t('support.title')}
+              Help Center
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              {t('support.subtitle')}
+              Find answers to common questions or get in touch with our support team
             </p>
           </div>
         </div>
@@ -131,7 +182,7 @@ const SupportPage = () => {
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
-            {t('support.contactTab')}
+            Contact Us
           </button>
           <button
             onClick={() => setActiveTab('faq')}
@@ -141,7 +192,7 @@ const SupportPage = () => {
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
-            {t('support.faqTab')}
+            FAQ
           </button>
         </div>
 
@@ -153,19 +204,19 @@ const SupportPage = () => {
               {/* Contact Form */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-5">
-                  {t('support.sendMessage')}
+                  Send us a message
                 </h2>
                 
                 {submitSuccess && (
                   <div className="mb-5 p-3 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200">
-                    {t('support.successMessage')}
+                    Your message has been sent successfully! We'll get back to you soon.
                   </div>
                 )}
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                      {t('support.name')}
+                      Name
                     </label>
                     <input
                       type="text"
@@ -175,13 +226,13 @@ const SupportPage = () => {
                       onChange={handleChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
-                      placeholder={t('support.namePlaceholder')}
+                      placeholder="Enter your name"
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      {t('support.email')}
+                      Email
                     </label>
                     <input
                       type="email"
@@ -191,13 +242,13 @@ const SupportPage = () => {
                       onChange={handleChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
-                      placeholder={t('support.emailPlaceholder')}
+                      placeholder="Enter your email"
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
-                      {t('support.subject')}
+                      Subject
                     </label>
                     <input
                       type="text"
@@ -207,13 +258,13 @@ const SupportPage = () => {
                       onChange={handleChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
-                      placeholder={t('support.subjectPlaceholder')}
+                      placeholder="What is this regarding?"
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                      {t('support.message')}
+                      Message
                     </label>
                     <textarea
                       id="message"
@@ -223,7 +274,7 @@ const SupportPage = () => {
                       required
                       rows={5}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
-                      placeholder={t('support.messagePlaceholder')}
+                      placeholder="How can we help you?"
                     />
                   </div>
                   
@@ -232,7 +283,7 @@ const SupportPage = () => {
                     disabled={isSubmitting}
                     className="w-full bg-[#3b396d] text-white font-medium py-2.5 px-4 rounded-md hover:bg-[#2a285a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
-                    {isSubmitting ? t('support.sending') : t('support.sendButton')}
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </button>
                 </form>
               </div>
@@ -240,7 +291,7 @@ const SupportPage = () => {
               {/* Contact Information */}
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-5">
-                  {t('support.contactInfo')}
+                  Contact Information
                 </h2>
                 
                 <div className="space-y-4">
@@ -259,70 +310,52 @@ const SupportPage = () => {
                 </div>
 
                 {/* Map Placeholder */}
-              <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('support.officeLocation')}</h3>
-
-      <div className="relative bg-gray-50 rounded-lg h-64 overflow-hidden">
-        {/* Simplified map of Amsterdam with key landmarks */}
-        <svg viewBox="0 0 800 500" className="w-full h-full">
-          {/* Background */}
-          <rect width="800" height="500" fill="#e6f2ff" />
-          
-          {/* Water channels - characteristic of Dutch cities */}
-          <path d="M100,100 Q250,50 400,150 T700,200" stroke="#99c2ff" strokeWidth="40" fill="none" />
-          <path d="M50,300 Q200,250 350,350 T750,400" stroke="#99c2ff" strokeWidth="30" fill="none" />
-          
-          {/* City blocks */}
-          <rect x="120" y="80" width="120" height="80" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          <rect x="260" y="60" width="100" height="100" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          <rect x="380" y="100" width="140" height="70" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          <rect x="540" y="80" width="110" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          
-          <rect x="100" y="200" width="130" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          <rect x="250" y="180" width="100" height="100" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          <rect x="370" y="200" width="140" height="80" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          <rect x="530" y="190" width="120" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          
-          <rect x="90" y="320" width="140" height="70" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          <rect x="250" y="300" width="110" height="80" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          <rect x="380" y="320" width="130" height="70" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          <rect x="530" y="300" width="120" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-          
-          {/* Main roads */}
-          <path d="M50,150 L750,150" stroke="#adb5bd" strokeWidth="8" fill="none" />
-          <path d="M150,50 L150,450" stroke="#adb5bd" strokeWidth="8" fill="none" />
-          <path d="M400,50 L400,450" stroke="#adb5bd" strokeWidth="8" fill="none" />
-          <path d="M650,50 L650,450" stroke="#adb5bd" strokeWidth="8" fill="none" />
-          
-          {/* Landmark icons */}
-          <circle cx="200" cy="120" r="15" fill="#3b396d" />
-          <circle cx="400" cy="200" r="15" fill="#3b396d" />
-          <circle cx="600" cy="280" r="15" fill="#3b396d" />
-          
-          {/* Our location marker */}
-          <circle cx="400" cy="300" r="20" fill="#3b396d" stroke="#fff" strokeWidth="3" />
-          <text x="400" y="305" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">A</text>
-        </svg>
-        
-        <div className="absolute bottom-4 left-4 bg-white px-3 py-2 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-[#3b396d] mr-2"></div>
-            <span className="text-sm font-medium text-gray-700">Amsterdam Office</span>
-          </div>
-        </div>
-      </div>
-      
-      <div className="mt-4 flex justify-between items-center">
-        <div className="text-sm text-gray-600">
-          <p>Singel 250, 1016 AB Amsterdam</p>
-          <p>Netherlands</p>
-        </div>
-        
-        <button className="px-4 py-2 bg-[#3b396d] text-white text-sm font-medium rounded-lg hover:bg-[#2a285a] transition-colors">
-                  {t('support.getDirections')}
-        </button>
-      </div>
-    </div>
+                <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Our Office Location</h3>
+                  <div className="relative bg-gray-50 rounded-lg h-64 overflow-hidden">
+                    <svg viewBox="0 0 800 500" className="w-full h-full">
+                      <rect width="800" height="500" fill="#e6f2ff" />
+                      <path d="M100,100 Q250,50 400,150 T700,200" stroke="#99c2ff" strokeWidth="40" fill="none" />
+                      <path d="M50,300 Q200,250 350,350 T750,400" stroke="#99c2ff" strokeWidth="30" fill="none" />
+                      <rect x="120" y="80" width="120" height="80" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="260" y="60" width="100" height="100" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="380" y="100" width="140" height="70" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="540" y="80" width="110" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="100" y="200" width="130" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="250" y="180" width="100" height="100" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="370" y="200" width="140" height="80" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="530" y="190" width="120" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="90" y="320" width="140" height="70" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="250" y="300" width="110" height="80" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="380" y="320" width="130" height="70" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <rect x="530" y="300" width="120" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
+                      <path d="M50,150 L750,150" stroke="#adb5bd" strokeWidth="8" fill="none" />
+                      <path d="M150,50 L150,450" stroke="#adb5bd" strokeWidth="8" fill="none" />
+                      <path d="M400,50 L400,450" stroke="#adb5bd" strokeWidth="8" fill="none" />
+                      <path d="M650,50 L650,450" stroke="#adb5bd" strokeWidth="8" fill="none" />
+                      <circle cx="200" cy="120" r="15" fill="#3b396d" />
+                      <circle cx="400" cy="200" r="15" fill="#3b396d" />
+                      <circle cx="600" cy="280" r="15" fill="#3b396d" />
+                      <circle cx="400" cy="300" r="20" fill="#3b396d" stroke="#fff" strokeWidth="3" />
+                      <text x="400" y="305" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">A</text>
+                    </svg>
+                    <div className="absolute bottom-4 left-4 bg-white px-3 py-2 rounded-lg shadow-sm border border-gray-200">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 rounded-full bg-[#3b396d] mr-2"></div>
+                        <span className="text-sm font-medium text-gray-700">Amsterdam Office</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex justify-between items-center">
+                    <div className="text-sm text-gray-600">
+                      <p>Singel 250, 1016 AB Amsterdam</p>
+                      <p>Netherlands</p>
+                    </div>
+                    <button className="px-4 py-2 bg-[#3b396d] text-white text-sm font-medium rounded-lg hover:bg-[#2a285a] transition-colors">
+                      Get Directions
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -332,10 +365,10 @@ const SupportPage = () => {
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8">
                 <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
-                  {t('faq.frequentlyAsked')}
+                  Frequently Asked Questions
                 </h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  {t('faq.description')}
+                  Find answers to common questions about our services
                 </p>
               </div>
 
@@ -379,22 +412,23 @@ const SupportPage = () => {
               {/* Still Need Help */}
               <div className="mt-12 bg-[#3b396d] rounded-lg p-6 text-center text-white">
                 <h3 className="text-xl font-semibold mb-3">
-                  {t('faq.stillNeedHelp')}
+                  Still need help?
                 </h3>
                 <p className="text-white/90 mb-5 max-w-xl mx-auto">
-                  {t('faq.stillNeedHelpDesc')}
+                  Can't find the answer you're looking for? Our support team is here to help.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <button 
                     onClick={() => setActiveTab('contact')}
                     className="px-5 py-2.5 bg-white text-[#3b396d] font-medium rounded-md hover:bg-gray-100 transition-colors text-sm"
                   >
-                    {t('faq.contactSupport')}
+                    Contact Support
                   </button>
                   <button 
+                    onClick={() => setIsChatOpen(true)}
                     className="px-5 py-2.5 bg-transparent border border-white text-white font-medium rounded-md hover:bg-white hover:text-[#3b396d] transition-colors text-sm"
                   >
-                    {t('faq.liveChat')}
+                    Live Chat
                   </button>
                 </div>
               </div>
@@ -402,8 +436,92 @@ const SupportPage = () => {
           )}
         </div>
       </div>
+
+      {/* Chat Bot Button */}
+      <button
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-6 right-6 bg-[#3b396d] text-white p-4 rounded-full shadow-lg hover:bg-[#2a285a] transition-colors z-40"
+      >
+        <FiMessageSquare className="text-xl" />
+      </button>
+
+      {/* Chat Bot UI */}
+      {isChatOpen && (
+ <>
+ 
+{/* Chat Bot UI - Minimal Responsive Design */}
+{isChatOpen && (
+  <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 w-full sm:w-[350px] bg-white sm:rounded-xl shadow-2xl z-50 flex flex-col h-full sm:h-[500px]">
+    {/* Chat Header - Minimal */}
+    <div className="bg-[#3b396d] text-white p-3 sm:rounded-t-xl flex justify-between items-center">
+      <div className="flex items-center">
+        <FiMessageSquare className="text-lg mr-2" />
+        <span className="font-medium text-sm truncate">Support Assistant</span>
+      </div>
+      <button 
+        onClick={() => setIsChatOpen(false)}
+        className="text-white hover:text-gray-200 p-1"
+        aria-label="Close chat"
+      >
+        <FiX className="text-lg" />
+      </button>
+    </div>
+
+    {/* Chat Messages - Clean Scroll */}
+    <div className="flex-1 overflow-y-auto p-3 bg-gray-50">
+      {messages.map((message) => (
+        <div 
+          key={message.id} 
+          className={`mb-3 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+        >
+          <div 
+            className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${
+              message.sender === 'user' 
+                ? 'bg-[#3b396d] text-white rounded-br-none' 
+                : 'bg-white border border-gray-200 rounded-bl-none'
+            }`}
+          >
+            <p>{message.text}</p>
+            <p className={`text-xs mt-1 ${message.sender === 'user' ? 'text-white/70' : 'text-gray-500'}`}>
+              {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Chat Input - Compact */}
+    <div className="border-t border-gray-200 p-2 bg-white">
+      <div className="flex">
+        <input
+          type="text"
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Type a message..."
+          className="flex-1 border border-gray-300 rounded-l-lg px-2 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
+        />
+        <button
+          onClick={handleSendMessage}
+          disabled={inputMessage.trim() === ''}
+          className={`px-3 py-2 rounded-r-lg flex items-center justify-center ${
+            inputMessage.trim() === '' 
+              ? 'bg-gray-200 text-gray-400' 
+              : 'bg-[#3b396d] text-white hover:bg-[#2a285a]'
+          }`}
+          aria-label="Send message"
+        >
+          <FiSend className="text-sm" />
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+ </>
+     
+     )}
     </div>
   );
 };
 
-export default SupportPage;
+export default HelpCenter;

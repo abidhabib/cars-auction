@@ -2,10 +2,12 @@
 import React from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter, FaApple, FaGooglePlay } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const { t, language, setLanguage } = useLanguage();
-
+  const navigate = useNavigate();
+  
   const footerLinks = {
     services: [
       { name: t("footer.services.buyCars"), href: "/buy" },
@@ -45,17 +47,25 @@ const Footer = () => {
     { icon: <FaGooglePlay className="w-5 h-5" />, store: "Google Play", href: "#" },
   ];
 
+  // Handle navigation for footer links
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   return (
     <footer className="bg-[#3b396d] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Top CTA Section */}
-        <div className="bg-white/5 rounded-2xl p-8 mb-16 backdrop-blur-sm ">
+        <div className="bg-white/5 rounded-2xl p-8 mb-16 backdrop-blur-sm">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="text-2xl font-bold mb-2">{t("footer.cta.title")}</h3>
               <p className="text-white/90">{t("footer.cta.subtitle")}</p>
             </div>
-            <button className="px-6 py-3 bg-white text-[#3b396d] font-semibold rounded-full hover:bg-gray-100 transition-colors">
+            <button 
+              onClick={() => handleNavigation("/register")} 
+              className="px-6 py-3 bg-white text-[#3b396d] font-semibold rounded-full hover:bg-gray-100 transition-colors"
+            >
               {t("footer.cta.button")}
             </button>
           </div>
@@ -87,12 +97,12 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.services.map((link, index) => (
                 <li key={index}>
-                  <a 
-                    href={link.href} 
-                    className="text-white/80 hover:text-white transition-colors"
+                  <button 
+                    onClick={() => handleNavigation(link.href)} 
+                    className="text-white/80 hover:text-white transition-colors text-left w-full"
                   >
                     {link.name}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -103,12 +113,12 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.account.map((link, index) => (
                 <li key={index}>
-                  <a 
-                    href={link.href} 
-                    className="text-white/80 hover:text-white transition-colors"
+                  <button 
+                    onClick={() => handleNavigation(link.href)} 
+                    className="text-white/80 hover:text-white transition-colors text-left w-full"
                   >
                     {link.name}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -119,12 +129,12 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.support.map((link, index) => (
                 <li key={index}>
-                  <a 
-                    href={link.href} 
-                    className="text-white/80 hover:text-white transition-colors"
+                  <button 
+                    onClick={() => handleNavigation(link.href)} 
+                    className="text-white/80 hover:text-white transition-colors text-left w-full"
                   >
                     {link.name}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -181,12 +191,18 @@ const Footer = () => {
               &copy; {new Date().getFullYear()} {t("footer.copyright")}
             </p>
             <div className="flex space-x-6">
-              <a href="/privacy" className="text-white/70 hover:text-white text-sm transition-colors">
+              <button 
+                onClick={() => handleNavigation("/privacy")} 
+                className="text-white/70 hover:text-white text-sm transition-colors"
+              >
                 {t("footer.privacy")}
-              </a>
-              <a href="/terms" className="text-white/70 hover:text-white text-sm transition-colors">
+              </button>
+              <button 
+                onClick={() => handleNavigation("/terms")} 
+                className="text-white/70 hover:text-white text-sm transition-colors"
+              >
                 {t("footer.terms")}
-              </a>
+              </button>
             </div>
           </div>
         </div>

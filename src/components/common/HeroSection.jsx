@@ -2,6 +2,7 @@
 import React from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import { useNavigate } from "react-router-dom";
+import CountUp from "react-countup";
 
 const HeroSection = () => {
   const { t } = useLanguage();
@@ -45,20 +46,26 @@ const HeroSection = () => {
           <div className="relative">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
               {/* Stats Visualization */}
-              <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="bg-white/10 rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-white">30+</div>
-                  <div className="text-xs text-white/80 mt-1">{t('businessGrowth.countries')}</div>
-                </div>
-                <div className="bg-white/10 rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-white">60K+</div>
-                  <div className="text-xs text-white/80 mt-1">{t('about.dealers')}</div>
-                </div>
-                <div className="bg-white/10 rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-white">€6B+</div>
-                  <div className="text-xs text-white/80 mt-1">{t('about.revenue')}</div>
-                </div>
-              </div>
+             <div className="grid grid-cols-3 gap-4 mb-6">
+  <div className="bg-white/10 rounded-xl p-4 text-center">
+    <div className="text-2xl font-bold text-white">
+      <CountUp end={30} duration={3} suffix="+" />
+    </div>
+    <div className="text-xs text-white/80 mt-1">{t('businessGrowth.countries')}</div>
+  </div>
+  <div className="bg-white/10 rounded-xl p-4 text-center">
+    <div className="text-2xl font-bold text-white">
+      <CountUp end={60} duration={3} suffix="K+" />
+    </div>
+    <div className="text-xs text-white/80 mt-1">{t('about.dealers')}</div>
+  </div>
+  <div className="bg-white/10 rounded-xl p-4 text-center">
+    <div className="text-2xl font-bold text-white">
+      <CountUp end={6} duration={3} prefix="€" suffix="B+" />
+    </div>
+    <div className="text-xs text-white/80 mt-1">{t('about.revenue')}</div>
+  </div>
+</div>
               
               {/* Interactive Path Visualization */}
               <div className="relative">

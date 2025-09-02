@@ -9,7 +9,7 @@ import dealer5 from '../../assets/success-stories/dealer5.jpg';
 import dealer6 from '../../assets/success-stories/dealer6.jpg';
 import dealer7 from '../../assets/success-stories/dealer7.jpg';
 import dealer8 from '../../assets/success-stories/dealer8.jpg';
-
+import CountUp from 'react-countup';
 const SuccessStories = () => {
   const { t } = useLanguage();
   
@@ -41,26 +41,33 @@ const SuccessStories = () => {
           </p>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
-            <div className="text-3xl font-bold text-[#3b396d] mb-2">250+</div>
-            <div className="text-gray-600">Dealers</div>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
-            <div className="text-3xl font-bold text-[#3b396d] mb-2">€2B+</div>
-            <div className="text-gray-600">Transactions</div>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
-            <div className="text-3xl font-bold text-[#3b396d] mb-2">98%</div>
-            <div className="text-gray-600">Satisfaction</div>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
-            <div className="text-3xl font-bold text-[#3b396d] mb-2">15+</div>
-            <div className="text-gray-600">Countries</div>
-          </div>
-        </div>
-
+       {/* Stats Section */}
+<div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
+    <div className="text-3xl font-bold text-[#3b396d] mb-2">
+      <CountUp end={250} duration={3} suffix="+" />
+    </div>
+    <div className="text-gray-600">Dealers</div>
+  </div>
+  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
+    <div className="text-3xl font-bold text-[#3b396d] mb-2">
+      <CountUp end={2} duration={3} prefix="€" suffix="B+" />
+    </div>
+    <div className="text-gray-600">Transactions</div>
+  </div>
+  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
+    <div className="text-3xl font-bold text-[#3b396d] mb-2">
+      <CountUp end={98} duration={3} suffix="%" />
+    </div>
+    <div className="text-gray-600">Satisfaction</div>
+  </div>
+  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
+    <div className="text-3xl font-bold text-[#3b396d] mb-2">
+      <CountUp end={15} duration={3} suffix="+" />
+    </div>
+    <div className="text-gray-600">Countries</div>
+  </div>
+</div>
         {/* Featured Stories */}
         <div className="mb-16">
           <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">

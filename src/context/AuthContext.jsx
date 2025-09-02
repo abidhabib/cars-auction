@@ -13,14 +13,14 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('authToken');
     if (token) {
       // TODO: validate token with backend
-      setUser({ id: 1, name: 'Dealer Name' });
+      setUser({ id: 1, name: 'Jhon Doe' });
     }
     setLoading(false);
   }, []);
 
   const login = async (credentials) => {
     // TODO: call API
-    const userData = { id: 1, name: 'Dealer Name', ...credentials };
+    const userData = { id: 1, name: 'Jhon Doe', ...credentials };
     setUser(userData);
     localStorage.setItem('authToken', 'fake-token');
     return userData;
