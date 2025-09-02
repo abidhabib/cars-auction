@@ -198,7 +198,59 @@ export const translations = {
 
     },
 
-
+ about: {
+    title: 'About Us',
+    hero: {
+      title: "Europe's largest wholesale platform for used cars",
+      subtitle: "CarAuction is Europe's leading digital platform for buying and selling used cars online. More than 60,000 partner dealers in over 30 countries actively digitize their used car business with our technologies and services.",
+      imageAlt: "Modern car auction platform"
+    },
+    learnMore: 'Learn More',
+    contactUs: 'Contact Us',
+    
+    // Business Overview
+    businessTitle: "Business operations in 30+ countries",
+    businessDescription: "Diversification and risk management are essential factors in the professional trading of used cars. Operating on a local level and the lack of a broad assortment of used cars belong to the most common challenges of the used car industry.",
+    countries: "Countries",
+    businessOperations: "Business operations",
+    dealers: "Dealers",
+    activePartners: "Active partner dealers",
+    carsSold: "Cars sold",
+    in2024: "In 2024",
+    
+    // Buy Section
+    buyTitle: "Attractive purchasing conditions for partner dealers",
+    buyDescription: "Only a diversified portfolio strategy enables high throughput and higher contribution margins. With CarAuction as a reliable sourcing channel, partner dealers can actively manage their vehicle inventory, ensuring long-term competitiveness and success in the used car business.",
+    buyBenefit1: "Cross-brand inventory of over 30,000 inspected used cars",
+    buyBenefit2: "Market-based purchasing conditions available 24/7",
+    buyBenefit3: "Over 3,000 new additions daily to inventory",
+    buyBenefit4: "Fast international trading with competitive prices",
+    
+    // Sell Section
+    sellTitle: "Remarketing partners sell cars 100% digital, fast and easy",
+    sellDescription: "Additionally, our Remarketing partners can sell cars B2B digitally without any risk to a network of over 60,000 dealers across Europe via CarAuction Remarketing.",
+    sellBenefit1Title: "Full-Service Remarketing",
+    sellBenefit1Desc: "Ranges from evaluation to marketing with innovative digital solutions",
+    sellBenefit2Title: "Data-Driven Management",
+    sellBenefit2Desc: "Implement data-driven used car management for better decisions",
+    sellBenefit3Title: "Fast Processing",
+    sellBenefit3Desc: "Quick evaluation, pricing, and selling Europe-wide with few clicks",
+    sellImageAlt: "Digital car selling platform",
+    
+    // Company Info
+    companyInfoTitle: "Europe's leading digital platform for buying and selling used cars online",
+    companyInfoSubtitle: "CarAuction is part of CarAuction Group, Europe's leading digital platform for buying and selling used cars online.",
+    revenue: "Revenue",
+    operations: "Operations",
+    digital: "Digital",
+    platform: "Platform",
+    companyDescription: "CarAuction Group, headquartered in Berlin, is active in more than 30 countries and achieved revenues of 6.3 billion Euros in 2024. Together with our partners, we implement data-driven used car management and revolutionize the automotive industry through technology and innovation.",
+    
+    // CTA
+    readyToStart: "Ready to Get Started?",
+    ctaDescription: "Join thousands of satisfied customers who have found their perfect car through our platform.",
+    exploreAuctions: "Explore Auctions"
+  },
 
     footer: {
       services: {
@@ -387,6 +439,59 @@ export const translations = {
       login: "Anmelden",
       signup: "Registrieren"
     },
+  about: {
+    title: 'Über uns',
+    hero: {
+      title: "Europas größte Großhandelsplattform für Gebrauchtwagen",
+      subtitle: "CarAuction ist Europas führende digitale Plattform für den Online-Kauf und -Verkauf von Gebrauchtwagen. Mehr als 60.000 Partnerhändler in über 30 Ländern digitalisieren aktiv ihr Gebrauchtwagen-Geschäft mit unseren Technologien und Dienstleistungen.",
+      imageAlt: "Moderne Autoauktionsplattform"
+    },
+    learnMore: 'Mehr erfahren',
+    contactUs: 'Kontaktieren Sie uns',
+    
+    // Business Overview
+    businessTitle: "Geschäftstätigkeit in 30+ Ländern",
+    businessDescription: "Diversifizierung und Risikomanagement sind entscheidende Faktoren im professionellen Handel mit Gebrauchtwagen. Der Betrieb auf lokaler Ebene und das Fehlen eines breiten Sortiments an Gebrauchtwagen gehören zu den häufigsten Herausforderungen der Branche.",
+    countries: "Länder",
+    businessOperations: "Geschäftstätigkeit",
+    dealers: "Händler",
+    activePartners: "Aktive Partnerhändler",
+    carsSold: "Verkaufte Autos",
+    in2024: "Im Jahr 2024",
+    
+    // Buy Section
+    buyTitle: "Attraktive Kaufbedingungen für Partnerhändler",
+    buyDescription: "Nur eine diversifizierte Portfoliostrategie ermöglicht einen hohen Durchsatz und höhere Deckungsbeiträge. Mit CarAuction als zuverlässigen Beschaffungskanal können Partnerhändler ihren Fahrzeugbestand aktiv managen und langfristige Wettbewerbsfähigkeit sichern.",
+    buyBenefit1: "Cross-Brand-Inventar mit über 30.000 inspizierten Gebrauchtwagen",
+    buyBenefit2: "Marktgerechte Kaufbedingungen rund um die Uhr verfügbar",
+    buyBenefit3: "Über 3.000 neue Ergänzungen täglich zum Inventar",
+    buyBenefit4: "Schneller internationaler Handel zu wettbewerbsfähigen Preisen",
+    
+    // Sell Section
+    sellTitle: "Remarketing-Partner verkaufen Autos 100% digital, schnell und einfach",
+    sellDescription: "Darüber hinaus können unsere Remarketing-Partner Autos B2B digital und risikofrei an ein Netzwerk von über 60.000 Händlern in ganz Europa über CarAuction Remarketing verkaufen.",
+    sellBenefit1Title: "Full-Service Remarketing",
+    sellBenefit1Desc: "Von der Bewertung bis zum Marketing mit innovativen digitalen Lösungen",
+    sellBenefit2Title: "Datengetriebenes Management",
+    sellBenefit2Desc: "Implementierung datengetriebener Gebrauchtwagenverwaltung für bessere Entscheidungen",
+    sellBenefit3Title: "Schnelle Abwicklung",
+    sellBenefit3Desc: "Schnelle Bewertung, Preisgestaltung und Verkauf in ganz Europa mit wenigen Klicks",
+    sellImageAlt: "Digitale Autoverkaufsplattform",
+    
+    // Company Info
+    companyInfoTitle: "Europas führende digitale Plattform für den Online-Kauf und -Verkauf von Gebrauchtwagen",
+    companyInfoSubtitle: "CarAuction ist Teil der CarAuction Group, Europas führende digitale Plattform für den Online-Kauf und -Verkauf von Gebrauchtwagen.",
+    revenue: "Umsatz",
+    operations: "Operationen",
+    digital: "Digital",
+    platform: "Plattform",
+    companyDescription: "Die CarAuction Group mit Hauptsitz in Berlin ist in über 30 Ländern tätig und erzielte 2024 einen Umsatz von 6,3 Milliarden Euro. Gemeinsam mit unseren Partnern implementieren wir datengetriebenes Gebrauchtwagenmanagement und revolutionieren die Automobilbranche durch Technologie und Innovation.",
+    
+    // CTA
+    readyToStart: "Bereit zu beginnen?",
+    ctaDescription: "Schließen Sie sich tausenden zufriedener Kunden an, die ihr perfektes Auto über unsere Plattform gefunden haben.",
+    exploreAuctions: "Auktionen entdecken"
+  },
     // Hero Section
     hero: {
       title: "Europas größte Großhandelsplattform für Gebrauchtwagen",
@@ -726,6 +831,59 @@ export const translations = {
       login: "Inloggen",
       signup: "Registreren"
     },
+  about: {
+    title: 'Over ons',
+    hero: {
+      title: "Europa's grootste groothandelsplatform voor tweedehands auto's",
+      subtitle: "CarAuction is Europas toonaangevende digitale platform voor het online kopen en verkopen van tweedehands auto's. Meer dan 60.000 partnerdealers in meer dan 30 landen digitaliseren actief hun tweedehandsautobedrijf met onze technologieën en diensten.",
+      imageAlt: "Modern auto veilingplatform"
+    },
+    learnMore: 'Meer informatie',
+    contactUs: 'Neem contact op',
+    
+    // Business Overview
+    businessTitle: "Bedrijfsactiviteiten in 30+ landen",
+    businessDescription: "Diversificatie en risicobeheersing zijn essentiële factoren in de professionele handel in tweedehands auto's. Opereren op lokaal niveau en het gebrek aan een breed assortiment tweedehands auto's behoren tot de meest voorkomende uitdagingen van de sector.",
+    countries: "Landen",
+    businessOperations: "Bedrijfsactiviteiten",
+    dealers: "Dealers",
+    activePartners: "Actieve partnerdealers",
+    carsSold: "Verkochte auto's",
+    in2024: "In 2024",
+    
+    // Buy Section
+    buyTitle: "Aantrekkelijke aankoopvoorwaarden voor partnerdealers",
+    buyDescription: "Alleen een gediversifieerde portfoliostrategie maakt een hoge throughput en hogere bijdragen mogelijk. Met CarAuction als betrouwbare inkoopkanaal kunnen partnerdealers hun voertuigvoorraad actief beheren, waardoor langdurige concurrentiekracht en succes in de tweedehandsautobranche wordt gegarandeerd.",
+    buyBenefit1: "Cross-merk inventaris van meer dan 30.000 geïnspecteerde tweedehands auto's",
+    buyBenefit2: "Marktconforme aankoopvoorwaarden 24/7 beschikbaar",
+    buyBenefit3: "Meer dan 3.000 nieuwe toevoegingen dagelijks aan het inventaris",
+    buyBenefit4: "Snelle internationale handel tegen concurrerende prijzen",
+    
+    // Sell Section
+    sellTitle: "Remarketing partners verkopen auto's 100% digitaal, snel en gemakkelijk",
+    sellDescription: "Bovendien kunnen onze Remarketing partners auto's B2B digitaal en zonder risico verkopen aan een netwerk van meer dan 60.000 dealers in heel Europa via CarAuction Remarketing.",
+    sellBenefit1Title: "Full-Service Remarketing",
+    sellBenefit1Desc: "Van evaluatie tot marketing met innovatieve digitale oplossingen",
+    sellBenefit2Title: "Data-gedreven management",
+    sellBenefit2Desc: "Implementatie van data-gedreven tweedehandsautobeheer voor betere beslissingen",
+    sellBenefit3Title: "Snelle verwerking",
+    sellBenefit3Desc: "Snelle evaluatie, prijsbepaling en verkoop in heel Europa met weinig klikken",
+    sellImageAlt: "Digitaal autoverkoopplatform",
+    
+    // Company Info
+    companyInfoTitle: "Europa's toonaangevende digitale platform voor het online kopen en verkopen van tweedehands auto's",
+    companyInfoSubtitle: "CarAuction maakt deel uit van CarAuction Group, Europa's toonaangevende digitale platform voor het online kopen en verkopen van tweedehands auto's.",
+    revenue: "Omzet",
+    operations: "Operaties",
+    digital: "Digitaal",
+    platform: "Platform",
+    companyDescription: "CarAuction Group, met hoofdkantoor in Berlijn, is actief in meer dan 30 landen en behaalde in 2024 een omzet van 6,3 miljard euro. Samen met onze partners implementeren we data-gedreven tweedehandsautobeheer en revolutioneren we de automobielindustrie door technologie en innovatie.",
+    
+    // CTA
+    readyToStart: 'Klaar om te beginnen?',
+    ctaDescription: 'Sluit je aan bij duizenden tevreden klanten die hun perfecte auto hebben gevonden via ons platform.',
+    exploreAuctions: 'Ontdek veilingen'
+  },
     // Hero Section
     hero: {
       title: "Europa's grootste groothandelsplatform voor gebruikte auto's",
