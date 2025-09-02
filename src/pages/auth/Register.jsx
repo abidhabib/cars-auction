@@ -13,30 +13,30 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    // Step 1: Personal Information
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    // Step 2: Business Information
-    companyName: '',
-    vatNumber: '',
-    UBO: '',
-    // Step 3: Address Information
-    street: '',
-    city: '',
-    postalCode: '',
-    country: '',
-    // Step 4: Account Security
-    password: '',
-    confirmPassword: '',
-    termsAccepted: false,
-    privacyAccepted: false,
-    marketingAccepted: false,
-    // Step 5: Shareholders Information
-    shareholders: [{ fullName: '', idFile: null }]
-  });
+ const [formData, setFormData] = useState({
+  // Step 1: Personal Information
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  // Step 2: Business Information
+  companyName: '',
+  vatNumber: '',
+  UBO: '',
+  // Step 3: Address Information
+  street: '',
+  city: '',
+  postalCode: '',
+  country: '',
+  // Step 4: Shareholders Information
+  shareholders: [{ fullName: '', idFile: null }],
+  // Step 5: Account Security
+  password: '',
+  confirmPassword: '',
+  termsAccepted: false,
+  privacyAccepted: false,
+  marketingAccepted: false,
+});
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -51,72 +51,63 @@ const Register = () => {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
-
-  const validateStep = (step) => {
-    const newErrors = {};
-
-    switch (step) {
-      case 1:
-        if (!formData.firstName) newErrors.firstName = t('auth.register.errors.firstNameRequired');
-        if (!formData.lastName) newErrors.lastName = t('auth.register.errors.lastNameRequired');
-        if (!formData.email) {
-          newErrors.email = t('auth.register.errors.emailRequired');
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-          newErrors.email = t('auth.register.errors.emailInvalid');
-        }
-        if (!formData.phone) newErrors.phone = t('auth.register.errors.phoneRequired');
-        break;
-
-      case 2:
-        if (!formData.companyName) newErrors.companyName = t('auth.register.errors.companyNameRequired');
-        if (!formData.vatNumber) newErrors.vatNumber = t('auth.register.errors.vatNumberRequired');
-        if (!formData.UBO) newErrors.UBO = t('auth.register.errors.UBORequired');
-        break;
-
-      case 3:
-        if (!formData.street) newErrors.street = t('auth.register.errors.streetRequired');
-        if (!formData.city) newErrors.city = t('auth.register.errors.cityRequired');
-        if (!formData.postalCode) newErrors.postalCode = t('auth.register.errors.postalCodeRequired');
-        if (!formData.country) newErrors.country = t('auth.register.errors.countryRequired');
-        break;
-
-      case 4:
-        if (!formData.password) {
-          newErrors.password = t('auth.register.errors.passwordRequired');
-        } else if (formData.password.length < 8) {
-          newErrors.password = t('auth.register.errors.passwordTooShort');
-        }
-        if (!formData.confirmPassword) {
-          newErrors.confirmPassword = t('auth.register.errors.confirmPasswordRequired');
-        } else if (formData.password !== formData.confirmPassword) {
-          newErrors.confirmPassword = t('auth.register.errors.passwordsDoNotMatch');
-        }
-        if (!formData.termsAccepted) newErrors.termsAccepted = t('auth.register.errors.termsRequired');
-        if (!formData.privacyAccepted) newErrors.privacyAccepted = t('auth.register.errors.privacyRequired');
-        break;
-
-      case 5:
-        if (!formData.shareholders || formData.shareholders.length === 0) {
-          newErrors.shareholders = t('auth.register.errors.shareholdersRequired');
-        } else {
-          formData.shareholders.forEach((shareholder, index) => {
-            if (!shareholder.fullName) {
-              newErrors[`shareholder-${index}-fullName`] = t('auth.register.errors.shareholderNameRequired');
-            }
-            if (!shareholder.idFile) {
-              newErrors[`shareholder-${index}-idFile`] = t('auth.register.errors.shareholderIdRequired');
-            }
-          });
-        }
-        break;
-
-      default:
-        break;
-    }
-
-    return newErrors;
-  };
-
+const validateStep = (step) => {
+  const newErrors = {};
+  switch (step) {
+    case 1:
+      if (!formData.firstName) newErrors.firstName = t('auth.register.errors.firstNameRequired');
+      if (!formData.lastName) newErrors.lastName = t('auth.register.errors.lastNameRequired');
+      if (!formData.email) {
+        newErrors.email = t('auth.register.errors.emailRequired');
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = t('auth.register.errors.emailInvalid');
+      }
+      if (!formData.phone) newErrors.phone = t('auth.register.errors.phoneRequired');
+      break;
+    case 2:
+      if (!formData.companyName) newErrors.companyName = t('auth.register.errors.companyNameRequired');
+      if (!formData.vatNumber) newErrors.vatNumber = t('auth.register.errors.vatNumberRequired');
+      if (!formData.UBO) newErrors.UBO = t('auth.register.errors.UBORequired');
+      break;
+    case 3:
+      if (!formData.street) newErrors.street = t('auth.register.errors.streetRequired');
+      if (!formData.city) newErrors.city = t('auth.register.errors.cityRequired');
+      if (!formData.postalCode) newErrors.postalCode = t('auth.register.errors.postalCodeRequired');
+      if (!formData.country) newErrors.country = t('auth.register.errors.countryRequired');
+      break;
+    case 4:
+      if (!formData.shareholders || formData.shareholders.length === 0) {
+        newErrors.shareholders = t('auth.register.errors.shareholdersRequired');
+      } else {
+        formData.shareholders.forEach((shareholder, index) => {
+          if (!shareholder.fullName) {
+            newErrors[`shareholder-${index}-fullName`] = t('auth.register.errors.shareholderNameRequired');
+          }
+          if (!shareholder.idFile) {
+            newErrors[`shareholder-${index}-idFile`] = t('auth.register.errors.shareholderIdRequired');
+          }
+        });
+      }
+      break;
+    case 5:
+      if (!formData.password) {
+        newErrors.password = t('auth.register.errors.passwordRequired');
+      } else if (formData.password.length < 8) {
+        newErrors.password = t('auth.register.errors.passwordTooShort');
+      }
+      if (!formData.confirmPassword) {
+        newErrors.confirmPassword = t('auth.register.errors.confirmPasswordRequired');
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = t('auth.register.errors.passwordsDoNotMatch');
+      }
+      if (!formData.termsAccepted) newErrors.termsAccepted = t('auth.register.errors.termsRequired');
+      if (!formData.privacyAccepted) newErrors.privacyAccepted = t('auth.register.errors.privacyRequired');
+      break;
+    default:
+      break;
+  }
+  return newErrors;
+};
   const handleNext = () => {
     const newErrors = validateStep(currentStep);
     if (Object.keys(newErrors).length === 0) {
@@ -489,164 +480,7 @@ const Register = () => {
             </div>
           </div>
         );
-
-      case 4:
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900">{t('auth.register.accountSecurity')}</h3>
-              <p className="text-gray-500 mt-2 text-sm">{t('auth.register.accountSecurityDesc')}</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Password */}
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('auth.register.password')}
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FiLock className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    placeholder='Create a strong password'
-                    onChange={handleChange}
-                    className={`appearance-none block w-full pl-10 pr-10 py-3 border ${
-                      errors.password ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
-                  >
-                    {showPassword ? (
-                      <FiEyeOff className="h-5 w-5" />
-                    ) : (
-                      <FiEye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="mt-2 text-sm text-red-600">{errors.password}</p>
-                )}
-                <p className="mt-2 text-xs text-gray-500">Use 8+ characters with a mix of letters, numbers & symbols</p>
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('auth.register.confirmPassword')}
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FiLock className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    placeholder='Confirm your password'
-                    onChange={handleChange}
-                    className={`appearance-none block w-full pl-10 pr-10 py-3 border ${
-                      errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
-                  >
-                    {showConfirmPassword ? (
-                      <FiEyeOff className="h-5 w-5" />
-                    ) : (
-                      <FiEye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
-                {errors.confirmPassword && (
-                  <p className="mt-2 text-sm text-red-600">{errors.confirmPassword}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Terms and Conditions */}
-            <div className="space-y-4 pt-4">
-              <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    id="termsAccepted"
-                    name="termsAccepted"
-                    type="checkbox"
-                    checked={formData.termsAccepted}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
-                  />
-                </div>
-                <div className="ml-3 text-sm">
-                  <label htmlFor="termsAccepted" className="text-gray-700">
-                    {t('auth.register.acceptTerms')}{' '}
-                    <a href="#" className="text-[#3b396d] hover:text-[#2a285a] font-medium">
-                      {t('auth.register.termsAndConditions')}
-                    </a>
-                  </label>
-                </div>
-              </div>
-              {errors.termsAccepted && (
-                <p className="text-sm text-red-600">{errors.termsAccepted}</p>
-              )}
-
-              <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    id="privacyAccepted"
-                    name="privacyAccepted"
-                    type="checkbox"
-                    checked={formData.privacyAccepted}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
-                  />
-                </div>
-                <div className="ml-3 text-sm">
-                  <label htmlFor="privacyAccepted" className="text-gray-700">
-                    {t('auth.register.acceptPrivacy')}{' '}
-                    <a href="#" className="text-[#3b396d] hover:text-[#2a285a] font-medium">
-                      {t('auth.register.privacyPolicy')}
-                    </a>
-                  </label>
-                </div>
-              </div>
-              {errors.privacyAccepted && (
-                <p className="text-sm text-red-600">{errors.privacyAccepted}</p>
-              )}
-
-              <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    id="marketingAccepted"
-                    name="marketingAccepted"
-                    type="checkbox"
-                    checked={formData.marketingAccepted}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
-                  />
-                </div>
-                <div className="ml-3 text-sm">
-                  <label htmlFor="marketingAccepted" className="text-gray-700">
-                    {t('auth.register.acceptMarketing')}
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 5:
+   case 4:
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -806,6 +640,157 @@ const Register = () => {
           </div>
         );
 
+    case 5:
+  return (
+    <div className="space-y-6">
+      <div className="text-center mb-8">
+        <h3 className="text-2xl font-bold text-gray-900">{t('auth.register.accountSecurity')}</h3>
+        <p className="text-gray-500 mt-2 text-sm">{t('auth.register.accountSecurityDesc')}</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Password */}
+        <div>
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            {t('auth.register.password')}
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FiLock className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              value={formData.password}
+              placeholder='Create a strong password'
+              onChange={handleChange}
+              className={`appearance-none block w-full pl-10 pr-10 py-3 border ${
+                errors.password ? 'border-red-300' : 'border-gray-300'
+              } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
+            >
+              {showPassword ? (
+                <FiEyeOff className="h-5 w-5" />
+              ) : (
+                <FiEye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="mt-2 text-sm text-red-600">{errors.password}</p>
+          )}
+          <p className="mt-2 text-xs text-gray-500">Use 8+ characters with a mix of letters, numbers & symbols</p>
+        </div>
+        {/* Confirm Password */}
+        <div>
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+            {t('auth.register.confirmPassword')}
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FiLock className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              placeholder='Confirm your password'
+              onChange={handleChange}
+              className={`appearance-none block w-full pl-10 pr-10 py-3 border ${
+                errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+              } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
+            >
+              {showConfirmPassword ? (
+                <FiEyeOff className="h-5 w-5" />
+              ) : (
+                <FiEye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+          {errors.confirmPassword && (
+            <p className="mt-2 text-sm text-red-600">{errors.confirmPassword}</p>
+          )}
+        </div>
+      </div>
+      {/* Terms and Conditions */}
+      <div className="space-y-4 pt-4">
+        <div className="flex items-start">
+          <div className="flex items-center h-5">
+            <input
+              id="termsAccepted"
+              name="termsAccepted"
+              type="checkbox"
+              checked={formData.termsAccepted}
+              onChange={handleChange}
+              className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
+            />
+          </div>
+          <div className="ml-3 text-sm">
+            <label htmlFor="termsAccepted" className="text-gray-700">
+              {t('auth.register.acceptTerms')}{' '}
+              <a href="#" className="text-[#3b396d] hover:text-[#2a285a] font-medium">
+                {t('auth.register.termsAndConditions')}
+              </a>
+            </label>
+          </div>
+        </div>
+        {errors.termsAccepted && (
+          <p className="text-sm text-red-600">{errors.termsAccepted}</p>
+        )}
+        <div className="flex items-start">
+          <div className="flex items-center h-5">
+            <input
+              id="privacyAccepted"
+              name="privacyAccepted"
+              type="checkbox"
+              checked={formData.privacyAccepted}
+              onChange={handleChange}
+              className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
+            />
+          </div>
+          <div className="ml-3 text-sm">
+            <label htmlFor="privacyAccepted" className="text-gray-700">
+              {t('auth.register.acceptPrivacy')}{' '}
+              <a href="#" className="text-[#3b396d] hover:text-[#2a285a] font-medium">
+                {t('auth.register.privacyPolicy')}
+              </a>
+            </label>
+          </div>
+        </div>
+        {errors.privacyAccepted && (
+          <p className="text-sm text-red-600">{errors.privacyAccepted}</p>
+        )}
+        <div className="flex items-start">
+          <div className="flex items-center h-5">
+            <input
+              id="marketingAccepted"
+              name="marketingAccepted"
+              type="checkbox"
+              checked={formData.marketingAccepted}
+              onChange={handleChange}
+              className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
+            />
+          </div>
+          <div className="ml-3 text-sm">
+            <label htmlFor="marketingAccepted" className="text-gray-700">
+              {t('auth.register.acceptMarketing')}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+   
       default:
         return null;
     }
@@ -831,37 +816,42 @@ const Register = () => {
           {/* Progress Steps */}
           <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
             <div className="flex justify-between items-center mb-8">
-              {[1, 2, 3, 4, 5].map((step) => (
-                <div key={step} className="flex flex-col items-center">
-                  <div
-                    className={`w-10 h-10 flex items-center justify-center rounded-full ${
-                      step < currentStep
-                        ? 'bg-[#3b396d] text-white'
-                        : step === currentStep
-                        ? 'bg-[#3b396d] text-white border-4 border-[#3b396d]/20'
-                        : 'bg-gray-100 text-gray-400'
-                    }`}
-                  >
-                    {step < currentStep ? (
-                      <FiCheck className="w-5 h-5" />
-                    ) : (
-                      <span className="font-medium text-sm">{step}</span>
-                    )}
-                  </div>
-                  <div className={`mt-2 text-xs font-medium ${
-                    step <= currentStep ? 'text-[#3b396d]' : 'text-gray-400'
-                  }`}>
-                    {t(`auth.register.step${step}`)}
-                  </div>
-                </div>
-              ))}
+        {[1, 2, 3, 4, 5].map((step) => (
+      <div key={step} className="flex flex-col items-center">
+        <div
+          className={`w-10 h-10 flex items-center justify-center rounded-full ${
+            step < currentStep
+              ? 'bg-[#3b396d] text-white'
+              : step === currentStep
+              ? 'bg-[#3b396d] text-white border-4 border-[#3b396d]/20'
+              : 'bg-gray-100 text-gray-400'
+          }`}
+        >
+          {step < currentStep ? (
+            <FiCheck className="w-5 h-5" />
+          ) : (
+            <span className="font-medium text-sm">{step}</span>
+          )}
+        </div>
+        <div className={`mt-2 text-xs font-medium ${
+          step <= currentStep ? 'text-[#3b396d]' : 'text-gray-400'
+        }`}>
+          {step === 4 
+            ? t('auth.register.step5') 
+            : step === 5 
+            ? t('auth.register.step4') 
+            : t(`auth.register.step${step}`)
+          }
+        </div>
+      </div>
+    ))}
             </div>
             
             <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
-              <div 
-                className="bg-[#3b396d] h-2 rounded-full transition-all duration-300" 
-                style={{ width: `${(currentStep - 1) * 25}%` }}
-              ></div>
+               <div 
+      className="bg-[#3b396d] h-2 rounded-full transition-all duration-300" 
+      style={{ width: `${(currentStep - 1) * 25}%` }}
+    ></div>
             </div>
 
             {/* Form Content */}
