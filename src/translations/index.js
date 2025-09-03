@@ -49,6 +49,10 @@ export const translations = {
       tagline: "The future of car trading",
       explore: "Explore",
       howItWorks: "How it works",
+       startSelling: 'Start Selling',
+           digital: 'Digital',
+
+    startBuying: 'Start Buying',
       benefit1:'Competitive Pricing',
       benefit2:'Wide Selection',
       benefit3:'Expert Support',
@@ -649,6 +653,10 @@ support: {
       explore: "Auktionen",
       howItWorks: "Wie es funktioniert",
       benefit1:'Wettbewerbsfähige Preise',
+       startSelling: 'Verkauf starten',
+           digital: 'Digital',
+
+    startBuying: 'Kauf starten',
       benefit2:'Große Auswahl',
       benefit3:'Expertenunterstützung',
       buySection: {
@@ -1126,6 +1134,10 @@ support: {
       howItWorks: 'Hoe het werkt',
       benefit1: 'Wettbewerbsfähige Preise',
       benefit2: 'Große Auswahl',
+        startSelling: 'Begin met verkopen',
+    startBuying: 'Begin met kopen',
+        digital: 'Digitaal',
+
       benefit3: 'Expertenunterstützung',
       sellSection: {
         title: "Auto's verkopen",

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+// src/pages/Home.jsx
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
 import BrandsSection from '../components/common/BrandsSection';
 import { Press } from '../components/common/Press';
@@ -8,8 +10,22 @@ import HeroSection from '../components/common/HeroSection';
 import SuccessStories from '../components/common/SuccessStories';
 
 const Home = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Page content
   const content = {
@@ -44,7 +60,7 @@ const Home = () => {
     }
   };
 
-  // Carousel navigation
+  // Carousel navigation - Fixed
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % content.daily_cars.cars.length);
   };
@@ -52,6 +68,17 @@ const Home = () => {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + content.daily_cars.cars.length) % content.daily_cars.cars.length);
   };
+
+  // Auto slide carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isMobile) {
+        nextSlide();
+      }
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [isMobile]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -65,15 +92,15 @@ const Home = () => {
               {t('dailyCars.title')}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Discover our handpicked selection of premium vehicles, updated daily with the best deals across Europe.
+              {t('Discover our handpicked selection of premium vehicles, updated daily with the best deals across Europe.')}
             </p>
           </div>
           
           <div className="relative group">
-            {/* Navigation Buttons - Visible on desktop, hidden on mobile */}
+            {/* Navigation Buttons - Always visible on desktop, hidden on mobile */}
             <button 
               onClick={prevSlide}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition z-10 -ml-3 hidden md:flex items-center justify-center"
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-3 shadow-md hover:shadow-lg transition z-10 -ml-4 hidden md:flex items-center justify-center"
               aria-label="Previous slide"
             >
               <svg className="w-5 h-5 text-[#3b396d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,13 +108,16 @@ const Home = () => {
               </svg>
             </button>
             
-            {/* Mobile-friendly Carousel */}
-            <div className="overflow-x-auto scrollbar-hide">
-              <div className="flex gap-4 pb-2" style={{ minWidth: `${content.daily_cars.cars.length * 272}px` }}>
+            {/* Fixed Carousel Container */}
+            <div className="overflow-hidden">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentSlide * (isMobile ? 272 : 272)}px)` }}
+              >
                 {content.daily_cars.cars.map((car, index) => (
                   <div 
                     key={index} 
-                    className="flex-shrink-0 w-64 bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100"
+                    className="flex-shrink-0 w-64 md:w-64 bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 mx-2"
                   >
                     <div className="h-40 overflow-hidden bg-gray-100">
                       <img 
@@ -102,8 +132,11 @@ const Home = () => {
                       <p className="text-xs text-gray-500 mb-3">{t('dailyCars.activeStatus')} • {t('dailyCars.addedToday')}</p>
                       <div className="flex justify-between items-center">
                         <span className="text-base font-bold text-[#3b396d]">€24,890</span>
-                        <button className="text-xs font-medium text-[#3b396d] hover:text-[#2a285a] transition-colors">
-                          {t('dailyCars.viewDetails')}
+                        <button 
+                          onClick={() => navigate(`/${language === 'en' ? '' : language}/car/${index}`)}
+                          className="text-xs font-medium text-[#3b396d] hover:text-[#2a285a] transition-colors"
+                        >
+                          {t('viewDetails')}
                         </button>
                       </div>
                     </div>
@@ -114,7 +147,7 @@ const Home = () => {
             
             <button 
               onClick={nextSlide}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition z-10 -mr-3 hidden md:flex items-center justify-center"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-3 shadow-md hover:shadow-lg transition z-10 -mr-4 hidden md:flex items-center justify-center"
               aria-label="Next slide"
             >
               <svg className="w-5 h-5 text-[#3b396d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,9 +156,26 @@ const Home = () => {
             </button>
           </div>
           
+          {/* Mobile Navigation Dots */}
+          <div className="flex justify-center mt-6 space-x-2 md:hidden">
+            {content.daily_cars.cars.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === currentSlide ? 'bg-[#3b396d]' : 'bg-gray-300'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+          
           <div className="text-center mt-10">
-            <button className="px-6 py-3 bg-[#3b396d] text-white font-medium rounded-lg hover:bg-[#2a285a] transition-colors">
-              Browse All Vehicles
+            <button 
+              onClick={() => navigate(`/${language === 'en' ? '' : language}/vehicles`)}
+              className="px-6 py-3 bg-[#3b396d] text-white font-medium rounded-lg hover:bg-[#2a285a] transition-colors"
+            >
+              {t('BrowseAll')}
             </button>
           </div>
           
@@ -168,10 +218,16 @@ const Home = () => {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-6 py-3 bg-white text-[#3b396d] font-medium rounded-lg hover:bg-gray-100 transition-colors text-center">
+                <button 
+                  onClick={() => navigate(`/${language === 'en' ? '' : language}/about`)}
+                  className="px-6 py-3 bg-white text-[#3b396d] font-medium rounded-lg hover:bg-gray-100 transition-colors text-center"
+                >
                   {t('businessGrowth.learnMore')}
                 </button>
-                <button className="px-6 py-3 border border-white text-white font-medium rounded-lg hover:bg-white/10 transition-colors text-center">
+                <button 
+                  onClick={() => navigate(`/${language === 'en' ? '' : language}/contact`)}
+                  className="px-6 py-3 border border-white text-white font-medium rounded-lg hover:bg-white/10 transition-colors text-center"
+                >
                   {t('businessGrowth.contactUs')}
                 </button>
               </div>
