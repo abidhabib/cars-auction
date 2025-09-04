@@ -3,11 +3,13 @@ import React from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter, FaApple, FaGooglePlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+// Import the updated Button component if you want to use it for the main CTA
+// import Button from '../common/Button';
 
 const Footer = () => {
   const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
-  
+
   const footerLinks = {
     services: [
       { name: t("footer.services.buyCars"), href: "/buy" },
@@ -36,15 +38,15 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: <FaFacebookF className="w-5 h-5" />, href: "#", label: "Facebook" },
-    { icon: <FaInstagram className="w-5 h-5" />, href: "#", label: "Instagram" },
-    { icon: <FaLinkedinIn className="w-5 h-5" />, href: "#", label: "LinkedIn" },
-    { icon: <FaTwitter className="w-5 h-5" />, href: "#", label: "Twitter" },
+    { icon: <FaFacebookF className="w-4 h-4" />, href: "#", label: "Facebook" },
+    { icon: <FaInstagram className="w-4 h-4" />, href: "#", label: "Instagram" },
+    { icon: <FaLinkedinIn className="w-4 h-4" />, href: "#", label: "LinkedIn" },
+    { icon: <FaTwitter className="w-4 h-4" />, href: "#", label: "Twitter" },
   ];
 
   const appLinks = [
-    { icon: <FaApple className="w-5 h-5" />, store: "App Store", href: "#" },
-    { icon: <FaGooglePlay className="w-5 h-5" />, store: "Google Play", href: "#" },
+    { icon: <FaApple className="w-4 h-4" />, store: "App Store", href: "#" },
+    { icon: <FaGooglePlay className="w-4 h-4" />, store: "Google Play", href: "#" },
   ];
 
   // Handle navigation for footer links
@@ -53,18 +55,24 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#3b396d] text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Top CTA Section */}
-        <div className="bg-white/5 rounded-2xl p-8 mb-16 backdrop-blur-sm">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+    // 1. Changed to light background. Font-sans for Outfit.
+    <footer className="bg-gray-50 text-gray-900 font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Top CTA Section - Light mode styling */}
+        <div className="bg-white rounded-xl p-6 mb-12 shadow-sm border border-gray-200"> {/* White background, subtle shadow/border */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-5">
             <div>
-              <h3 className="text-2xl font-bold mb-2">{t("footer.cta.title")}</h3>
-              <p className="text-white/90">{t("footer.cta.subtitle")}</p>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900"> {/* Explicit dark text */}
+                {t("footer.cta.title")}
+              </h3>
+              <p className="text-gray-700 text-sm"> {/* Softer text color */}
+                {t("footer.cta.subtitle")}
+              </p>
             </div>
-            <button 
-              onClick={() => handleNavigation("/register")} 
-              className="px-6 py-3 bg-white text-[#3b396d] font-semibold rounded-full hover:bg-gray-100 transition-colors"
+            {/* CTA Button: Keep brand color for visual impact on light background */}
+            <button
+              onClick={() => handleNavigation("/register")}
+              className="px-5 py-2.5 bg-logo-dark-blue text-white font-medium rounded-lg hover:bg-[#2a285a] transition-colors text-sm shadow-sm" // Added shadow-sm for subtle depth
             >
               {t("footer.cta.button")}
             </button>
@@ -72,18 +80,20 @@ const Footer = () => {
         </div>
 
         {/* Footer Links Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
           <div className="lg:col-span-2">
-            <h4 className="text-lg font-semibold mb-6">{t("footer.company.name")}</h4>
-            <p className="text-white/80 mb-6 max-w-md">
+            <h4 className="text-base font-semibold mb-5 text-gray-900"> {/* Explicit dark text */}
+              {t("footer.company.name")}
+            </h4>
+            <p className="text-gray-600 mb-5 text-sm max-w-md"> {/* Softer text color */}
               {t("footer.description")}
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3">
               {socialLinks.map((social, index) => (
-                <a 
+                <a
                   key={index}
                   href={social.href}
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors" // Light background
                   aria-label={social.label}
                 >
                   {social.icon}
@@ -93,13 +103,15 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold mb-6">{t("footer.services.title")}</h4>
-            <ul className="space-y-3">
+            <h4 className="text-base font-semibold mb-5 text-gray-900">
+              {t("footer.services.title")}
+            </h4>
+            <ul className="space-y-2">
               {footerLinks.services.map((link, index) => (
                 <li key={index}>
-                  <button 
-                    onClick={() => handleNavigation(link.href)} 
-                    className="text-white/80 hover:text-white transition-colors text-left w-full"
+                  <button
+                    onClick={() => handleNavigation(link.href)}
+                    className="text-gray-600 hover:text-logo-dark-blue hover:underline transition-colors text-left text-sm w-full" // Softer text, brand color/link on hover
                   >
                     {link.name}
                   </button>
@@ -109,13 +121,15 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold mb-6">{t("footer.account.title")}</h4>
-            <ul className="space-y-3">
+            <h4 className="text-base font-semibold mb-5 text-gray-900">
+              {t("footer.account.title")}
+            </h4>
+            <ul className="space-y-2">
               {footerLinks.account.map((link, index) => (
                 <li key={index}>
-                  <button 
-                    onClick={() => handleNavigation(link.href)} 
-                    className="text-white/80 hover:text-white transition-colors text-left w-full"
+                  <button
+                    onClick={() => handleNavigation(link.href)}
+                    className="text-gray-600 hover:text-logo-dark-blue hover:underline transition-colors text-left text-sm w-full"
                   >
                     {link.name}
                   </button>
@@ -125,13 +139,15 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold mb-6">{t("footer.support.title")}</h4>
-            <ul className="space-y-3">
+            <h4 className="text-base font-semibold mb-5 text-gray-900">
+              {t("footer.support.title")}
+            </h4>
+            <ul className="space-y-2">
               {footerLinks.support.map((link, index) => (
                 <li key={index}>
-                  <button 
-                    onClick={() => handleNavigation(link.href)} 
-                    className="text-white/80 hover:text-white transition-colors text-left w-full"
+                  <button
+                    onClick={() => handleNavigation(link.href)}
+                    className="text-gray-600 hover:text-logo-dark-blue hover:underline transition-colors text-left text-sm w-full"
                   >
                     {link.name}
                   </button>
@@ -142,35 +158,39 @@ const Footer = () => {
         </div>
 
         {/* App Download and Language Selector */}
-        <div className="border-t border-white/20 pt-8 mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="border-t border-gray-200 pt-7 mb-7"> {/* Light border */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-5">
             <div>
-              <h5 className="text-lg font-medium mb-4">{t("footer.downloadApp")}</h5>
-              <div className="flex flex-wrap gap-3">
+              <h5 className="text-base font-medium mb-3 text-gray-900"> {/* Explicit dark text */}
+                {t("footer.downloadApp")}
+              </h5>
+              <div className="flex flex-wrap gap-2">
                 {appLinks.map((app, index) => (
-                  <a 
+                  <a
                     key={index}
                     href={app.href}
-                    className="flex items-center px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
+                    className="flex items-center px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-sm" // Light background
                   >
                     {app.icon}
-                    <span className="ml-2 text-sm">{app.store}</span>
+                    <span className="ml-2 text-gray-700">{app.store}</span> {/* Softer text color for store name */}
                   </a>
                 ))}
               </div>
             </div>
 
             <div>
-              <h5 className="text-lg font-medium mb-4">{t("footer.language")}</h5>
+              <h5 className="text-base font-medium mb-3 text-gray-900">
+                {t("footer.language")}
+              </h5>
               <div className="flex space-x-2">
                 {['en', 'de', 'nl'].map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setLanguage(lang)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                      language === lang 
-                        ? 'bg-white text-[#3b396d]' 
-                        : 'bg-white/10 text-white hover:bg-white/20'
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                      language === lang
+                        ? 'bg-logo-dark-blue text-white' // Brand color for active
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200' // Light background for inactive
                     }`}
                   >
                     {lang.toUpperCase()}
@@ -182,24 +202,26 @@ const Footer = () => {
         </div>
 
         {/* Copyright and Legal */}
-        <div className="border-t border-white/20 pt-8">
+        <div className="border-t border-gray-200 pt-7"> {/* Light border */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center">
-              <img src="/logoLight.svg" alt="Car Network Europe" className="w-32 mr-3" />
+              {/* 1. Logo Usage: Logo Dark Blue (#3B396D) on light background is correct */}
+              {/* Assuming logo.svg is the dark blue version. If it's white, use logoLight.svg and it will be dark on light. */}
+              <img src="/logo.svg" alt="Car Network Europe" className="w-28 mr-3" /> {/* Slightly smaller logo */}
             </div>
-            <p className="text-white/70 text-sm">
+            <p className="text-gray-500 text-xs"> {/* Softer text color */}
               &copy; {new Date().getFullYear()} {t("footer.copyright")}
             </p>
-            <div className="flex space-x-6">
-              <button 
-                onClick={() => handleNavigation("/privacy")} 
-                className="text-white/70 hover:text-white text-sm transition-colors"
+            <div className="flex space-x-5">
+              <button
+                onClick={() => handleNavigation("/privacy")}
+                className="text-gray-500 hover:text-logo-dark-blue hover:underline text-xs transition-colors" // Softer text, brand color/link on hover
               >
                 {t("footer.privacy")}
               </button>
-              <button 
-                onClick={() => handleNavigation("/terms")} 
-                className="text-white/70 hover:text-white text-sm transition-colors"
+              <button
+                onClick={() => handleNavigation("/terms")}
+                className="text-gray-500 hover:text-logo-dark-blue hover:underline text-xs transition-colors"
               >
                 {t("footer.terms")}
               </button>

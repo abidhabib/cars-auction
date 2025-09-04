@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+// src/pages/Home.jsx (or your Home component file path)
+import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import Button from '../components/common/Button';
+import Button from '../components/common/Button'; // Updated Button component
 import BrandsSection from '../components/common/BrandsSection';
 import { Press } from '../components/common/Press';
 import InfoSections from '../components/common/InfoCard';
 import HeroSection from '../components/common/HeroSection';
 import SuccessStories from '../components/common/SuccessStories';
+import JoinNewsletter from '../components/common/JoinNewsletter';
 
 const Home = () => {
   const { t } = useLanguage();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
 
   // Page content
   const content = {
@@ -52,57 +55,90 @@ const Home = () => {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + content.daily_cars.cars.length) % content.daily_cars.cars.length);
   };
+  // Handler for accepting cookies
+    useEffect(() => {
+    const isConsentGiven = localStorage.getItem('cookiesAccepted');
+    // Show banner only if consent is not explicitly given (either 'true' or 'false')
+    // This means it shows on first visit or if user previously declined.
+    // You might want to show it only if 'cookiesAccepted' is null/undefined.
+    // Adjust logic as needed.
+    if (isConsentGiven !== 'true') {
+      setShowCookieBanner(true);
+    }
+    // If isConsentGiven is 'true', banner stays hidden (showCookieBanner remains false)
+  }, []);
+  const handleAcceptCookies = () => {
+    localStorage.setItem('cookiesAccepted', 'true');
+    setShowCookieBanner(false);
+    // Here you would typically initialize or enable non-essential cookies/tracking scripts
+    console.log("Cookies accepted by user.");
+  };
 
+  // Handler for declining cookies (optional, depends on your policy)
+  const handleDeclineCookies = () => {
+    localStorage.setItem('cookiesAccepted', 'false');
+    setShowCookieBanner(false);
+    // Here you would typically ensure non-essential cookies/tracking are disabled
+    console.log("Cookies declined by user.");
+  };
   return (
-    <div className="min-h-screen bg-white">
+    // Ensure Outfit font is applied globally via CSS or Tailwind config (sans: ['Outfit', ...])
+    <div className="min-h-screen bg-white font-sans">
       <HeroSection />
-      
-      {/* Daily Cars Section */}
-      <section className="py-16 bg-gray-50">
+
+      {/* Daily Cars Section - Minimalist styling */}
+      <section className="py-16 bg-gray-50"> {/* Light gray background is acceptable */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            {/* 3. Typography: Headline - Using Outfit, reduced weight for minimalism */}
+            <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
               {t('dailyCars.title')}
             </h2>
+            {/* 3. Typography: Body - Using Outfit */}
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Discover our handpicked selection of premium vehicles, updated daily with the best deals across Europe.
             </p>
           </div>
-          
+
           <div className="relative group">
-            {/* Navigation Buttons - Visible on desktop, hidden on mobile */}
-            <button 
+            {/* Navigation Buttons - Simplified shadows for minimalism */}
+            <button
               onClick={prevSlide}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition z-10 -ml-3 hidden md:flex items-center justify-center"
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-sm hover:shadow-md transition z-10 -ml-3 hidden md:flex items-center justify-center"
               aria-label="Previous slide"
             >
-              <svg className="w-5 h-5 text-[#3b396d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {/* 1.1 Logo Color Principle: Use Logo Dark Blue on white background */}
+              <svg className="w-5 h-5 text-logo-dark-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            
+
             {/* Mobile-friendly Carousel */}
             <div className="overflow-x-auto scrollbar-hide">
               <div className="flex gap-4 pb-2" style={{ minWidth: `${content.daily_cars.cars.length * 272}px` }}>
                 {content.daily_cars.cars.map((car, index) => (
-                  <div 
-                    key={index} 
-                    className="flex-shrink-0 w-64 bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100"
+                  <div
+                    key={index}
+                    className="flex-shrink-0 w-64 bg-white rounded-md overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-200" // Softer border
                   >
                     <div className="h-40 overflow-hidden bg-gray-100">
-                      <img 
-                        src={car.image} 
-                        alt={car.name} 
+                      <img
+                        src={car.image}
+                        alt={car.name}
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                         loading="lazy"
                       />
                     </div>
                     <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 text-base mb-1 truncate">{car.name}</h3>
+                      {/* 3. Typography: Subline/Body for car name */}
+                      <h3 className="font-medium text-gray-900 text-base mb-1 truncate">{car.name}</h3>
+                      {/* 3. Typography: Body for status */}
                       <p className="text-xs text-gray-500 mb-3">{t('dailyCars.activeStatus')} • {t('dailyCars.addedToday')}</p>
                       <div className="flex justify-between items-center">
-                        <span className="text-base font-bold text-[#3b396d]">€24,890</span>
-                        <button className="text-xs font-medium text-[#3b396d] hover:text-[#2a285a] transition-colors">
+                        {/* 1.1 Logo Color Principle: Use Logo Dark Blue for price */}
+                        <span className="text-base font-semibold text-logo-dark-blue">€24,890</span>
+                        {/* 1.1 Logo Color Principle: Use Logo Dark Blue for links/buttons on light background */}
+                        <button className="text-xs font-medium text-logo-dark-blue hover:text-[#2a285a] transition-colors">
                           {t('dailyCars.viewDetails')}
                         </button>
                       </div>
@@ -111,80 +147,89 @@ const Home = () => {
                 ))}
               </div>
             </div>
-            
-            <button 
+
+            <button
               onClick={nextSlide}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition z-10 -mr-3 hidden md:flex items-center justify-center"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-sm hover:shadow-md transition z-10 -mr-3 hidden md:flex items-center justify-center"
               aria-label="Next slide"
             >
-              <svg className="w-5 h-5 text-[#3b396d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {/* 1.1 Logo Color Principle: Use Logo Dark Blue on white background */}
+              <svg className="w-5 h-5 text-logo-dark-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
-          
+
           <div className="text-center mt-10">
-            <button className="px-6 py-3 bg-[#3b396d] text-white font-medium rounded-lg hover:bg-[#2a285a] transition-colors">
+            {/* Using the updated, minimal Button component */}
+            <Button variant="primary" size="md">
               Browse All Vehicles
-            </button>
+            </Button>
           </div>
-          
+
           {/* Brand Logos */}
-          <BrandsSection/>
+          <BrandsSection />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <JoinNewsletter/>
+</div>
         </div>
       </section>
-      
-      {/* Business Growth Section */}
-      <section className="py-16 bg-[#3b396d] text-white">
+
+      {/* Business Growth Section - Using Logo Dark Blue background */}
+      {/* Note: Per style guide, if logo were here, background should be background-deep-blue with white logo. */}
+      <section className="py-16 bg-logo-dark-blue text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="flex flex-col h-full">
               <div className="flex-grow">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+                {/* 3. Typography: Headline - White text, reduced weight for minimalism */}
+                <h2 className="text-3xl md:text-4xl font-semibold mb-6 leading-tight">
                   {t('businessGrowth.title')}
                 </h2>
+                {/* 3. Typography: Body - Lighter blue text, using Outfit */}
                 <p className="text-lg text-blue-100 leading-relaxed mb-8">
                   {t('businessGrowth.description')}
                 </p>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-6 mb-8">
                 <div className="text-center md:text-left">
-                  <div className="text-3xl font-bold mb-1">5,000+</div>
+                  <div className="text-3xl font-semibold mb-1">5,000+</div> {/* Reduced weight */}
                   <div className="text-blue-200 text-sm">{t('businessGrowth.stats.partners')}</div>
                 </div>
                 <div className="text-center md:text-left">
-                  <div className="text-3xl font-bold mb-1">98%</div>
+                  <div className="text-3xl font-semibold mb-1">98%</div> {/* Reduced weight */}
                   <div className="text-blue-200 text-sm">{t('businessGrowth.stats.satisfaction')}</div>
                 </div>
                 <div className="text-center md:text-left">
-                  <div className="text-3xl font-bold mb-1">15+</div>
+                  <div className="text-3xl font-semibold mb-1">15+</div> {/* Reduced weight */}
                   <div className="text-blue-200 text-sm">{t('businessGrowth.stats.experience')}</div>
                 </div>
                 <div className="text-center md:text-left">
-                  <div className="text-3xl font-bold mb-1">27</div>
+                  <div className="text-3xl font-semibold mb-1">27</div> {/* Reduced weight */}
                   <div className="text-blue-200 text-sm">{t('businessGrowth.stats.countries')}</div>
                 </div>
               </div>
-              
+
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-6 py-3 bg-white text-[#3b396d] font-medium rounded-lg hover:bg-gray-100 transition-colors text-center">
+                {/* Using the updated, minimal Button component for consistency */}
+                <Button variant="secondary" size="md">
                   {t('businessGrowth.learnMore')}
-                </button>
-                <button className="px-6 py-3 border border-white text-white font-medium rounded-lg hover:bg-white/10 transition-colors text-center">
+                </Button>
+                <Button variant="outline" size="md" textColorClass="text-white" borderColorClass="border-white" hoverBgClass="hover:bg-white/10">
                   {t('businessGrowth.contactUs')}
-                </button>
+                </Button>
               </div>
             </div>
-            
+
             <div className="relative">
-              <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl">
-                <img 
-                  src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80" 
-                  alt="Business Growth" 
+              <div className="relative aspect-video rounded-xl overflow-hidden shadow-xl"> {/* Slightly reduced rounding/shadow for minimalism */}
+                <img
+                  src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80"
+                  alt="Business Growth"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div> {/* Softer gradient */}
                 <div className="absolute bottom-6 left-6">
                   <div className="flex items-center space-x-2 text-white cursor-pointer hover:underline">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -198,16 +243,60 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
-      <SuccessStories/>
-      
+
+      <SuccessStories />
+
       {/* Buying/Selling Sections */}
       <div className="max-w-7xl mx-auto pb-16 px-4 sm:px-6 lg:px-8">
         <InfoSections />
       </div>
 
       {/* In the Press */}
-      <Press/>
+      <Press />
+       {showCookieBanner && (
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 shadow-lg z-50 font-sans"> {/* Ensure font, z-index, position */}
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-sm">
+              <p className="mb-1">
+                {t('cookies.message') || 'We use cookies to improve your experience, analyze traffic, and for marketing purposes.'}
+              </p>
+              <p className="text-gray-300 text-xs">
+                {t('cookies.learnMore') || 'By continuing to use our site, you accept our'}{' '}
+                <a
+                  href="/privacy" // Link to your actual privacy policy page
+                  target="_blank" // Open in new tab
+                  rel="noopener noreferrer" // Security best practice
+                  className="text-gray-500 hover:underline" // Use theme color for link
+                >
+                  {t('cookies.privacyPolicyLink') || 'Privacy Policy'}
+                </a>.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+              {/* Optional: Decline button. Be aware of legal requirements in your jurisdiction. */}
+              {/* <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDeclineCookies}
+                textColorClass="text-white"
+                borderColorClass="border-white"
+                hoverBgClass="hover:bg-white/10"
+                className="w-full sm:w-auto"
+              >
+                {t('cookies.decline') || 'Decline'}
+              </Button> */}
+              <Button
+                variant="primary" // Uses theme primary color
+                size="sm"
+                onClick={handleAcceptCookies}
+                className="w-full sm:w-auto"
+              >
+                {t('cookies.accept') || 'Accept All'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

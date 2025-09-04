@@ -7,26 +7,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+        // --- Colors from Style Guide (Section 2: Primary colors) ---
+        // Logo Dark Blue: Used for logo on white/black backgrounds
+        'logo-dark-blue': {
+          DEFAULT: '#3B396D',
+          // Add lighter/darker shades here if needed for hover, gradients, etc.
+          // 50: '#f0f0f7',
+          // 100: '#d9d8e6',
+          // 900: '#1a1931',
         },
-        secondary: {
-          500: '#3b396d',
-          600: '#3b396d',
+        // Background Deep Blue: Used for backgrounds, only with white logo
+        'background-deep-blue': {
+          DEFAULT: '#1D1B3A',
+          // Add lighter/darker shades here if needed
         },
-        accent: {
-          500: '#10b981',
-          600: '#059669',
-        }
+        // White (listed in style guide)
+        'white': {
+          DEFAULT: '#FFFFFF',
+        },
+        // Note: The style guide specifies *never* using Logo Dark Blue and Background Deep Blue together.
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        // --- Typography from Style Guide (Section 3: Typography) ---
+        // Use 'Outfit' as the primary sans-serif font for all text (headlines, body)
+        sans: ['Outfit', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        // Keep serif if you use it for specific elements
         serif: ['Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
       },
       keyframes: {

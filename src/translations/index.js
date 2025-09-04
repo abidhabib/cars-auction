@@ -2,6 +2,27 @@ import { steps } from "framer-motion";
 
 export const translations = {
   en: {
+    cookies: {
+      message: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies as described in our Cookie Policy.",
+      accept: "Accept",
+      learnMore: "Learn More",
+      privacyPolicyLink: "Privacy Policy"
+    
+    },
+     "newsletter": {
+    "title": "Join Our Newsletter",
+    "description": "Subscribe to receive updates, news, and special offers directly to your inbox.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "your.email@example.com",
+    "subscribeButton": "Subscribe",
+    "privacyNote": "We care about your data. Unsubscribe anytime.",
+    "successMessage": "Thank you for subscribing!",
+    "errors": {
+      "emailRequired": "Please enter your email address.",
+      "emailInvalid": "Please enter a valid email address.",
+      "subscriptionFailed": "Subscription failed. Please try again."
+    }
+  },
     languageName: "English",
     // Header
     header: {
@@ -392,98 +413,170 @@ support: {
 
         }
       },
-      register: {
-        title: "Create your account",
-        subtitle: "Join Europe's largest car marketplace",
-        step1: "Personal Information",
-        step2: "Business Information",
-        step3: "Address Information",
-        step4: "Account Security",
-        step5: "Shareholders Information",
-        personalInfo: "Personal Information",
-        personalInfoDesc: "Tell us about yourself",
-        businessInfo: "Business Information",
-        businessInfoDesc: "Tell us about your company",
-        addressInfo: "Address Information",
-        addressInfoDesc: "Where are you located?",
-        accountSecurity: "Account Security",
-        accountSecurityDesc: "Create a secure password",
-        firstName: "First name",
-        lastName: "Last name",
-        email: "Email address",
-        phone: "Phone number",
-        companyName: "Company name",
-         shareholdersInfo: "Shareholders Information",
-      shareholdersInfoDesc: "Please provide details of all shareholders and upload identification documents",
-      shareholder: "Shareholder",
-      shareholderFullName: "Full Name",
-      shareholderIdUpload: "Identification Document",
-      enterFullName: "Enter full name",
-      uploadFile: "Upload a file",
-      dragAndDrop: "or drag and drop",
-      fileTypes: "PNG, JPG, PDF up to 10MB",
-      addAnotherShareholder: "Add Another Shareholder",
-      removeLastShareholder: "Remove Last",
-        vatNumber: "VAT number",
-        UBO: "Ultimate Beneficial Owner number",
-        street: "Street address",
-        city: "City",
-        postalCode: "Postal code",
-        country: "Country",
-        selectCountry: "Select a country",
-        password: "Password",
-        confirmPassword: "Confirm password",
-        acceptTerms: "I accept the",
-        termsAndConditions: "Terms and Conditions",
-        acceptPrivacy: "I accept the",
-        privacyPolicy: "Privacy Policy",
-        acceptMarketing: "I want to receive marketing communications",
-        createAccount: "Create account",
-        alreadyHaveAccount: "Already have an account?",
-        loginHere: "Login here",
-        step1: "Personal",
-        step1Desc: "About you",
-        step2: "Business",
-        step2Desc: "Your company",
-        step3: "Address",
-        step3Desc: "Location",
-        step4: "Security",
-        step5: "Shareholders",
-        step4Desc: "Password",
-        
-        
-        errors: {
-          firstNameRequired: "First name is required",
-          lastNameRequired: "Last name is required",
-          emailRequired: "Email is required",
-          emailInvalid: "Please enter a valid email address",
-          phoneRequired: "Phone number is required",
-          companyNameRequired: "Company name is required",
-          vatNumberRequired: "VAT number is required",
-          UBORequired: "Ultimate Beneficial Owner number is required",
-          streetRequired: "Street address is required",
-          cityRequired: "City is required",
-          postalCodeRequired: "Postal code is required",
-          countryRequired: "Country is required",
-          passwordRequired: "Password is required",
-          passwordTooShort: "Password must be at least 8 characters",
-          confirmPasswordRequired: "Please confirm your password",
-          passwordsDoNotMatch: "Passwords do not match",
-          termsRequired: "You must accept the terms and conditions",
-          privacyRequired: "You must accept the privacy policy",
-          registrationFailed: "Registration failed. Please try again.",
-          shareholderNameRequired: "Shareholder name is required",
-          shareholderIdRequired: "Shareholder ID is required"
-        }
+
+    register: {
+      // Existing Steps (Labels might be slightly adjusted for clarity)
+      "step1": "Personal Information",
+      "step2": "Business Information",
+      "step3": "Location & Compliance",
+      "step4": "Shareholders",
+      "step5": "Account Security",
+      title: "Create your account",
+      passwordPlaceholder: "Create a strong password",
+      joinMarketplace:    "Join the Marketplace",
+      confirmPasswordPlaceholder: "Confirm your password",
+      passwordHint: "Use at least 8 characters with a mix of letters, numbers & symbols",
+      // Section Titles & Descriptions
+      "personalInfo": "Personal Information",
+      "personalInfoDesc": "Tell us about yourself",
+      "businessInfo": "Business Information",
+      "businessInfoDesc": "Tell us about your company",
+      "complianceInfo": "Location & Compliance", // New section title
+      "complianceInfoDesc": "Select your country and provide relevant details", // New section description
+      "shareholdersInfo": "Shareholders Information",
+      "shareholdersInfoDesc": "Please provide details of all shareholders and upload identification documents",
+      "accountSecurity": "Account Security",
+      "accountSecurityDesc": "Create a secure password",
+      // Existing Personal Info Fields
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email address",
+      "phone": "Phone number",
+      // Existing Business Info Fields
+      "companyName": "Company name",
+      "vatNumber": "VAT number",
+      "UBO": "Ultimate Beneficial Owner number",
+      // --- NEW FIELDS ---
+      "companyAddress": "Company Address", // New field label
+      "companyAddressPlaceholder": "Enter your full company address", // New placeholder
+      "companyAddressRequired": "Company address is required", // New error message
+      "invoiceEmail": "Invoice Email Address", // New field label
+      "invoiceEmailPlaceholder": "billing@yourcompany.com", // New placeholder
+      "invoiceEmailRequired": "Invoice email address is required", // New error message
+      // --- END NEW FIELDS ---
+      // Existing Address Info Fields (Moved/Contextualized)
+      // Note: 'street', 'city', 'postalCode' might be less relevant if using 'companyAddress'
+      // But kept for potential separate use or backend structure
+      "street": "Street address",
+      "city": "City",
+      "postalCode": "Postal code",
+      "country": "Country",
+      "selectCountry": "Select a country",
+      // --- NEW FIELD FOR NL ---
+      "rdwNumber": "RDW Number", // New conditional field label
+      "rdwNumberPlaceholder": "Enter RDW Number", // New conditional placeholder
+      "rdwNumberRequired": "RDW Number is required for Netherlands", // New conditional error
+      "rdwInfo": "Required for vehicle registration in the Netherlands.", // Optional info text
+      // --- END NEW FIELD FOR NL ---
+      // Existing Account Security Fields
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "acceptTerms": "I accept the",
+      "termsAndConditions": "Terms and Conditions",
+      "acceptPrivacy": "I accept the",
+      "privacyPolicy": "Privacy Policy",
+      "acceptMarketing": "I want to receive marketing communications",
+      // Existing Shareholder Fields
+      "shareholder": "Shareholder",
+      "shareholderFullName": "Full Name",
+      "shareholderIdUpload": "Identification Document",
+      "enterFullName": "Enter full name",
+      "uploadFile": "Upload a file",
+      "dragAndDrop": "or drag and drop",
+      "fileTypes": "PNG, JPG, PDF up to 10MB",
+      "addAnotherShareholder": "Add Another Shareholder",
+      "removeLastShareholder": "Remove Last",
+      // Action Buttons
+      "createAccount": "Create account",
+      "alreadyHaveAccount": "Already have an account?",
+      "loginHere": "Log in here",
+      // Errors (Including new ones)
+       "firstNamePlaceholder": "Enter your first name",
+      "lastNamePlaceholder": "Enter your last name",
+      "emailPlaceholder": "your.email@example.com",
+      "phonePlaceholder": "+1 (555) 123-4567",
+      "companyNamePlaceholder": "Your Company Name",
+      "vatNumberPlaceholder": "VAT123456789",
+      "uboPlaceholder": "Ultimate Beneficial Owner",
+      // --- NEW PLACEHOLDERS ---
+    
+      // --- END NEW PLACEHOLDERS ---
+      // Note: Placeholders for 'street', 'city', 'postalCode' exist in the original data
+      // but are less relevant if using the combined 'companyAddress' field.
+      // They are omitted here to focus on the newly requested and combined fields.
+      // If you need them, they were:
+      // "streetPlaceholder": "123 Main Street",
+      // "cityPlaceholder": "New York",
+      // "postalCodePlaceholder": "10001",
+      
+      "errors": {
+        // Existing Errors
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "emailRequired": "Email address is required",
+        "emailInvalid": "Please enter a valid email address",
+        "phoneRequired": "Phone number is required",
+        "companyNameRequired": "Company name is required",
+        "vatNumberRequired": "VAT number is required",
+        "UBORequired": "UBO number is required",
+        // Errors for potentially separate address fields (if used)
+        "streetRequired": "Street address is required",
+        "cityRequired": "City is required",
+        "postalCodeRequired": "Postal code is required",
+        "countryRequired": "Country is required",
+        // Existing Account Security Errors
+        "passwordRequired": "Password is required",
+        "passwordTooShort": "Password must be at least 8 characters long",
+        "confirmPasswordRequired": "Please confirm your password",
+        "passwordsDoNotMatch": "Passwords do not match",
+        "termsRequired": "You must accept the Terms and Conditions",
+        "privacyRequired": "You must accept the Privacy Policy",
+        "registrationFailed": "Registration failed. Please try again.",
+        // Existing Shareholder Errors
+        "shareholdersRequired": "At least one shareholder is required",
+        "shareholderNameRequired": "Shareholder name is required",
+        "shareholderIdRequired": "Shareholder ID document is required",
+        // --- NEW ERROR MESSAGES ---
+        "companyAddressRequired": "Company address is required", // Error for new field
+        "invoiceEmailRequired": "Invoice email address is required", // Error for new field
+        "invoiceEmailInvalid": "Please enter a valid invoice email address", // Reuse/variant of emailInvalid
+        "rdwNumberRequired": "RDW Number is required for Netherlands" // Error for new conditional field
+        // --- END NEW ERROR MESSAGES ---
       }
+    }
+  
+
     }
   },
   de: {
-    languageName: "Deutsch",
-    // Header
-    header: {
-      mainMenu: {
-        home: "Startseite",
+    cookies: {
+      message: "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern. Durch die Nutzung unserer Website stimmen Sie unserer Cookie-Richtlinie zu.",
+      accept: "Alle akzeptieren",
+      decline: "Nur notwendige Cookies",
+      learnMore: "Mehr erfahren",
+      privacyPolicyLink: "Datenschutzerklärung"
+      
+    },
+      "newsletter": {
+    "title": "Abonnieren Sie unseren Newsletter",
+    "description": "Abonnieren Sie unseren Newsletter, um Updates, Neuigkeiten und Sonderangebote direkt in Ihren Posteingang zu erhalten.",
+    "emailLabel": "E-Mail-Adresse",
+    "emailPlaceholder": "Ihre E-Mail-Adresse",
+    "subscribeButton": "Abonnieren",
+    "privacyNote": "Wir kümmern uns um Ihre Daten. Sie können sich jederzeit abmelden.",
+    "successMessage": "Vielen Dank für Ihre Anmeldung!",
+    "errors": {
+      "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
+      "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+      "subscriptionFailed": "Die Anmeldung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
+    }
+  },
+
+  languageName: "Deutsch",
+  // Header
+  header: {
+    mainMenu: {
+      home: "Startseite",
         buyCars: "Autos kaufen",
         sellCars: "Autos verkaufen",
         aboutUs: "Über uns",
@@ -870,92 +963,152 @@ support: {
         }
       },
       register: {
-        title: "Konto erstellen",
-        subtitle: "Treten Sie Europas größtem Automarktplatz bei",
+        // Bestehende Schritte
         step1: "Persönliche Informationen",
-        step2: "Geschäftsinformationen",
-        step3: "Adressinformationen",
-        step4: "Kontosicherheit",
-        step5: "Aandeelhouders",
+        step2: "Unternehmensinformationen",
+        step3: "Standort & Compliance", // Neue Abschnittsüberschrift
+        step4: "Aktionäre",
+        step5: "Kontosicherheit",
+        passwordPlaceholder: "Erstellen Sie ein sicheres Passwort",
+        confirmPasswordPlaceholder: "Bestätigen Sie Ihr Passwort",
+        passwordHint: "Verwenden Sie mindestens 8 Zeichen mit einer Mischung aus Buchstaben, Zahlen & Symbolen",
+        joinMarketplace:    "Marktplatz beitreten",
+         "firstNamePlaceholder": "Vornamen eingeben",
+      "lastNamePlaceholder": "Nachnamen eingeben",
+      "emailPlaceholder": "ihre.email@beispiel.de",
+      "phonePlaceholder": "+49 (0) 123 456789",
+      "companyNamePlaceholder": "Ihr Firmenname",
+      "vatNumberPlaceholder": "DE123456789",
+      "uboPlaceholder": "Ultimate Beneficial Owner",
+      // --- NEUE PLACEHOLDER ---
+      "companyAddressPlaceholder": "Geben Sie Ihre vollständige Firmenadresse ein",
+      "invoiceEmailPlaceholder": "rechnung@ihrunternehmen.de",
+      "rdwNumberPlaceholder": "RDW Nummer eingeben",
+        // Abschnittsüberschriften & Beschreibungen
         personalInfo: "Persönliche Informationen",
         personalInfoDesc: "Erzählen Sie uns etwas über sich",
-        businessInfo: "Geschäftsinformationen",
+        businessInfo: "Unternehmensinformationen",
         businessInfoDesc: "Erzählen Sie uns etwas über Ihr Unternehmen",
-        addressInfo: "Adressinformationen",
-        addressInfoDesc: "Wo befinden Sie sich?",
+        complianceInfo: "Standort & Compliance", // Neue Abschnittsüberschrift
+        complianceInfoDesc: "Wählen Sie Ihr Land aus und geben Sie relevante Details an", // Neue Abschnittsbeschreibung
+        shareholdersInfo: "Informationen zu den Aktionären",
+        shareholdersInfoDesc: "Bitte geben Sie die Daten aller Aktionäre an und laden Sie Identifikationsdokumente hoch",
         accountSecurity: "Kontosicherheit",
         accountSecurityDesc: "Erstellen Sie ein sicheres Passwort",
+        // Bestehende Persönliche Info-Felder
         firstName: "Vorname",
         lastName: "Nachname",
         email: "E-Mail-Adresse",
         phone: "Telefonnummer",
+
+        // Bestehende Unternehmensinfo-Felder
         companyName: "Firmenname",
         vatNumber: "Umsatzsteuer-ID",
-        UBO: "Handelsregisternummer",
-        street: "Straße",
-        city: "Stadt",
-        postalCode: "Postleitzahl",
-        country: "Land",
-        selectCountry: "Land auswählen",
-        password: "Passwort",
-        confirmPassword: "Passwort bestätigen",
-         shareholdersInfo: "Shareholders Information",
-      shareholdersInfoDesc: "Please provide details of all shareholders and upload identification documents",
-      shareholder: "Shareholder",
-      shareholderFullName: "Full Name",
-      shareholderIdUpload: "Identification Document",
-      enterFullName: "Enter full name",
-      uploadFile: "Upload a file",
-      dragAndDrop: "or drag and drop",
-      fileTypes: "PNG, JPG, PDF up to 10MB",
-      addAnotherShareholder: "Add Another Shareholder",
-      removeLastShareholder: "Remove Last",
-        acceptTerms: "Ich akzeptiere die",
-        termsAndConditions: "Allgemeinen Geschäftsbedingungen",
-        acceptPrivacy: "Ich akzeptiere die",
-        privacyPolicy: "Datenschutzrichtlinie",
-        acceptMarketing: "Ich möchte Marketingmitteilungen erhalten",
-        createAccount: "Konto erstellen",
-        alreadyHaveAccount: "Bereits ein Konto?",
-        loginHere: "Hier anmelden",
-        step1: "Persönlich",
-        step1Desc: "Über Sie",
-        step2: "Geschäft",
-        step2Desc: "Ihr Unternehmen",
-        step3: "Adresse",
-        step3Desc: "Standort",
-        step4: "Sicherheit",
-        step5: "Aandeelhouders",
-        step4Desc: "Passwort",
-        errors: {
-          firstNameRequired: "Vorname ist erforderlich",
-          lastNameRequired: "Nachname ist erforderlich",
-          emailRequired: "E-Mail ist erforderlich",
-          emailInvalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
-          phoneRequired: "Telefonnummer ist erforderlich",
-          companyNameRequired: "Firmenname ist erforderlich",
-          vatNumberRequired: "Umsatzsteuer-ID ist erforderlich",
-          UBORequired: "Handelsregisternummer ist erforderlich",
-          streetRequired: "Straße ist erforderlich",
-          cityRequired: "Stadt ist erforderlich",
-          postalCodeRequired: "Postleitzahl ist erforderlich",
-          countryRequired: "Land ist erforderlich",
-          passwordRequired: "Passwort ist erforderlich",
-          passwordTooShort: "Passwort muss mindestens 8 Zeichen haben",
-          confirmPasswordRequired: "Bitte bestätigen Sie Ihr Passwort",
-          passwordsDoNotMatch: "Passwörter stimmen nicht überein",
-          termsRequired: "Sie müssen die Allgemeinen Geschäftsbedingungen akzeptieren",
-          privacyRequired: "Sie müssen die Datenschutzrichtlinie akzeptieren",
-          registrationFailed: "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
-          shareholderNameRequired: "Name des Aktionärs ist erforderlich",
-          shareholderIdRequired: "Ausweis des Aktionärs ist erforderlich"
-        }
+        UBO: "UBO-Nummer (Ultimate Beneficial Owner)",
+        // --- NEUE FELDER ---
+        companyAddress: "Firmenadresse", // Neue Feldbezeichnung
+        companyAddressPlaceholder: "Geben Sie Ihre vollständige Firmenadresse ein", // Neue Platzhalter
+        companyAddressRequired: "Firmenadresse ist erforderlich", // Neue Fehlermeldung
+        invoiceEmail: "Rechnungs-E-Mail-Adresse", // Neue Feldbezeichnung
+        invoiceEmailPlaceholder: "rechnung@ihrunternehmen.de", // Neue Platzhalter
+        invoiceEmailRequired: "Rechnungs-E-Mail-Adresse ist erforderlich", // Neue Fehlermeldung
+        // --- ENDE NEUE FELDER ---
+        // Bestehende Adressinfo-Felder (Verschoben/Kontextualisiert)
+      street: "Straße",
+      city: "Stadt",
+      postalCode: "Postleitzahl",
+      country: "Land",
+      selectCountry: "Land auswählen",
+      // --- NEUES FELD FÜR NL ---
+      rdwNumber: "RDW Nummer", // Neue bedingte Feldbezeichnung
+      rdwNumberPlaceholder: "RDW Nummer eingeben", // Neue bedingte Platzhalter
+      rdwNumberRequired: "RDW Nummer ist für die Niederlande erforderlich", // Neue bedingte Fehlermeldung
+      rdwInfo: "Erforderlich für die Fahrzeugzulassung in den Niederlanden.", // Optionaler Infotext
+      // --- ENDE NEUES FELD FÜR NL ---
+      // Bestehende Kontosicherheitsfelder
+      password: "Passwort",
+      confirmPassword: "Passwort bestätigen",
+      acceptTerms: "Ich akzeptiere die",
+      termsAndConditions: "Allgemeinen Geschäftsbedingungen",
+      acceptPrivacy: "Ich akzeptiere die",
+      privacyPolicy: "Datenschutzrichtlinie",
+      acceptMarketing: "Ich möchte Marketingmitteilungen erhalten",
+      // Bestehende Aktionärsfelder
+      shareholder: "Aktionär",
+      shareholderFullName: "Vollständiger Name",
+      shareholderIdUpload: "Identifikationsdokument",
+      enterFullName: "Vollständigen Namen eingeben",
+      uploadFile: "Eine Datei hochladen",
+      dragAndDrop: "oder per Drag & Drop ablegen",
+      fileTypes: "PNG, JPG, PDF bis zu 10MB",
+      addAnotherShareholder: "Weiteren Aktionär hinzufügen",
+      removeLastShareholder: "Letzten entfernen",
+      // Aktionsbuttons
+      createAccount: "Konto erstellen",
+      alreadyHaveAccount: "Haben Sie bereits ein Konto?",
+      loginHere: "Hier anmelden",
+      // Fehler (Einschließlich neuer)
+      errors: {
+        // Bestehende Fehler
+        firstNameRequired: "Vorname ist erforderlich",
+        lastNameRequired: "Nachname ist erforderlich",
+        emailRequired: "E-Mail-Adresse ist erforderlich",
+        emailInvalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+        phoneRequired: "Telefonnummer ist erforderlich",
+        companyNameRequired: "Firmenname ist erforderlich",
+        vatNumberRequired: "Umsatzsteuer-ID ist erforderlich",
+        UBORequired: "UBO-Nummer ist erforderlich",
+        streetRequired: "Straße ist erforderlich",
+        cityRequired: "Stadt ist erforderlich",
+        postalCodeRequired: "Postleitzahl ist erforderlich",
+        countryRequired: "Land ist erforderlich",
+        passwordRequired: "Passwort ist erforderlich",
+        passwordTooShort: "Das Passwort muss mindestens 8 Zeichen lang sein",
+        confirmPasswordRequired: "Bitte bestätigen Sie Ihr Passwort",
+        passwordsDoNotMatch: "Passwörter stimmen nicht überein",
+        termsRequired: "Sie müssen die Allgemeinen Geschäftsbedingungen akzeptieren",
+        privacyRequired: "Sie müssen die Datenschutzrichtlinie akzeptieren",
+        registrationFailed: "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+        shareholdersRequired: "Mindestens ein Aktionär ist erforderlich",
+        shareholderNameRequired: "Name des Aktionärs ist erforderlich",
+        shareholderIdRequired: "Identitätsdokument des Aktionärs ist erforderlich",
+        // --- NEUE FEHLERMELDUNGEN ---
+        companyAddressRequired: "Firmenadresse ist erforderlich", // Fehler für neues Feld
+        invoiceEmailRequired: "Rechnungs-E-Mail-Adresse ist erforderlich", // Fehler für neues Feld
+        invoiceEmailInvalid: "Bitte geben Sie eine gültige Rechnungs-E-Mail-Adresse ein", // Variante von emailInvalid
+        rdwNumberRequired: "RDW Nummer ist für die Niederlande erforderlich" // Fehler für neues bedingtes Feld
+        // --- ENDE NEUE FEHLERMELDUNGEN ---
       }
     }
+  
+
+    }
+  
   },
   nl: {
     languageName: "Nederlands",
+    cookies: {
+      message: "We gebruiken cookies om uw ervaring te verbeteren. Door onze site te blijven gebruiken, gaat u akkoord met ons gebruik van cookies.",
+      accept: "Cookies accepteren",
+      decline: "Cookies weigeren",
+      settings: "Cookie-instellingen"
+    },
     // Header
+    newsletter: {
+    "title": "Abonneer op onze nieuwsbrief",
+    "description": "Abonneer op onze nieuwsbrief om updates, nieuws en speciale aanbiedingen rechtstreeks in uw inbox te ontvangen.",
+    "emailLabel": "E-mailadres",
+    "emailPlaceholder": "Uw e-mailadres",
+    "subscribeButton": "Abonneren",
+    "privacyNote": "We zorgen voor uw gegevens. U kunt zich op elk moment afmelden.",
+    "successMessage": "Bedankt voor uw inschrijving!",
+    "errors": {
+      "emailRequired": "Vul uw e-mailadres in.",
+      "emailInvalid": "Vul een geldig e-mailadres in.",
+      "subscriptionFailed": "Abonneren is mislukt. Probeer het opnieuw."
+    }
+  },
+
     header: {
       mainMenu: {
         home: "Home",
@@ -1341,11 +1494,27 @@ support: {
       register: {
         title: "Maak uw account aan",
         subtitle: "Word lid van Europa's grootste automarktplaats",
-        step1: "Persoonlijke informatie",
-        step2: "Bedrijfsinformatie",
-        step3: "Adresgegevens",
-        step4: "Accountbeveiliging",
-        step5: "Aandeelhouders",
+     passwordPlaceholder: "Maak een veilig wachtwoord aan",
+        confirmPasswordPlaceholder: "Bevestig uw wachtwoord",
+        passwordHint: "Gebruik minimaal 8 tekens met een mix van letters, cijfers & symbolen",
+        joinMarketplace:'Word lid van de marktplaats',
+        rdwNumber: "RDW Nummer", // Nieuwe voorwaardelijke veldnaam
+        rdwInfo: "Vereist voor voertuigregistratie in Nederland.", // Optionele informatieve tekst
+        complianceInfo: "Locatie & naleving", // Nieuwe sectietitel
+        complianceInfoDesc: "Selecteer uw land en geef relevante details op", // Nieuwe sectiebeschrijving
+         "firstNamePlaceholder": "Voer uw voornaam in",
+      "lastNamePlaceholder": "Voer uw achternaam in",
+      "emailPlaceholder": "jouw.email@voorbeeld.nl",
+      "phonePlaceholder": "+31 (0)6 12345678",
+      "companyNamePlaceholder": "Uw Bedrijfsnaam",
+      "vatNumberPlaceholder": "NL123456789B01",
+      "uboPlaceholder": "Ultimate Beneficial Owner",
+      // --- NIEUWE PLACEHOLDERS ---
+      "companyAddressPlaceholder": "Voer uw volledige bedrijfsadres in",
+      "invoiceEmailPlaceholder": "facturatie@uwbedrijf.nl",
+      "rdwNumberPlaceholder": "Voer RDW Nummer in",
+        // --- EINDE NIEUWE PLACEHOLDERS ---
+        // Sectie titels & beschrijvingen
         personalInfo: "Persoonlijke informatie",
         personalInfoDesc: "Vertel ons iets over uzelf",
         businessInfo: "Bedrijfsinformatie",
@@ -1396,6 +1565,7 @@ support: {
         step4: "Beveiliging",
         step5:"Aandeelhouders",
         step4Desc: "Wachtwoord",
+        
         errors: {
           firstNameRequired: "Voornaam is verplicht",
           lastNameRequired: "Achternaam is verplicht",

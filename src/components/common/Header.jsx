@@ -95,20 +95,23 @@ const Header = () => {
   }, []);
 
   const buyMenuItems = [
-    { name: t('header.buyMenu.browseInventory'), icon: <FiShoppingCart className="text-[#3b396d]" />, href: '/buy/inventory' },
-    { name: t('header.buyMenu.directBuy'), icon: <FiTag className="text-[#3b396d]" />, href: '/buy/direct' }
+    // 1. Use theme color for icons
+    { name: t('header.buyMenu.browseInventory'), icon: <FiShoppingCart className="text-logo-dark-blue" />, href: '/buy/inventory' },
+    { name: t('header.buyMenu.directBuy'), icon: <FiTag className="text-logo-dark-blue" />, href: '/buy/direct' }
   ];
 
   const sellMenuItems = [
-    { name: t('header.sellMenu.sellYourCar'), icon: <FiTag className="text-[#3b396d]" />, href: '/sell/car' },
-    { name: t('header.sellMenu.pricingGuide'), icon: <FiTag className="text-[#3b396d]" />, href: '/sell/pricing' }
+    // 1. Use theme color for icons
+    { name: t('header.sellMenu.sellYourCar'), icon: <FiTag className="text-logo-dark-blue" />, href: '/sell/car' },
+    { name: t('header.sellMenu.pricingGuide'), icon: <FiTag className="text-logo-dark-blue" />, href: '/sell/pricing' }
   ];
 
   const mainMenuItems = [
-    { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-[#3b396d]" />, href: '/buy', hasDropdown: true, key: 'buy' },
-    { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-[#3b396d]" />, href: '/sell', hasDropdown: true, key: 'sell' },
-    { name: t('header.mainMenu.aboutUs'), icon: <FiInfo className="text-[#3b396d]" />, href: '/about' },
-    { name: t('header.mainMenu.contact'), icon: <FiPhone className="text-[#3b396d]" />, href: '/contact' },
+    // 1. Use theme color for icons
+    { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-logo-dark-blue" />, href: '/buy', hasDropdown: true, key: 'buy' },
+    { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-logo-dark-blue" />, href: '/sell', hasDropdown: true, key: 'sell' },
+    { name: t('header.mainMenu.aboutUs'), icon: <FiInfo className="text-logo-dark-blue" />, href: '/about' },
+    { name: t('header.mainMenu.contact'), icon: <FiPhone className="text-logo-dark-blue" />, href: '/contact' },
   ];
 
   const mobileMenuItems = [
@@ -169,8 +172,9 @@ const Header = () => {
       )}
 
       {/* Header */}
+      {/* 2. Use theme color for background */}
       <header 
-        className={`fixed w-full z-50 transition-all duration-300 shadow bg-[#3b396d] py-3 ${scrolled ? 'shadow-md shadow-white' : ''}`}
+        className={`fixed w-full z-50 transition-all duration-300 shadow bg-logo-dark-blue py-3 ${scrolled ? 'shadow-md shadow-white' : ''}`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
@@ -180,7 +184,8 @@ const Header = () => {
                 onClick={() => navigate('/home')}
                 className="flex items-center focus:outline-none"
               >
-                <img src="/logoLight.svg" alt="CarNetwork Logo" className=" h-8" />
+                {/* 3. CONFIRMED: Use logoLight.svg (white logo) on the dark blue header background */}
+                <img src="/logoLight.svg" alt="CarNetwork Logo" className="h-8" />
               </button>
             </div>
 
@@ -193,10 +198,11 @@ const Header = () => {
                       <button 
                         data-dropdown-toggle="true"
                         onClick={(e) => toggleDesktopDropdown(item.key, e)}
+                        // 2. Use theme colors for hover/active states
                         className={`flex items-center px-4 py-2 text-sm font-medium transition-colors rounded-lg ${
                           isActiveRoute(item.href) 
-                            ? 'text-white bg-[#2a285a]' 
-                            : 'text-indigo-100 hover:text-white hover:bg-[#2a285a]/50'
+                            ? 'text-white bg-background-deep-blue' // Use darker blue for active state contrast
+                            : 'text-indigo-100 hover:text-white hover:bg-background-deep-blue/50' // Use theme color for hover
                         }`}
                       >
                         {item.name}
@@ -225,10 +231,11 @@ const Header = () => {
                   ) : (
                     <button
                       onClick={(e) => handleNavigation(item.href, e)}
+                      // 2. Use theme colors for hover/active states
                       className={`px-4 py-2 text-sm font-medium transition-colors rounded-lg ${
                         isActiveRoute(item.href) 
-                          ? 'text-white bg-[#2a285a]' 
-                          : 'text-indigo-100 hover:text-white hover:bg-[#2a285a]/50'
+                          ? 'text-white bg-background-deep-blue' // Use darker blue for active state contrast
+                          : 'text-indigo-100 hover:text-white hover:bg-background-deep-blue/50' // Use theme color for hover
                       }`}
                     >
                       {item.name}
@@ -249,7 +256,8 @@ const Header = () => {
                     setLanguageDropdownOpen(!languageDropdownOpen);
                     setUserDropdownOpen(false);
                   }}
-                  className="flex items-center px-3 py-2 text-sm text-indigo-100 hover:text-white hover:bg-[#2a285a]/50 transition-colors rounded-lg"
+                  // 2. Use theme colors for hover
+                  className="flex items-center px-3 py-2 text-sm text-indigo-100 hover:text-white hover:bg-background-deep-blue/50 transition-colors rounded-lg"
                 >
                   <FiGlobe className="mr-1 text-white" />
                   <span className="hidden md:inline">{getLanguageName(language)}</span>
@@ -267,9 +275,10 @@ const Header = () => {
                             setLanguage(langCode);
                             setLanguageDropdownOpen(false);
                           }}
+                          // 1. Use theme color for active language
                           className={`block w-full text-left px-4 py-2 text-sm ${
                             language === langCode 
-                              ? 'text-[#3b396d] bg-gray-100' 
+                              ? 'text-logo-dark-blue bg-gray-100' 
                               : 'text-gray-700 hover:bg-gray-100'
                           }`}
                         >
@@ -291,9 +300,10 @@ const Header = () => {
                       setUserDropdownOpen(!userDropdownOpen);
                       setLanguageDropdownOpen(false);
                     }}
-                    className="flex items-center text-sm text-indigo-100 hover:text-white hover:bg-[#2a285a]/50 transition-colors rounded-lg px-3 py-2"
+                    // 2. Use theme colors for hover
+                    className="flex items-center text-sm text-indigo-100 hover:text-white  transition-colors rounded-lg "
                   >
-                    <div className="w-8 h-8 rounded-full bg-[#2a285a] flex items-center justify-center text-white">
+                    <div className="w-8 h-8 rounded-full bg-background-deep-blue flex items-center justify-center text-white">
                       {user.name ? user.name.charAt(0).toUpperCase() : <FiUser className="w-4 h-4" />}
                     </div>
                     <span className="truncate max-w-[100px] ml-2 hidden lg:inline">{user.name}</span>
@@ -335,8 +345,9 @@ const Header = () => {
                           onClick={(e) => {
                             e.stopPropagation();
                             logout();
+                                                    navigate('/');
+
                             setUserDropdownOpen(false);
-                            navigate('/');
                           }}
                           className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
@@ -351,13 +362,15 @@ const Header = () => {
                 <div className="hidden md:flex items-center space-x-2">
                   <button 
                     onClick={() => navigate('/login')}
-                    className="px-4 py-2 text-sm font-medium text-indigo-100 hover:text-white hover:bg-[#2a285a]/50 transition-colors rounded-lg"
+                    // 2. Use theme colors for hover
+                    className="px-4 py-2 text-sm font-medium text-indigo-100 hover:text-white hover:bg-background-deep-blue/50 transition-colors rounded-lg"
                   >
                     {t('navigation.login')}
                   </button>
+                  {/* 2. Use theme colors for primary signup button */}
                   <button 
                     onClick={() => navigate('/register')}
-                    className="px-4 py-2 text-sm font-medium text-white bg-[#2a285a] rounded-lg hover:bg-[#1d1b47] transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-white bg-background-deep-blue rounded-lg hover:bg-[#100f25] transition-colors" // Slightly darker hover for deep blue
                   >
                     {t('navigation.signup')}
                   </button>
@@ -366,7 +379,7 @@ const Header = () => {
 
               {/* Mobile menu button */}
               <button 
-                className="lg:hidden p-2 rounded-md text-indigo-100 hover:text-white hover:bg-[#2a285a]/50 focus:outline-none transition-colors"
+                className="lg:hidden p-2 rounded-md text-indigo-100 hover:text-white hover:bg-background-deep-blue/50 focus:outline-none transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <FiX className="h-5 w-5" /> : <FiMenu className="h-5 w-5" />}
@@ -376,20 +389,21 @@ const Header = () => {
         </div>
 
         {/* Mobile Menu - Full Width Sidebar with #3b396d background */}
+        {/* 2. Use theme color for background */}
         <div 
-          className={`lg:hidden fixed top-0 left-0 w-full h-full bg-[#3b396d] z-50 transform transition-transform duration-300 ease-in-out ${
+          className={`lg:hidden fixed top-0 left-0 w-full h-full bg-logo-dark-blue z-50 transform transition-transform duration-300 ease-in-out ${
             mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
           <div className="flex flex-col h-full overflow-y-auto">
             {/* Mobile Header */}
-            <div className="flex justify-between items-center p-5 border-b border-[#2a285a]">
+            <div className="flex justify-between items-center p-5 border-b border-background-deep-blue">
               <div className="flex items-center">
-                                <img src="/logoLight.svg" alt="CarNetwork Logo" className=" h-8" />
-
+                {/* 3. CONFIRMED: Use logoLight.svg (white logo) on the dark blue mobile menu background */}
+                <img src="/logoLight.svg" alt="CarNetwork Logo" className="h-8" />
               </div>
               <button 
-                className="p-2 rounded-md text-white hover:bg-[#2a285a]"
+                className="p-2 rounded-md text-white hover:bg-background-deep-blue"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <FiX className="h-6 w-6" />
@@ -405,7 +419,7 @@ const Header = () => {
                       <div className="mb-2">
                         <button 
                           onClick={(e) => toggleMobileDropdown(item.key, e)}
-                          className="flex items-center justify-between w-full p-3 text-left text-white hover:bg-[#2a285a] rounded-lg transition-colors"
+                          className="flex items-center justify-between w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"
                         >
                           <div className="flex items-center">
                             <span className="mr-3">{item.icon}</span>
@@ -420,7 +434,7 @@ const Header = () => {
                               <button
                                 key={subIndex}
                                 onClick={(e) => handleSubNavigation(subItem.href, item.key, e)}
-                                className="flex items-center w-full p-2 text-left text-indigo-100 hover:text-white hover:bg-[#2a285a] rounded-lg transition-colors"
+                                className="flex items-center w-full p-2 text-left text-indigo-100 hover:text-white hover:bg-background-deep-blue rounded-lg transition-colors"
                               >
                                 <span className="mr-3 opacity-70">{subItem.icon}</span>
                                 {subItem.name}
@@ -432,7 +446,7 @@ const Header = () => {
                     ) : (
                       <button
                         onClick={(e) => handleNavigation(item.href, e)}
-                        className="flex items-center w-full p-3 text-left text-white hover:bg-[#2a285a] rounded-lg transition-colors"
+                        className="flex items-center w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"
                       >
                         <span className="mr-3">{item.icon}</span>
                         {item.name}
@@ -443,14 +457,14 @@ const Header = () => {
               </nav>
 
               {/* User section in mobile menu */}
-              <div className="mt-8 pt-6 border-t border-[#2a285a]">
+              <div className="mt-8 pt-6 border-t border-background-deep-blue">
                 {user ? (
                   <div className="space-y-3">
                     <div className="flex items-center p-3 text-white cursor-pointer" onClick={() => {
                         navigate('/profile');
                         setMobileMenuOpen(false);
                       }}>
-                      <div className="w-10 h-10 rounded-full bg-[#2a285a] flex items-center justify-center text-white mr-3">
+                      <div className="w-10 h-10 rounded-full bg-background-deep-blue flex items-center justify-center text-white mr-3">
                         {user.name ? user.name.charAt(0).toUpperCase() : <FiUser className="w-5 h-5" />}
                       </div>
                       <div>
@@ -464,7 +478,7 @@ const Header = () => {
                         navigate('/dashboard');
                         setMobileMenuOpen(false);
                       }}
-                      className="flex items-center w-full p-3 text-left text-white hover:bg-[#2a285a] rounded-lg transition-colors"
+                      className="flex items-center w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"
                     >
                       <FiSettings className="mr-3" />
                       {t('header.userMenu.dashboard')}
@@ -476,7 +490,7 @@ const Header = () => {
                         setMobileMenuOpen(false);
                         navigate('/');
                       }}
-                      className="flex items-center w-full p-3 text-left text-white hover:bg-[#2a285a] rounded-lg transition-colors"
+                      className="flex items-center w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"
                     >
                       <FiLogOut className="mr-3" />
                       {t('logout')}
@@ -489,7 +503,7 @@ const Header = () => {
                         navigate('/login');
                         setMobileMenuOpen(false);
                       }}
-                      className="p-3 text-center text-white border border-white rounded-lg hover:bg-white hover:text-[#3b396d] transition-colors"
+                      className="p-3 text-center text-white border border-white rounded-lg hover:bg-white hover:text-logo-dark-blue transition-colors"
                     >
                       {t('navigation.login')}
                     </button>
@@ -498,7 +512,7 @@ const Header = () => {
                         navigate('/register');
                         setMobileMenuOpen(false);
                       }}
-                      className="p-3 text-center text-[#3b396d] bg-white rounded-lg hover:bg-gray-100 transition-colors"
+                      className="p-3 text-center text-white bg-background-deep-blue rounded-lg hover:bg-[#100f25] transition-colors" // Slightly darker hover
                     >
                       {t('navigation.signup')}
                     </button>
@@ -517,8 +531,8 @@ const Header = () => {
                         }}
                         className={`p-2 text-center rounded-lg text-sm ${
                           language === langCode 
-                            ? 'bg-white text-[#3b396d]' 
-                            : 'text-white bg-[#2a285a] hover:bg-[#2a285a]/80'
+                            ? 'bg-white text-logo-dark-blue' 
+                            : 'text-white bg-background-deep-blue hover:bg-[#100f25]' // Slightly darker hover
                         }`}
                       >
                         {getLanguageName(langCode)}
