@@ -225,7 +225,7 @@ const Home = () => {
             <div className="relative">
               <div className="relative aspect-video rounded-xl overflow-hidden shadow-xl"> {/* Slightly reduced rounding/shadow for minimalism */}
                 <img
-                  src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80"
+                  src="https://blog.salvagebid.com/wp-content/uploads/2021/02/SB-Blog-Buying-a-car-with-a-lien-title-820x461.png"
                   alt="Business Growth"
                   className="w-full h-full object-cover"
                 />
