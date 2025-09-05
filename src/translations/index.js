@@ -283,6 +283,7 @@ export const translations = {
     exploreAuctions: "Explore Auctions"
   },
   
+  
 support: {
     title: 'Support Center',
     subtitle: 'Get help with your account, auctions, and more',
@@ -416,9 +417,9 @@ support: {
 
     register: {
       // Existing Steps (Labels might be slightly adjusted for clarity)
-      "step1": "Personal Information",
-      "step2": "Business Information",
-      "step3": "Location & Compliance",
+      "step1": "Personal",
+      "step2": "Business",
+      "step3": "Location",
       "step4": "Shareholders",
       "step5": "Account Security",
       title: "Create your account",
@@ -546,7 +547,123 @@ support: {
     }
   
 
-    }
+    },
+    sellerDashboard: {
+    // Alerts & Messages
+    addVehicleAlert: 'Redirecting to Add Vehicle form...',
+    linkCopied: 'Link copied to clipboard!',
+    linkCopyFailed: 'Failed to copy link.',
+    logoutAlert: 'Logging out...',
+    viewBidHistoryAlert: 'Opening bid history...',
+    
+    // Sidebar Navigation
+    sidebar: {
+      overview: 'Overview',
+      inventory: 'My Inventory',
+      myAuctions: 'My Auctions',
+      sales: 'Sales & Transactions',
+      messages: 'Messages',
+      analytics: 'Analytics',
+      settings: 'Settings'
+    },
+
+    // Stats Cards
+    stats: {
+      totalListings: 'Total Listings',
+      activeAuctions: 'Active Auctions',
+      vehiclesSold: 'Vehicles Sold',
+      totalRevenue: 'Total Revenue'
+    },
+
+    // Overview Tab
+    overview: {
+      recentVehicles: 'Recent Vehicles',
+      recentMessages: 'Recent Messages'
+    },
+
+    // Inventory Tab
+    inventory: {
+      addVehicle: 'Add Vehicle',
+      vehicleDetails: 'Vehicle Details',
+      mileage: 'Mileage',
+      fuelType: 'Fuel Type',
+      transmission: 'Transmission',
+      color: 'Color',
+      condition: 'Condition',
+      location: 'Location',
+      currentBid: 'Current Bid',
+      reservePrice: 'Reserve Price',
+      auctionEnds: 'Auction Ends',
+      bids: 'Bids',
+      finalSalePrice: 'Final Sale Price',
+      soldTo: 'Sold To',
+      privateAuction: 'Private Auction Link',
+      searchPlaceholder: 'Search vehicles...',
+      vehicle: 'Vehicle',
+      details: 'Details',
+      status: 'Status',
+      price: 'Price',
+      actions: 'Actions',
+      private: 'Private'
+    },
+
+    // Vehicle Statuses
+    vehicleStatus: {
+      active: 'Active',
+      sold: 'Sold',
+      draft: 'Draft'
+    },
+
+    // Filters
+    filters: {
+      all: 'All Vehicles',
+      active: 'Active',
+      sold: 'Sold',
+      draft: 'Draft'
+    },
+
+    // Messages/Chat Tab
+    messages: {
+      typeMessage: 'Type a message...',
+      conversations: 'Conversations',
+      selectConversation: 'Select a conversation',
+      selectConversationDesc: 'Choose a conversation from the list to start chatting.'
+    },
+
+    // Analytics Tab
+    analytics: {
+      revenueTitle: 'Revenue Overview',
+      chartPlaceholder: 'Revenue Chart Placeholder',
+      totalRevenue: 'Total Revenue',
+      vehiclesSold: 'Vehicles Sold',
+      sellThroughRate: 'Sell-Through Rate',
+      topModels: 'Top Selling Models',
+      units: 'units',
+      financialSummary: 'Financial Summary',
+      period: 'Period',
+      grossSales: 'Gross Sales',
+      fees: 'Platform Fees',
+      netEarnings: 'Net Earnings',
+      ytdTotal: 'YTD Total'
+    },
+
+    // Generic UI
+    comingSoon: 'Coming Soon',
+    comingSoonDesc: 'This section is under development.',
+    viewAll: 'View All',
+    viewDetails: 'View Details',
+    back: 'Back to List',
+    copyLink: 'Copy Link'
+  },
+  back: 'Back',
+  next: 'Next',
+  logout: 'Logout',
+  notifications: 'Notifications',
+  downloadReport: 'Download Report',
+  viewDetails: 'View Details',
+  copyLink: 'Copy Link',
+  filters: 'Filters',
+  viewAll: 'View All'
   },
   de: {
     cookies: {
@@ -964,9 +1081,9 @@ support: {
       },
       register: {
         // Bestehende Schritte
-        step1: "Persönliche Informationen",
-        step2: "Unternehmensinformationen",
-        step3: "Standort & Compliance", // Neue Abschnittsüberschrift
+        step1: "Persönliche",
+        step2: "Unternehmens",
+        step3: "Standort", // Neue Abschnittsüberschrift
         step4: "Aktionäre",
         step5: "Kontosicherheit",
         passwordPlaceholder: "Erstellen Sie ein sicheres Passwort",
@@ -1082,7 +1199,124 @@ support: {
     }
   
 
-    }
+    },
+    sellerDashboard: {
+    // Alerts & Messages
+    addVehicleAlert: 'Weiterleitung zum Fahrzeug hinzufügen Formular...',
+    linkCopied: 'Link in die Zwischenablage kopiert!',
+    linkCopyFailed: 'Link konnte nicht kopiert werden.',
+    logoutAlert: 'Abmeldung...',
+    viewBidHistoryAlert: 'Bietverlauf wird geöffnet...',
+    
+    // Sidebar Navigation
+    sidebar: {
+      overview: 'Übersicht',
+      inventory: 'Mein Inventar',
+      myAuctions: 'Meine Auktionen',
+      sales: 'Verkäufe & Transaktionen',
+      messages: 'Nachrichten',
+      analytics: 'Analyse',
+      settings: 'Einstellungen'
+    },
+
+    // Stats Cards
+    stats: {
+      totalListings: 'Gesamtanzahl Inserate',
+      activeAuctions: 'Aktive Auktionen',
+      vehiclesSold: 'Verkaufte Fahrzeuge',
+      totalRevenue: 'Gesamtumsatz'
+    },
+
+    // Overview Tab
+    overview: {
+      recentVehicles: 'Neueste Fahrzeuge',
+      recentMessages: 'Neueste Nachrichten'
+    },
+
+    // Inventory Tab
+    inventory: {
+      addVehicle: 'Fahrzeug hinzufügen',
+      vehicleDetails: 'Fahrzeugdetails',
+      mileage: 'Laufleistung',
+      fuelType: 'Kraftstoffart',
+      transmission: 'Getriebe',
+      color: 'Farbe',
+      condition: 'Zustand',
+      location: 'Standort',
+      currentBid: 'Aktuelles Gebot',
+      reservePrice: 'Mindestpreis',
+      auctionEnds: 'Auktion endet',
+      bids: 'Gebote',
+      finalSalePrice: 'Endverkaufspreis',
+      soldTo: 'Verkauft an',
+      privateAuction: 'Privater Auktionslink',
+      searchPlaceholder: 'Fahrzeuge suchen...',
+      vehicle: 'Fahrzeug',
+      details: 'Details',
+      status: 'Status',
+      price: 'Preis',
+      actions: 'Aktionen',
+      private: 'Privat'
+    },
+
+    // Vehicle Statuses
+    vehicleStatus: {
+      active: 'Aktiv',
+      sold: 'Verkauft',
+      draft: 'Entwurf'
+    },
+
+    // Filters
+    filters: {
+      all: 'Alle Fahrzeuge',
+      active: 'Aktiv',
+      sold: 'Verkauft',
+      draft: 'Entwurf'
+    },
+
+    // Messages/Chat Tab
+    messages: {
+      typeMessage: 'Eine Nachricht schreiben...',
+      conversations: 'Unterhaltungen',
+      selectConversation: 'Wählen Sie eine Unterhaltung',
+      selectConversationDesc: 'Wählen Sie eine Unterhaltung aus der Liste, um mit dem Chatten zu beginnen.'
+    },
+
+    // Analytics Tab
+    analytics: {
+      revenueTitle: 'Umsatzübersicht',
+      chartPlaceholder: 'Umsatzdiagramm Platzhalter',
+      totalRevenue: 'Gesamtumsatz',
+      vehiclesSold: 'Verkaufte Fahrzeuge',
+      sellThroughRate: 'Verkaufsrate',
+      topModels: 'Bestverkaufte Modelle',
+      units: 'Einheiten',
+      financialSummary: 'Finanzübersicht',
+      period: 'Zeitraum',
+      grossSales: 'Bruttoumsatz',
+      fees: 'Plattformgebühren',
+      netEarnings: 'Nettogewinn',
+      ytdTotal: 'YTD Gesamt'
+    },
+
+    // Generic UI
+    comingSoon: 'Demnächst verfügbar',
+    comingSoonDesc: 'Dieser Bereich befindet sich in der Entwicklung.',
+    viewAll: 'Alle anzeigen',
+    viewDetails: 'Details anzeigen',
+    back: 'Zurück zur Liste',
+    copyLink: 'Link kopieren'
+  },
+
+      back: 'Zurück',
+  next: 'Weiter',
+  logout: 'Ausloggen',
+  notifications: 'Benachrichtigungen',
+  downloadReport: 'Bericht herunterladen',
+  viewDetails: 'Details anzeigen',
+  copyLink: 'Link kopieren',
+  filters: 'Filter',
+  viewAll: 'Alle anzeigen'
   
   },
   nl: {
@@ -1590,6 +1824,126 @@ support: {
           shareholderIdRequired: "Identiteitsbewijs van de aandeelhouder is verplicht"
         }
       }
-    }
-  }
+    },
+      sellerDashboard: {
+    // Alerts & Messages
+    addVehicleAlert: 'Doorverwijzen naar Voertuig Toevoegen formulier...',
+    linkCopied: 'Link gekopieerd naar klembord!',
+    linkCopyFailed: 'Link kopiëren mislukt.',
+    logoutAlert: 'Uitloggen...',
+    viewBidHistoryAlert: 'Biedingsgeschiedenis openen...',
+    
+    // Sidebar Navigation
+    sidebar: {
+      overview: 'Overzicht',
+      inventory: 'Mijn Voorraad',
+      myAuctions: 'Mijn Veilingen',
+      sales: 'Verkoop & Transaktionen',
+      messages: 'Berichten',
+      analytics: 'Analytics',
+      settings: 'Instellingen'
+    },
+
+    // Stats Cards
+    stats: {
+      totalListings: 'Totaal Aanbod',
+      activeAuctions: 'Actieve Veilingen',
+      vehiclesSold: 'Verkochte Voertuigen',
+      totalRevenue: 'Totale Opbrengst'
+    },
+
+    // Overview Tab
+    overview: {
+      recentVehicles: 'Recente Voertuigen',
+      recentMessages: 'Recente Berichten'
+    },
+
+    // Inventory Tab
+    inventory: {
+      addVehicle: 'Voertuig Toevoegen',
+      vehicleDetails: 'Voertuigdetails',
+      mileage: 'Kilometerstand',
+      fuelType: 'Brandstof Type',
+      transmission: 'Transmissie',
+      color: 'Kleur',
+      condition: 'Conditie',
+      location: 'Locatie',
+      currentBid: 'Huidig Bod',
+      reservePrice: 'Reserveprijs',
+      auctionEnds: 'Veiling Eindigt',
+      bids: 'Biedingen',
+      finalSalePrice: 'Eindverkoopprijs',
+      soldTo: 'Verkocht Aan',
+      privateAuction: 'Privé Veiling Link',
+      searchPlaceholder: 'Zoek voertuigen...',
+      vehicle: 'Voertuig',
+      details: 'Details',
+      status: 'Status',
+      price: 'Prijs',
+      actions: 'Acties',
+      private: 'Privé'
+    },
+
+    // Vehicle Statuses
+    vehicleStatus: {
+      active: 'Actief',
+      sold: 'Verkocht',
+      draft: 'Concept'
+    },
+
+    // Filters
+    filters: {
+      all: 'Alle Voertuigen',
+      active: 'Actief',
+      sold: 'Verkocht',
+      draft: 'Concept'
+    },
+
+    // Messages/Chat Tab
+    messages: {
+      typeMessage: 'Typ een bericht...',
+      conversations: 'Gesprekken',
+      selectConversation: 'Selecteer een gesprek',
+      selectConversationDesc: 'Kies een gesprek uit de lijst om te beginnen met chatten.'
+    },
+
+    // Analytics Tab
+    analytics: {
+      revenueTitle: 'Opbrengst Overzicht',
+      chartPlaceholder: 'Opbrengst Grafiek Placeholder',
+      totalRevenue: 'Totale Opbrengst',
+      vehiclesSold: 'Verkochte Voertuigen',
+      sellThroughRate: 'Verkooppercentage',
+      topModels: 'Best Verkopende Modellen',
+      units: 'eenheden',
+      financialSummary: 'Financieel Overzicht',
+      period: 'Periode',
+      grossSales: 'Bruto Verkopen',
+      fees: 'Platformkosten',
+      netEarnings: 'Netto Winst',
+      ytdTotal: 'YTD Totaal'
+    },
+
+    // Generic UI
+    comingSoon: 'Binnenkort Beschikbaar',
+    comingSoonDesc: 'Deze sectie is in ontwikkeling.',
+    viewAll: 'Bekijk Alles',
+    viewDetails: 'Bekijk Details',
+    back: 'Terug naar Lijst',
+    copyLink: 'Link Kopiëren'
+  },
+  back: 'Terug',
+  next: 'Volgende',
+  logout: 'Uitloggen',
+  notifications: 'Meldingen',
+  downloadReport: 'Rapport Downloaden',
+  viewDetails: 'Bekijk Details',
+  copyLink: 'Link Kopiëren',
+  filters: 'Filters',
+  viewAll: 'Bekijk Alles'
+
+  },
+
+
+
 };

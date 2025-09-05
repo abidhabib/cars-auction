@@ -845,7 +845,7 @@ const Register = () => {
                       <span className="font-medium text-sm">{step}</span>
                     )}
                   </div>
-                  <div className={`mt-2 text-xs font-medium ${
+                  <div className={`mt-2 sm:mt-2 text-[0.6rem] sm:text-xs font-medium max-w-[70px] sm:max-w-[100px] truncate hidden sm:block  ${
                     step <= currentStep ? 'text-logo-dark-blue' : 'text-gray-400' // Style guide color
                   }`}>
                     {/* Note: Original labels seemed mismatched (step4/5). Keeping logic but you might adjust labels. */}
