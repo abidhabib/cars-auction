@@ -12,6 +12,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'; // Import useAuth
 import { LanguageProvider } from './context/LanguageContext';
 import SplashScreen from './components/common/SplashScreen';
 import AppLayout from './components/layout/AppLayout';
+import SellerDashboard from './pages/seller/SellerDashboard';
 
 // Lazy load all pages and components
 const Home = React.lazy(() => import('./pages/Home'));
@@ -115,6 +116,14 @@ function App() {
                     element={
                       <AppLayout>
                         <Home />
+                      </AppLayout>
+                    }
+                  />
+                  <Route
+                    path="/sellerDashboard"
+                    element={
+                      <AppLayout>
+                        <SellerDashboard />
                       </AppLayout>
                     }
                   />

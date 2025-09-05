@@ -31,7 +31,7 @@ const Footer = () => {
     ],
     support: [
       { name: t("footer.support.help"), href: "/help" },
-      { name: t("footer.support.faq"), href: "/contact" },
+      { name: t("footer.support.faq"), href: "/contact?tab=faq" },
       { name: t("footer.support.privacy"), href: "/privacy" },
       { name: t("footer.support.terms"), href: "/terms" },
     ],

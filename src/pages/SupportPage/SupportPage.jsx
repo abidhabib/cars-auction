@@ -1,12 +1,13 @@
 // src/components/help/HelpCenter.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { Link } from 'react-router-dom';
-import { FiMessageSquare, FiX, FiSend, FiClock, FiMail, FiPhone } from 'react-icons/fi';
+import { Link, useSearchParams } from 'react-router-dom'; // Import useSearchParams
+import { FiMessageSquare, FiX, FiSend, FiClock, FiMail, FiPhone, FiChevronLeft, FiChevronRight, FiCheck, FiUser } from 'react-icons/fi';
 
 const HelpCenter = () => {
   const { t, language } = useLanguage();
-  const [activeTab, setActiveTab] = useState('contact');
+  const [searchParams, setSearchParams] = useSearchParams(); // Hook to read URL params
+  const [activeTab, setActiveTabInternal] = useState('contact'); // Internal state
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,6 +27,22 @@ const HelpCenter = () => {
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
+
+  // Effect to set initial tab based on URL parameter
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam === 'faq') {
+      setActiveTabInternal('faq');
+    } else {
+      setActiveTabInternal('contact'); // Default to contact
+    }
+  }, [searchParams]);
+
+  // Function to update both internal state and URL param
+  const updateActiveTab = (tab) => {
+    setActiveTabInternal(tab);
+    setSearchParams({ tab }); // Update URL: /contact?tab=faq or /contact?tab=contact
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -55,7 +72,7 @@ const HelpCenter = () => {
     setOpenFAQIndex(openFAQIndex === index ? null : index);
   };
 
-  // Handle sending a message
+  // Handle sending a message in chat
   const handleSendMessage = () => {
     if (inputMessage.trim() === '') return;
 
@@ -67,7 +84,7 @@ const HelpCenter = () => {
       timestamp: new Date()
     };
 
-    setMessages([...messages, newUserMessage]);
+    setMessages(prevMessages => [...prevMessages, newUserMessage]);
     setInputMessage('');
 
     // Simulate bot response after a delay
@@ -89,11 +106,11 @@ const HelpCenter = () => {
         timestamp: new Date()
       };
       
-      setMessages(prev => [...prev, newBotMessage]);
+      setMessages(prevMessages => [...prevMessages, newBotMessage]);
     }, 1000);
   };
 
-  // Handle pressing Enter to send
+  // Handle pressing Enter to send in chat
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -130,28 +147,28 @@ const HelpCenter = () => {
 
   const faqs = [
     {
-      question: "How do I create an account?",
-      answer: "Click on the 'Sign Up' button at the top right corner and fill in your details. You'll receive a confirmation email to verify your account."
+      question: t('faq.questions.0.question') || "How do I create an account?",
+      answer: t('faq.questions.0.answer') || "Click on the 'Sign Up' button at the top right corner and fill in your details. You'll receive a confirmation email to verify your account."
     },
     {
-      question: "How can I list my car for sale?",
-      answer: "After logging in, go to the 'Sell Cars' section and click 'Sell Your Car'. Fill in the vehicle details and upload photos to create your listing."
+      question: t('faq.questions.1.question') || "How can I list my car for sale?",
+      answer: t('faq.questions.1.answer') || "After logging in, go to the 'Sell Cars' section and click 'Sell Your Car'. Fill in the vehicle details and upload photos to create your listing."
     },
     {
-      question: "What payment methods do you accept?",
-      answer: "We accept all major credit cards, bank transfers, and PayPal. Payment details are securely processed through our payment partners."
+      question: t('faq.questions.2.question') || "What payment methods do you accept?",
+      answer: t('faq.questions.2.answer') || "We accept all major credit cards, bank transfers, and PayPal. Payment details are securely processed through our payment partners."
     },
     {
-      question: "How long does it take to verify my listing?",
-      answer: "Most listings are verified within 24 hours. Premium listings get priority verification and are typically approved within 2 hours."
+      question: t('faq.questions.3.question') || "How long does it take to verify my listing?",
+      answer: t('faq.questions.3.answer') || "Most listings are verified within 24 hours. Premium listings get priority verification and are typically approved within 2 hours."
     },
     {
-      question: "Can I edit my listing after publishing?",
-      answer: "Yes, you can edit your listing at any time by going to your dashboard and selecting the listing you want to modify."
+      question: t('faq.questions.4.question') || "Can I edit my listing after publishing?",
+      answer: t('faq.questions.4.answer') || "Yes, you can edit your listing at any time by going to your dashboard and selecting the listing you want to modify."
     },
     {
-      question: "How do I contact a seller?",
-      answer: "Each listing has a 'Contact Seller' button. Click this to send a message directly through our secure messaging system."
+      question: t('faq.questions.5.question') || "How do I contact a seller?",
+      answer: t('faq.questions.5.answer') || "Each listing has a 'Contact Seller' button. Click this to send a message directly through our secure messaging system."
     }
   ];
 
@@ -162,10 +179,10 @@ const HelpCenter = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-              Help Center
+              {t('support.title') || 'Help Center'}
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Find answers to common questions or get in touch with our support team
+              {t('support.subtitle') || 'Find answers to common questions or get in touch with our support team'}
             </p>
           </div>
         </div>
@@ -175,24 +192,24 @@ const HelpCenter = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex border-b border-gray-200 mb-8">
           <button
-            onClick={() => setActiveTab('contact')}
+            onClick={() => updateActiveTab('contact')}
             className={`px-6 py-3 font-medium text-sm border-b-2 transition-colors ${
               activeTab === 'contact'
                 ? 'border-[#3b396d] text-[#3b396d]'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
-            Contact Us
+            {t('support.contactTab') || 'Contact Us'}
           </button>
           <button
-            onClick={() => setActiveTab('faq')}
+            onClick={() => updateActiveTab('faq')}
             className={`px-6 py-3 font-medium text-sm border-b-2 transition-colors ${
               activeTab === 'faq'
                 ? 'border-[#3b396d] text-[#3b396d]'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
-            FAQ
+            {t('support.faqTab') || 'FAQ'}
           </button>
         </div>
 
@@ -204,19 +221,19 @@ const HelpCenter = () => {
               {/* Contact Form */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-5">
-                  Send us a message
+                  {t('support.sendMessage') || 'Send us a message'}
                 </h2>
                 
                 {submitSuccess && (
                   <div className="mb-5 p-3 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200">
-                    Your message has been sent successfully! We'll get back to you soon.
+                    {t('support.successMessage') || 'Your message has been sent successfully! We\'ll get back to you soon.'}
                   </div>
                 )}
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                      Name
+                      {t('support.name') || 'Name'}
                     </label>
                     <input
                       type="text"
@@ -226,13 +243,13 @@ const HelpCenter = () => {
                       onChange={handleChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
-                      placeholder="Enter your name"
+                      placeholder={t('support.namePlaceholder') || 'Enter your name'}
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Email
+                      {t('support.email') || 'Email'}
                     </label>
                     <input
                       type="email"
@@ -242,13 +259,13 @@ const HelpCenter = () => {
                       onChange={handleChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
-                      placeholder="Enter your email"
+                      placeholder={t('support.emailPlaceholder') || 'Enter your email'}
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
-                      Subject
+                      {t('support.subject') || 'Subject'}
                     </label>
                     <input
                       type="text"
@@ -258,13 +275,13 @@ const HelpCenter = () => {
                       onChange={handleChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
-                      placeholder="What is this regarding?"
+                      placeholder={t('support.subjectPlaceholder') || 'What is this regarding?'}
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                      Message
+                      {t('support.message') || 'Message'}
                     </label>
                     <textarea
                       id="message"
@@ -274,16 +291,16 @@ const HelpCenter = () => {
                       required
                       rows={5}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
-                      placeholder="How can we help you?"
+                      placeholder={t('support.messagePlaceholder') || 'How can we help you?'}
                     />
                   </div>
                   
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-[#3b396d] text-white font-medium py-2.5 px-4 rounded-md hover:bg-[#2a285a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    className="w-full bg-[#3b396d]  text-white font-medium py-2.5 px-4 rounded-md hover:bg-[#2a285a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                    {isSubmitting ? (t('support.sending') || 'Sending...') : (t('support.sendButton') || 'Send Message')}
                   </button>
                 </form>
               </div>
@@ -291,7 +308,7 @@ const HelpCenter = () => {
               {/* Contact Information */}
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-5">
-                  Contact Information
+                  {t('support.contactInfo') || 'Contact Information'}
                 </h2>
                 
                 <div className="space-y-4">
@@ -311,7 +328,7 @@ const HelpCenter = () => {
 
                 {/* Map Placeholder */}
                 <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Our Office Location</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('support.officeLocation') || 'Our Office Location'}</h3>
                   <div className="relative bg-gray-50 rounded-lg h-64 overflow-hidden">
                     <svg viewBox="0 0 800 500" className="w-full h-full">
                       <rect width="800" height="500" fill="#e6f2ff" />
@@ -342,17 +359,17 @@ const HelpCenter = () => {
                     <div className="absolute bottom-4 left-4 bg-white px-3 py-2 rounded-lg shadow-sm border border-gray-200">
                       <div className="flex items-center">
                         <div className="w-3 h-3 rounded-full bg-[#3b396d] mr-2"></div>
-                        <span className="text-sm font-medium text-gray-700">Amsterdam Office</span>
+                        <span className="text-sm font-medium text-gray-700">{t('support.amsterdamOffice') || 'Amsterdam Office'}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="mt-4 flex justify-between items-center">
+                  <div className="mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div className="text-sm text-gray-600">
-                      <p>Singel 250, 1016 AB Amsterdam</p>
-                      <p>Netherlands</p>
+                      <p>{t('support.addressLine1') || 'Singel 250, 1016 AB Amsterdam'}</p>
+                      <p>{t('support.addressLine2') || 'Netherlands'}</p>
                     </div>
-                    <button className="px-4 py-2 bg-[#3b396d] text-white text-sm font-medium rounded-lg hover:bg-[#2a285a] transition-colors">
-                      Get Directions
+                    <button className="px-4 py-2 bg-[#3b396d] text-white text-sm font-medium rounded-lg hover:bg-[#2a285a] transition-colors whitespace-nowrap">
+                      {t('support.getDirections') || 'Get Directions'}
                     </button>
                   </div>
                 </div>
@@ -365,10 +382,10 @@ const HelpCenter = () => {
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8">
                 <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-3">
-                  Frequently Asked Questions
+                  {t('faq.frequentlyAsked') || 'Frequently Asked Questions'}
                 </h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Find answers to common questions about our services
+                  {t('faq.description') || 'Find answers to common questions about our services'}
                 </p>
               </div>
 
@@ -412,23 +429,23 @@ const HelpCenter = () => {
               {/* Still Need Help */}
               <div className="mt-12 bg-[#3b396d] rounded-lg p-6 text-center text-white">
                 <h3 className="text-xl font-semibold mb-3">
-                  Still need help?
+                  {t('faq.stillNeedHelp') || 'Still need help?'}
                 </h3>
                 <p className="text-white/90 mb-5 max-w-xl mx-auto">
-                  Can't find the answer you're looking for? Our support team is here to help.
+                  {t('faq.stillNeedHelpDesc') || "Can't find the answer you're looking for? Our support team is here to help."}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <button 
-                    onClick={() => setActiveTab('contact')}
+                    onClick={() => updateActiveTab('contact')} // Navigate to Contact tab
                     className="px-5 py-2.5 bg-white text-[#3b396d] font-medium rounded-md hover:bg-gray-100 transition-colors text-sm"
                   >
-                    Contact Support
+                    {t('faq.contactSupport') || 'Contact Support'}
                   </button>
                   <button 
                     onClick={() => setIsChatOpen(true)}
                     className="px-5 py-2.5 bg-transparent border border-white text-white font-medium rounded-md hover:bg-white hover:text-[#3b396d] transition-colors text-sm"
                   >
-                    Live Chat
+                    {t('faq.liveChat') || 'Live Chat'}
                   </button>
                 </div>
               </div>
@@ -447,79 +464,72 @@ const HelpCenter = () => {
 
       {/* Chat Bot UI */}
       {isChatOpen && (
- <>
- 
-{/* Chat Bot UI - Minimal Responsive Design */}
-{isChatOpen && (
-  <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 w-full sm:w-[350px] bg-white sm:rounded-xl shadow-2xl z-50 flex flex-col h-full sm:h-[500px]">
-    {/* Chat Header - Minimal */}
-    <div className="bg-[#3b396d] text-white p-3 sm:rounded-t-xl flex justify-between items-center">
-      <div className="flex items-center">
-        <FiMessageSquare className="text-lg mr-2" />
-        <span className="font-medium text-sm truncate">Support Assistant</span>
-      </div>
-      <button 
-        onClick={() => setIsChatOpen(false)}
-        className="text-white hover:text-gray-200 p-1"
-        aria-label="Close chat"
-      >
-        <FiX className="text-lg" />
-      </button>
-    </div>
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 w-full sm:w-[350px] bg-white sm:rounded-xl shadow-2xl z-50 flex flex-col h-full sm:h-[500px]">
+          {/* Chat Header - Minimal */}
+          <div className="bg-[#3b396d] text-white p-3 sm:rounded-t-xl flex justify-between items-center">
+            <div className="flex items-center">
+              <FiMessageSquare className="text-lg mr-2" />
+              <span className="font-medium text-sm truncate">{t('support.supportAssistant') || 'Support Assistant'}</span>
+            </div>
+            <button 
+              onClick={() => setIsChatOpen(false)}
+              className="text-white hover:text-gray-200 p-1"
+              aria-label={t('support.closeChat') || "Close chat"}
+            >
+              <FiX className="text-lg" />
+            </button>
+          </div>
 
-    {/* Chat Messages - Clean Scroll */}
-    <div className="flex-1 overflow-y-auto p-3 bg-gray-50">
-      {messages.map((message) => (
-        <div 
-          key={message.id} 
-          className={`mb-3 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-        >
-          <div 
-            className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${
-              message.sender === 'user' 
-                ? 'bg-[#3b396d] text-white rounded-br-none' 
-                : 'bg-white border border-gray-200 rounded-bl-none'
-            }`}
-          >
-            <p>{message.text}</p>
-            <p className={`text-xs mt-1 ${message.sender === 'user' ? 'text-white/70' : 'text-gray-500'}`}>
-              {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </p>
+          {/* Chat Messages - Clean Scroll */}
+          <div className="flex-1 overflow-y-auto p-3 bg-gray-50">
+            {messages.map((message) => (
+              <div 
+                key={message.id} 
+                className={`mb-3 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div 
+                  className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${
+                    message.sender === 'user' 
+                      ? 'bg-[#3b396d] text-white rounded-br-none' 
+                      : 'bg-white border border-gray-200 rounded-bl-none'
+                  }`}
+                >
+                  <p>{message.text}</p>
+                  <p className={`text-xs mt-1 ${message.sender === 'user' ? 'text-white/70' : 'text-gray-500'}`}>
+                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Chat Input - Compact */}
+          <div className="border-t border-gray-200 p-2 bg-white">
+            <div className="flex">
+              <input
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder={t('support.typeMessage') || "Type a message..."}
+                className="flex-1 border border-gray-300 rounded-l-lg px-2 py-2 text-sm focus:outline-none focus:ring-0.1 focus:ring-[#3b396d] focus:border-[#3b396d]"
+              />
+              <button
+                onClick={handleSendMessage}
+                disabled={inputMessage.trim() === ''}
+                className={`px-3 py-2 rounded-r-lg flex items-center ml-1 justify-center ${
+                  inputMessage.trim() === '' 
+                    ? 'bg-gray-200 text-gray-400' 
+                    : 'bg-[#3b396d] text-white hover:bg-[#2a285a]'
+                }`}
+                aria-label={t('support.sendMessage') || "Send message"}
+              >
+                <FiSend className="text-sm" />
+              </button>
+            </div>
           </div>
         </div>
-      ))}
-    </div>
-
-    {/* Chat Input - Compact */}
-    <div className="border-t border-gray-200 p-2 bg-white">
-      <div className="flex">
-        <input
-          type="text"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Type a message..."
-          className="flex-1 border border-gray-300 rounded-l-lg px-2 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#3b396d] focus:border-[#3b396d]"
-        />
-        <button
-          onClick={handleSendMessage}
-          disabled={inputMessage.trim() === ''}
-          className={`px-3 py-2 rounded-r-lg flex items-center justify-center ${
-            inputMessage.trim() === '' 
-              ? 'bg-gray-200 text-gray-400' 
-              : 'bg-[#3b396d] text-white hover:bg-[#2a285a]'
-          }`}
-          aria-label="Send message"
-        >
-          <FiSend className="text-sm" />
-        </button>
-      </div>
-    </div>
-  </div>
-)}
- </>
-     
-     )}
+      )}
     </div>
   );
 };
