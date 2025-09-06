@@ -13,6 +13,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import SplashScreen from './components/common/SplashScreen';
 import AppLayout from './components/layout/AppLayout';
 import SellerDashboard from './pages/seller/SellerDashboard';
+import AddCarListing from './components/seller/AddCarListing';
 
 // Lazy load all pages and components
 const Home = React.lazy(() => import('./pages/Home'));
@@ -124,6 +125,14 @@ function App() {
                     element={
                       <AppLayout>
                         <SellerDashboard />
+                      </AppLayout>
+                    }
+                  />
+                  <Route
+                    path="/seller/addvehicle"
+                    element={
+                      <AppLayout>
+                        <AddCarListing />
                       </AppLayout>
                     }
                   />

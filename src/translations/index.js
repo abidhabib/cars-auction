@@ -9,6 +9,20 @@ export const translations = {
       privacyPolicyLink: "Privacy Policy"
     
     },
+      months: {
+    jan: 'Jan',
+    feb: 'Feb',
+    mar: 'Mar',
+    apr: 'Apr',
+    may: 'May',
+    jun: 'Jun',
+    jul: 'Jul',
+    aug: 'Aug',
+    sep: 'Sep',
+    oct: 'Oct',
+    nov: 'Nov',
+    dec: 'Dec',
+  },
      "newsletter": {
     "title": "Join Our Newsletter",
     "description": "Subscribe to receive updates, news, and special offers directly to your inbox.",
@@ -572,7 +586,9 @@ support: {
       totalListings: 'Total Listings',
       activeAuctions: 'Active Auctions',
       vehiclesSold: 'Vehicles Sold',
-      totalRevenue: 'Total Revenue'
+      totalRevenue: 'Total Revenue',
+      sellThroughRate: 'Sell-Through Rate',
+      avgSellingPrice: 'Avg. Selling Price'
     },
 
     // Overview Tab
@@ -641,13 +657,32 @@ support: {
       units: 'units',
       financialSummary: 'Financial Summary',
       period: 'Period',
+      grosssales: 'Gross Sales',
+      fees: 'Platform Fees',
+      netearnings: 'Net Earnings',
+      ytdTotal: 'YTD Total',
+            revenueChartTitle: 'Monthly Revenue Trend',
+      topModelsChartTitle: 'Sales Distribution by Model',
+      revenueTitle: 'Revenue Overview',
+      // chartPlaceholder: 'Revenue Chart Placeholder', // Can be removed
+      totalRevenue: 'Total Revenue',
+      vehiclesSold: 'Vehicles Sold',
+      sellThroughRate: 'Sell-Through Rate',
+      avgSellingPrice: 'Avg. Selling Price', // Added
+      topModels: 'Top Selling Models',
+      // chartPlaceholder: 'Top Models Chart Placeholder', // Can be removed
+      units: 'units',
+      financialSummary: 'Financial Summary',
+      period: 'Period',
       grossSales: 'Gross Sales',
       fees: 'Platform Fees',
       netEarnings: 'Net Earnings',
-      ytdTotal: 'YTD Total'
+      ytdTotal: 'YTD Total',
+      // Add translations for chart tooltips/legends if needed, or rely on dataset labels
     },
 
     // Generic UI
+    downloadReport: 'Download Report',
     comingSoon: 'Coming Soon',
     comingSoonDesc: 'This section is under development.',
     viewAll: 'View All',
@@ -655,6 +690,199 @@ support: {
     back: 'Back to List',
     copyLink: 'Copy Link'
   },
+  
+ addCarListing: {
+    title: 'Add New Car Listing',
+    subtitle: 'Follow the steps to list your vehicle for sale.',
+    unknownStep: 'Unknown step',
+    errors: {
+      saleTypeRequired: 'Please select a sale type.',
+      directBuyPriceRequired: 'Direct buy price is required.',
+      auctionStartRequired: 'Auction start date and time are required.',
+      auctionEndRequired: 'Auction end date and time are required.',
+      invalidAuctionDates: 'Invalid date or time format.',
+      auctionTooShort: 'Auction must be at least 1 hour long.',
+      auctionTooLong: 'Auction cannot exceed 14 days.',
+      auctionEndFuture: 'Auction end time must be in the future.',
+      vinRequired: 'VIN is required.',
+      makeRequired: 'Make is required.',
+      modelRequired: 'Model is required.',
+      yearRequired: 'Year is required.',
+      photosRequired: 'At least one photo is required.',
+      headlineRequired: 'A headline is required.',
+      descriptionRequired: 'A detailed description is required.',
+      accidentDetailsRequired: 'Please describe the accident.',
+      submit: 'An error occurred during submission. Please try again.',
+    },
+    saveDraft: 'Save Draft',
+    savingDraft: 'Saving Draft...',
+    publishButton: 'Publish Listing',
+    publishing: 'Publishing...',
+    publishSuccess: 'Listing published successfully!',
+    draftSaved: 'Draft saved successfully!',
+    submitError: 'An error occurred during submission. Please try again.',
+
+    steps: {
+      step1: 'Sale Type',
+      step2: 'Auction Timing',
+      step3: 'Vehicle ID',
+      step4: 'Media & Description',
+      step5: 'Condition',
+      step6: 'Review & Publish',
+    },
+
+    saleTypes: {
+      directBuy: {
+        title: 'Direct Buy',
+        description: 'Set a fixed price. Users can buy it immediately or make bids, which you can choose to accept or decline.',
+      },
+      generalAuction: {
+        title: 'General Auction',
+        description: 'Run a blind auction with a defined time window. Bidders won\'t see others\' offers. You are not obligated to accept the highest bid.',
+      },
+      privateSale: {
+        title: 'Private Sale',
+        description: 'Your listing will be hidden from the public. Only people with your unique link can view and bid on it.',
+      },
+    },
+
+    steps: {
+      step1: {
+        title: 'Select Sale Type',
+        description: 'Choose how you want to sell your vehicle.',
+        directBuyPriceLabel: 'Direct Buy Price ($)',
+        directBuyPricePlaceholder: 'Enter price',
+        privateSaleNoteTitle: 'Private Listing Confirmed',
+        privateSaleNoteDesc: 'Your listing will not appear in public searches. You can share the unique link with potential buyers.',
+      },
+      step2: {
+        title: 'Auction Timing',
+        description: 'Define the start and end times for your auction.',
+      },
+      step3: {
+        title: 'Vehicle Identification',
+        description: 'Provide the core details of your vehicle.',
+      },
+      step4: {
+        title: 'Visual Documentation & Description',
+        description: 'Add photos and tell the story of your vehicle.',
+      },
+      step5: {
+        title: 'Condition Assessment',
+        description: 'Provide a detailed condition report to build trust with buyers.',
+      },
+      step6: {
+        title: 'Review & Publish',
+        description: 'Please review your listing details before publishing.',
+      },
+    },
+
+    auctionTiming: {
+      presetLabel: 'Quick Select Duration',
+      presets: {
+        '24-hours': '24 Hours',
+        '3-days': '3 Days',
+        '5-days': '5 Days',
+        '7-days': '7 Days',
+        custom: 'Custom',
+      },
+      startDateLabel: 'Start Date',
+      startTimeLabel: 'Start Time',
+      endDateLabel: 'End Date',
+      endTimeLabel: 'End Time',
+      timezoneLabel: 'Timezone',
+      timezoneInfo: 'Times are in your local timezone: {{timezone}}', // Placeholder for interpolation if your `t` function supports it
+    },
+
+    vehicleId: {
+      methodLabel: 'How would you like to identify your vehicle?',
+      findVin: 'Find by VIN (Chassis Number)',
+      enterManually: 'Enter details manually',
+      vinLabel: 'VIN (Vehicle Identification Number)',
+      vinPlaceholder: '17-character VIN',
+      decodeButton: 'Decode VIN',
+      decoding: 'Decoding...',
+      vinHelper: 'The 17-character VIN is usually found on the dashboard (driver\'s side), door jamb, or engine bay.',
+      vinRequired: 'Please enter a VIN.',
+      vinDecoded: 'VIN decoded successfully! (Simulated)',
+      vinDecodeFailed: 'Failed to decode VIN. Please check the number and try again.',
+      makeLabel: 'Make',
+      makePlaceholder: 'e.g., BMW',
+      modelLabel: 'Model',
+      modelPlaceholder: 'e.g., X5',
+      yearLabel: 'Year',
+      yearPlaceholder: 'e.g., 2020',
+      trimLabel: 'Trim / Edition',
+      trimPlaceholder: 'e.g., xDrive40i',
+      licensePlateLabel: 'License Plate Number',
+      licensePlatePlaceholder: 'e.g., ABC-123',
+      mileageLabel: 'Mileage',
+      mileagePlaceholder: 'e.g., 30000',
+      unitLabel: 'Unit',
+      registrationDateLabel: 'Vehicle Registration Date',
+      previousOwnersLabel: 'Previous Owners',
+    },
+
+    media: {
+      photosLabel: 'Photos',
+      uploadButton: 'Upload Photos',
+      dragDrop: 'or drag and drop',
+      fileTypes: 'PNG, JPG, GIF up to 10MB',
+      previewTitle: 'Preview',
+      removePhoto: 'Remove photo',
+      headlineLabel: 'Listing Headline',
+      headlinePlaceholder: 'e.g., 2020 BMW X5 xDrive40i in Excellent Condition',
+      descriptionLabel: 'Full Description',
+      descriptionPlaceholder: 'Describe the vehicle in detail, including its history, features, condition, and any unique aspects. What makes it special?',
+      serviceHistoryLabel: 'Service History',
+      serviceHistory: {
+        full: 'Full',
+        partial: 'Partial',
+        none: 'None',
+      },
+      accidentQuestion: 'Has the car been in an accident?',
+      accidentDetailsLabel: 'Accident Details',
+      accidentDetailsPlaceholder: 'Please describe the nature and extent of the accident damage.',
+    },
+
+    condition: {
+      damageReport: {
+        title: 'Damage Report',
+        description: 'Please indicate any damage on the vehicle. (Interactive diagram would go here in a real implementation)',
+        placeholder: 'Interactive car diagram for damage reporting (Not implemented in this demo)',
+      },
+      technicalChecklist: {
+        title: 'Technical Checklist',
+      },
+      interiorChecklist: {
+        title: 'Interior Checklist',
+      },
+      tyreReport: {
+        title: 'Tyre Report',
+        brand: 'Brand',
+        brandPlaceholder: 'e.g., Michelin',
+        treadDepth: 'Tread Depth (mm)',
+        condition: 'Condition',
+      },
+      rating: {
+        good: 'Good',
+        average: 'Average',
+        poor: 'Poor',
+        notWorking: 'Not Working',
+        worn: 'Worn',
+      },
+    },
+  },
+
+  yes: 'Yes',
+  no: 'No',
+  edit: 'Edit',
+  back: 'Back',
+  next: 'Next',
+  // ... (other existing translations)
+
+  loading: 'Loading...', // General loading message
+  downloadReport: 'Download Report',
   back: 'Back',
   next: 'Next',
   logout: 'Logout',
@@ -663,7 +891,10 @@ support: {
   viewDetails: 'View Details',
   copyLink: 'Copy Link',
   filters: 'Filters',
-  viewAll: 'View All'
+  viewAll: 'View All',
+  
+
+
   },
   de: {
     cookies: {
@@ -691,6 +922,20 @@ support: {
 
   languageName: "Deutsch",
   // Header
+   months: {
+    jan: 'Jan',
+    feb: 'Feb',
+    mar: 'Mär', // March abbreviation in German
+    apr: 'Apr',
+    may: 'Mai', // May in German
+    jun: 'Jun',
+    jul: 'Jul',
+    aug: 'Aug',
+    sep: 'Sep',
+    oct: 'Okt', // October abbreviation in German
+    nov: 'Nov',
+    dec: 'Dez', // December abbreviation in German
+  },
   header: {
     mainMenu: {
       home: "Startseite",
@@ -1224,7 +1469,9 @@ support: {
       totalListings: 'Gesamtanzahl Inserate',
       activeAuctions: 'Aktive Auktionen',
       vehiclesSold: 'Verkaufte Fahrzeuge',
-      totalRevenue: 'Gesamtumsatz'
+      totalRevenue: 'Gesamtumsatz',
+      sellThroughRate: 'Verkaufsrate',
+      avgSellingPrice: 'Durchschn. Verkaufspreis', // Hinzugefügt
     },
 
     // Overview Tab
@@ -1284,6 +1531,24 @@ support: {
 
     // Analytics Tab
     analytics: {
+       revenueChartTitle: 'Monatlicher Umsatztrend',
+      topModelsChartTitle: 'Verkaufsverteilung nach Modell',
+      revenueTitle: 'Umsatzübersicht',
+      // chartPlaceholder: 'Umsatzdiagramm Platzhalter', // Entfernen
+      totalRevenue: 'Gesamtumsatz',
+      vehiclesSold: 'Verkaufte Fahrzeuge',
+      sellThroughRate: 'Verkaufsrate',
+      avgSellingPrice: 'Durchschn. Verkaufspreis', // Hinzugefügt
+      topModels: 'Bestverkaufte Modelle',
+      // chartPlaceholder: 'Diagramm für Bestseller Platzhalter', // Entfernen
+      units: 'Einheiten',
+      financialSummary: 'Finanzübersicht',
+      period: 'Zeitraum',
+      grossSales: 'Bruttoumsatz',
+      fees: 'Plattformgebühren',
+      netEarnings: 'Nettogewinn',
+      ytdTotal: 'YTD Gesamt',
+      // Übersetzungen für Diagramm-Tooltips/Legenden bei Bedarf hinzufügen
       revenueTitle: 'Umsatzübersicht',
       chartPlaceholder: 'Umsatzdiagramm Platzhalter',
       totalRevenue: 'Gesamtumsatz',
@@ -1293,13 +1558,14 @@ support: {
       units: 'Einheiten',
       financialSummary: 'Finanzübersicht',
       period: 'Zeitraum',
-      grossSales: 'Bruttoumsatz',
+      grosssales: 'Bruttoumsatz',
       fees: 'Plattformgebühren',
-      netEarnings: 'Nettogewinn',
+      netearnings: 'Nettogewinn',
       ytdTotal: 'YTD Gesamt'
     },
 
     // Generic UI
+    downloadReport: 'Bericht herunterladen',
     comingSoon: 'Demnächst verfügbar',
     comingSoonDesc: 'Dieser Bereich befindet sich in der Entwicklung.',
     viewAll: 'Alle anzeigen',
@@ -1307,8 +1573,9 @@ support: {
     back: 'Zurück zur Liste',
     copyLink: 'Link kopieren'
   },
-
-      back: 'Zurück',
+  loading: 'Wird geladen...', // Allgemeine Lade-Nachricht
+  downloadReport: 'Bericht herunterladen', // Allgemeiner Download-Button-Text
+  back: 'Zurück',
   next: 'Weiter',
   logout: 'Ausloggen',
   notifications: 'Benachrichtigungen',
@@ -1327,6 +1594,20 @@ support: {
       decline: "Cookies weigeren",
       settings: "Cookie-instellingen"
     },
+      months: {
+    jan: 'Jan',
+    feb: 'Feb',
+    mar: 'Mrt',
+    apr: 'Apr',
+    may: 'Mei',
+    jun: 'Jun',
+    jul: 'Jul',
+    aug: 'Aug',
+    sep: 'Sep',
+    oct: 'Okt',
+    nov: 'Nov',
+    dec: 'Dec',
+  },
     // Header
     newsletter: {
     "title": "Abonneer op onze nieuwsbrief",
@@ -1849,7 +2130,12 @@ support: {
       totalListings: 'Totaal Aanbod',
       activeAuctions: 'Actieve Veilingen',
       vehiclesSold: 'Verkochte Voertuigen',
-      totalRevenue: 'Totale Opbrengst'
+      totalRevenue: 'Totale Opbrengst',
+      avgSellingPrice: 'Gem. Verkoopprijs', // Added,
+      sellThroughRate: 'Verkooppercentage',
+
+
+
     },
 
     // Overview Tab
@@ -1921,8 +2207,26 @@ support: {
       grossSales: 'Bruto Verkopen',
       fees: 'Platformkosten',
       netEarnings: 'Netto Winst',
-      ytdTotal: 'YTD Totaal'
+      ytdTotal: 'YTD Totaal',
+        revenueChartTitle: 'Maandelijkse Omzet Trend', // For Bar Chart Title
+      topModelsChartTitle: 'Verkoopverdeling per Model', // For Doughnut Chart Title
+      revenueTitle: 'Opbrengst Overzicht',
+      // chartPlaceholder: 'Opbrengst Grafiek Placeholder', // Removed as we have real charts
+      totalRevenue: 'Totale Opbrengst',
+      vehiclesSold: 'Verkochte Voertuigen',
+      sellThroughRate: 'Verkooppercentage',
+      avgSellingPrice: 'Gem. Verkoopprijs', // Added
+      topModels: 'Best Verkopende Modellen',
+      // chartPlaceholder: 'Top Modellen Grafiek Placeholder', // Removed
+      units: 'eenheden',
+      financialSummary: 'Financieel Overzicht',
+      period: 'Periode',
+      grosssales: 'Bruto Verkopen',
+      fees: 'Platformkosten',
+      netearnings: 'Netto Winst',
+      ytdTotal: 'YTD Totaal',
     },
+       downloadReport: 'Rapport Downloaden', // Added at component level
 
     // Generic UI
     comingSoon: 'Binnenkort Beschikbaar',
@@ -1930,7 +2234,9 @@ support: {
     viewAll: 'Bekijk Alles',
     viewDetails: 'Bekijk Details',
     back: 'Terug naar Lijst',
-    copyLink: 'Link Kopiëren'
+    copyLink: 'Link Kopiëren',
+   
+  
   },
   back: 'Terug',
   next: 'Volgende',
