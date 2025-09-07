@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext'; // Assuming this path
-import { FiCheck, FiChevronLeft, FiChevronRight, FiUpload, FiCamera, FiDollarSign, FiClock, FiInfo, FiEdit2, FiSave, FiEye, FiLink } from 'react-icons/fi';
+import { FiCheck, FiChevronLeft, FiChevronRight, FiUpload, FiCamera, FiDollarSign, FiClock, FiInfo, FiEdit2, FiSave, FiEye, FiLink,FiTrash2 } from 'react-icons/fi';
 import Button from '../common/Button'; // Assuming this path or use your Button component
 // import AppLayout from '../layout/AppLayout'; // If needed as a wrapper
 
@@ -94,10 +94,10 @@ const AddCarListing = () => {
   ];
 
   const AUCTION_PRESETS = [
-    { id: '24-hours', label: t('addCarListing.auctionTiming.presets.24Hours') || '24 Hours' },
-    { id: '3-days', label: t('addCarListing.auctionTiming.presets.3Days') || '3 Days' },
-    { id: '5-days', label: t('addCarListing.auctionTiming.presets.5Days') || '5 Days' },
-    { id: '7-days', label: t('addCarListing.auctionTiming.presets.7Days') || '7 Days' },
+    { id: '24-hours', label: t('addCarListing.auctionTiming.presets.24hours') || '24 Hours' },
+    { id: '3-days', label: t('addCarListing.auctionTiming.presets.3days') || '3 Days' },
+    { id: '5-days', label: t('addCarListing.auctionTiming.presets.5days') || '5 Days' },
+    { id: '7-days', label: t('addCarListing.auctionTiming.presets.7days') || '7 Days' },
     { id: 'custom', label: t('addCarListing.auctionTiming.presets.custom') || 'Custom' }
   ];
 
@@ -381,7 +381,7 @@ const AddCarListing = () => {
                 <div className={`mt-2 text-xs font-medium text-center max-w-[80px] ${
                   step <= currentStep ? 'text-[#3b396d]' : 'text-gray-400'
                 }`}>
-                  {t(`addCarListing.steps.step${step}`) || `Step ${step}`}
+                  {t(`addCarListing.stepNames.step${step}`) || `Step ${step}`}
                 </div>
               </div>
             );
@@ -400,8 +400,8 @@ const AddCarListing = () => {
   const renderStep1_SaleType = () => (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.steps.step1.title') || 'Select Sale Type'}</h2>
-        <p className="text-gray-600 mt-2">{t('addCarListing.steps.step1.description') || 'Choose how you want to sell your vehicle.'}</p>
+        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step1.title') || 'Select Sale Type'}</h2>
+        <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step1.description') || 'Choose how you want to sell your vehicle.'}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -434,7 +434,7 @@ const AddCarListing = () => {
       {saleType === 'direct-buy' && (
         <div className="mt-6 p-4 bg-[#f8f9ff] rounded-lg border border-gray-200">
           <label htmlFor="directBuyPrice" className="block text-sm font-medium text-gray-700 mb-2">
-            {t('addCarListing.steps.step1.directBuyPriceLabel') || 'Direct Buy Price ($)'}
+            {t('addCarListing.saleTypes.directBuy.title') || 'Direct Buy Price ($)'}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -446,8 +446,8 @@ const AddCarListing = () => {
               name="directBuyPrice"
               value={mediaAndDescription.directBuyPrice || ''} // Temporary storage
               onChange={(e) => setMediaAndDescription(prev => ({ ...prev, directBuyPrice: e.target.value }))}
-              className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] transition"
-              placeholder={t('addCarListing.steps.step1.directBuyPricePlaceholder') || 'Enter price'}
+              className="block text-sm w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+              placeholder={t('addCarListing.saleTypes.directBuy.description') || 'Enter price'}
             />
           </div>
           {errors.directBuyPrice && <p className="text-red-600 text-sm mt-1">{errors.directBuyPrice}</p>}
@@ -460,10 +460,10 @@ const AddCarListing = () => {
           <FiInfo className="h-5 w-5 text-yellow-600 mt-0.5 mr-3 flex-shrink-0" />
           <div>
             <p className="text-sm font-medium text-yellow-800">
-              {t('addCarListing.steps.step1.privateSaleNoteTitle') || 'Private Listing Confirmed'}
+              {t('addCarListing.stepDetails.step1.privateSaleNoteTitle') || 'Private Listing Confirmed'}
             </p>
             <p className="text-xs text-yellow-700 mt-1">
-              {t('addCarListing.steps.step1.privateSaleNoteDesc') || 'Your listing will not appear in public searches. You can share the unique link with potential buyers.'}
+              {t('addCarListing.stepDetails.step1.privateSaleNoteDesc') || 'Your listing will not appear in public searches. You can share the unique link with potential buyers.'}
             </p>
           </div>
         </div>
@@ -474,8 +474,8 @@ const AddCarListing = () => {
   const renderStep2_AuctionTiming = () => (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.steps.step2.title') || 'Auction Timing'}</h2>
-        <p className="text-gray-600 mt-2">{t('addCarListing.steps.step2.description') || 'Define the start and end times for your auction.'}</p>
+        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step2.title') || 'Auction Timing'}</h2>
+        <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step2.description') || 'Define the start and end times for your auction.'}</p>
       </div>
 
       {/* Presets */}
@@ -586,8 +586,8 @@ const AddCarListing = () => {
   const renderStep3_VehicleId = () => (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.steps.step3.title') || 'Vehicle Identification'}</h2>
-        <p className="text-gray-600 mt-2">{t('addCarListing.steps.step3.description') || 'Provide the core details of your vehicle.'}</p>
+        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step3.title') || 'Vehicle Identification'}</h2>
+        <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step3.description') || 'Provide the core details of your vehicle.'}</p>
       </div>
 
       {/* Identification Method */}
@@ -800,8 +800,8 @@ const AddCarListing = () => {
   const renderStep4_MediaDescription = () => (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.steps.step4.title') || 'Visual Documentation & Description'}</h2>
-        <p className="text-gray-600 mt-2">{t('addCarListing.steps.step4.description') || 'Add photos and tell the story of your vehicle.'}</p>
+        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step4.title') || 'Visual Documentation & Description'}</h2>
+        <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step4.description') || 'Add photos and tell the story of your vehicle.'}</p>
       </div>
 
       {/* Photo Upload */}
@@ -970,8 +970,8 @@ const AddCarListing = () => {
   const renderStep5_Condition = () => (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.steps.step5.title') || 'Condition Assessment'}</h2>
-        <p className="text-gray-600 mt-2">{t('addCarListing.steps.step5.description') || 'Provide a detailed condition report to build trust with buyers.'}</p>
+        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step5.title') || 'Condition Assessment'}</h2>
+        <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step5.description') || 'Provide a detailed condition report to build trust with buyers.'}</p>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-lg p-5">
@@ -1118,14 +1118,14 @@ const AddCarListing = () => {
     return (
       <div className="space-y-6">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.steps.step6.title') || 'Review & Publish'}</h2>
-          <p className="text-gray-600 mt-2">{t('addCarListing.steps.step6.description') || 'Please review your listing details before publishing.'}</p>
+          <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step6.title') || 'Review & Publish'}</h2>
+          <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step6.description') || 'Please review your listing details before publishing.'}</p>
         </div>
 
         {/* Summary Cards */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-medium text-gray-800">{t('addCarListing.steps.step1.title') || 'Sale Type'}</h3>
+            <h3 className="font-medium text-gray-800">{t('addCarListing.stepDetails.step1.title') || 'Sale Type'}</h3>
             <button
               onClick={() => setCurrentStep(1)}
               className="text-[#3b396d] hover:text-[#2a285a] text-sm font-medium flex items-center"
@@ -1135,14 +1135,14 @@ const AddCarListing = () => {
             </button>
           </div>
           <div className="text-sm text-gray-700">
-            <p><span className="font-medium">{t('addCarListing.steps.step1.title') || 'Sale Type'}:</span> {SALE_TYPES.find(st => st.id === saleType)?.title || saleType}</p>
+            <p><span className="font-medium">{t('addCarListing.stepDetails.step1.title') || 'Sale Type'}:</span> {SALE_TYPES.find(st => st.id === saleType)?.title || saleType}</p>
             {saleType === 'direct-buy' && (
-              <p><span className="font-medium">{t('addCarListing.steps.step1.directBuyPriceLabel') || 'Direct Buy Price'}:</span> ${mediaAndDescription.directBuyPrice}</p>
+              <p><span className="font-medium">{t('addCarListing.stepDetails.step1.directBuyPriceLabel') || 'Direct Buy Price'}:</span> ${mediaAndDescription.directBuyPrice}</p>
             )}
             {saleType === 'private-sale' && (
               <p className="text-yellow-600 flex items-center mt-1">
                 <FiLink className="mr-1 h-4 w-4" />
-                {t('addCarListing.steps.step1.privateSaleNoteTitle') || 'Private Listing Confirmed'}
+                {t('addCarListing.stepDetails.step1.privateSaleNoteTitle') || 'Private Listing Confirmed'}
               </p>
             )}
           </div>
@@ -1151,7 +1151,7 @@ const AddCarListing = () => {
         {saleType === 'general-auction' && (
           <div className="bg-white border border-gray-200 rounded-lg p-5">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-medium text-gray-800">{t('addCarListing.steps.step2.title') || 'Auction Timing'}</h3>
+              <h3 className="font-medium text-gray-800">{t('addCarListing.stepDetails.step2.title') || 'Auction Timing'}</h3>
               <button
                 onClick={() => setCurrentStep(2)}
                 className="text-[#3b396d] hover:text-[#2a285a] text-sm font-medium flex items-center"
@@ -1170,7 +1170,7 @@ const AddCarListing = () => {
 
         <div className="bg-white border border-gray-200 rounded-lg p-5">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-medium text-gray-800">{t('addCarListing.steps.step3.title') || 'Vehicle Identification'}</h3>
+            <h3 className="font-medium text-gray-800">{t('addCarListing.stepDetails.step3.title') || 'Vehicle Identification'}</h3>
             <button
               onClick={() => setCurrentStep(3)}
               className="text-[#3b396d] hover:text-[#2a285a] text-sm font-medium flex items-center"
@@ -1191,7 +1191,7 @@ const AddCarListing = () => {
 
         <div className="bg-white border border-gray-200 rounded-lg p-5">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-medium text-gray-800">{t('addCarListing.steps.step4.title') || 'Media & Description'}</h3>
+            <h3 className="font-medium text-gray-800">{t('addCarListing.stepDetails.step4.title') || 'Media & Description'}</h3>
             <button
               onClick={() => setCurrentStep(4)}
               className="text-[#3b396d] hover:text-[#2a285a] text-sm font-medium flex items-center"
@@ -1228,7 +1228,7 @@ const AddCarListing = () => {
 
         <div className="bg-white border border-gray-200 rounded-lg p-5">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-medium text-gray-800">{t('addCarListing.steps.step5.title') || 'Condition Assessment'}</h3>
+            <h3 className="font-medium text-gray-800">{t('addCarListing.stepDetails.step5.title') || 'Condition Assessment'}</h3>
             <button
               onClick={() => setCurrentStep(5)}
               className="text-[#3b396d] hover:text-[#2a285a] text-sm font-medium flex items-center"

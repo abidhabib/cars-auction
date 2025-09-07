@@ -6,7 +6,7 @@ import {
   Route,
   Navigate,
   useLocation,
-  useNavigate // Import useNavigate
+  useNavigate
 } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext'; // Import useAuth
 import { LanguageProvider } from './context/LanguageContext';
@@ -25,7 +25,6 @@ const AboutPage = React.lazy(() => import('./pages/AboutPage/AboutPage'));
 const SupportPage = React.lazy(() => import('./pages/SupportPage/SupportPage'));
 const TermsOfService = React.lazy(() => import('./pages/TermsOfService'));
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
-
 // --- Helper Component for Scroll ---
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -46,7 +45,12 @@ const ProtectedAuthRoutes = ({ children }) => {
   useEffect(() => {
     if (user && (location.pathname === '/login' || location.pathname === '/register')) {
       console.log("User is logged in, redirecting from auth page to dashboard...");
-      navigate('/dashboard', { replace: true });
+      // Redirect based on user role
+      if (user.role === 'seller') {
+        navigate('/sellerDashboard', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     }
   }, [user, location.pathname, navigate]);
 
@@ -54,10 +58,9 @@ const ProtectedAuthRoutes = ({ children }) => {
 };
 
 // --- Helper Component: Protect Routes for Logged-in Users Only ---
-// This component ensures only authenticated users can access certain routes
 const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth(); // Access user and loading state
-  const location = useLocation(); // Get current location for redirect
+  const { user, loading } = useAuth();
+  const location = useLocation();
 
   // Show a loading state while checking auth status
   if (loading) {
@@ -65,7 +68,6 @@ const ProtectedRoute = ({ children }) => {
   }
 
   // If user is not logged in, redirect to login page
-  // Pass the attempted URL as state so user can be redirected back after login
   if (!user) {
     console.log("User not logged in, redirecting to login...");
     return <Navigate to="/login" state={{ from: location }} replace />;
@@ -75,8 +77,33 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// --- Helper Component: Protect Seller Routes ---
+const SellerProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+
+  // Show a loading state while checking auth status
+  if (loading) {
+    return <LoadingFallback />;
+  }
+
+  // If user is not logged in, redirect to login page
+  if (!user) {
+    console.log("User not logged in, redirecting to login...");
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // If user is logged in but not a seller, redirect to buyer dashboard
+  if (user.role !== 'seller') {
+    console.log("User is not a seller, redirecting to buyer dashboard...");
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // If user is a seller, render the requested content
+  return children;
+};
+
 // --- Loading Fallback Component ---
-// 1. Design Guidelines: Use theme color for background
 const LoadingFallback = () => (
   <div className="flex justify-center items-center min-h-screen bg-logo-dark-blue font-sans">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
@@ -99,11 +126,11 @@ function App() {
   }
 
   return (
-    <AuthProvider>
-      <LanguageProvider>
         <Router>
           <ScrollToTop />
-          <ProtectedAuthRoutes> {/* Handles redirect FROM auth pages if logged in */}
+    <LanguageProvider>
+        <AuthProvider>
+          <ProtectedAuthRoutes>
             <div className="App min-h-screen">
               <React.Suspense fallback={<LoadingFallback />}>
                 <Routes>
@@ -121,22 +148,6 @@ function App() {
                     }
                   />
                   <Route
-                    path="/sellerDashboard"
-                    element={
-                      <AppLayout>
-                        <SellerDashboard />
-                      </AppLayout>
-                    }
-                  />
-                  <Route
-                    path="/seller/addvehicle"
-                    element={
-                      <AppLayout>
-                        <AddCarListing />
-                      </AppLayout>
-                    }
-                  />
-                  <Route
                     path="/about"
                     element={
                       <AppLayout>
@@ -146,6 +157,14 @@ function App() {
                   />
                   <Route
                     path="/contact"
+                    element={
+                      <AppLayout>
+                        <SupportPage />
+                      </AppLayout>
+                    }
+                  />
+                  <Route
+                    path="/faq"
                     element={
                       <AppLayout>
                         <SupportPage />
@@ -170,12 +189,11 @@ function App() {
                   />
                   <Route path="/" element={<Navigate to="/home" replace />} />
 
-                  {/* Protected routes with AppLayout */}
-                  {/* These will be checked by ProtectedRoute for authentication */}
+                  {/* Protected routes for ALL authenticated users */}
                   <Route
                     path="/dashboard"
                     element={
-                      <ProtectedRoute> {/* Protects the Dashboard route */}
+                      <ProtectedRoute>
                         <AppLayout>
                           <Dashboard />
                         </AppLayout>
@@ -185,7 +203,7 @@ function App() {
                   <Route
                     path="/profile"
                     element={
-                      <ProtectedRoute> {/* Protects the Profile route */}
+                      <ProtectedRoute>
                         <AppLayout>
                           <Profile />
                         </AppLayout>
@@ -195,30 +213,55 @@ function App() {
                   <Route
                     path="/buy/*"
                     element={
-                      <ProtectedRoute> {/* Protects the Buy section */}
+                      <ProtectedRoute>
                         <AppLayout>
                           <div className="min-h-screen pt-16">Buy Section</div>
                         </AppLayout>
                       </ProtectedRoute>
                     }
                   />
+
+                  {/* Seller-specific protected routes */}
+                  <Route
+                    path="/sellerDashboard"
+                    element={
+                      <SellerProtectedRoute>
+                        <AppLayout>
+                          <SellerDashboard />
+                        </AppLayout>
+                      </SellerProtectedRoute>
+                    }
+                  />
                   <Route
                     path="/sell/*"
                     element={
-                      <ProtectedRoute> {/* Protects the Sell section */}
+                      <SellerProtectedRoute>
                         <AppLayout>
                           <div className="min-h-screen pt-16">Sell Section</div>
                         </AppLayout>
-                      </ProtectedRoute>
+                      </SellerProtectedRoute>
                     }
                   />
+                  <Route
+                    path="/seller/addvehicle"
+                    element={
+                      <SellerProtectedRoute>
+                        <AppLayout>
+                          <AddCarListing />
+                        </AppLayout>
+                      </SellerProtectedRoute>
+                    }
+                  />
+
+                  {/* Catch-all route */}
+                  <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
               </React.Suspense>
             </div>
           </ProtectedAuthRoutes>
-        </Router>
-      </LanguageProvider>
     </AuthProvider>
+      </LanguageProvider>
+        </Router>
   );
 }
 
