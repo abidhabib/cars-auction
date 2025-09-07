@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiMail, FiLock, FiEye, FiEyeOff, FiUser, FiBriefcase } from 'react-icons/fi'; // Added icons
 import api from '../../services/api';
 import AppLayout from '../../components/layout/AppLayout';
 import Button from '../../components/common/Button';
@@ -16,7 +16,8 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    rememberMe: false
+    rememberMe: false,
+    userType: 'buyer' // Default to buyer
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +62,11 @@ const Login = () => {
       newErrors.password = t('auth.login.errors.passwordTooShort');
     }
     
+    // User type validation (optional, but good to have)
+    if (!formData.userType) {
+      newErrors.userType = t('auth.login.errors.userTypeRequired');
+    }
+    
     return newErrors;
   };
 
@@ -77,15 +83,63 @@ const Login = () => {
     setErrors({});
     
     try {
-      // Use the new API service - automatically uses mock data
-      const response = await api.auth.login({
-        email: formData.email,
-        password: formData.password
-      });
-      
-      // Login with the response data
-      login(response.user || response, formData.rememberMe);
-      navigate('/dashboard');
+      // --- Demo User Logic ---
+      // Check for predefined demo credentials
+      const demoUsers = {
+        'seller@example.com': { 
+          id: 'demo_seller_123', 
+          name: 'Demo Seller', 
+          email: 'seller@example.com', 
+          role: 'seller',
+          company: 'Demo Auto Traders GmbH'
+        },
+        'buyer@example.com': { 
+          id: 'demo_buyer_456', 
+          name: 'Demo Buyer', 
+          email: 'buyer@example.com', 
+          role: 'buyer',
+          company: 'Demo Fleet Solutions Ltd.'
+        }
+      };
+
+      // Check if it's a demo user
+      if (demoUsers[formData.email]) {
+        const demoUser = demoUsers[formData.email];
+        
+        // Verify password (in a real app, this would be done server-side)
+        if (formData.password === 'password123') {
+          // Login with the demo user data
+          login(demoUser, formData.rememberMe);
+          
+          // Redirect based on user role
+          if (demoUser.role === 'seller') {
+            navigate('/sellerDashboard');
+          } else {
+            navigate('/dashboard');
+          }
+        } else {
+          throw new Error(t('auth.login.errors.invalidCredentials'));
+        }
+      } else {
+        // --- Regular Login Logic (for non-demo users) ---
+        // Use the new API service - automatically uses mock data
+        const response = await api.auth.login({
+          email: formData.email,
+          password: formData.password,
+          userType: formData.userType // Send user type to backend
+        });
+        
+        // Login with the response data
+        const loggedInUser = response.user || response;
+        login(loggedInUser, formData.rememberMe);
+        
+        // Redirect based on user role from backend
+        if (loggedInUser.role === 'seller') {
+          navigate('/sellerDashboard');
+        } else {
+          navigate('/dashboard');
+        }
+      }
     } catch (error) {
       console.error('Login error:', error);
       setErrors({
@@ -118,9 +172,57 @@ const Login = () => {
             </div>
 
             <form className="space-y-6" onSubmit={handleSubmit}>
+              {/* User Type Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t('auth.login.userType')}
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, userType: 'buyer' }))}
+                    className={`flex flex-col items-center justify-center p-4 border rounded-lg transition-colors ${
+                      formData.userType === 'buyer'
+                        ? 'border-[#3b396d] bg-[#3b396d]/5 ring-2 ring-[#3b396d]/20'
+                        : 'border-gray-300 hover:border-[#3b396d] hover:bg-gray-50'
+                    }`}
+                  >
+                    <FiUser className={`h-6 w-6 mb-2 ${
+                      formData.userType === 'buyer' ? 'text-[#3b396d]' : 'text-gray-400'
+                    }`} />
+                    <span className={`font-medium ${
+                      formData.userType === 'buyer' ? 'text-[#3b396d]' : 'text-gray-700'
+                    }`}>
+                      {t('auth.login.buyer')}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, userType: 'seller' }))}
+                    className={`flex flex-col items-center justify-center p-4 border rounded-lg transition-colors ${
+                      formData.userType === 'seller'
+                        ? 'border-[#3b396d] bg-[#3b396d]/5 ring-2 ring-[#3b396d]/20'
+                        : 'border-gray-300 hover:border-[#3b396d] hover:bg-gray-50'
+                    }`}
+                  >
+                    <FiBriefcase className={`h-6 w-6 mb-2 ${
+                      formData.userType === 'seller' ? 'text-[#3b396d]' : 'text-gray-400'
+                    }`} />
+                    <span className={`font-medium ${
+                      formData.userType === 'seller' ? 'text-[#3b396d]' : 'text-gray-700'
+                    }`}>
+                      {t('auth.login.seller')}
+                    </span>
+                  </button>
+                </div>
+                {errors.userType && (
+                  <p className="mt-2 text-sm text-red-600">{errors.userType}</p>
+                )}
+              </div>
+
               {/* Email Input */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                   {t('auth.login.email')}
                 </label>
                 <div className="relative">
@@ -152,7 +254,7 @@ const Login = () => {
 
               {/* Password Input */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                   {t('auth.login.password')}
                 </label>
                 <div className="relative">
@@ -262,8 +364,9 @@ const Login = () => {
                       {t('auth.login.testCredentials')}
                     </h3>
                     <div className="mt-2 text-sm text-blue-700">
-                      <p><strong>{t('common.email')}:</strong> user@example.com</p>
+                      <p><strong>{t('common.email')}:</strong> seller@example.com / buyer@example.com</p>
                       <p><strong>{t('common.password')}:</strong> password123</p>
+                      <p><strong>{t('auth.login.userType')}:</strong> {t('auth.login.seller')} / {t('auth.login.buyer')}</p>
                     </div>
                   </div>
                 </div>

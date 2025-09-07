@@ -9,6 +9,20 @@ export const translations = {
       privacyPolicyLink: "Privacy Policy"
     
     },
+      months: {
+    jan: 'Jan',
+    feb: 'Feb',
+    mar: 'Mar',
+    apr: 'Apr',
+    may: 'May',
+    jun: 'Jun',
+    jul: 'Jul',
+    aug: 'Aug',
+    sep: 'Sep',
+    oct: 'Oct',
+    nov: 'Nov',
+    dec: 'Dec',
+  },
      "newsletter": {
     "title": "Join Our Newsletter",
     "description": "Subscribe to receive updates, news, and special offers directly to your inbox.",
@@ -162,6 +176,8 @@ export const translations = {
     },
     // Common
     common: {
+        email: 'Email',
+    password: 'Password',
       loading: "Loading...",
       error: "Something went wrong",
       tryAgain: "Try again",
@@ -282,6 +298,7 @@ export const translations = {
     ctaDescription: "Join thousands of satisfied customers who have found their perfect car through our platform.",
     exploreAuctions: "Explore Auctions"
   },
+  
   
 support: {
     title: 'Support Center',
@@ -405,6 +422,10 @@ support: {
         signIn: "Sign in",
         noAccount: "Don't have an account?",
         createAccount: "Create an account",
+         userType: 'Login as',
+      buyer: 'Buyer',
+      seller: 'Seller',
+      testCredentials: 'Test Credentials',
         errors: {
           invalidCredentials: "Invalid email or password",
           required: "This field is required",
@@ -416,9 +437,9 @@ support: {
 
     register: {
       // Existing Steps (Labels might be slightly adjusted for clarity)
-      "step1": "Personal Information",
-      "step2": "Business Information",
-      "step3": "Location & Compliance",
+      "step1": "Personal",
+      "step2": "Business",
+      "step3": "Location",
       "step4": "Shareholders",
       "step5": "Account Security",
       title: "Create your account",
@@ -511,6 +532,8 @@ support: {
       
       "errors": {
         // Existing Errors
+                userTypeRequired: 'Please select a user type',
+
         "firstNameRequired": "First name is required",
         "lastNameRequired": "Last name is required",
         "emailRequired": "Email address is required",
@@ -546,7 +569,342 @@ support: {
     }
   
 
-    }
+    },
+    sellerDashboard: {
+    // Alerts & Messages
+    addVehicleAlert: 'Redirecting to Add Vehicle form...',
+    linkCopied: 'Link copied to clipboard!',
+    linkCopyFailed: 'Failed to copy link.',
+    logoutAlert: 'Logging out...',
+    viewBidHistoryAlert: 'Opening bid history...',
+    
+    // Sidebar Navigation
+    sidebar: {
+      overview: 'Overview',
+      inventory: 'My Inventory',
+      myAuctions: 'My Auctions',
+      sales: 'Sales & Transactions',
+      messages: 'Messages',
+      analytics: 'Analytics',
+      settings: 'Settings'
+    },
+
+    // Stats Cards
+    stats: {
+      totalListings: 'Total Listings',
+      activeAuctions: 'Active Auctions',
+      vehiclesSold: 'Vehicles Sold',
+      totalRevenue: 'Total Revenue',
+      sellThroughRate: 'Sell-Through Rate',
+      avgSellingPrice: 'Avg. Selling Price'
+    },
+
+    // Overview Tab
+    overview: {
+      recentVehicles: 'Recent Vehicles',
+      recentMessages: 'Recent Messages'
+    },
+
+    // Inventory Tab
+    inventory: {
+      addVehicle: 'Add Vehicle',
+      vehicleDetails: 'Vehicle Details',
+      mileage: 'Mileage',
+      fuelType: 'Fuel Type',
+      transmission: 'Transmission',
+      color: 'Color',
+      condition: 'Condition',
+      location: 'Location',
+      currentBid: 'Current Bid',
+      reservePrice: 'Reserve Price',
+      auctionEnds: 'Auction Ends',
+      bids: 'Bids',
+      finalSalePrice: 'Final Sale Price',
+      soldTo: 'Sold To',
+      privateAuction: 'Private Auction Link',
+      searchPlaceholder: 'Search vehicles...',
+      vehicle: 'Vehicle',
+      details: 'Details',
+      status: 'Status',
+      price: 'Price',
+      actions: 'Actions',
+      private: 'Private'
+    },
+
+    // Vehicle Statuses
+    vehicleStatus: {
+      active: 'Active',
+      sold: 'Sold',
+      draft: 'Draft'
+    },
+
+    // Filters
+    filters: {
+      all: 'All Vehicles',
+      active: 'Active',
+      sold: 'Sold',
+      draft: 'Draft'
+    },
+
+    // Messages/Chat Tab
+    messages: {
+      typeMessage: 'Type a message...',
+      conversations: 'Conversations',
+      selectConversation: 'Select a conversation',
+      selectConversationDesc: 'Choose a conversation from the list to start chatting.'
+    },
+
+    // Analytics Tab
+    analytics: {
+      revenueTitle: 'Revenue Overview',
+      chartPlaceholder: 'Revenue Chart Placeholder',
+      totalRevenue: 'Total Revenue',
+      vehiclesSold: 'Vehicles Sold',
+      sellThroughRate: 'Sell-Through Rate',
+      topModels: 'Top Selling Models',
+      units: 'units',
+      financialSummary: 'Financial Summary',
+      period: 'Period',
+      grosssales: 'Gross Sales',
+      fees: 'Platform Fees',
+      netearnings: 'Net Earnings',
+      ytdTotal: 'YTD Total',
+            revenueChartTitle: 'Monthly Revenue Trend',
+      topModelsChartTitle: 'Sales Distribution by Model',
+      revenueTitle: 'Revenue Overview',
+      // chartPlaceholder: 'Revenue Chart Placeholder', // Can be removed
+      totalRevenue: 'Total Revenue',
+      vehiclesSold: 'Vehicles Sold',
+      sellThroughRate: 'Sell-Through Rate',
+      avgSellingPrice: 'Avg. Selling Price', // Added
+      topModels: 'Top Selling Models',
+      // chartPlaceholder: 'Top Models Chart Placeholder', // Can be removed
+      units: 'units',
+      financialSummary: 'Financial Summary',
+      period: 'Period',
+      grossSales: 'Gross Sales',
+      fees: 'Platform Fees',
+      netEarnings: 'Net Earnings',
+      ytdTotal: 'YTD Total',
+      // Add translations for chart tooltips/legends if needed, or rely on dataset labels
+    },
+
+    // Generic UI
+    downloadReport: 'Download Report',
+    comingSoon: 'Coming Soon',
+    comingSoonDesc: 'This section is under development.',
+    viewAll: 'View All',
+    viewDetails: 'View Details',
+    back: 'Back to List',
+    copyLink: 'Copy Link'
+  },
+  
+addCarListing: {
+    title: 'Add New Car Listing',
+    subtitle: 'Follow the steps to list your vehicle for sale.',
+    unknownStep: 'Unknown step',
+    errors: {
+      saleTypeRequired: 'Please select a sale type.',
+      directBuyPriceRequired: 'Direct buy price is required.',
+      auctionStartRequired: 'Auction start date and time are required.',
+      auctionEndRequired: 'Auction end date and time are required.',
+      invalidAuctionDates: 'Invalid date or time format.',
+      auctionTooShort: 'Auction must be at least 1 hour long.',
+      auctionTooLong: 'Auction cannot exceed 14 days.',
+      auctionEndFuture: 'Auction end time must be in the future.',
+      vinRequired: 'VIN is required.',
+      makeRequired: 'Make is required.',
+      modelRequired: 'Model is required.',
+      yearRequired: 'Year is required.',
+      photosRequired: 'At least one photo is required.',
+      headlineRequired: 'A headline is required.',
+      descriptionRequired: 'A detailed description is required.',
+      accidentDetailsRequired: 'Please describe the accident.',
+      submit: 'An error occurred during submission. Please try again.',
+    },
+    saveDraft: 'Save Draft',
+    savingDraft: 'Saving Draft...',
+    publishButton: 'Publish Listing',
+    publishing: 'Publishing...',
+    publishSuccess: 'Listing published successfully!',
+    draftSaved: 'Draft saved successfully!',
+    submitError: 'An error occurred during submission. Please try again.',
+
+    // Step names for the progress indicator
+    stepNames: {
+      step1: 'Sale Type',
+      step2: 'Auction Timing',
+      step3: 'Vehicle ID',
+      step4: 'Media & Description',
+      step5: 'Condition',
+      step6: 'Review & Publish',
+    },
+
+    saleTypes: {
+      directBuy: {
+        title: 'Direct Buy',
+        description: 'Set a fixed price. Users can buy it immediately or make bids, which you can choose to accept or decline.',
+      },
+      generalAuction: {
+        title: 'General Auction',
+        description: 'Run a blind auction with a defined time window. Bidders won\'t see others\' offers. You are not obligated to accept the highest bid.',
+      },
+      privateSale: {
+        title: 'Private Sale',
+        description: 'Your listing will be hidden from the public. Only people with your unique link can view and bid on it.',
+      },
+    },
+
+    // Step details (content for each step)
+    stepDetails: {
+      step1: {
+        title: 'Select Sale Type',
+        description: 'Choose how you want to sell your vehicle.',
+        directBuyPriceLabel: 'Direct Buy Price ($)',
+        directBuyPricePlaceholder: 'Enter price',
+        privateSaleNoteTitle: 'Private Listing Confirmed',
+        privateSaleNoteDesc: 'Your listing will not appear in public searches. You can share the unique link with potential buyers.',
+      },
+      step2: {
+        title: 'Auction Timing',
+        description: 'Define the start and end times for your auction.',
+      },
+      step3: {
+        title: 'Vehicle Identification',
+        description: 'Provide the core details of your vehicle.',
+      },
+      step4: {
+        title: 'Visual Documentation & Description',
+        description: 'Add photos and tell the story of your vehicle.',
+      },
+      step5: {
+        title: 'Condition Assessment',
+        description: 'Provide a detailed condition report to build trust with buyers.',
+      },
+      step6: {
+        title: 'Review & Publish',
+        description: 'Please review your listing details before publishing.',
+      },
+    },
+
+    auctionTiming: {
+      presetLabel: 'Quick Select Duration',
+      presets: {
+        '24hours':'24 Hours',
+        '3days': '3 Days',
+        '5days': '5 Days',
+        '7days' : '7 Days',
+        custom: 'Custom',
+      },
+      startDateLabel: 'Start Date',
+      startTimeLabel: 'Start Time',
+      endDateLabel: 'End Date',
+      endTimeLabel: 'End Time',
+      timezoneLabel: 'Timezone',
+      timezoneInfo: 'Times are in your local timezone: {{timezone}}',
+    },
+
+    vehicleId: {
+      methodLabel: 'How would you like to identify your vehicle?',
+      findVin: 'Find by VIN (Chassis Number)',
+      enterManually: 'Enter details manually',
+      vinLabel: 'VIN (Vehicle Identification Number)',
+      vinPlaceholder: '17-character VIN',
+      decodeButton: 'Decode VIN',
+      decoding: 'Decoding...',
+      vinHelper: 'The 17-character VIN is usually found on the dashboard (driver\'s side), door jamb, or engine bay.',
+      vinRequired: 'Please enter a VIN.',
+      vinDecoded: 'VIN decoded successfully! (Simulated)',
+      vinDecodeFailed: 'Failed to decode VIN. Please check the number and try again.',
+      makeLabel: 'Make',
+      makePlaceholder: 'e.g., BMW',
+      modelLabel: 'Model',
+      modelPlaceholder: 'e.g., X5',
+      yearLabel: 'Year',
+      yearPlaceholder: 'e.g., 2020',
+      trimLabel: 'Trim / Edition',
+      trimPlaceholder: 'e.g., xDrive40i',
+      licensePlateLabel: 'License Plate Number',
+      licensePlatePlaceholder: 'e.g., ABC-123',
+      mileageLabel: 'Mileage',
+      mileagePlaceholder: 'e.g., 30000',
+      unitLabel: 'Unit',
+      registrationDateLabel: 'Vehicle Registration Date',
+      previousOwnersLabel: 'Previous Owners',
+    },
+
+    media: {
+      photosLabel: 'Photos',
+      uploadButton: 'Upload Photos',
+      dragDrop: 'or drag and drop',
+      fileTypes: 'PNG, JPG, GIF up to 10MB',
+      previewTitle: 'Preview',
+      removePhoto: 'Remove photo',
+      headlineLabel: 'Listing Headline',
+      headlinePlaceholder: 'e.g., 2020 BMW X5 xDrive40i in Excellent Condition',
+      descriptionLabel: 'Full Description',
+      descriptionPlaceholder: 'Describe the vehicle in detail, including its history, features, condition, and any unique aspects. What makes it special?',
+      serviceHistoryLabel: 'Service History',
+      serviceHistory: {
+        full: 'Full',
+        partial: 'Partial',
+        none: 'None',
+      },
+      accidentQuestion: 'Has the car been in an accident?',
+      accidentDetailsLabel: 'Accident Details',
+      accidentDetailsPlaceholder: 'Please describe the nature and extent of the accident damage.',
+    },
+
+    condition: {
+      damageReport: {
+        title: 'Damage Report',
+        description: 'Please indicate any damage on the vehicle. (Interactive diagram would go here in a real implementation)',
+        placeholder: 'Interactive car diagram for damage reporting (Not implemented in this demo)',
+      },
+      technicalChecklist: {
+        title: 'Technical Checklist',
+      },
+      interiorChecklist: {
+        title: 'Interior Checklist',
+      },
+      tyreReport: {
+        title: 'Tyre Report',
+        brand: 'Brand',
+        brandPlaceholder: 'e.g., Michelin',
+        treadDepth: 'Tread Depth (mm)',
+        condition: 'Condition',
+      },
+      rating: {
+        good: 'Good',
+        average: 'Average',
+        poor: 'Poor',
+        notWorking: 'Not Working',
+        worn: 'Worn',
+      },
+    },
+  },
+
+  yes: 'Yes',
+  no: 'No',
+  edit: 'Edit',
+  back: 'Back',
+  next: 'Next',
+  // ... (other existing translations)
+
+  loading: 'Loading...', // General loading message
+  downloadReport: 'Download Report',
+  back: 'Back',
+  next: 'Next',
+  logout: 'Logout',
+  notifications: 'Notifications',
+  downloadReport: 'Download Report',
+  viewDetails: 'View Details',
+  copyLink: 'Copy Link',
+  filters: 'Filters',
+  viewAll: 'View All',
+  
+
+
   },
   de: {
     cookies: {
@@ -574,6 +932,20 @@ support: {
 
   languageName: "Deutsch",
   // Header
+   months: {
+    jan: 'Jan',
+    feb: 'Feb',
+    mar: 'Mär', // March abbreviation in German
+    apr: 'Apr',
+    may: 'Mai', // May in German
+    jun: 'Jun',
+    jul: 'Jul',
+    aug: 'Aug',
+    sep: 'Sep',
+    oct: 'Okt', // October abbreviation in German
+    nov: 'Nov',
+    dec: 'Dez', // December abbreviation in German
+  },
   header: {
     mainMenu: {
       home: "Startseite",
@@ -837,6 +1209,8 @@ support: {
     },
     // save
     common: {
+       email: 'E-Mail',
+    password: 'Passwort',
       loading: "Wird geladen...",
       error: "Etwas ist schief gelaufen",
       tryAgain: "Erneut versuchen",
@@ -954,9 +1328,15 @@ support: {
         signIn: "Anmelden",
         noAccount: "Noch kein Konto?",
         createAccount: "Konto erstellen",
+        userType: 'Anmelden als',
+      buyer: 'Käufer',
+      seller: 'Verkäufer',
+      testCredentials: 'Test-Anmeldeinformationen',
         errors: {
           invalidCredentials: "Ungültige E-Mail oder Passwort",
           required: "Dieses Feld ist erforderlich",
+                  userTypeRequired: 'Bitte wählen Sie einen Benutzertyp aus',
+
           invalidEmail: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
           passwordTooShort: "Das Passwort muss mindestens 8 Zeichen lang sein."
 
@@ -964,9 +1344,9 @@ support: {
       },
       register: {
         // Bestehende Schritte
-        step1: "Persönliche Informationen",
-        step2: "Unternehmensinformationen",
-        step3: "Standort & Compliance", // Neue Abschnittsüberschrift
+        step1: "Persönliche",
+        step2: "Unternehmens",
+        step3: "Standort", // Neue Abschnittsüberschrift
         step4: "Aktionäre",
         step5: "Kontosicherheit",
         passwordPlaceholder: "Erstellen Sie ein sicheres Passwort",
@@ -1082,7 +1462,338 @@ support: {
     }
   
 
-    }
+    },
+    sellerDashboard: {
+    // Alerts & Messages
+    addVehicleAlert: 'Weiterleitung zum Fahrzeug hinzufügen Formular...',
+    linkCopied: 'Link in die Zwischenablage kopiert!',
+    linkCopyFailed: 'Link konnte nicht kopiert werden.',
+    logoutAlert: 'Abmeldung...',
+    viewBidHistoryAlert: 'Bietverlauf wird geöffnet...',
+    
+    // Sidebar Navigation
+    sidebar: {
+      overview: 'Übersicht',
+      inventory: 'Mein Inventar',
+      myAuctions: 'Meine Auktionen',
+      sales: 'Verkäufe & Transaktionen',
+      messages: 'Nachrichten',
+      analytics: 'Analyse',
+      settings: 'Einstellungen'
+    },
+
+    // Stats Cards
+    stats: {
+      totalListings: 'Gesamtanzahl Inserate',
+      activeAuctions: 'Aktive Auktionen',
+      vehiclesSold: 'Verkaufte Fahrzeuge',
+      totalRevenue: 'Gesamtumsatz',
+      sellThroughRate: 'Verkaufsrate',
+      avgSellingPrice: 'Durchschn. Verkaufspreis', // Hinzugefügt
+    },
+
+    // Overview Tab
+    overview: {
+      recentVehicles: 'Neueste Fahrzeuge',
+      recentMessages: 'Neueste Nachrichten'
+    },
+
+    // Inventory Tab
+    inventory: {
+      addVehicle: 'Fahrzeug hinzufügen',
+      vehicleDetails: 'Fahrzeugdetails',
+      mileage: 'Laufleistung',
+      fuelType: 'Kraftstoffart',
+      transmission: 'Getriebe',
+      color: 'Farbe',
+      condition: 'Zustand',
+      location: 'Standort',
+      currentBid: 'Aktuelles Gebot',
+      reservePrice: 'Mindestpreis',
+      auctionEnds: 'Auktion endet',
+      bids: 'Gebote',
+      finalSalePrice: 'Endverkaufspreis',
+      soldTo: 'Verkauft an',
+      privateAuction: 'Privater Auktionslink',
+      searchPlaceholder: 'Fahrzeuge suchen...',
+      vehicle: 'Fahrzeug',
+      details: 'Details',
+      status: 'Status',
+      price: 'Preis',
+      actions: 'Aktionen',
+      private: 'Privat'
+    },
+
+    // Vehicle Statuses
+    vehicleStatus: {
+      active: 'Aktiv',
+      sold: 'Verkauft',
+      draft: 'Entwurf'
+    },
+
+    // Filters
+    filters: {
+      all: 'Alle Fahrzeuge',
+      active: 'Aktiv',
+      sold: 'Verkauft',
+      draft: 'Entwurf'
+    },
+
+    // Messages/Chat Tab
+    messages: {
+      typeMessage: 'Eine Nachricht schreiben...',
+      conversations: 'Unterhaltungen',
+      selectConversation: 'Wählen Sie eine Unterhaltung',
+      selectConversationDesc: 'Wählen Sie eine Unterhaltung aus der Liste, um mit dem Chatten zu beginnen.'
+    },
+
+    // Analytics Tab
+    analytics: {
+       revenueChartTitle: 'Monatlicher Umsatztrend',
+      topModelsChartTitle: 'Verkaufsverteilung nach Modell',
+      revenueTitle: 'Umsatzübersicht',
+      // chartPlaceholder: 'Umsatzdiagramm Platzhalter', // Entfernen
+      totalRevenue: 'Gesamtumsatz',
+      vehiclesSold: 'Verkaufte Fahrzeuge',
+      sellThroughRate: 'Verkaufsrate',
+      avgSellingPrice: 'Durchschn. Verkaufspreis', // Hinzugefügt
+      topModels: 'Bestverkaufte Modelle',
+      // chartPlaceholder: 'Diagramm für Bestseller Platzhalter', // Entfernen
+      units: 'Einheiten',
+      financialSummary: 'Finanzübersicht',
+      period: 'Zeitraum',
+      grossSales: 'Bruttoumsatz',
+      fees: 'Plattformgebühren',
+      netEarnings: 'Nettogewinn',
+      ytdTotal: 'YTD Gesamt',
+      // Übersetzungen für Diagramm-Tooltips/Legenden bei Bedarf hinzufügen
+      revenueTitle: 'Umsatzübersicht',
+      chartPlaceholder: 'Umsatzdiagramm Platzhalter',
+      totalRevenue: 'Gesamtumsatz',
+      vehiclesSold: 'Verkaufte Fahrzeuge',
+      sellThroughRate: 'Verkaufsrate',
+      topModels: 'Bestverkaufte Modelle',
+      units: 'Einheiten',
+      financialSummary: 'Finanzübersicht',
+      period: 'Zeitraum',
+      grosssales: 'Bruttoumsatz',
+      fees: 'Plattformgebühren',
+      netearnings: 'Nettogewinn',
+      ytdTotal: 'YTD Gesamt'
+    },
+
+    // Generic UI
+    downloadReport: 'Bericht herunterladen',
+    comingSoon: 'Demnächst verfügbar',
+    comingSoonDesc: 'Dieser Bereich befindet sich in der Entwicklung.',
+    viewAll: 'Alle anzeigen',
+    viewDetails: 'Details anzeigen',
+    back: 'Zurück zur Liste',
+    copyLink: 'Link kopieren'
+  },
+  
+   addCarListing: {
+    title: 'Neues Fahrzeug inserieren',
+    subtitle: 'Folgen Sie den Schritten, um Ihr Fahrzeug zum Verkauf anzubieten.',
+    unknownStep: 'Unbekannter Schritt',
+    errors: {
+      saleTypeRequired: 'Bitte wählen Sie eine Verkaufsart aus.',
+      directBuyPriceRequired: 'Direktkaufpreis ist erforderlich.',
+      auctionStartRequired: 'Startdatum und -zeit der Auktion sind erforderlich.',
+      auctionEndRequired: 'Enddatum und -zeit der Auktion sind erforderlich.',
+      invalidAuctionDates: 'Ungültiges Datums- oder Zeitformat.',
+      auctionTooShort: 'Die Auktion muss mindestens 1 Stunde dauern.',
+      auctionTooLong: 'Die Auktion darf 14 Tage nicht überschreiten.',
+      auctionEndFuture: 'Die Auktionsendzeit muss in der Zukunft liegen.',
+      vinRequired: 'VIN ist erforderlich.',
+      makeRequired: 'Marke ist erforderlich.',
+      modelRequired: 'Modell ist erforderlich.',
+      yearRequired: 'Baujahr ist erforderlich.',
+      photosRequired: 'Mindestens ein Foto ist erforderlich.',
+      headlineRequired: 'Eine Überschrift ist erforderlich.',
+      descriptionRequired: 'Eine detaillierte Beschreibung ist erforderlich.',
+      accidentDetailsRequired: 'Bitte beschreiben Sie den Unfall.',
+      submit: 'Beim Absenden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+    },
+    saveDraft: 'Entwurf speichern',
+    savingDraft: 'Entwurf wird gespeichert...',
+    publishButton: 'Inserat veröffentlichen',
+    publishing: 'Wird veröffentlicht...',
+    publishSuccess: 'Inserat erfolgreich veröffentlicht!',
+    draftSaved: 'Entwurf erfolgreich gespeichert!',
+    submitError: 'Beim Absenden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+
+    // Step names for the progress indicator
+    stepNames: {
+      step1: 'Verkaufsart',
+      step2: 'Auktionszeit',
+      step3: 'Fahrzeug-ID',
+      step4: 'Medien & Beschreibung',
+      step5: 'Zustand',
+      step6: 'Überprüfen & Veröffentlichen',
+    },
+
+    saleTypes: {
+      directBuy: {
+        title: 'Direktkauf',
+        description: 'Legen Sie einen Festpreis fest. Benutzer können es sofort kaufen oder bieten, was Sie akzeptieren oder ablehnen können.',
+      },
+      generalAuction: {
+        title: 'Allgemeine Auktion',
+        description: 'Führen Sie eine Blindauktion mit einem definierten Zeitfenster durch. Bieter sehen die Angebote anderer nicht. Sie sind nicht verpflichtet, das höchste Gebot anzunehmen.',
+      },
+      privateSale: {
+        title: 'Privatverkauf',
+        description: 'Ihr Inserat ist vor der Öffentlichkeit verborgen. Nur Personen mit Ihrem einzigartigen Link können es sehen und darauf bieten.',
+      },
+    },
+
+    // Step details (content for each step)
+    stepDetails: {
+      step1: {
+        title: 'Verkaufsart auswählen',
+        description: 'Wählen Sie, wie Sie Ihr Fahrzeug verkaufen möchten.',
+        directBuyPriceLabel: 'Direktkaufpreis (€)',
+        directBuyPricePlaceholder: 'Preis eingeben',
+        privateSaleNoteTitle: 'Privatverkauf bestätigt',
+        privateSaleNoteDesc: 'Ihr Inserat erscheint nicht in öffentlichen Suchen. Sie können den einzigartigen Link mit potenziellen Käufern teilen.',
+      },
+      step2: {
+        title: 'Auktionszeit',
+        description: 'Definieren Sie die Start- und Endzeiten für Ihre Auktion.',
+      },
+      step3: {
+        title: 'Fahrzeugidentifikation',
+        description: 'Geben Sie die Kerndaten Ihres Fahrzeugs an.',
+      },
+      step4: {
+        title: 'Visuelle Dokumentation & Beschreibung',
+        description: 'Fügen Sie Fotos hinzu und erzählen Sie die Geschichte Ihres Fahrzeugs.',
+      },
+      step5: {
+        title: 'Zustandsbewertung',
+        description: 'Geben Sie einen detaillierten Zustandsbericht ab, um das Vertrauen der Käufer zu gewinnen.',
+      },
+      step6: {
+        title: 'Überprüfen & Veröffentlichen',
+        description: 'Bitte überprüfen Sie Ihre Inseratsdetails vor der Veröffentlichung.',
+      },
+    },
+
+    auctionTiming: {
+      presetLabel: 'Schnellauswahl Dauer',
+      presets: {
+        '24hours':'24 Stunden',
+        '3days': '3 Tage',
+        '5days': '5 Tage',
+        '7days' : '7 Tage',
+        custom: 'Benutzerdefiniert',
+      },
+      startDateLabel: 'Startdatum',
+      startTimeLabel: 'Startzeit',
+      endDateLabel: 'Enddatum',
+      endTimeLabel: 'Endzeit',
+      timezoneLabel: 'Zeitzone',
+      timezoneInfo: 'Zeiten sind in Ihrer lokalen Zeitzone: {{timezone}}',
+    },
+
+    vehicleId: {
+      methodLabel: 'Wie möchten Sie Ihr Fahrzeug identifizieren?',
+      findVin: 'Nach VIN (Fahrgestellnummer) suchen',
+      enterManually: 'Details manuell eingeben',
+      vinLabel: 'VIN (Vehicle Identification Number)',
+      vinPlaceholder: '17-stellige VIN',
+      decodeButton: 'VIN entschlüsseln',
+      decoding: 'Wird entschlüsselt...',
+      vinHelper: 'Die 17-stellige VIN befindet sich normalerweise auf dem Armaturenbrett (Fahrerseite), Türschwelle oder im Motorraum.',
+      vinRequired: 'Bitte geben Sie eine VIN ein.',
+      vinDecoded: 'VIN erfolgreich entschlüsselt! (Simuliert)',
+      vinDecodeFailed: 'VIN konnte nicht entschlüsselt werden. Bitte prüfen Sie die Nummer und versuchen Sie es erneut.',
+      makeLabel: 'Marke',
+      makePlaceholder: 'z.B. BMW',
+      modelLabel: 'Modell',
+      modelPlaceholder: 'z.B. X5',
+      yearLabel: 'Baujahr',
+      yearPlaceholder: 'z.B. 2020',
+      trimLabel: 'Ausstattung / Edition',
+      trimPlaceholder: 'z.B. xDrive40i',
+      licensePlateLabel: 'Kennzeichen',
+      licensePlatePlaceholder: 'z.B. B-AB 123C',
+      mileageLabel: 'Kilometerstand',
+      mileagePlaceholder: 'z.B. 30000',
+      unitLabel: 'Einheit',
+      registrationDateLabel: 'Erstzulassungsdatum',
+      previousOwnersLabel: 'Vorbesitzer',
+    },
+
+    media: {
+      photosLabel: 'Fotos',
+      uploadButton: 'Fotos hochladen',
+      dragDrop: 'oder drag & drop',
+      fileTypes: 'PNG, JPG, GIF bis 10MB',
+      previewTitle: 'Vorschau',
+      removePhoto: 'Foto entfernen',
+      headlineLabel: 'Inseratsüberschrift',
+      headlinePlaceholder: 'z.B. 2020 BMW X5 xDrive40i in exzellentem Zustand',
+      descriptionLabel: 'Vollständige Beschreibung',
+      descriptionPlaceholder: 'Beschreiben Sie das Fahrzeug detailliert, einschließlich seiner Geschichte, Ausstattung, Zustand und besonderer Merkmale. Was macht es besonders?',
+      serviceHistoryLabel: 'Servicehistorie',
+      serviceHistory: {
+        full: 'Vollständig',
+        partial: 'Teilweise',
+        none: 'Keine',
+      },
+      accidentQuestion: 'War das Auto in einen Unfall verwickelt?',
+      accidentDetailsLabel: 'Unfalldetails',
+      accidentDetailsPlaceholder: 'Bitte beschreiben Sie die Art und das Ausmaß des Unfallschadens.',
+    },
+
+    condition: {
+      damageReport: {
+        title: 'Schadensbericht',
+        description: 'Bitte geben Sie alle Schäden am Fahrzeug an. (Interaktives Diagramm wäre hier in einer echten Implementierung)',
+        placeholder: 'Interaktives Fahrzeugdiagramm für Schadensmeldung (Nicht in dieser Demo implementiert)',
+      },
+      technicalChecklist: {
+        title: 'Technische Checkliste',
+      },
+      interiorChecklist: {
+        title: 'Innenausstattung Checkliste',
+      },
+      tyreReport: {
+        title: 'Reifenbericht',
+        brand: 'Marke',
+        brandPlaceholder: 'z.B. Michelin',
+        treadDepth: 'Profiltiefe (mm)',
+        condition: 'Zustand',
+      },
+      rating: {
+        good: 'Gut',
+        average: 'Durchschnittlich',
+        poor: 'Schlecht',
+        notWorking: 'Defekt',
+        worn: 'Abgenutzt',
+      },
+    },
+  },
+
+  yes: 'Ja',
+  no: 'Nein',
+  edit: 'Bearbeiten',
+  back: 'Zurück',
+
+
+  loading: 'Wird geladen...', // Allgemeine Lade-Nachricht
+  downloadReport: 'Bericht herunterladen', // Allgemeiner Download-Button-Text
+  back: 'Zurück',
+  next: 'Weiter',
+  logout: 'Ausloggen',
+  notifications: 'Benachrichtigungen',
+  downloadReport: 'Bericht herunterladen',
+  viewDetails: 'Details anzeigen',
+  copyLink: 'Link kopieren',
+  filters: 'Filter',
+  viewAll: 'Alle anzeigen'
   
   },
   nl: {
@@ -1093,6 +1804,20 @@ support: {
       decline: "Cookies weigeren",
       settings: "Cookie-instellingen"
     },
+      months: {
+    jan: 'Jan',
+    feb: 'Feb',
+    mar: 'Mrt',
+    apr: 'Apr',
+    may: 'Mei',
+    jun: 'Jun',
+    jul: 'Jul',
+    aug: 'Aug',
+    sep: 'Sep',
+    oct: 'Okt',
+    nov: 'Nov',
+    dec: 'Dec',
+  },
     // Header
     newsletter: {
     "title": "Abonneer op onze nieuwsbrief",
@@ -1367,6 +2092,8 @@ support: {
     },
     // Common
     common: {
+          email: 'E-mail',
+    password: 'Wachtwoord',
       loading: "Laden...",
       error: "Er is iets misgegaan",
       tryAgain: "Opnieuw proberen",
@@ -1475,6 +2202,10 @@ support: {
     },
     auth: {
       login: {
+         userType: 'Inloggen als',
+      buyer: 'Koper',
+      seller: 'Verkoper',
+      testCredentials: 'Test Inloggegevens',
         title: "Welkom terug",
         subtitle: "Log in op uw account",
         email: "E-mailadres",
@@ -1485,6 +2216,8 @@ support: {
         noAccount: "Nog geen account?",
         createAccount: "Account aanmaken",
         errors: {
+                  userTypeRequired: 'Selecteer alstublieft een gebruikerstype',
+
           invalidCredentials: "Ongeldig e-mailadres of wachtwoord",
           required: "Dit veld is verplicht",
           invalidEmail: "Voer een geldig e-mailadres in",
@@ -1590,6 +2323,341 @@ support: {
           shareholderIdRequired: "Identiteitsbewijs van de aandeelhouder is verplicht"
         }
       }
-    }
-  }
+    },
+      sellerDashboard: {
+    // Alerts & Messages
+    addVehicleAlert: 'Doorverwijzen naar Voertuig Toevoegen formulier...',
+    linkCopied: 'Link gekopieerd naar klembord!',
+    linkCopyFailed: 'Link kopiëren mislukt.',
+    logoutAlert: 'Uitloggen...',
+    viewBidHistoryAlert: 'Biedingsgeschiedenis openen...',
+    
+    // Sidebar Navigation
+    sidebar: {
+      overview: 'Overzicht',
+      inventory: 'Mijn Voorraad',
+      myAuctions: 'Mijn Veilingen',
+      sales: 'Verkoop & Transaktionen',
+      messages: 'Berichten',
+      analytics: 'Analytics',
+      settings: 'Instellingen'
+    },
+
+    // Stats Cards
+    stats: {
+      totalListings: 'Totaal Aanbod',
+      activeAuctions: 'Actieve Veilingen',
+      vehiclesSold: 'Verkochte Voertuigen',
+      totalRevenue: 'Totale Opbrengst',
+      avgSellingPrice: 'Gem. Verkoopprijs', // Added,
+      sellThroughRate: 'Verkooppercentage',
+
+
+
+    },
+
+    // Overview Tab
+    overview: {
+      recentVehicles: 'Recente Voertuigen',
+      recentMessages: 'Recente Berichten'
+    },
+
+    // Inventory Tab
+    inventory: {
+      addVehicle: 'Voertuig Toevoegen',
+      vehicleDetails: 'Voertuigdetails',
+      mileage: 'Kilometerstand',
+      fuelType: 'Brandstof Type',
+      transmission: 'Transmissie',
+      color: 'Kleur',
+      condition: 'Conditie',
+      location: 'Locatie',
+      currentBid: 'Huidig Bod',
+      reservePrice: 'Reserveprijs',
+      auctionEnds: 'Veiling Eindigt',
+      bids: 'Biedingen',
+      finalSalePrice: 'Eindverkoopprijs',
+      soldTo: 'Verkocht Aan',
+      privateAuction: 'Privé Veiling Link',
+      searchPlaceholder: 'Zoek voertuigen...',
+      vehicle: 'Voertuig',
+      details: 'Details',
+      status: 'Status',
+      price: 'Prijs',
+      actions: 'Acties',
+      private: 'Privé'
+    },
+
+    // Vehicle Statuses
+    vehicleStatus: {
+      active: 'Actief',
+      sold: 'Verkocht',
+      draft: 'Concept'
+    },
+
+    // Filters
+    filters: {
+      all: 'Alle Voertuigen',
+      active: 'Actief',
+      sold: 'Verkocht',
+      draft: 'Concept'
+    },
+
+    // Messages/Chat Tab
+    messages: {
+      typeMessage: 'Typ een bericht...',
+      conversations: 'Gesprekken',
+      selectConversation: 'Selecteer een gesprek',
+      selectConversationDesc: 'Kies een gesprek uit de lijst om te beginnen met chatten.'
+    },
+
+    // Analytics Tab
+    analytics: {
+      revenueTitle: 'Opbrengst Overzicht',
+      chartPlaceholder: 'Opbrengst Grafiek Placeholder',
+      totalRevenue: 'Totale Opbrengst',
+      vehiclesSold: 'Verkochte Voertuigen',
+      sellThroughRate: 'Verkooppercentage',
+      topModels: 'Best Verkopende Modellen',
+      units: 'eenheden',
+      financialSummary: 'Financieel Overzicht',
+      period: 'Periode',
+      grossSales: 'Bruto Verkopen',
+      fees: 'Platformkosten',
+      netEarnings: 'Netto Winst',
+      ytdTotal: 'YTD Totaal',
+        revenueChartTitle: 'Maandelijkse Omzet Trend', // For Bar Chart Title
+      topModelsChartTitle: 'Verkoopverdeling per Model', // For Doughnut Chart Title
+      revenueTitle: 'Opbrengst Overzicht',
+      // chartPlaceholder: 'Opbrengst Grafiek Placeholder', // Removed as we have real charts
+      totalRevenue: 'Totale Opbrengst',
+      vehiclesSold: 'Verkochte Voertuigen',
+      sellThroughRate: 'Verkooppercentage',
+      avgSellingPrice: 'Gem. Verkoopprijs', // Added
+      topModels: 'Best Verkopende Modellen',
+      // chartPlaceholder: 'Top Modellen Grafiek Placeholder', // Removed
+      units: 'eenheden',
+      financialSummary: 'Financieel Overzicht',
+      period: 'Periode',
+      grosssales: 'Bruto Verkopen',
+      fees: 'Platformkosten',
+      netearnings: 'Netto Winst',
+      ytdTotal: 'YTD Totaal',
+    },
+       downloadReport: 'Rapport Downloaden', // Added at component level
+
+    // Generic UI
+    comingSoon: 'Binnenkort Beschikbaar',
+    comingSoonDesc: 'Deze sectie is in ontwikkeling.',
+    viewAll: 'Bekijk Alles',
+    viewDetails: 'Bekijk Details',
+    back: 'Terug naar Lijst',
+    copyLink: 'Link Kopiëren',
+   
+  
+  },
+   addCarListing: {
+    title: 'Nieuwe auto aanbieden',
+    subtitle: 'Volg de stappen om uw voertuig te verkopen.',
+    unknownStep: 'Onbekende stap',
+    errors: {
+      saleTypeRequired: 'Selecteer een verkoopmethode.',
+      directBuyPriceRequired: 'Directe koopprijs is verplicht.',
+      auctionStartRequired: 'Startdatum en -tijd van de veiling zijn verplicht.',
+      auctionEndRequired: 'Einddatum en -tijd van de veiling zijn verplicht.',
+      invalidAuctionDates: 'Ongeldig datum- of tijdformaat.',
+      auctionTooShort: 'De veiling moet minimaal 1 uur duren.',
+      auctionTooLong: 'De veiling mag niet langer dan 14 dagen duren.',
+      auctionEndFuture: 'De veilingeindtijd moet in de toekomst liggen.',
+      vinRequired: 'VIN is verplicht.',
+      makeRequired: 'Merk is verplicht.',
+      modelRequired: 'Model is verplicht.',
+      yearRequired: 'Bouwjaar is verplicht.',
+      photosRequired: 'Minstens één foto is verplicht.',
+      headlineRequired: 'Een kop is verplicht.',
+      descriptionRequired: 'Een gedetailleerde beschrijving is verplicht.',
+      accidentDetailsRequired: 'Beschrijf het ongeval alstublieft.',
+      submit: 'Er is een fout opgetreden tijdens het verzenden. Probeer het opnieuw.',
+    },
+    saveDraft: 'Concept opslaan',
+    savingDraft: 'Concept wordt opgeslagen...',
+    publishButton: 'Aanbod publiceren',
+    publishing: 'Wordt gepubliceerd...',
+    publishSuccess: 'Aanbod succesvol gepubliceerd!',
+    draftSaved: 'Concept succesvol opgeslagen!',
+    submitError: 'Er is een fout opgetreden tijdens het verzenden. Probeer het opnieuw.',
+
+    // Step names for the progress indicator
+    stepNames: {
+      step1: 'Verkoopmethode',
+      step2: 'Veilingstijd',
+      step3: 'Voertuig-ID',
+      step4: 'Media & Beschrijving',
+      step5: 'Conditie',
+      step6: 'Controleren & Publiceren',
+    },
+
+    saleTypes: {
+      directBuy: {
+        title: 'Direct Kopen',
+        description: 'Stel een vaste prijs in. Gebruikers kunnen het direct kopen of bieden, wat u kunt accepteren of afwijzen.',
+      },
+      generalAuction: {
+        title: 'Algemene Veiling',
+        description: 'Houd een blinde veiling met een gedefinieerd tijdsvenster. Bieders zien de biedingen van anderen niet. U bent niet verplicht het hoogste bod aan te nemen.',
+      },
+      privateSale: {
+        title: 'Privéverkoop',
+        description: 'Uw aanbod is verborgen voor het publiek. Alleen mensen met uw unieke link kunnen het bekijken en daarop bieden.',
+      },
+    },
+
+    // Step details (content for each step)
+    stepDetails: {
+      step1: {
+        title: 'Verkoopmethode Selecteren',
+        description: 'Kies hoe u uw voertuig wilt verkopen.',
+        directBuyPriceLabel: 'Directe Koopprijs (€)',
+        directBuyPricePlaceholder: 'Prijs invoeren',
+        privateSaleNoteTitle: 'Privéverkoop Bevestigd',
+        privateSaleNoteDesc: 'Uw aanbod verschijnt niet in openbare zoekopdrachten. U kunt de unieke link delen met potentiële kopers.',
+      },
+      step2: {
+        title: 'Veilingstijd',
+        description: 'Bepaal de start- en eindtijden voor uw veiling.',
+      },
+      step3: {
+        title: 'Voertuigidentificatie',
+        description: 'Geef de kerngegevens van uw voertuig op.',
+      },
+      step4: {
+        title: 'Visuele Documentatie & Beschrijving',
+        description: 'Voeg foto\'s toe en vertel het verhaal van uw voertuig.',
+      },
+      step5: {
+        title: 'Conditiebeoordeling',
+        description: 'Geef een gedetailleerd conditierapport voor vertrouwen bij kopers.',
+      },
+      step6: {
+        title: 'Controleren & Publiceren',
+        description: 'Controleer uw aanboddetails voor publicatie.',
+      },
+    },
+
+    auctionTiming: {
+      presetLabel: 'Snelselectie Duur',
+      presets: {
+        '24hours':'24 Uur',
+        '3days': '3 Dagen',
+        '5days': '5 Dagen',
+        '7days' : '7 Dagen',
+        custom: 'Aangepast',
+      },
+      startDateLabel: 'Startdatum',
+      startTimeLabel: 'Starttijd',
+      endDateLabel: 'Einddatum',
+      endTimeLabel: 'Eindtijd',
+      timezoneLabel: 'Tijdzone',
+      timezoneInfo: 'Tijden zijn in uw lokale tijdzone: {{timezone}}',
+    },
+
+    vehicleId: {
+      methodLabel: 'Hoe wilt u uw voertuig identificeren?',
+      findVin: 'Zoeken op VIN (Chassiskader Nummer)',
+      enterManually: 'Details handmatig invoeren',
+      vinLabel: 'VIN (Voertuig Identificatie Nummer)',
+      vinPlaceholder: '17-cijferige VIN',
+      decodeButton: 'VIN decoderen',
+      decoding: 'Wordt gedecodeerd...',
+      vinHelper: 'Het 17-cijferige VIN-nummer bevindt zich meestal op het dashboard (bestuurderszijde), deurstijl of in de motorruimte.',
+      vinRequired: 'Voer een VIN in.',
+      vinDecoded: 'VIN succesvol gedecodeerd! (Gesimuleerd)',
+      vinDecodeFailed: 'VIN kon niet worden gedecodeerd. Controleer het nummer en probeer het opnieuw.',
+      makeLabel: 'Merk',
+      makePlaceholder: 'bijv. BMW',
+      modelLabel: 'Model',
+      modelPlaceholder: 'bijv. X5',
+      yearLabel: 'Bouwjaar',
+      yearPlaceholder: 'bijv. 2020',
+      trimLabel: 'Uitvoering / Editie',
+      trimPlaceholder: 'bijv. xDrive40i',
+      licensePlateLabel: 'Kenteken',
+      licensePlatePlaceholder: 'bijv. 1-ABC-123',
+      mileageLabel: 'Kilometerstand',
+      mileagePlaceholder: 'bijv. 30000',
+      unitLabel: 'Eenheid',
+      registrationDateLabel: 'Datum eerste registratie',
+      previousOwnersLabel: 'Vorige eigenaren',
+    },
+
+    media: {
+      photosLabel: 'Foto\'s',
+      uploadButton: 'Foto\'s uploaden',
+      dragDrop: 'of slepen en neerzetten',
+      fileTypes: 'PNG, JPG, GIF tot 10MB',
+      previewTitle: 'Voorbeeld',
+      removePhoto: 'Foto verwijderen',
+      headlineLabel: 'Aanbodkop',
+      headlinePlaceholder: 'bijv. 2020 BMW X5 xDrive40i in uitstekende staat',
+      descriptionLabel: 'Volledige beschrijving',
+      descriptionPlaceholder: 'Beschrijf het voertuig in detail, inclusief de geschiedenis, kenmerken, staat en eventuele unieke aspecten. Wat maakt het bijzonder?',
+      serviceHistoryLabel: 'Onderhoudsgeschiedenis',
+      serviceHistory: {
+        full: 'Volledig',
+        partial: 'Gedeeltelijk',
+        none: 'Geen',
+      },
+      accidentQuestion: 'Is de auto ooit in een ongeval geweest?',
+      accidentDetailsLabel: 'Ongevalsdetails',
+      accidentDetailsPlaceholder: 'Beschrijf a.u.b. de aard en omvang van de schade door het ongeval.',
+    },
+
+    condition: {
+      damageReport: {
+        title: 'Schade Rapport',
+        description: 'Geef a.u.b. eventuele schade aan het voertuig aan. (Interactief diagram zou hier komen in een echte implementatie)',
+        placeholder: 'Interactief autodiagram voor schade rapportage (Niet geïmplementeerd in deze demo)',
+      },
+      technicalChecklist: {
+        title: 'Technische Checklist',
+      },
+      interiorChecklist: {
+        title: 'Interieur Checklist',
+      },
+      tyreReport: {
+        title: 'Banden Rapport',
+        brand: 'Merk',
+        brandPlaceholder: 'bijv. Michelin',
+        treadDepth: 'Profiel Diepte (mm)',
+        condition: 'Staat',
+      },
+      rating: {
+        good: 'Goed',
+        average: 'Gemiddeld',
+        poor: 'Slecht',
+        notWorking: 'Niet Werkend',
+        worn: 'Versleten',
+      },
+    },
+  },
+
+  yes: 'Ja',
+  no: 'Nee',
+  edit: 'Bewerken',
+  back: 'Terug',
+
+  back: 'Terug',
+  next: 'Volgende',
+  logout: 'Uitloggen',
+  notifications: 'Meldingen',
+  downloadReport: 'Rapport Downloaden',
+  viewDetails: 'Bekijk Details',
+  copyLink: 'Link Kopiëren',
+  filters: 'Filters',
+  viewAll: 'Bekijk Alles'
+
+  },
+
+
+
 };
