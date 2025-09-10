@@ -13,6 +13,8 @@ const Button = ({
   onClick,
   disabled = false,
   type = 'button',
+  textColorClass='',
+  borderColorClass='',
   ...props 
 }) => {
   // Base classes for all buttons

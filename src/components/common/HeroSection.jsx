@@ -50,7 +50,7 @@ const HeroSection = () => {
 
   return (
     <section 
-      className="min-h-screen w-full flex items-center justify-center pt-16 pb-12 overflow-x-hidden font-sans relative"
+      className="min-h-screen w-full flex items-center justify-center sm:pt-16 sm:pb-12 overflow-x-hidden font-sans relative"
   style={{
   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cpath d='M45 30c2-2 5-3 8-3 4 0 7 2 9 5 2 3 2 6 0 9-2 2-5 3-8 3-4 0-7-2-9-5-2-3-2-6 0-9zm25 15c2-1 4-3 5-5 1-2 1-5 0-7-1-2-3-3-5-3-2 0-4 1-5 3-1 2-1 5 0 7 1 2 3 4 5 5zm-15 20c1-1 3-2 4-2 2 0 3 1 4 2 1 1 1 3 0 4-1 1-3 2-4 2-2 0-3-1-4-2-1-1-1-3 0-4zm35-10c1-1 2-3 2-5 0-2-1-3-2-4-1-1-2-1-3 0-1 1-2 3-2 5 0 2 1 3 2 4 1 1 2 1 3 0zm-25 15c1-1 2-2 2-4 0-2-1-3-2-4-1-1-2-1-3 0-1 1-2 2-2 4 0 2 1 3 2 4 1 1 2 1 3 0z' fill='%232563eb' fill-opacity='0.08'/%3E%3C/svg%3E"), linear-gradient(135deg, #f0f4ff 0%, #fff7ed 100%)`,
   backgroundSize: '200px 100px, auto',
@@ -65,7 +65,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 items-center">
           {/* Text Content */}
           <div className={`text-gray-900 transition-all duration-700 ease-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
             <div className="mb-6">

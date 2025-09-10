@@ -40,6 +40,7 @@ export const translations = {
     languageName: "English",
     // Header
     header: {
+      searchPlaceholder:'Exlpore Auction',
       mainMenu: {
         home: "Home",
         buyCars: "Buy Cars",
@@ -156,7 +157,8 @@ export const translations = {
     dailyCars: {
       title: "More than 3,000 cars added daily",
       activeStatus: "Active",
-      addedToday: "Added today"
+      addedToday: "Added today",
+      viewDetails:'View Details'
     },
     // Business Growth Section
     businessGrowth: {
@@ -594,7 +596,23 @@ phonePlaceholder:"+3412345671",
   
 
     },
-    sellerDashboard: {
+
+  sellerDashboard: {
+     view: 'View',
+  edit: 'Edit',
+  delete: 'Delete',
+  cancel: 'Cancel',
+  retry: 'Retry',
+  deleting: 'Deleting...',
+  previous: 'Previous',
+  next: 'Next',
+  to: 'to',
+  of: 'of',
+  results: 'results',
+  back: 'Back',
+  copyLink: 'Copy Link',
+  viewDetails: 'View Details',
+  filters: 'Filters',
     // Alerts & Messages
     addVehicleAlert: 'Redirecting to Add Vehicle form...',
     linkCopied: 'Link copied to clipboard!',
@@ -652,7 +670,25 @@ phonePlaceholder:"+3412345671",
       status: 'Status',
       price: 'Price',
       actions: 'Actions',
-      private: 'Private'
+      private: 'Private',
+      publish: 'Publish',
+      unpublish: 'Unpublish',
+      loadError: 'Failed to load vehicles',
+      deleteSuccess: 'Vehicle deleted successfully',
+      deleteError: 'Failed to delete vehicle',
+      statusUpdateSuccess: 'Vehicle status updated successfully',
+      statusUpdateError: 'Failed to update status',
+      noResults: 'No vehicles found matching your criteria',
+      noVehicles: 'No vehicles in inventory',
+      showing: 'Showing',
+      sort: {
+        year: 'Year',
+        make: 'Make',
+        price: 'Price',
+        mileage: 'Mileage'
+      },
+      deleteConfirmTitle: 'Delete Vehicle',
+      deleteConfirmText: 'Are you sure you want to delete this vehicle? This action cannot be undone.'
     },
 
     // Vehicle Statuses
@@ -689,28 +725,13 @@ phonePlaceholder:"+3412345671",
       units: 'units',
       financialSummary: 'Financial Summary',
       period: 'Period',
-      grosssales: 'Gross Sales',
-      fees: 'Platform Fees',
-      netearnings: 'Net Earnings',
-      ytdTotal: 'YTD Total',
-            revenueChartTitle: 'Monthly Revenue Trend',
-      topModelsChartTitle: 'Sales Distribution by Model',
-      revenueTitle: 'Revenue Overview',
-      // chartPlaceholder: 'Revenue Chart Placeholder', // Can be removed
-      totalRevenue: 'Total Revenue',
-      vehiclesSold: 'Vehicles Sold',
-      sellThroughRate: 'Sell-Through Rate',
-      avgSellingPrice: 'Avg. Selling Price', // Added
-      topModels: 'Top Selling Models',
-      // chartPlaceholder: 'Top Models Chart Placeholder', // Can be removed
-      units: 'units',
-      financialSummary: 'Financial Summary',
-      period: 'Period',
       grossSales: 'Gross Sales',
       fees: 'Platform Fees',
       netEarnings: 'Net Earnings',
       ytdTotal: 'YTD Total',
-      // Add translations for chart tooltips/legends if needed, or rely on dataset labels
+      revenueChartTitle: 'Monthly Revenue Trend',
+      topModelsChartTitle: 'Sales Distribution by Model',
+      avgSellingPrice: 'Avg. Selling Price'
     },
 
     // Generic UI
@@ -720,8 +741,20 @@ phonePlaceholder:"+3412345671",
     viewAll: 'View All',
     viewDetails: 'View Details',
     back: 'Back to List',
-    copyLink: 'Copy Link'
-  },
+    copyLink: 'Copy Link',
+    edit: 'Edit',
+    delete: 'Delete',
+    cancel: 'Cancel',
+    retry: 'Retry',
+    deleting: 'Deleting...',
+    previous: 'Previous',
+    next: 'Next',
+    to: 'to',
+    of: 'of',
+    results: 'results'
+  }
+
+  ,
   
 addCarListing: {
     title: 'Add New Car Listing',
@@ -971,6 +1004,7 @@ addCarListing: {
     dec: 'Dez', // December abbreviation in German
   },
   header: {
+    searchPlaceholder:'Explore Auctions',
     mainMenu: {
       home: "Startseite",
         buyCars: "Autos kaufen",
@@ -1500,13 +1534,29 @@ phonePlaceholder:"+3412345671",
   
 
     },
-    sellerDashboard: {
+
+  sellerDashboard: {
     // Alerts & Messages
+     view: 'Ansehen',
+  edit: 'Bearbeiten',
+  delete: 'Löschen',
+  cancel: 'Abbrechen',
+  retry: 'Erneut versuchen',
+  deleting: 'Wird gelöscht...',
+  previous: 'Zurück',
+  next: 'Weiter',
+  to: 'bis',
+  of: 'von',
+  results: 'Ergebnisse',
+  back: 'Zurück',
+  copyLink: 'Link kopieren',
+  viewDetails: 'Details anzeigen',
+  filters: 'Filter',
     addVehicleAlert: 'Weiterleitung zum Fahrzeug hinzufügen Formular...',
     linkCopied: 'Link in die Zwischenablage kopiert!',
     linkCopyFailed: 'Link konnte nicht kopiert werden.',
-    logoutAlert: 'Abmeldung...',
-    viewBidHistoryAlert: 'Bietverlauf wird geöffnet...',
+    logoutAlert: 'Abmelden...',
+    viewBidHistoryAlert: 'Gebotshistorie öffnen...',
     
     // Sidebar Navigation
     sidebar: {
@@ -1521,12 +1571,12 @@ phonePlaceholder:"+3412345671",
 
     // Stats Cards
     stats: {
-      totalListings: 'Gesamtanzahl Inserate',
+      totalListings: 'Gesamtangebote',
       activeAuctions: 'Aktive Auktionen',
       vehiclesSold: 'Verkaufte Fahrzeuge',
       totalRevenue: 'Gesamtumsatz',
       sellThroughRate: 'Verkaufsrate',
-      avgSellingPrice: 'Durchschn. Verkaufspreis', // Hinzugefügt
+      avgSellingPrice: 'Durchschn. Verkaufspreis'
     },
 
     // Overview Tab
@@ -1549,7 +1599,7 @@ phonePlaceholder:"+3412345671",
       reservePrice: 'Mindestpreis',
       auctionEnds: 'Auktion endet',
       bids: 'Gebote',
-      finalSalePrice: 'Endverkaufspreis',
+      finalSalePrice: 'Verkaufspreis',
       soldTo: 'Verkauft an',
       privateAuction: 'Privater Auktionslink',
       searchPlaceholder: 'Fahrzeuge suchen...',
@@ -1558,7 +1608,25 @@ phonePlaceholder:"+3412345671",
       status: 'Status',
       price: 'Preis',
       actions: 'Aktionen',
-      private: 'Privat'
+      private: 'Privat',
+      publish: 'Veröffentlichen',
+      unpublish: 'Veröffentlichung aufheben',
+      loadError: 'Fahrzeuge konnten nicht geladen werden',
+      deleteSuccess: 'Fahrzeug erfolgreich gelöscht',
+      deleteError: 'Fahrzeug konnte nicht gelöscht werden',
+      statusUpdateSuccess: 'Fahrzeugstatus erfolgreich aktualisiert',
+      statusUpdateError: 'Status konnte nicht aktualisiert werden',
+      noResults: 'Keine Fahrzeuge gefunden',
+      noVehicles: 'Keine Fahrzeuge im Inventar',
+      showing: 'Angezeigt',
+      sort: {
+        year: 'Jahr',
+        make: 'Marke',
+        price: 'Preis',
+        mileage: 'Laufleistung'
+      },
+      deleteConfirmTitle: 'Fahrzeug löschen',
+      deleteConfirmText: 'Sind Sie sicher, dass Sie dieses Fahrzeug löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
     },
 
     // Vehicle Statuses
@@ -1578,45 +1646,30 @@ phonePlaceholder:"+3412345671",
 
     // Messages/Chat Tab
     messages: {
-      typeMessage: 'Eine Nachricht schreiben...',
-      conversations: 'Unterhaltungen',
-      selectConversation: 'Wählen Sie eine Unterhaltung',
-      selectConversationDesc: 'Wählen Sie eine Unterhaltung aus der Liste, um mit dem Chatten zu beginnen.'
+      typeMessage: 'Nachricht eingeben...',
+      conversations: 'Konversationen',
+      selectConversation: 'Konversation auswählen',
+      selectConversationDesc: 'Wählen Sie eine Konversation aus der Liste, um zu chatten.'
     },
 
     // Analytics Tab
     analytics: {
-       revenueChartTitle: 'Monatlicher Umsatztrend',
-      topModelsChartTitle: 'Verkaufsverteilung nach Modell',
-      revenueTitle: 'Umsatzübersicht',
-      // chartPlaceholder: 'Umsatzdiagramm Platzhalter', // Entfernen
-      totalRevenue: 'Gesamtumsatz',
-      vehiclesSold: 'Verkaufte Fahrzeuge',
-      sellThroughRate: 'Verkaufsrate',
-      avgSellingPrice: 'Durchschn. Verkaufspreis', // Hinzugefügt
-      topModels: 'Bestverkaufte Modelle',
-      // chartPlaceholder: 'Diagramm für Bestseller Platzhalter', // Entfernen
-      units: 'Einheiten',
-      financialSummary: 'Finanzübersicht',
-      period: 'Zeitraum',
-      grossSales: 'Bruttoumsatz',
-      fees: 'Plattformgebühren',
-      netEarnings: 'Nettogewinn',
-      ytdTotal: 'YTD Gesamt',
-      // Übersetzungen für Diagramm-Tooltips/Legenden bei Bedarf hinzufügen
       revenueTitle: 'Umsatzübersicht',
       chartPlaceholder: 'Umsatzdiagramm Platzhalter',
       totalRevenue: 'Gesamtumsatz',
       vehiclesSold: 'Verkaufte Fahrzeuge',
       sellThroughRate: 'Verkaufsrate',
-      topModels: 'Bestverkaufte Modelle',
+      topModels: 'Top-Verkaufsmodelle',
       units: 'Einheiten',
       financialSummary: 'Finanzübersicht',
       period: 'Zeitraum',
-      grosssales: 'Bruttoumsatz',
+      grossSales: 'Bruttoumsatz',
       fees: 'Plattformgebühren',
-      netearnings: 'Nettogewinn',
-      ytdTotal: 'YTD Gesamt'
+      netEarnings: 'Nettoertrag',
+      ytdTotal: 'Jahresgesamt',
+      revenueChartTitle: 'Monatlicher Umsatztrend',
+      topModelsChartTitle: 'Verkaufsverteilung nach Modell',
+      avgSellingPrice: 'Durchschn. Verkaufspreis'
     },
 
     // Generic UI
@@ -1626,8 +1679,20 @@ phonePlaceholder:"+3412345671",
     viewAll: 'Alle anzeigen',
     viewDetails: 'Details anzeigen',
     back: 'Zurück zur Liste',
-    copyLink: 'Link kopieren'
-  },
+    copyLink: 'Link kopieren',
+    edit: 'Bearbeiten',
+    delete: 'Löschen',
+    cancel: 'Abbrechen',
+    retry: 'Erneut versuchen',
+    deleting: 'Wird gelöscht...',
+    previous: 'Zurück',
+    next: 'Weiter',
+    to: 'bis',
+    of: 'von',
+    results: 'Ergebnisse'
+  }
+
+  ,
   
    addCarListing: {
     title: 'Neues Fahrzeug inserieren',
@@ -1872,6 +1937,8 @@ phonePlaceholder:"+3412345671",
   },
 
     header: {
+          searchPlaceholder:'Explore Auctions',
+
       mainMenu: {
         home: "Home",
         buyCars: "Auto's kopen",
@@ -2388,22 +2455,37 @@ phonePlaceholder:"+3412345671",
         }
       }
     },
-      sellerDashboard: {
+  sellerDashboard: {
+     view: 'Bekijken',
+  edit: 'Bewerken',
+  delete: 'Verwijderen',
+  cancel: 'Annuleren',
+  retry: 'Opnieuw proberen',
+  deleting: 'Verwijderen...',
+  previous: 'Vorige',
+  next: 'Volgende',
+  to: 'tot',
+  of: 'van',
+  results: 'resultaten',
+  back: 'Terug',
+  copyLink: 'Link kopiëren',
+  viewDetails: 'Details bekijken',
+  filters: 'Filters',
     // Alerts & Messages
-    addVehicleAlert: 'Doorverwijzen naar Voertuig Toevoegen formulier...',
+    addVehicleAlert: 'Doorsturen naar Voertuig toevoegen formulier...',
     linkCopied: 'Link gekopieerd naar klembord!',
-    linkCopyFailed: 'Link kopiëren mislukt.',
+    linkCopyFailed: 'Link kon niet worden gekopieerd.',
     logoutAlert: 'Uitloggen...',
-    viewBidHistoryAlert: 'Biedingsgeschiedenis openen...',
+    viewBidHistoryAlert: 'Bodgeschiedenis openen...',
     
     // Sidebar Navigation
     sidebar: {
       overview: 'Overzicht',
-      inventory: 'Mijn Voorraad',
+      inventory: 'Mijn Inventaris',
       myAuctions: 'Mijn Veilingen',
-      sales: 'Verkoop & Transaktionen',
+      sales: 'Verkoop & Transacties',
       messages: 'Berichten',
-      analytics: 'Analytics',
+      analytics: 'Analyse',
       settings: 'Instellingen'
     },
 
@@ -2412,12 +2494,9 @@ phonePlaceholder:"+3412345671",
       totalListings: 'Totaal Aanbod',
       activeAuctions: 'Actieve Veilingen',
       vehiclesSold: 'Verkochte Voertuigen',
-      totalRevenue: 'Totale Opbrengst',
-      avgSellingPrice: 'Gem. Verkoopprijs', // Added,
+      totalRevenue: 'Totale Omzet',
       sellThroughRate: 'Verkooppercentage',
-
-
-
+      avgSellingPrice: 'Gem. Verkoopprijs'
     },
 
     // Overview Tab
@@ -2428,28 +2507,46 @@ phonePlaceholder:"+3412345671",
 
     // Inventory Tab
     inventory: {
-      addVehicle: 'Voertuig Toevoegen',
+      addVehicle: 'Voertuig toevoegen',
       vehicleDetails: 'Voertuigdetails',
       mileage: 'Kilometerstand',
-      fuelType: 'Brandstof Type',
+      fuelType: 'Brandstof',
       transmission: 'Transmissie',
       color: 'Kleur',
       condition: 'Conditie',
       location: 'Locatie',
-      currentBid: 'Huidig Bod',
+      currentBid: 'Huidig bod',
       reservePrice: 'Reserveprijs',
-      auctionEnds: 'Veiling Eindigt',
+      auctionEnds: 'Veiling eindigt',
       bids: 'Biedingen',
-      finalSalePrice: 'Eindverkoopprijs',
-      soldTo: 'Verkocht Aan',
-      privateAuction: 'Privé Veiling Link',
+      finalSalePrice: 'Verkoopprijs',
+      soldTo: 'Verkocht aan',
+      privateAuction: 'Privé veiling link',
       searchPlaceholder: 'Zoek voertuigen...',
       vehicle: 'Voertuig',
       details: 'Details',
       status: 'Status',
       price: 'Prijs',
       actions: 'Acties',
-      private: 'Privé'
+      private: 'Privé',
+      publish: 'Publiceren',
+      unpublish: 'Depubliceren',
+      loadError: 'Voertuigen konden niet worden geladen',
+      deleteSuccess: 'Voertuig succesvol verwijderd',
+      deleteError: 'Voertuig kon niet worden verwijderd',
+      statusUpdateSuccess: 'Voertuigstatus succesvol bijgewerkt',
+      statusUpdateError: 'Status kon niet worden bijgewerkt',
+      noResults: 'Geen voertuigen gevonden',
+      noVehicles: 'Geen voertuigen in inventaris',
+      showing: 'Weergegeven',
+      sort: {
+        year: 'Jaar',
+        make: 'Merk',
+        price: 'Prijs',
+        mileage: 'Kilometerstand'
+      },
+      deleteConfirmTitle: 'Voertuig verwijderen',
+      deleteConfirmText: 'Weet u zeker dat u dit voertuig wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
     },
 
     // Vehicle Statuses
@@ -2461,7 +2558,7 @@ phonePlaceholder:"+3412345671",
 
     // Filters
     filters: {
-      all: 'Alle Voertuigen',
+      all: 'Alle voertuigen',
       active: 'Actief',
       sold: 'Verkocht',
       draft: 'Concept'
@@ -2477,12 +2574,12 @@ phonePlaceholder:"+3412345671",
 
     // Analytics Tab
     analytics: {
-      revenueTitle: 'Opbrengst Overzicht',
-      chartPlaceholder: 'Opbrengst Grafiek Placeholder',
-      totalRevenue: 'Totale Opbrengst',
+      revenueTitle: 'Omzetoverzicht',
+      chartPlaceholder: 'Omzetgrafiek Placeholder',
+      totalRevenue: 'Totale Omzet',
       vehiclesSold: 'Verkochte Voertuigen',
       sellThroughRate: 'Verkooppercentage',
-      topModels: 'Best Verkopende Modellen',
+      topModels: 'Top Verkoopmodellen',
       units: 'eenheden',
       financialSummary: 'Financieel Overzicht',
       period: 'Periode',
@@ -2490,36 +2587,31 @@ phonePlaceholder:"+3412345671",
       fees: 'Platformkosten',
       netEarnings: 'Netto Winst',
       ytdTotal: 'YTD Totaal',
-        revenueChartTitle: 'Maandelijkse Omzet Trend', // For Bar Chart Title
-      topModelsChartTitle: 'Verkoopverdeling per Model', // For Doughnut Chart Title
-      revenueTitle: 'Opbrengst Overzicht',
-      // chartPlaceholder: 'Opbrengst Grafiek Placeholder', // Removed as we have real charts
-      totalRevenue: 'Totale Opbrengst',
-      vehiclesSold: 'Verkochte Voertuigen',
-      sellThroughRate: 'Verkooppercentage',
-      avgSellingPrice: 'Gem. Verkoopprijs', // Added
-      topModels: 'Best Verkopende Modellen',
-      // chartPlaceholder: 'Top Modellen Grafiek Placeholder', // Removed
-      units: 'eenheden',
-      financialSummary: 'Financieel Overzicht',
-      period: 'Periode',
-      grosssales: 'Bruto Verkopen',
-      fees: 'Platformkosten',
-      netearnings: 'Netto Winst',
-      ytdTotal: 'YTD Totaal',
+      revenueChartTitle: 'Maandelijkse Omzettrend',
+      topModelsChartTitle: 'Verkoopverdeling per Model',
+      avgSellingPrice: 'Gem. Verkoopprijs'
     },
-       downloadReport: 'Rapport Downloaden', // Added at component level
 
     // Generic UI
-    comingSoon: 'Binnenkort Beschikbaar',
+    downloadReport: 'Rapport downloaden',
+    comingSoon: 'Binnenkort beschikbaar',
     comingSoonDesc: 'Deze sectie is in ontwikkeling.',
-    viewAll: 'Bekijk Alles',
-    viewDetails: 'Bekijk Details',
-    back: 'Terug naar Lijst',
-    copyLink: 'Link Kopiëren',
-   
-  
-  },
+    viewAll: 'Alles bekijken',
+    viewDetails: 'Details bekijken',
+    back: 'Terug naar lijst',
+    copyLink: 'Link kopiëren',
+    edit: 'Bewerken',
+    delete: 'Verwijderen',
+    cancel: 'Annuleren',
+    retry: 'Opnieuw proberen',
+    deleting: 'Verwijderen...',
+    previous: 'Vorige',
+    next: 'Volgende',
+    to: 'tot',
+    of: 'van',
+    results: 'resultaten'
+  }
+  ,
    addCarListing: {
     title: 'Nieuwe auto aanbieden',
     subtitle: 'Volg de stappen om uw voertuig te verkopen.',

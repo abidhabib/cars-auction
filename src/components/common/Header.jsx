@@ -5,15 +5,11 @@ import { useAuth } from '../../context/AuthContext';
 import { 
   FiMenu, 
   FiX, 
-  FiChevronDown, 
   FiGlobe, 
   FiUser, 
   FiLogOut,
   FiShoppingCart,
   FiTag,
-  FiInfo,
-  FiPhone,
-  FiHome,
   FiSearch,
   FiSettings
 } from 'react-icons/fi';
@@ -24,20 +20,11 @@ const Header = () => {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [mobileDropdownStates, setMobileDropdownStates] = useState({
-    buy: false,
-    sell: false
-  });
-  const [desktopDropdownStates, setDesktopDropdownStates] = useState({
-    buy: false,
-    sell: false
-  });
   const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   
   const dropdownRefs = {
-    buy: useRef(null),
-    sell: useRef(null),
     language: useRef(null),
     user: useRef(null)
   };
@@ -76,14 +63,6 @@ const Header = () => {
 
       Object.entries(dropdownRefs).forEach(([key, ref]) => {
         if (ref.current && !ref.current.contains(event.target)) {
-          if (key === 'buy') {
-            setDesktopDropdownStates(prev => ({ ...prev, buy: false }));
-            setMobileDropdownStates(prev => ({ ...prev, buy: false }));
-          }
-          if (key === 'sell') {
-            setDesktopDropdownStates(prev => ({ ...prev, sell: false }));
-            setMobileDropdownStates(prev => ({ ...prev, sell: false }));
-          }
           if (key === 'language') setLanguageDropdownOpen(false);
           if (key === 'user') setUserDropdownOpen(false);
         }
@@ -94,71 +73,34 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const buyMenuItems = [
-    // 1. Use theme color for icons
-    { name: t('header.buyMenu.browseInventory'), icon: <FiShoppingCart className="text-logo-dark-blue" />, href: '/buy/inventory' },
-    { name: t('header.buyMenu.directBuy'), icon: <FiTag className="text-logo-dark-blue" />, href: '/buy/direct' }
-  ];
-
-  const sellMenuItems = [
-    // 1. Use theme color for icons
-    { name: t('header.sellMenu.sellYourCar'), icon: <FiTag className="text-logo-dark-blue" />, href: '/sell/car' },
-    { name: t('header.sellMenu.pricingGuide'), icon: <FiTag className="text-logo-dark-blue" />, href: '/sell/pricing' }
-  ];
-
   const mainMenuItems = [
-    // 1. Use theme color for icons
-    { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-logo-dark-blue" />, href: '/buy', hasDropdown: true, key: 'buy' },
-    { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-logo-dark-blue" />, href: '/sell', hasDropdown: true, key: 'sell' },
-    { name: t('header.mainMenu.aboutUs'), icon: <FiInfo className="text-logo-dark-blue" />, href: '/about' },
-    { name: t('header.mainMenu.contact'), icon: <FiPhone className="text-logo-dark-blue" />, href: '/contact' },
+    { name: t('header.mainMenu.buyCars') || 'Buy Cars', icon: <FiShoppingCart className="text-logo-dark-blue" />, href: '/buy' },
+    { name: t('header.mainMenu.sellCars') || 'Sell Cars', icon: <FiTag className="text-logo-dark-blue" />, href: '/sell' }
   ];
 
   const mobileMenuItems = [
-    { name: 'Home', icon: <FiHome className="text-white" />, href: '/home' },
-    { name: t('header.mainMenu.buyCars'), icon: <FiShoppingCart className="text-white" />, href: '/buy', hasDropdown: true, key: 'buy' },
-    { name: t('header.mainMenu.sellCars'), icon: <FiTag className="text-white" />, href: '/sell', hasDropdown: true, key: 'sell' },
-    { name: t('header.mainMenu.aboutUs'), icon: <FiInfo className="text-white" />, href: '/about' },
-    { name: t('header.mainMenu.contact'), icon: <FiPhone className="text-white" />, href: '/contact' },
-    { name: 'Search', icon: <FiSearch className="text-white" />, href: '/search' },
+    { name: t('header.mainMenu.buyCars') || 'Buy Cars', icon: <FiShoppingCart className="text-white" />, href: '/buy' },
+    { name: t('header.mainMenu.sellCars') || 'Sell Cars', icon: <FiTag className="text-white" />, href: '/sell' },
+    { name: 'Search', icon: <FiSearch className="text-white" />, href: '/search' }
   ];
 
   const isActiveRoute = (href) => {
-    if (href === '/home') return location.pathname === '/' || location.pathname === '/home';
     return location.pathname.startsWith(href);
-  };
-
-  const toggleMobileDropdown = (dropdownKey, e) => {
-    e?.stopPropagation();
-    setMobileDropdownStates(prev => ({
-      ...prev,
-      [dropdownKey]: !prev[dropdownKey]
-    }));
-  };
-
-  const toggleDesktopDropdown = (dropdownKey, e) => {
-    e?.stopPropagation();
-    const otherKey = dropdownKey === 'buy' ? 'sell' : 'buy';
-    setDesktopDropdownStates(prev => ({
-      ...prev,
-      [otherKey]: false,
-      [dropdownKey]: !prev[dropdownKey]
-    }));
   };
 
   const handleNavigation = (path, e) => {
     e?.preventDefault();
     navigate(path);
     setMobileMenuOpen(false);
-    setDesktopDropdownStates({ buy: false, sell: false });
   };
 
-  const handleSubNavigation = (path, dropdownKey, e) => {
-    e?.preventDefault();
-    e?.stopPropagation();
-    navigate(path);
-    setMobileMenuOpen(false);
-    setDesktopDropdownStates(prev => ({ ...prev, [dropdownKey]: false }));
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      setMobileMenuOpen(false);
+    }
   };
 
   return (
@@ -172,7 +114,6 @@ const Header = () => {
       )}
 
       {/* Header */}
-      {/* 2. Use theme color for background */}
       <header 
         className={`fixed w-full z-50 transition-all duration-300 shadow bg-logo-dark-blue py-3 ${scrolled ? 'shadow-md shadow-white' : ''}`}
       >
@@ -181,69 +122,51 @@ const Header = () => {
             {/* Logo */}
             <div className="flex items-center">
               <button 
-                onClick={() => navigate('/home')}
+                onClick={() => navigate('/')}
                 className="flex items-center focus:outline-none"
               >
-                {/* 3. CONFIRMED: Use logoLight.svg (white logo) on the dark blue header background */}
                 <img src="/logoLight.svg" alt="CarNetwork Logo" className="h-8" />
               </button>
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex lg:items-center lg:space-x-1">
-              {mainMenuItems.map((item, index) => (
-                <div key={index} className="relative" ref={item.hasDropdown ? dropdownRefs[item.key] : null}>
-                  {item.hasDropdown ? (
-                    <>
-                      <button 
-                        data-dropdown-toggle="true"
-                        onClick={(e) => toggleDesktopDropdown(item.key, e)}
-                        // 2. Use theme colors for hover/active states
-                        className={`flex items-center px-4 py-2 text-sm font-medium transition-colors rounded-lg ${
-                          isActiveRoute(item.href) 
-                            ? 'text-white bg-background-deep-blue' // Use darker blue for active state contrast
-                            : 'text-indigo-100 hover:text-white hover:bg-background-deep-blue/50' // Use theme color for hover
-                        }`}
-                      >
-                        {item.name}
-                        <FiChevronDown className={`ml-1 transition-transform ${
-                          desktopDropdownStates[item.key] ? 'rotate-180' : ''
-                        }`} />
-                      </button>
-                      
-                      {desktopDropdownStates[item.key] && (
-                        <div className="absolute left-0 mt-2 w-56 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-20 z-50 border border-gray-200">
-                          <div className="py-1">
-                            {(item.key === 'buy' ? buyMenuItems : sellMenuItems).map((subItem, subIndex) => (
-                              <button
-                                key={subIndex}
-                                onClick={(e) => handleSubNavigation(subItem.href, item.key, e)}
-                                className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors w-full text-left"
-                              >
-                                <span className="mr-3">{subItem.icon}</span>
-                                {subItem.name}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <button
-                      onClick={(e) => handleNavigation(item.href, e)}
-                      // 2. Use theme colors for hover/active states
-                      className={`px-4 py-2 text-sm font-medium transition-colors rounded-lg ${
-                        isActiveRoute(item.href) 
-                          ? 'text-white bg-background-deep-blue' // Use darker blue for active state contrast
-                          : 'text-indigo-100 hover:text-white hover:bg-background-deep-blue/50' // Use theme color for hover
-                      }`}
-                    >
-                      {item.name}
-                    </button>
-                  )}
+            <div className="hidden lg:flex lg:items-center lg:space-x-4 flex-1 max-w-2xl mx-8">
+              <nav className="flex lg:items-center lg:space-x-1">
+                {mainMenuItems.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={(e) => handleNavigation(item.href, e)}
+                    className={`flex items-center px-4 py-2 text-sm font-medium transition-colors rounded-lg ${
+                      isActiveRoute(item.href) 
+                        ? 'text-white bg-background-deep-blue'
+                        : 'text-indigo-100 hover:text-white hover:bg-background-deep-blue/50'
+                    }`}
+                  >
+                    <span className="mr-2">{item.icon}</span>
+                    {item.name}
+                  </button>
+                ))}
+              </nav>
+
+              {/* Desktop Search Bar */}
+              <form onSubmit={handleSearch} className="flex-1 ml-4">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={t('header.searchPlaceholder') || "Search cars..."}
+                    className="w-full px-4 py-2 pr-10 text-sm text-gray-900 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-logo-dark-blue"
+                  />
+                  <button 
+                    type="submit"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <FiSearch className="h-4 w-4" />
+                  </button>
                 </div>
-              ))}
-            </nav>
+              </form>
+            </div>
 
             {/* User Actions */}
             <div className="flex items-center space-x-3">
@@ -256,12 +179,10 @@ const Header = () => {
                     setLanguageDropdownOpen(!languageDropdownOpen);
                     setUserDropdownOpen(false);
                   }}
-                  // 2. Use theme colors for hover
                   className="flex items-center px-3 py-2 text-sm text-indigo-100 hover:text-white hover:bg-background-deep-blue/50 transition-colors rounded-lg"
                 >
                   <FiGlobe className="mr-1 text-white" />
                   <span className="hidden md:inline">{getLanguageName(language)}</span>
-                  <FiChevronDown className={`ml-1 transition-transform ${languageDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
                 {languageDropdownOpen && (
@@ -275,7 +196,6 @@ const Header = () => {
                             setLanguage(langCode);
                             setLanguageDropdownOpen(false);
                           }}
-                          // 1. Use theme color for active language
                           className={`block w-full text-left px-4 py-2 text-sm ${
                             language === langCode 
                               ? 'text-logo-dark-blue bg-gray-100' 
@@ -300,14 +220,12 @@ const Header = () => {
                       setUserDropdownOpen(!userDropdownOpen);
                       setLanguageDropdownOpen(false);
                     }}
-                    // 2. Use theme colors for hover
-                    className="flex items-center text-sm text-indigo-100 hover:text-white  transition-colors rounded-lg "
+                    className="flex items-center text-sm text-indigo-100 hover:text-white transition-colors rounded-lg"
                   >
                     <div className="w-8 h-8 rounded-full bg-background-deep-blue flex items-center justify-center text-white">
                       {user.name ? user.name.charAt(0).toUpperCase() : <FiUser className="w-4 h-4" />}
                     </div>
                     <span className="truncate max-w-[100px] ml-2 hidden lg:inline">{user.name}</span>
-                    <FiChevronDown className={`ml-1 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
                   
                   {userDropdownOpen && (
@@ -328,31 +246,19 @@ const Header = () => {
                           className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           <FiSettings className="mr-2 text-gray-500" />
-                          {t('header.userMenu.dashboard')}
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate('/profile');
-                            setUserDropdownOpen(false);
-                          }}
-                          className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          <FiUser className="mr-2 text-gray-500" />
-                          {t('header.userMenu.profile')}
+                          {t('header.userMenu.dashboard') || 'Dashboard'}
                         </button>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             logout();
-                                                    navigate('/');
-
+                            navigate('/');
                             setUserDropdownOpen(false);
                           }}
                           className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           <FiLogOut className="mr-2 text-gray-500" />
-                          {t('logout')}
+                          {t('logout') || 'Logout'}
                         </button>
                       </div>
                     </div>
@@ -362,17 +268,15 @@ const Header = () => {
                 <div className="hidden md:flex items-center space-x-2">
                   <button 
                     onClick={() => navigate('/login')}
-                    // 2. Use theme colors for hover
                     className="px-4 py-2 text-sm font-medium text-indigo-100 hover:text-white hover:bg-background-deep-blue/50 transition-colors rounded-lg"
                   >
-                    {t('navigation.login')}
+                    {t('navigation.login') || 'Login'}
                   </button>
-                  {/* 2. Use theme colors for primary signup button */}
                   <button 
                     onClick={() => navigate('/register')}
-                    className="px-4 py-2 text-sm font-medium text-white bg-background-deep-blue rounded-lg hover:bg-[#100f25] transition-colors" // Slightly darker hover for deep blue
+                    className="px-4 py-2 text-sm font-medium text-white bg-background-deep-blue rounded-lg hover:bg-[#100f25] transition-colors"
                   >
-                    {t('navigation.signup')}
+                    {t('navigation.signup') || 'Sign Up'}
                   </button>
                 </div>
               )}
@@ -386,10 +290,30 @@ const Header = () => {
               </button>
             </div>
           </div>
+
+          {/* Mobile Search Bar - shown below nav on mobile */}
+          <div className="mt-3 lg:hidden">
+            <form onSubmit={handleSearch}>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={t('header.searchPlaceholder') || "Search cars..."}
+                  className="w-full px-4 py-2 pr-10 text-sm text-gray-900 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-logo-dark-blue"
+                />
+                <button 
+                  type="submit"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <FiSearch className="h-4 w-4" />
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
 
-        {/* Mobile Menu - Full Width Sidebar with #3b396d background */}
-        {/* 2. Use theme color for background */}
+        {/* Mobile Menu - Full Width Sidebar */}
         <div 
           className={`lg:hidden fixed top-0 left-0 w-full h-full bg-logo-dark-blue z-50 transform transition-transform duration-300 ease-in-out ${
             mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
@@ -399,7 +323,6 @@ const Header = () => {
             {/* Mobile Header */}
             <div className="flex justify-between items-center p-5 border-b border-background-deep-blue">
               <div className="flex items-center">
-                {/* 3. CONFIRMED: Use logoLight.svg (white logo) on the dark blue mobile menu background */}
                 <img src="/logoLight.svg" alt="CarNetwork Logo" className="h-8" />
               </div>
               <button 
@@ -410,49 +333,39 @@ const Header = () => {
               </button>
             </div>
 
+            {/* Mobile Search Bar */}
+            <div className="p-5 border-b border-background-deep-blue">
+              <form onSubmit={handleSearch}>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={t('header.searchPlaceholder') || "Search cars..."}
+                    className="w-full px-4 py-2 pr-10 text-sm text-gray-900 bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-logo-dark-blue"
+                  />
+                  <button 
+                    type="submit"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <FiSearch className="h-4 w-4" />
+                  </button>
+                </div>
+              </form>
+            </div>
+
             {/* Mobile Menu Items */}
             <div className="flex-1 p-5">
               <nav className="space-y-2">
                 {mobileMenuItems.map((item, index) => (
-                  <div key={index}>
-                    {item.hasDropdown ? (
-                      <div className="mb-2">
-                        <button 
-                          onClick={(e) => toggleMobileDropdown(item.key, e)}
-                          className="flex items-center justify-between w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"
-                        >
-                          <div className="flex items-center">
-                            <span className="mr-3">{item.icon}</span>
-                            {item.name}
-                          </div>
-                          <FiChevronDown className={`transition-transform ${mobileDropdownStates[item.key] ? 'rotate-180' : ''}`} />
-                        </button>
-                        
-                        {mobileDropdownStates[item.key] && (
-                          <div className="ml-8 mt-1 space-y-1">
-                            {(item.key === 'buy' ? buyMenuItems : sellMenuItems).map((subItem, subIndex) => (
-                              <button
-                                key={subIndex}
-                                onClick={(e) => handleSubNavigation(subItem.href, item.key, e)}
-                                className="flex items-center w-full p-2 text-left text-indigo-100 hover:text-white hover:bg-background-deep-blue rounded-lg transition-colors"
-                              >
-                                <span className="mr-3 opacity-70">{subItem.icon}</span>
-                                {subItem.name}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <button
-                        onClick={(e) => handleNavigation(item.href, e)}
-                        className="flex items-center w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"
-                      >
-                        <span className="mr-3">{item.icon}</span>
-                        {item.name}
-                      </button>
-                    )}
-                  </div>
+                  <button
+                    key={index}
+                    onClick={(e) => handleNavigation(item.href, e)}
+                    className="flex items-center w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"
+                  >
+                    <span className="mr-3">{item.icon}</span>
+                    {item.name}
+                  </button>
                 ))}
               </nav>
 
@@ -481,7 +394,7 @@ const Header = () => {
                       className="flex items-center w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"
                     >
                       <FiSettings className="mr-3" />
-                      {t('header.userMenu.dashboard')}
+                      {t('header.userMenu.dashboard') || 'Dashboard'}
                     </button>
                     
                     <button
@@ -493,7 +406,7 @@ const Header = () => {
                       className="flex items-center w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"
                     >
                       <FiLogOut className="mr-3" />
-                      {t('logout')}
+                      {t('logout') || 'Logout'}
                     </button>
                   </div>
                 ) : (
@@ -505,16 +418,16 @@ const Header = () => {
                       }}
                       className="p-3 text-center text-white border border-white rounded-lg hover:bg-white hover:text-logo-dark-blue transition-colors"
                     >
-                      {t('navigation.login')}
+                      {t('navigation.login') || 'Login'}
                     </button>
                     <button 
                       onClick={() => {
                         navigate('/register');
                         setMobileMenuOpen(false);
                       }}
-                      className="p-3 text-center text-white bg-background-deep-blue rounded-lg hover:bg-[#100f25] transition-colors" // Slightly darker hover
+                      className="p-3 text-center text-white bg-background-deep-blue rounded-lg hover:bg-[#100f25] transition-colors"
                     >
-                      {t('navigation.signup')}
+                      {t('navigation.signup') || 'Sign Up'}
                     </button>
                   </div>
                 )}
@@ -532,7 +445,7 @@ const Header = () => {
                         className={`p-2 text-center rounded-lg text-sm ${
                           language === langCode 
                             ? 'bg-white text-logo-dark-blue' 
-                            : 'text-white bg-background-deep-blue hover:bg-[#100f25]' // Slightly darker hover
+                            : 'text-white bg-background-deep-blue hover:bg-[#100f25]'
                         }`}
                       >
                         {getLanguageName(langCode)}
