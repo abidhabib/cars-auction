@@ -1,16 +1,16 @@
-// src/components/help/HelpCenter.jsx
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { Link, useSearchParams } from 'react-router-dom'; // Import useSearchParams
+import { Link, useSearchParams } from 'react-router-dom';
 import { FiMessageSquare, FiX, FiSend, FiClock, FiMail, FiPhone, FiChevronLeft, FiChevronRight, FiCheck, FiUser } from 'react-icons/fi';
 
 const HelpCenter = () => {
   const { t, language } = useLanguage();
-  const [searchParams, setSearchParams] = useSearchParams(); // Hook to read URL params
-  const [activeTab, setActiveTabInternal] = useState('contact'); // Internal state
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTabInternal] = useState('contact');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '', // Added phone number field
     subject: '',
     message: ''
   });
@@ -28,20 +28,45 @@ const HelpCenter = () => {
   ]);
   const [inputMessage, setInputMessage] = useState('');
 
-  // Effect to set initial tab based on URL parameter
+  // Mock data for support team members
+  const supportTeam = [
+    {
+      id: 1,
+      name: 'Sarah Johnson',
+      role: 'Support Lead',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80'
+    },
+    {
+      id: 2,
+      name: 'Michael Chen',
+      role: 'Technical Support',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80'
+    },
+    {
+      id: 3,
+      name: 'Emma Davis',
+      role: 'Customer Success',
+      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80'
+    },
+    {
+      id:4,
+      role:'IT Manager',
+      image:'https://t3.ftcdn.net/jpg/04/10/17/94/240_F_410179439_izeZbkMJCzdFA7AV2jPOWN767J55L4Rt.jpg'
+    }
+  ];
+
   useEffect(() => {
     const tabParam = searchParams.get('tab');
     if (tabParam === 'faq') {
       setActiveTabInternal('faq');
     } else {
-      setActiveTabInternal('contact'); // Default to contact
+      setActiveTabInternal('contact');
     }
   }, [searchParams]);
 
-  // Function to update both internal state and URL param
   const updateActiveTab = (tab) => {
     setActiveTabInternal(tab);
-    setSearchParams({ tab }); // Update URL: /contact?tab=faq or /contact?tab=contact
+    setSearchParams({ tab });
   };
 
   const handleChange = (e) => {
@@ -55,13 +80,11 @@ const HelpCenter = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitSuccess(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
       
-      // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
@@ -72,11 +95,9 @@ const HelpCenter = () => {
     setOpenFAQIndex(openFAQIndex === index ? null : index);
   };
 
-  // Handle sending a message in chat
   const handleSendMessage = () => {
     if (inputMessage.trim() === '') return;
 
-    // Add user message
     const newUserMessage = {
       id: messages.length + 1,
       text: inputMessage,
@@ -87,12 +108,11 @@ const HelpCenter = () => {
     setMessages(prevMessages => [...prevMessages, newUserMessage]);
     setInputMessage('');
 
-    // Simulate bot response after a delay
     setTimeout(() => {
       const botResponses = [
         "I understand. Let me check that for you.",
         "Thanks for your message. Our team will get back to you shortly.",
-        "For more detailed assistance, you can also contact our support team at support@carnetwork.com",
+        "For more detailed assistance, you can also contact our support team at support@car-network.com",
         "Is there anything else I can help you with?",
         "I've noted your concern. A support representative will contact you within 24 hours."
       ];
@@ -110,7 +130,6 @@ const HelpCenter = () => {
     }, 1000);
   };
 
-  // Handle pressing Enter to send in chat
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -120,28 +139,27 @@ const HelpCenter = () => {
 
   const contactInfo = [
     {
-      icon: (
-        <FiPhone className="w-5 h-5" />
-      ),
+      icon: <FiPhone className="w-5 h-5" />,
       title: t('support.phone'),
-      content: '+1 (555) 123-4567',
-      description: t('support.phoneDesc')
+      content: '+31 (0) 6 123 456 78',
+      description: t('support.phoneDesc'),
+      isLink: true,
+      linkType: 'tel'
     },
     {
-      icon: (
-        <FiMail className="w-5 h-5" />
-      ),
+      icon: <FiMail className="w-5 h-5" />,
       title: t('support.email'),
-      content: 'support@carnetwork.com',
-      description: t('support.emailDesc')
+      content: 'support@car-network.com',
+      description: t('support.emailDesc'),
+      isLink: true,
+      linkType: 'mailto'
     },
     {
-      icon: (
-        <FiClock className="w-5 h-5" />
-      ),
+      icon: <FiClock className="w-5 h-5" />,
       title: t('support.address'),
       content: t('support.fullAddress'),
-      description: t('support.addressDesc')
+      description: t('support.addressDesc'),
+      isLink: false
     }
   ];
 
@@ -184,6 +202,53 @@ const HelpCenter = () => {
             <p className="text-gray-600 max-w-2xl mx-auto">
               {t('support.subtitle') || 'Find answers to common questions or get in touch with our support team'}
             </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Hero Section with Team Photos */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="flex-1 text-center md:text-left">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                {t('support.meetOurTeam') || 'Meet Our Support Team'}
+              </h2>
+              <p className="text-gray-600 mb-4">
+                {t('support.teamDescription') || 'Our dedicated support specialists are here to help you with any questions about our platform.'}
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
+                <div className="flex items-center text-sm text-gray-500">
+                  <FiMail className="mr-2" />
+                  <a href="mailto:support@car-network.com" className="text-blue-600 hover:text-blue-800 font-medium">
+                    support@car-network.com
+                  </a>
+                </div>
+                <div className="flex items-center text-sm text-gray-500">
+                  <FiPhone className="mr-2" />
+                  <a href="tel:+31612345678" className="text-blue-600 hover:text-blue-800 font-medium">
+                    +31 (0) 6 123 456 78
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="flex-1 flex justify-center">
+              <div className="flex -space-x-4">
+                {supportTeam.map((member) => (
+                  <div
+                    key={member.id}
+                    className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-4 border-white shadow-lg transform transition-transform hover:scale-105"
+                    title={`${member.name} - ${member.role}`}
+                  >
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -247,20 +312,37 @@ const HelpCenter = () => {
                     />
                   </div>
                   
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      {t('support.email') || 'Email'}
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
-                      placeholder={t('support.emailPlaceholder') || 'Enter your email'}
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('support.email') || 'Email'}
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
+                        placeholder={t('support.emailPlaceholder') || 'Enter your email'}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('support.phone') || 'Phone'}
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-colors text-sm"
+                        placeholder={t('support.phonePlaceholder') || 'Enter your phone'}
+                      />
+                    </div>
                   </div>
                   
                   <div>
@@ -298,7 +380,7 @@ const HelpCenter = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-[#3b396d]  text-white font-medium py-2.5 px-4 rounded-md hover:bg-[#2a285a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    className="w-full bg-[#3b396d] text-white font-medium py-2.5 px-4 rounded-md hover:bg-[#2a285a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     {isSubmitting ? (t('support.sending') || 'Sending...') : (t('support.sendButton') || 'Send Message')}
                   </button>
@@ -319,60 +401,54 @@ const HelpCenter = () => {
                       </div>
                       <div>
                         <h3 className="font-medium text-gray-900 text-sm mb-1">{info.title}</h3>
-                        <p className="text-[#3b396d] font-medium text-sm mb-1">{info.content}</p>
+                        {info.isLink ? (
+                          <a 
+                            href={`${info.linkType}:${info.content}`} 
+                            className="text-[#3b396d] font-medium text-sm mb-1 hover:underline"
+                          >
+                            {info.content}
+                          </a>
+                        ) : (
+                          <p className="text-[#3b396d] font-medium text-sm mb-1">{info.content}</p>
+                        )}
                         <p className="text-gray-600 text-xs">{info.description}</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                {/* Map Placeholder */}
-                <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('support.officeLocation') || 'Our Office Location'}</h3>
-                  <div className="relative bg-gray-50 rounded-lg h-64 overflow-hidden">
-                    <svg viewBox="0 0 800 500" className="w-full h-full">
-                      <rect width="800" height="500" fill="#e6f2ff" />
-                      <path d="M100,100 Q250,50 400,150 T700,200" stroke="#99c2ff" strokeWidth="40" fill="none" />
-                      <path d="M50,300 Q200,250 350,350 T750,400" stroke="#99c2ff" strokeWidth="30" fill="none" />
-                      <rect x="120" y="80" width="120" height="80" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="260" y="60" width="100" height="100" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="380" y="100" width="140" height="70" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="540" y="80" width="110" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="100" y="200" width="130" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="250" y="180" width="100" height="100" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="370" y="200" width="140" height="80" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="530" y="190" width="120" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="90" y="320" width="140" height="70" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="250" y="300" width="110" height="80" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="380" y="320" width="130" height="70" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <rect x="530" y="300" width="120" height="90" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="2" />
-                      <path d="M50,150 L750,150" stroke="#adb5bd" strokeWidth="8" fill="none" />
-                      <path d="M150,50 L150,450" stroke="#adb5bd" strokeWidth="8" fill="none" />
-                      <path d="M400,50 L400,450" stroke="#adb5bd" strokeWidth="8" fill="none" />
-                      <path d="M650,50 L650,450" stroke="#adb5bd" strokeWidth="8" fill="none" />
-                      <circle cx="200" cy="120" r="15" fill="#3b396d" />
-                      <circle cx="400" cy="200" r="15" fill="#3b396d" />
-                      <circle cx="600" cy="280" r="15" fill="#3b396d" />
-                      <circle cx="400" cy="300" r="20" fill="#3b396d" stroke="#fff" strokeWidth="3" />
-                      <text x="400" y="305" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">A</text>
-                    </svg>
-                    <div className="absolute bottom-4 left-4 bg-white px-3 py-2 rounded-lg shadow-sm border border-gray-200">
-                      <div className="flex items-center">
-                        <div className="w-3 h-3 rounded-full bg-[#3b396d] mr-2"></div>
-                        <span className="text-sm font-medium text-gray-700">{t('support.amsterdamOffice') || 'Amsterdam Office'}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <div className="text-sm text-gray-600">
-                      <p>{t('support.addressLine1') || 'Singel 250, 1016 AB Amsterdam'}</p>
-                      <p>{t('support.addressLine2') || 'Netherlands'}</p>
-                    </div>
-                    <button className="px-4 py-2 bg-[#3b396d] text-white text-sm font-medium rounded-lg hover:bg-[#2a285a] transition-colors whitespace-nowrap">
-                      {t('support.getDirections') || 'Get Directions'}
-                    </button>
-                  </div>
-                </div>
+         {/* Map Placeholder */}
+<div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+  <h3 className="text-lg font-semibold text-gray-800 mb-4">
+    {t('support.officeLocation') || 'Our Office Location'}
+  </h3>
+
+  {/* Google Maps Embed */}
+  <div className="relative bg-gray-50 rounded-lg h-64 overflow-hidden">
+    <iframe
+      title="Office Location"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2436.154529322312!2d4.890943315803501!3d52.36752097977469!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c609ea1d9f4b2d%3A0x7f8ec9f4c3a5f0b0!2sSingel%20250%2C%201016%20AB%20Amsterdam%2C%20Netherlands!5e0!3m2!1sen!2s!4v1693423456789!5m2!1sen!2s"
+      width="100%"
+      height="100%"
+      style={{ border: 0 }}
+      allowFullScreen=""
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+    ></iframe>
+  </div>
+
+  <div className="mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+   
+    <a
+      href="https://www.google.com/maps/dir/?api=1&destination=Singel+250,+1016+AB+Amsterdam,+Netherlands"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="px-4 py-2 bg-[#3b396d] text-white text-sm font-medium rounded-lg hover:bg-[#2a285a] transition-colors whitespace-nowrap text-center"
+    >
+      {t('support.getDirections') || 'Get Directions'}
+    </a>
+  </div>
+</div>
               </div>
             </div>
           )}
@@ -389,7 +465,6 @@ const HelpCenter = () => {
                 </p>
               </div>
 
-              {/* FAQ Accordion */}
               <div className="space-y-3">
                 {faqs.map((faq, index) => (
                   <div 
@@ -426,7 +501,6 @@ const HelpCenter = () => {
                 ))}
               </div>
 
-              {/* Still Need Help */}
               <div className="mt-12 bg-[#3b396d] rounded-lg p-6 text-center text-white">
                 <h3 className="text-xl font-semibold mb-3">
                   {t('faq.stillNeedHelp') || 'Still need help?'}
@@ -436,7 +510,7 @@ const HelpCenter = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <button 
-                    onClick={() => updateActiveTab('contact')} // Navigate to Contact tab
+                    onClick={() => updateActiveTab('contact')}
                     className="px-5 py-2.5 bg-white text-[#3b396d] font-medium rounded-md hover:bg-gray-100 transition-colors text-sm"
                   >
                     {t('faq.contactSupport') || 'Contact Support'}
@@ -454,7 +528,6 @@ const HelpCenter = () => {
         </div>
       </div>
 
-      {/* Chat Bot Button */}
       <button
         onClick={() => setIsChatOpen(true)}
         className="fixed bottom-6 right-6 bg-[#3b396d] text-white p-4 rounded-full shadow-lg hover:bg-[#2a285a] transition-colors z-40"
@@ -462,10 +535,8 @@ const HelpCenter = () => {
         <FiMessageSquare className="text-xl" />
       </button>
 
-      {/* Chat Bot UI */}
       {isChatOpen && (
         <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 w-full sm:w-[350px] bg-white sm:rounded-xl shadow-2xl z-50 flex flex-col h-full sm:h-[500px]">
-          {/* Chat Header - Minimal */}
           <div className="bg-[#3b396d] text-white p-3 sm:rounded-t-xl flex justify-between items-center">
             <div className="flex items-center">
               <FiMessageSquare className="text-lg mr-2" />
@@ -480,7 +551,6 @@ const HelpCenter = () => {
             </button>
           </div>
 
-          {/* Chat Messages - Clean Scroll */}
           <div className="flex-1 overflow-y-auto p-3 bg-gray-50">
             {messages.map((message) => (
               <div 
@@ -503,7 +573,6 @@ const HelpCenter = () => {
             ))}
           </div>
 
-          {/* Chat Input - Compact */}
           <div className="border-t border-gray-200 p-2 bg-white">
             <div className="flex">
               <input

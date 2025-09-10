@@ -309,6 +309,9 @@ support: {
     faqTab: 'FAQ',
     officeLocation: 'Office Location',
     getDirections: 'Get Directions',
+    meetOurTeam:'Meet Our Team',
+teamDescription: 'Our dedicated team is here to guide you with personalized support and expert assistance.',
+phonePlaceholder:"+3412345671",
 
     // Contact Form
     sendMessage: 'Send us a message',
@@ -1069,6 +1072,9 @@ addCarListing: {
     faqTab: 'FAQ',
     officeLocation: 'Kantoorlocatie',
     getDirections: 'Routebeschrijving',
+teamDescription: 'Unser engagiertes Team steht Ihnen mit persönlicher Unterstützung und fachkundiger Beratung zur Seite.'
+,
+phonePlaceholder:"+3412345671",
 
     // Contact Form
     sendMessage: 'Senden Sie uns eine Nachricht',
@@ -1967,6 +1973,9 @@ addCarListing: {
     contactTab: 'Contact',
     faqTab: 'FAQ',
     officeLocation: 'Kantoorlocatie',
+    teamDescription: 'Ons toegewijde team staat voor u klaar met persoonlijke ondersteuning en deskundige hulp.'
+,
+phonePlaceholder:"+3412345671",
 
     // Contact Form
     sendMessage: 'Stuur ons een bericht',
