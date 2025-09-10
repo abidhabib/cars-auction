@@ -1,4 +1,4 @@
-// src/pages/auth/Register.jsx (or your file path)
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -19,23 +19,33 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
 
+  // --- New state for Dealer Locations and Role ---
+  const [selectedLocations, setSelectedLocations] = useState([]);
+  const [selectedRole, setSelectedRole] = useState('');
+  // --- End New State ---
+
   const [formData, setFormData] = useState({
     // Step 1: Personal Information
     firstName: '',
     lastName: '',
     email: '', // Consider if this should also populate invoiceEmail by default
     phone: '',
-    // Step 2: Business Information (Combined Address Info here)
+    // Step 2: Business Information (Merged with Step 3, Split Address)
     companyName: '',
     vatNumber: '',
-    UBO: '',
-    companyAddress: '', // New combined address field
-    invoiceEmail: '',   // New invoice email field
-    // Step 3: Location & Compliance (Country + Conditional RDW)
-    country: '', // Used for determining if RDW is needed
-    rdwNumber: '', // Conditional field
-    // Step 4: Shareholders Information
+    // UBO moved to Step 4
+    // companyAddress: '', // Removed
+    // New split address fields
+    street: '',
+    houseNumber: '',
+    postalCode: '',
+    city: '',
+    country: '', // From old Step 3
+    rdwNumber: '', // Conditional field from old Step 3
+    invoiceEmail: '',
+    // Step 4: Shareholders Information & UBO
     shareholders: [{ fullName: '', idFile: null }],
+    UBO: '', // Moved from Step 2
     // Step 5: Account Security
     password: '',
     confirmPassword: '',
@@ -46,6 +56,21 @@ const Register = () => {
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  // --- Mock data for Dealer Locations and Roles ---
+  // In a real app, this would come from an API
+  const availableLocations = [
+    { id: 'loc1', name: 'Amsterdam Branch' },
+    { id: 'loc2', name: 'Rotterdam HQ' },
+    { id: 'loc3', name: 'Utrecht Office' },
+  ];
+
+  const availableRoles = [
+    { id: 'sales_advisor', name: 'Sales Advisor', description: 'Limited rights per location' },
+    { id: 'purchasing_manager', name: 'Purchasing Manager', description: 'Extended rights across all locations' },
+    { id: 'admin', name: 'Administrator', description: 'Full access' },
+  ];
+  // --- End Mock Data ---
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -58,6 +83,28 @@ const Register = () => {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
+
+  // --- Handlers for new fields ---
+  const handleLocationChange = (locationId) => {
+    setSelectedLocations(prev =>
+      prev.includes(locationId)
+        ? prev.filter(id => id !== locationId)
+        : [...prev, locationId]
+    );
+    // Clear error if any
+    if (errors.selectedLocations) {
+      setErrors(prev => ({ ...prev, selectedLocations: '' }));
+    }
+  };
+
+  const handleRoleChange = (roleId) => {
+    setSelectedRole(roleId);
+    // Clear error if any
+    if (errors.selectedRole) {
+      setErrors(prev => ({ ...prev, selectedRole: '' }));
+    }
+  };
+  // --- End Handlers ---
 
   const validateStep = (step) => {
     const newErrors = {};
@@ -72,25 +119,29 @@ const Register = () => {
         }
         if (!formData.phone) newErrors.phone = t('auth.register.errors.phoneRequired');
         break;
-      case 2: // Updated Business Info validation
+      case 2: // Updated Business Info (Merged Step 2 & 3, Split Address)
         if (!formData.companyName) newErrors.companyName = t('auth.register.errors.companyNameRequired');
         if (!formData.vatNumber) newErrors.vatNumber = t('auth.register.errors.vatNumberRequired');
-        if (!formData.UBO) newErrors.UBO = t('auth.register.errors.UBORequired');
-        if (!formData.companyAddress) newErrors.companyAddress = t('auth.register.errors.companyAddressRequired'); // Validate new field
-        if (!formData.invoiceEmail) {
-            newErrors.invoiceEmail = t('auth.register.errors.invoiceEmailRequired');
-        } else if (!/\S+@\S+\.\S+/.test(formData.invoiceEmail)) {
-            newErrors.invoiceEmail = t('auth.register.errors.emailInvalid'); // Reuse email invalid message
-        }
-        break;
-      case 3: // Updated Address/Compliance Info validation
+        // if (!formData.UBO) newErrors.UBO = t('auth.register.errors.UBORequired'); // Moved to Step 4
+        // if (!formData.companyAddress) newErrors.companyAddress = t('auth.register.errors.companyAddressRequired'); // Replaced by split fields
+        if (!formData.street) newErrors.street = t('auth.register.errors.streetRequired');
+        if (!formData.houseNumber) newErrors.houseNumber = t('auth.register.errors.houseNumberRequired');
+        if (!formData.postalCode) newErrors.postalCode = t('auth.register.errors.postalCodeRequired');
+        if (!formData.city) newErrors.city = t('auth.register.errors.cityRequired');
         if (!formData.country) newErrors.country = t('auth.register.errors.countryRequired');
-        // Conditional validation for RDW Number
+        if (!formData.invoiceEmail) {
+          newErrors.invoiceEmail = t('auth.register.errors.invoiceEmailRequired');
+        } else if (!/\S+@\S+\.\S+/.test(formData.invoiceEmail)) {
+          newErrors.invoiceEmail = t('auth.register.errors.emailInvalid'); // Reuse email invalid message
+        }
+        // Conditional validation for RDW Number (from old Step 3)
         if (formData.country === 'NL' && !formData.rdwNumber) {
-             newErrors.rdwNumber = t('auth.register.errors.rdwNumberRequired'); // You'll need this translation key
+          newErrors.rdwNumber = t('auth.register.errors.rdwNumberRequired');
         }
         break;
-      case 4: // Shareholders validation (unchanged)
+      // case 3: // Removed as content is merged into Step 2
+      case 4: // Shareholders & UBO validation
+        if (!formData.UBO) newErrors.UBO = t('auth.register.errors.UBORequired'); // Moved here
         if (!formData.shareholders || formData.shareholders.length === 0) {
           newErrors.shareholders = t('auth.register.errors.shareholdersRequired');
         } else {
@@ -124,22 +175,61 @@ const Register = () => {
     return newErrors;
   };
 
+  // --- Validation for new Step (Role-based access) ---
+  const validateRoleStep = () => {
+    const newErrors = {};
+    if (selectedLocations.length === 0) {
+      newErrors.selectedLocations = t('auth.register.errors.locationsRequired');
+    }
+    if (!selectedRole) {
+      newErrors.selectedRole = t('auth.register.errors.roleRequired');
+    }
+    return newErrors;
+  };
+  // --- End Validation ---
+
   const handleNext = () => {
-    const newErrors = validateStep(currentStep);
-    if (Object.keys(newErrors).length === 0) {
-      setCurrentStep(currentStep + 1);
+    let newErrors = {};
+
+    // Special handling for the new Role step (which we'll insert as Step 3)
+    if (currentStep === 2) { // If moving from current Step 2 to new Step 3 (Role)
+      newErrors = validateStep(2); // Validate current Step 2 first
+      if (Object.keys(newErrors).length === 0) {
+        setCurrentStep(3); // Move to new Step 3 (Role)
+      }
+    } else if (currentStep === 3) { // If moving from new Step 3 (Role) to current Step 4
+      newErrors = validateRoleStep(); // Validate new Step 3
+      if (Object.keys(newErrors).length === 0) {
+        setCurrentStep(4); // Move to current Step 4
+      }
     } else {
+      // Default behavior for other steps
+      newErrors = validateStep(currentStep);
+      if (Object.keys(newErrors).length === 0) {
+        setCurrentStep(currentStep + 1);
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     }
   };
 
   const handleBack = () => {
-    setCurrentStep(currentStep - 1);
+    // Special handling for the new Role step
+    if (currentStep === 4) { // If going back from current Step 4
+      setCurrentStep(3); // Go back to new Step 3 (Role)
+    } else if (currentStep === 3) { // If going back from new Step 3 (Role)
+      setCurrentStep(2); // Go back to current Step 2
+    } else {
+      setCurrentStep(currentStep - 1);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = validateStep(currentStep);
+    // Validate the last visible step (Step 5)
+    const newErrors = validateStep(5);
     if (Object.keys(newErrors).length === 0) {
       setIsLoading(true);
       try {
@@ -152,7 +242,7 @@ const Register = () => {
             // Handle potentially empty conditional fields (e.g., rdwNumber if not NL)
             // Only send if they have a value or are required (like country)
             // For simplicity, we'll send all non-shareholder fields
-             formDataToSend.append(key, formData[key]);
+            formDataToSend.append(key, formData[key]);
           }
         });
         // Append shareholders data
@@ -162,6 +252,14 @@ const Register = () => {
             formDataToSend.append(`shareholders[${index}][idFile]`, shareholder.idFile);
           }
         });
+
+        // --- Append new Role-based data ---
+        formDataToSend.append('selectedRole', selectedRole);
+        selectedLocations.forEach((locId, index) => {
+          formDataToSend.append(`selectedLocations[${index}]`, locId);
+        });
+        // --- End Append ---
+
         await register(formDataToSend); // Ensure your backend handles the new fields
         navigate('/dashboard'); // Or a confirmation page
       } catch (error) {
@@ -203,7 +301,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
                       errors.firstName ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`} // Added font-sans
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
                   />
                 </div>
                 {errors.firstName && (
@@ -285,7 +383,7 @@ const Register = () => {
             </div>
           </div>
         );
-      case 2: // Updated Business Info with new fields
+      case 2: // Updated Business Info (Merged Step 2 & 3, Split Address)
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -338,132 +436,142 @@ const Register = () => {
                   <p className="mt-2 text-sm text-red-600">{errors.vatNumber}</p>
                 )}
               </div>
+              {/* UBO field removed from here */}
+            </div>
+
+            {/* --- Split Address Fields --- */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label htmlFor="UBO" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('auth.register.UBO')}
+                <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-2">
+                  {t('auth.register.street')}
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FiMapPin className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    id="street"
+                    name="street"
+                    placeholder={t('auth.register.streetPlaceholder') || 'Street Name'}
+                    value={formData.street}
+                    onChange={handleChange}
+                    className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
+                      errors.street ? 'border-red-300' : 'border-gray-300'
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
+                  />
+                </div>
+                {errors.street && (
+                  <p className="mt-2 text-sm text-red-600">{errors.street}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="houseNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                  {t('auth.register.houseNumber')}
                 </label>
                 <div className="relative">
                   <input
                     type="text"
-                    id="UBO"
-                    name="UBO"
-                    placeholder={t('auth.register.uboPlaceholder') || 'Ultimate Beneficial Owner'}
-                    value={formData.UBO}
+                    id="houseNumber"
+                    name="houseNumber"
+                    placeholder={t('auth.register.houseNumberPlaceholder') || '123'}
+                    value={formData.houseNumber}
                     onChange={handleChange}
                     className={`appearance-none block w-full px-4 py-3 border ${
-                      errors.UBO ? 'border-red-300' : 'border-gray-300'
+                      errors.houseNumber ? 'border-red-300' : 'border-gray-300'
                     } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
                   />
                 </div>
-                {errors.UBO && (
-                  <p className="mt-2 text-sm text-red-600">{errors.UBO}</p>
+                {errors.houseNumber && (
+                  <p className="mt-2 text-sm text-red-600">{errors.houseNumber}</p>
                 )}
               </div>
             </div>
-
-            {/* --- New Fields for Step 2 --- */}
-            <div>
-              <label htmlFor="companyAddress" className="block text-sm font-medium text-gray-700 mb-2">
-                {t('auth.register.companyAddress')}
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 pt-3 flex items-start pointer-events-none"> {/* Adjusted alignment */}
-                  <FiMapPin className="h-5 w-5 text-gray-400" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div>
+                <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 mb-2">
+                  {t('auth.register.postalCode')}
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="postalCode"
+                    name="postalCode"
+                    placeholder={t('auth.register.postalCodePlaceholder') || '1234 AB'}
+                    value={formData.postalCode}
+                    onChange={handleChange}
+                    className={`appearance-none block w-full px-4 py-3 border ${
+                      errors.postalCode ? 'border-red-300' : 'border-gray-300'
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
+                  />
                 </div>
-                <textarea
-                  id="companyAddress"
-                  name="companyAddress"
-                  rows="3"
-                  placeholder={t('auth.register.companyAddressPlaceholder') || 'Enter full company address'}
-                  value={formData.companyAddress}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
-                    errors.companyAddress ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
-                />
+                {errors.postalCode && (
+                  <p className="mt-2 text-sm text-red-600">{errors.postalCode}</p>
+                )}
               </div>
-              {errors.companyAddress && (
-                <p className="mt-2 text-sm text-red-600">{errors.companyAddress}</p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="invoiceEmail" className="block text-sm font-medium text-gray-700 mb-2">
-                {t('auth.register.invoiceEmail')}
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiMail className="h-5 w-5 text-gray-400" />
+              <div>
+                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+                  {t('auth.register.city')}
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    placeholder={t('auth.register.cityPlaceholder') || 'City'}
+                    value={formData.city}
+                    onChange={handleChange}
+                    className={`appearance-none block w-full px-4 py-3 border ${
+                      errors.city ? 'border-red-300' : 'border-gray-300'
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
+                  />
                 </div>
-                <input
-                  type="email"
-                  id="invoiceEmail"
-                  name="invoiceEmail"
-                  placeholder={t('auth.register.invoiceEmailPlaceholder') || 'billing@yourcompany.com'} 
-                  
-                  value={formData.invoiceEmail}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
-                    errors.invoiceEmail ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
-                />
+                {errors.city && (
+                  <p className="mt-2 text-sm text-red-600">{errors.city}</p>
+                )}
               </div>
-              {errors.invoiceEmail && (
-                <p className="mt-2 text-sm text-red-600">{errors.invoiceEmail}</p>
-              )}
-            </div>
-            {/* --- End New Fields --- */}
-          </div>
-        );
-      case 3: // Updated Address/Compliance Info (Simplified, focuses on Country and RDW)
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900">{t('auth.register.complianceInfo')}</h3>
-              <p className="text-gray-500 mt-2 text-sm">{t('auth.register.complianceInfoDesc')}</p>
-            </div>
-
-            {/* Country Selection (Crucial for conditional logic) */}
-            <div>
-              <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
-                {t('auth.register.country')}
-              </label>
-              <div className="relative">
-                <select
-                  id="country"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-4 py-3 border ${
-                    errors.country ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
-                >
-                  <option value="">{t('auth.register.selectCountry')}</option>
-                  <option value="NL">Netherlands</option>
-                  <option value="DE">Germany</option>
-                  <option value="BE">Belgium</option>
-                  <option value="FR">France</option>
-                  <option value="ES">Spain</option>
-                  <option value="IT">Italy</option>
-                  <option value="UK">United Kingdom</option>
-                   <option value="AT">Austria</option>
-                  <option value="CH">Switzerland</option>
-                  <option value="DK">Denmark</option>
-                  <option value="SE">Sweden</option>
-                  <option value="NO">Norway</option>
-                  <option value="FI">Finland</option>
-                  {/* Add more countries as needed */}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+              <div>
+                <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
+                  {t('auth.register.country')}
+                </label>
+                <div className="relative">
+                  <select
+                    id="country"
+                    name="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    className={`appearance-none block w-full px-4 py-3 border ${
+                      errors.country ? 'border-red-300' : 'border-gray-300'
+                    } rounded-lg focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
+                  >
+                    <option value="">{t('auth.register.selectCountry')}</option>
+                    <option value="NL">Netherlands</option>
+                    <option value="DE">Germany</option>
+                    <option value="BE">Belgium</option>
+                    <option value="FR">France</option>
+                    <option value="ES">Spain</option>
+                    <option value="IT">Italy</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="AT">Austria</option>
+                    <option value="CH">Switzerland</option>
+                    <option value="DK">Denmark</option>
+                    <option value="SE">Sweden</option>
+                    <option value="NO">Norway</option>
+                    <option value="FI">Finland</option>
+                    {/* Add more countries as needed */}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
+                {errors.country && (
+                  <p className="mt-2 text-sm text-red-600">{errors.country}</p>
+                )}
               </div>
-              {errors.country && (
-                <p className="mt-2 text-sm text-red-600">{errors.country}</p>
-              )}
             </div>
+            {/* --- End Split Address Fields --- */}
 
             {/* Conditional RDW Number Field */}
             {formData.country === 'NL' && (
@@ -473,7 +581,7 @@ const Register = () => {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FiFileText className="h-5 w-5 text-gray-400" /> {/* Icon for RDW */}
+                    <FiFileText className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
                     type="text"
@@ -490,16 +598,121 @@ const Register = () => {
                 {errors.rdwNumber && (
                   <p className="mt-2 text-sm text-red-600">{errors.rdwNumber}</p>
                 )}
-                 <p className="mt-1 text-xs text-gray-500">{t('auth.register.rdwInfo')}</p> {/* Optional info text, add translation key */}
+                <p className="mt-1 text-xs text-gray-500">{t('auth.register.rdwInfo')}</p>
               </div>
             )}
 
-            {/* Optional: You could keep some address details here if needed separately,
-                 but 'companyAddress' in step 2 covers most. */}
-            {/* If you keep separate fields, validation logic needs updating. */}
-
+            <div>
+              <label htmlFor="invoiceEmail" className="block text-sm font-medium text-gray-700 mb-2">
+                {t('auth.register.invoiceEmail')}
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiMail className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="email"
+                  id="invoiceEmail"
+                  name="invoiceEmail"
+                  placeholder={t('auth.register.invoiceEmailPlaceholder') || 'billing@yourcompany.com'}
+                  value={formData.invoiceEmail}
+                  onChange={handleChange}
+                  className={`appearance-none block w-full pl-10 pr-4 py-3 border ${
+                    errors.invoiceEmail ? 'border-red-300' : 'border-gray-300'
+                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
+                />
+              </div>
+              {errors.invoiceEmail && (
+                <p className="mt-2 text-sm text-red-600">{errors.invoiceEmail}</p>
+              )}
+            </div>
           </div>
         );
+      case 3: // New Step: Role-based Access
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-gray-900">{t('auth.register.roleAccess')}</h3>
+              <p className="text-gray-500 mt-2 text-sm">{t('auth.register.roleAccessDesc')}</p>
+            </div>
+
+            {/* Dealer Locations Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t('auth.register.dealerLocations')}
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {availableLocations.map(location => (
+                  <div
+                    key={location.id}
+                    onClick={() => handleLocationChange(location.id)}
+                    className={`p-3 border rounded-lg cursor-pointer transition-all ${
+                      selectedLocations.includes(location.id)
+                        ? 'border-logo-dark-blue bg-logo-dark-blue/10'
+                        : 'border-gray-300 hover:border-gray-400'
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <div className={`w-5 h-5 rounded-full border mr-3 flex items-center justify-center ${
+                        selectedLocations.includes(location.id)
+                          ? 'border-logo-dark-blue bg-logo-dark-blue'
+                          : 'border-gray-400'
+                      }`}>
+                        {selectedLocations.includes(location.id) && (
+                          <FiCheck className="text-white text-xs" />
+                        )}
+                      </div>
+                      <span className="text-sm font-medium">{location.name}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {errors.selectedLocations && (
+                <p className="mt-2 text-sm text-red-600">{errors.selectedLocations}</p>
+              )}
+            </div>
+
+            {/* Role Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t('auth.register.roleFunction')}
+              </label>
+              <div className="space-y-3">
+                {availableRoles.map(role => (
+                  <div
+                    key={role.id}
+                    onClick={() => handleRoleChange(role.id)}
+                    className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                      selectedRole === role.id
+                        ? 'border-logo-dark-blue bg-logo-dark-blue/10'
+                        : 'border-gray-300 hover:border-gray-400'
+                    }`}
+                  >
+                    <div className="flex items-start">
+                      <div className={`w-5 h-5 rounded-full border mr-3 mt-0.5 flex items-center justify-center ${
+                        selectedRole === role.id
+                          ? 'border-logo-dark-blue bg-logo-dark-blue'
+                          : 'border-gray-400'
+                      }`}>
+                        {selectedRole === role.id && (
+                          <FiCheck className="text-white text-xs" />
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-medium">{role.name}</h4>
+                        <p className="text-xs text-gray-500 mt-1">{role.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {errors.selectedRole && (
+                <p className="mt-2 text-sm text-red-600">{errors.selectedRole}</p>
+              )}
+            </div>
+          </div>
+        );
+      // case 3: // Removed as content is merged into Step 2
       case 4: // Shareholders Info (Largely Unchanged, just ensured style guide colors)
         return (
           <div className="space-y-6">
@@ -507,6 +720,29 @@ const Register = () => {
               <h3 className="text-2xl font-bold text-gray-900">{t('auth.register.shareholdersInfo')}</h3>
               <p className="text-gray-500 mt-2 text-sm">{t('auth.register.shareholdersInfoDesc')}</p>
             </div>
+            {/* --- UBO Field Added Here --- */}
+            <div>
+              <label htmlFor="UBO" className="block text-sm font-medium text-gray-700 mb-2">
+                {t('auth.register.UBO')}
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  id="UBO"
+                  name="UBO"
+                  placeholder={t('auth.register.uboPlaceholder') || 'Ultimate Beneficial Owner'}
+                  value={formData.UBO}
+                  onChange={handleChange}
+                  className={`appearance-none block w-full px-4 py-3 border ${
+                    errors.UBO ? 'border-red-300' : 'border-gray-300'
+                  } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
+                />
+              </div>
+              {errors.UBO && (
+                <p className="mt-2 text-sm text-red-600">{errors.UBO}</p>
+              )}
+            </div>
+            {/* --- End UBO Field --- */}
             <div className="space-y-5">
               {formData.shareholders.map((shareholder, index) => (
                 <div key={index} className="border border-gray-200 rounded-lg p-5 bg-gray-50">
@@ -550,7 +786,7 @@ const Register = () => {
                       {t('auth.register.shareholderIdUpload')}
                     </label>
                     <div className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg ${
-                      shareholder.idFile ? 'border-logo-dark-blue bg-logo-dark-blue/5' : 'border-gray-300' // Style guide colors
+                      shareholder.idFile ? 'border-logo-dark-blue bg-logo-dark-blue/5' : 'border-gray-300'
                     }`}>
                       <div className="space-y-1 text-center">
                         {shareholder.idFile ? (
@@ -577,7 +813,7 @@ const Register = () => {
                               <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             <div className="flex text-sm text-gray-600 justify-center">
-                              <label htmlFor={`shareholder-${index}-idFile`} className="relative cursor-pointer bg-white rounded-md font-medium text-logo-dark-blue hover:text-[#2a285a] focus-within:outline-none font-sans"> {/* Style guide colors */}
+                              <label htmlFor={`shareholder-${index}-idFile`} className="relative cursor-pointer bg-white rounded-md font-medium text-logo-dark-blue hover:text-[#2a285a] focus-within:outline-none font-sans">
                                 <span>{t('auth.register.uploadFile')}</span>
                                 <input
                                   id={`shareholder-${index}-idFile`}
@@ -620,9 +856,8 @@ const Register = () => {
                 </div>
               ))}
               <div className="flex justify-between pt-2">
-                {/* Using the updated Button component */}
                 <Button
-                  variant="outline" // Or ghost
+                  variant="outline"
                   size="sm"
                   onClick={() => {
                     setFormData(prev => ({
@@ -630,7 +865,6 @@ const Register = () => {
                       shareholders: [...prev.shareholders, { fullName: '', idFile: null }]
                     }));
                   }}
-                  // className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-logo-dark-blue"
                 >
                   <FiPlus className="mr-2 h-4 w-4" />
                   {t('auth.register.addAnotherShareholder')}
@@ -681,7 +915,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-10 py-3 border ${
                       errors.password ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`} // Style guide color
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
                   />
                   <button
                     type="button"
@@ -717,7 +951,7 @@ const Register = () => {
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-10 py-3 border ${
                       errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`} // Style guide color
+                    } rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-logo-dark-blue focus:border-logo-dark-blue transition font-sans`}
                   />
                   <button
                     type="button"
@@ -745,13 +979,13 @@ const Register = () => {
                     type="checkbox"
                     checked={formData.termsAccepted}
                     onChange={handleChange}
-                    className="h-4 w-4 text-logo-dark-blue focus:ring-logo-dark-blue border-gray-300 rounded" // Style guide color
+                    className="h-4 w-4 text-logo-dark-blue focus:ring-logo-dark-blue border-gray-300 rounded"
                   />
                 </div>
                 <div className="ml-3 text-sm">
                   <label htmlFor="termsAccepted" className="text-gray-700">
                     {t('auth.register.acceptTerms')}{' '}
-                    <a href="#" className="text-logo-dark-blue hover:text-[#2a285a] font-medium"> {/* Style guide colors */}
+                    <a href="#" className="text-logo-dark-blue hover:text-[#2a285a] font-medium">
                       {t('auth.register.termsAndConditions')}
                     </a>
                   </label>
@@ -768,13 +1002,13 @@ const Register = () => {
                     type="checkbox"
                     checked={formData.privacyAccepted}
                     onChange={handleChange}
-                    className="h-4 w-4 text-logo-dark-blue focus:ring-logo-dark-blue border-gray-300 rounded" // Style guide color
+                    className="h-4 w-4 text-logo-dark-blue focus:ring-logo-dark-blue border-gray-300 rounded"
                   />
                 </div>
                 <div className="ml-3 text-sm">
                   <label htmlFor="privacyAccepted" className="text-gray-700">
                     {t('auth.register.acceptPrivacy')}{' '}
-                    <a href="#" className="text-logo-dark-blue hover:text-[#2a285a] font-medium"> {/* Style guide colors */}
+                    <a href="#" className="text-logo-dark-blue hover:text-[#2a285a] font-medium">
                       {t('auth.register.privacyPolicy')}
                     </a>
                   </label>
@@ -791,7 +1025,7 @@ const Register = () => {
                     type="checkbox"
                     checked={formData.marketingAccepted}
                     onChange={handleChange}
-                    className="h-4 w-4 text-logo-dark-blue focus:ring-logo-dark-blue border-gray-300 rounded" // Style guide color
+                    className="h-4 w-4 text-logo-dark-blue focus:ring-logo-dark-blue border-gray-300 rounded"
                   />
                 </div>
                 <div className="ml-3 text-sm">
@@ -815,28 +1049,31 @@ const Register = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-logo-dark-blue/10"> {/* Subtle brand color */}
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-logo-dark-blue/10">
               <img
                 src="/icon.svg" // Ensure this path is correct
                 alt="Car Network Logo"
                 className="h-10 w-auto"
               />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">{t('appName') || 'Car Network Europe'}</h1>
-            <p className="text-gray-600 mt-2">{t('auth.register.joinMarketplace')}</p> 
+            {/* --- Updated Heading --- */}
+            <h1 className="text-3xl font-bold text-gray-900">{t('Car Network Europe')}</h1>
+            {/* --- End Updated Heading --- */}
+            <p className="text-gray-600 mt-2">{t('auth.register.joinMarketplace')}</p>
           </div>
           {/* Progress Steps */}
           <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+            {/* --- Updated Progress Steps to show 6 steps --- */}
             <div className="flex justify-between items-center mb-8">
               {[1, 2, 3, 4, 5].map((step) => (
                 <div key={step} className="flex flex-col items-center">
                   <div
                     className={`w-10 h-10 flex items-center justify-center rounded-full ${
                       step < currentStep
-                        ? 'bg-logo-dark-blue text-white' // Style guide color
+                        ? 'bg-logo-dark-blue text-white'
                         : step === currentStep
-                        ? 'bg-logo-dark-blue text-white border-4 border-logo-dark-blue/20' // Style guide color
-                        : 'bg-gray-100 text-gray-400'
+                          ? 'bg-logo-dark-blue text-white border-4 border-logo-dark-blue/20'
+                          : 'bg-gray-100 text-gray-400'
                     }`}
                   >
                     {step < currentStep ? (
@@ -845,26 +1082,28 @@ const Register = () => {
                       <span className="font-medium text-sm">{step}</span>
                     )}
                   </div>
-                  <div className={`mt-2 sm:mt-2 text-[0.6rem] sm:text-xs font-medium max-w-[70px] sm:max-w-[100px] truncate hidden sm:block  ${
-                    step <= currentStep ? 'text-logo-dark-blue' : 'text-gray-400' // Style guide color
+                  <div className={`mt-2 sm:mt-2 text-[0.6rem] sm:text-xs font-medium max-w-[70px] sm:max-w-[100px] truncate hidden sm:block ${
+                    step <= currentStep ? 'text-logo-dark-blue' : 'text-gray-400'
                   }`}>
-                    {/* Note: Original labels seemed mismatched (step4/5). Keeping logic but you might adjust labels. */}
-                    {step === 1 ? t('auth.register.step1') :
-                     step === 2 ? t('auth.register.step2') :
-                     step === 3 ? t('auth.register.step3') :
-                     step === 4 ? t('auth.register.step4') : // Was originally step5 label
-                     step === 5 ? t('auth.register.step5') : '' // Was originally step4 label
+                    {/* Updated labels to match new steps */}
+                    {step === 1 ? t('auth.register.step1') : // Personal Info
+                     step === 2 ? t('auth.register.step2') : // Business Info
+                     step === 3 ? t('auth.register.step3') : // Role Access (New)
+                     step === 4 ? t('auth.register.step4') : // Shareholders & UBO
+                     step === 5 ? t('auth.register.step5') : '' // Account Security
                     }
                   </div>
                 </div>
               ))}
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
-               <div
-                className="bg-logo-dark-blue h-2 rounded-full transition-all duration-300" // Style guide color
-                style={{ width: `${(currentStep - 1) * 25}%` }}
+              <div
+                className="bg-logo-dark-blue h-2 rounded-full transition-all duration-300"
+                style={{ width: `${(currentStep - 1) * 25}%` }} // Adjust percentage if needed for 5 steps
               ></div>
             </div>
+            {/* --- End Updated Progress --- */}
+
             {/* Form Content */}
             <form onSubmit={handleSubmit} className="space-y-6">
               {renderStep()}
@@ -872,10 +1111,9 @@ const Register = () => {
               <div className="flex justify-between pt-8 border-t border-gray-200">
                 {currentStep > 1 ? (
                   <Button
-                    variant="outline" // Or ghost
+                    variant="outline"
                     size="md"
                     onClick={handleBack}
-                    // className="inline-flex items-center px-5 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-logo-dark-blue"
                   >
                     <FiChevronLeft className="w-4 h-4 mr-2" />
                     {t('back')}
@@ -885,12 +1123,11 @@ const Register = () => {
                 )}
                 {/* Submit/Create Account Button */}
                 <Button
-                  variant="primary" // Uses style guide primary color
+                  variant="primary"
                   size="md"
                   type={currentStep === 5 ? "submit" : "button"}
                   onClick={currentStep < 5 ? handleNext : undefined}
                   disabled={isLoading}
-                  // className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-logo-dark-blue hover:bg-[#2a285a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-logo-dark-blue"
                 >
                   {currentStep < 5 ? (
                     <>
@@ -938,7 +1175,7 @@ const Register = () => {
               {t('auth.register.alreadyHaveAccount')}{' '}
               <button
                 onClick={() => navigate('/login')}
-                className="font-medium text-logo-dark-blue hover:text-[#2a285a]" // Style guide colors
+                className="font-medium text-logo-dark-blue hover:text-[#2a285a]"
               >
                 {t('auth.register.loginHere')}
               </button>
@@ -951,3 +1188,4 @@ const Register = () => {
 };
 
 export default Register;
+

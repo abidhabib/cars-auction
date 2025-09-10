@@ -94,7 +94,8 @@ export const translations = {
           "Get pre-approved for financing",
           "Enjoy a seamless buying experience"
         ],
-        cta: "Start Buying"
+        cta: "Start Buying",
+        sub:'Browse thousands of inspected vehicles at the best prices.'
       },
       sellSection: {
         title: "Sell Cars",
@@ -103,6 +104,7 @@ export const translations = {
           "Full transport and document handling",
           "dealers bid on your car"
         ],
+        sub: "Sell your car quickly and easily",
        
         cta: "Start Selling"
       }
@@ -479,15 +481,35 @@ support: {
       // Note: 'street', 'city', 'postalCode' might be less relevant if using 'companyAddress'
       // But kept for potential separate use or backend structure
       "street": "Street address",
+      "houseNumber": "House number",
+      "streetPlaceholder": "123 Main Street",
+      "houseNumberPlaceholder": "Apt, suite",
       "city": "City",
+      "cityPlaceholder": "Amsterdam",
       "postalCode": "Postal code",
       "country": "Country",
+      "postalCodePlaceholder": "10001",
+      "countryPlaceholder": "Select your country",
+      "streetRequired": "Street address is required",
+      "houseNumberRequired": "House number is required",
+      "cityRequired": "City is required",
+      "postalCodeRequired": "Postal code is required",
+      "countryRequired": "Country is required",
       "selectCountry": "Select a country",
       // --- NEW FIELD FOR NL ---
       "rdwNumber": "RDW Number", // New conditional field label
       "rdwNumberPlaceholder": "Enter RDW Number", // New conditional placeholder
       "rdwNumberRequired": "RDW Number is required for Netherlands", // New conditional error
+      
       "rdwInfo": "Required for vehicle registration in the Netherlands.", // Optional info text
+    dealerLocations: "Dealer Locations",
+    dealerLocationsPlaceholder: "Enter all your dealer locations",
+    dealerLocationsRequired: "Dealer locations are required",
+    roleAccess: "Role Access",
+    roleAccessDesc: "Select your role to access relevant features",
+    roleFunction: "Role/Function",
+    roleFunctionPlaceholder: "Select your role/function",
+    roleFunctionRequired: "Role/Function is required",
       // --- END NEW FIELD FOR NL ---
       // Existing Account Security Fields
       "password": "Password",
@@ -1119,7 +1141,9 @@ addCarListing: {
       buySection: {
         title: "Autos kaufen",
        
-        cta: "Jetzt kaufen"
+        cta: "Jetzt kaufen",
+        sub: "Kaufen Sie Ihr nächstes Auto in 3 einfachen Schritten",
+
       },
       sellSection: {
         title: "Autos verkaufen",
@@ -1129,17 +1153,10 @@ addCarListing: {
           "60.000+ Händler bieten auf Ihr Auto"
         ],
        
-        cta: "Jetzt verkaufen"
+        cta: "Jetzt verkaufen",
+        sub: "Verkaufen Sie Ihr Auto in 3 einfachen Schritten"
       },
-      buySection: {
-        title: "Autos kaufen",
-        points: [
-          "Durchsuchen Sie unseren umfangreichen Bestand",
-          "Lassen Sie sich für eine Finanzierung vorab genehmigen",
-          "Genießen Sie ein nahtloses Kauferlebnis"
-        ],
-        cta: "Jetzt kaufen"
-      }
+    
     },
     // Success Stories
     successStories: {
@@ -1360,6 +1377,13 @@ addCarListing: {
       "companyNamePlaceholder": "Ihr Firmenname",
       "vatNumberPlaceholder": "DE123456789",
       "uboPlaceholder": "Ultimate Beneficial Owner",
+      houseNumberPlaceholder: "Hausnummer eingeben",
+      houseNumber: "Hausnummer",
+      houseNumberRequired: "Hausnummer ist erforderlich",
+      roleAccessDesc: "Wählen Sie Ihre Rolle, um auf relevante Funktionen zuzugreifen",
+      dealerLocations: "Händlerstandorte",
+      dealerLocationsPlaceholder: "Geben Sie alle Ihre Händlerstandorte ein",
+      // --- ENDE BESTEHENDE SCHRITTE ---
       // --- NEUE PLACEHOLDER ---
       "companyAddressPlaceholder": "Geben Sie Ihre vollständige Firmenadresse ein",
       "invoiceEmailPlaceholder": "rechnung@ihrunternehmen.de",
@@ -1387,10 +1411,8 @@ addCarListing: {
         UBO: "UBO-Nummer (Ultimate Beneficial Owner)",
         // --- NEUE FELDER ---
         companyAddress: "Firmenadresse", // Neue Feldbezeichnung
-        companyAddressPlaceholder: "Geben Sie Ihre vollständige Firmenadresse ein", // Neue Platzhalter
         companyAddressRequired: "Firmenadresse ist erforderlich", // Neue Fehlermeldung
         invoiceEmail: "Rechnungs-E-Mail-Adresse", // Neue Feldbezeichnung
-        invoiceEmailPlaceholder: "rechnung@ihrunternehmen.de", // Neue Platzhalter
         invoiceEmailRequired: "Rechnungs-E-Mail-Adresse ist erforderlich", // Neue Fehlermeldung
         // --- ENDE NEUE FELDER ---
         // Bestehende Adressinfo-Felder (Verschoben/Kontextualisiert)
@@ -1399,9 +1421,20 @@ addCarListing: {
       postalCode: "Postleitzahl",
       country: "Land",
       selectCountry: "Land auswählen",
+      streetPlaceholder: "Geben Sie Ihre Straße und Hausnummer ein",
+      cityPlaceholder: "Geben Sie Ihre Stadt ein",
+      postalCodePlaceholder: "Geben Sie Ihre Postleitzahl ein",
+      roleAccess: "Rollen-Zugriff",
+      roleAccessRequired: "Rollen-Zugriff ist erforderlich",
+      dealerLocation: "Händlerstandort",
+      dealerLocationRequired: "Mindestens ein Händlerstandort ist erforderlich",
+      roleFunction: "Rollenfunktion",
+      // --- ENDE Bestehende Adressinfo-Felder ---
+      // --- NEUE FELDER FÜR NL ---
+      countryNetherlands: "Niederlande", // Neue Länderoption
+      showRdwField: "RDW Nummer anzeigen", // Neue bedingte Logikbezeichnung
       // --- NEUES FELD FÜR NL ---
       rdwNumber: "RDW Nummer", // Neue bedingte Feldbezeichnung
-      rdwNumberPlaceholder: "RDW Nummer eingeben", // Neue bedingte Platzhalter
       rdwNumberRequired: "RDW Nummer ist für die Niederlande erforderlich", // Neue bedingte Fehlermeldung
       rdwInfo: "Erforderlich für die Fahrzeugzulassung in den Niederlanden.", // Optionaler Infotext
       // --- ENDE NEUES FELD FÜR NL ---
@@ -2012,7 +2045,8 @@ addCarListing: {
           "Volledige transport- en documentafhandeling",
           "60.000+ dealers bieden op uw auto"
         ],
-        cta: "Begin met verkopen"
+        cta: "Begin met verkopen",
+        sub: "Verkoop uw auto snel en gemakkelijk"
       },
       buySection: {
         title: "Auto's kopen",
@@ -2021,7 +2055,8 @@ addCarListing: {
           "Krijg vooraf goedkeuring voor financiering",
           "Geniet van een naadloze koopervaring"
         ],
-        cta: "Begin met kopen"
+        cta: "Begin met kopen",
+        sub: "Vind uw perfecte auto vandaag nog"
       }
     },
     // Success Stories
@@ -2242,10 +2277,33 @@ addCarListing: {
       "companyNamePlaceholder": "Uw Bedrijfsnaam",
       "vatNumberPlaceholder": "NL123456789B01",
       "uboPlaceholder": "Ultimate Beneficial Owner",
+      dealerLocations: "Dealer Locaties",
+      dealerLocationsDesc: "Voeg alle locaties toe waar uw bedrijf actief is",
+      addLocation: "Locatie toevoegen",
       // --- NIEUWE PLACEHOLDERS ---
       "companyAddressPlaceholder": "Voer uw volledige bedrijfsadres in",
       "invoiceEmailPlaceholder": "facturatie@uwbedrijf.nl",
       "rdwNumberPlaceholder": "Voer RDW Nummer in",
+      streetPlaceholder: "Straat en huisnummer",
+      cityPlaceholder: "Stad",
+      postalCodePlaceholder: "Postcode",
+      houseNumberPlaceholder: "Huisnummer",
+      houseNumber:"Huisnummer",
+      roleAccess: "Rol & Toegang", // Nieuwe sectietitel
+      roleAccessDesc: "Selecteer uw rol en accounttoegang", // Nieuwe sectiebeschrijving
+      role: "Rol", // Nieuwe veldnaam
+      rolePlaceholder: "Selecteer uw rol", // Nieuwe placeholder
+      roles: {
+        owner: "Eigenaar",
+        manager: "Manager",
+        staff: "Medewerker"
+      },
+      invoiceDetails: "Facturatiegegevens", // Nieuwe sectietitel
+      invoiceDetailsDesc: "Geef de facturatie-e-mail op voor uw account", // Nieuwe sectiebeschrijving
+      invoiceEmail: "Facturatie-e-mailadres", // Nieuwe veldnaam
+      invoiceEmailInfo: "Alle facturen en betalingsbewijzen worden naar dit e-mailadres gestuurd.", // Optionele informatieve tekst
+      countryPlaceholder: "Selecteer uw land",
+      // --- EINDE NIEUWE PLACEHOLDERS ---
         // --- EINDE NIEUWE PLACEHOLDERS ---
         // Sectie titels & beschrijvingen
         personalInfo: "Persoonlijke informatie",

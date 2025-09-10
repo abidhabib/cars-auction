@@ -172,53 +172,7 @@ const Login = () => {
             </div>
 
             <form className="space-y-6" onSubmit={handleSubmit}>
-              {/* User Type Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('auth.login.userType')}
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, userType: 'buyer' }))}
-                    className={`flex flex-col items-center justify-center p-4 border rounded-lg transition-colors ${
-                      formData.userType === 'buyer'
-                        ? 'border-[#3b396d] bg-[#3b396d]/5 ring-2 ring-[#3b396d]/20'
-                        : 'border-gray-300 hover:border-[#3b396d] hover:bg-gray-50'
-                    }`}
-                  >
-                    <FiUser className={`h-6 w-6 mb-2 ${
-                      formData.userType === 'buyer' ? 'text-[#3b396d]' : 'text-gray-400'
-                    }`} />
-                    <span className={`font-medium ${
-                      formData.userType === 'buyer' ? 'text-[#3b396d]' : 'text-gray-700'
-                    }`}>
-                      {t('auth.login.buyer')}
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, userType: 'seller' }))}
-                    className={`flex flex-col items-center justify-center p-4 border rounded-lg transition-colors ${
-                      formData.userType === 'seller'
-                        ? 'border-[#3b396d] bg-[#3b396d]/5 ring-2 ring-[#3b396d]/20'
-                        : 'border-gray-300 hover:border-[#3b396d] hover:bg-gray-50'
-                    }`}
-                  >
-                    <FiBriefcase className={`h-6 w-6 mb-2 ${
-                      formData.userType === 'seller' ? 'text-[#3b396d]' : 'text-gray-400'
-                    }`} />
-                    <span className={`font-medium ${
-                      formData.userType === 'seller' ? 'text-[#3b396d]' : 'text-gray-700'
-                    }`}>
-                      {t('auth.login.seller')}
-                    </span>
-                  </button>
-                </div>
-                {errors.userType && (
-                  <p className="mt-2 text-sm text-red-600">{errors.userType}</p>
-                )}
-              </div>
+            
 
               {/* Email Input */}
               <div>

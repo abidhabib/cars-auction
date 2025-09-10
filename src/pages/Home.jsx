@@ -58,19 +58,14 @@ const Home = () => {
   // Handler for accepting cookies
     useEffect(() => {
     const isConsentGiven = localStorage.getItem('cookiesAccepted');
-    // Show banner only if consent is not explicitly given (either 'true' or 'false')
-    // This means it shows on first visit or if user previously declined.
-    // You might want to show it only if 'cookiesAccepted' is null/undefined.
-    // Adjust logic as needed.
+
     if (isConsentGiven !== 'true') {
       setShowCookieBanner(true);
     }
-    // If isConsentGiven is 'true', banner stays hidden (showCookieBanner remains false)
   }, []);
   const handleAcceptCookies = () => {
     localStorage.setItem('cookiesAccepted', 'true');
     setShowCookieBanner(false);
-    // Here you would typically initialize or enable non-essential cookies/tracking scripts
     console.log("Cookies accepted by user.");
   };
 
@@ -78,15 +73,12 @@ const Home = () => {
   const handleDeclineCookies = () => {
     localStorage.setItem('cookiesAccepted', 'false');
     setShowCookieBanner(false);
-    // Here you would typically ensure non-essential cookies/tracking are disabled
     console.log("Cookies declined by user.");
   };
   return (
-    // Ensure Outfit font is applied globally via CSS or Tailwind config (sans: ['Outfit', ...])
     <div className="min-h-screen bg-white font-sans">
       <HeroSection />
 
-      {/* Daily Cars Section - Minimalist styling */}
       <section className="py-16 bg-gray-50"> {/* Light gray background is acceptable */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -273,20 +265,9 @@ const Home = () => {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-              {/* Optional: Decline button. Be aware of legal requirements in your jurisdiction. */}
-              {/* <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDeclineCookies}
-                textColorClass="text-white"
-                borderColorClass="border-white"
-                hoverBgClass="hover:bg-white/10"
-                className="w-full sm:w-auto"
-              >
-                {t('cookies.decline') || 'Decline'}
-              </Button> */}
+             
               <Button
-                variant="primary" // Uses theme primary color
+                variant="primary" 
                 size="sm"
                 onClick={handleAcceptCookies}
                 className="w-full sm:w-auto"
