@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -20,14 +20,14 @@ const SidebarItem = ({ item, isActive, isOpen, onClick }) => {
       onClick={onClick}
       className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
         isActive
-          ? 'bg-[#3b396d] text-white'
+          ? 'bg-[#3b396d] text-white shadow-sm'
           : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
       } ${!isOpen ? 'justify-center' : ''}`}
       title={!isOpen ? item.label : ''}
       aria-label={!isOpen ? item.label : undefined}
     >
-      <span className={`${isOpen ? 'mr-3' : ''}`}>{item.icon}</span>
-      {isOpen && <span>{item.label}</span>}
+      <span className={`${isOpen ? 'mr-3' : ''} flex-shrink-0`}>{item.icon}</span>
+      {isOpen && <span className="truncate">{item.label}</span>}
     </button>
   );
 };
@@ -56,33 +56,39 @@ const SellerSidebar = ({ isOpen, toggleSidebar, activeTab, setActiveTab }) => {
 
   const handleLogout = () => {
     alert(t('sellerDashboard.logoutAlert') || 'Logging out...');
-    // Implement actual logout logic here
-    // logout();
-    // navigate('/login');
   };
 
   return (
     <>
-      {/* Mobile Toggle Button */}
-      <button
-        type="button"
-        className="fixed top-4 left-4 z-50 p-2 rounded-md text-gray-700 bg-white shadow-md md:hidden"
-        onClick={toggleSidebar}
-        aria-label={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
-      >
-        {isOpen ? <FiChevronLeft className="h-6 w-6" /> : <FiChevronRight className="h-6 w-6" />}
-      </button>
-
-      {/* Sidebar */}
+      {/* Sidebar - Fixed positioning and responsive behavior */}
       <div
-        className={`fixed top-16 inset-y-0 left-0 z-40 bg-white shadow-lg transform transition-all duration-300 ease-in-out md:translate-x-0 md:static md:inset-0 ${
-          isOpen ? 'w-64 translate-x-0' : 'w-20 -translate-x-0'
-        }`}
+        className={`fixed top-16 inset-y-0 left-0 z-40 bg-white shadow-lg transition-all duration-300 ease-in-out border-r border-gray-200 ${
+          isOpen 
+            ? 'w-64 translate-x-0' 
+            : 'w-20 -translate-x-full md:-translate-x-0'  // Completely hide on mobile when collapsed
+        } flex flex-col md:static md:translate-x-0 md:inset-0`}
       >
-   
+        {/* Top Section */}
+        <div className={`flex items-center justify-between h-14 px-4 border-b border-gray-200 ${!isOpen ? 'justify-center' : ''}`}>
+          {isOpen ? (
+            <div className="flex items-center">
+              <img
+                className="h-6 w-auto"
+                src="/icon.svg"
+                alt="Car Network Logo"
+              />
+              <span className="ml-2 text-xl font-bold text-[#3b396d] truncate">Seller Hub</span>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center w-8 h-8 bg-[#3b396d] rounded-lg">
+              <span className="text-white font-bold text-sm">SH</span>
+            </div>
+          )}
+        </div>
 
-        <div className="flex-1 overflow-y-auto">
-          <nav className="py-4 space-y-1">
+        {/* Navigation Items */}
+        <div className="flex-1 overflow-y-auto py-2">
+          <nav className="space-y-1 px-2">
             {sidebarItems.map((item) => (
               <SidebarItem
                 key={item.id}
@@ -95,12 +101,13 @@ const SellerSidebar = ({ isOpen, toggleSidebar, activeTab, setActiveTab }) => {
           </nav>
         </div>
 
-        <div className="p-4 border-t border-gray-200">
+        {/* Bottom Section */}
+        <div className="p-3 border-t border-gray-200">
           <button
             onClick={handleLogout}
             className={`w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-all duration-200 ${
               !isOpen ? 'justify-center' : ''
-            }`}
+            } mb-3`}
             title={!isOpen ? (t('logout') || 'Logout') : ''}
             aria-label={!isOpen ? (t('logout') || 'Logout') : undefined}
           >
@@ -110,8 +117,27 @@ const SellerSidebar = ({ isOpen, toggleSidebar, activeTab, setActiveTab }) => {
         </div>
       </div>
 
-     
-      {/* Mobile Overlay */}
+      {/* Toggle Button - Fixed positioning */}
+      <button
+        type="button"
+        onClick={toggleSidebar}
+        className={`fixed bottom-4 z-50 flex items-center justify-center p-2.5 text-gray-600 bg-white hover:bg-gray-100 rounded-lg shadow-lg transition-all duration-200 group border border-gray-200 ${
+          isOpen 
+            ? 'left-64 md:left-64' 
+            : 'left-6 md:left-6'
+        }`}
+        aria-label={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+      >
+        <div className="relative">
+          {isOpen ? (
+            <FiChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-0.5" />
+          ) : (
+            <FiChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
+          )}
+        </div>
+      </button>
+
+      {/* Mobile Overlay - Only show on mobile when sidebar is open */}
       {isOpen && (
         <div
           className="fixed inset-0 z-30 bg-black bg-opacity-50 md:hidden"
