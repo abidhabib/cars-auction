@@ -19,7 +19,6 @@ import AddCarListing from './components/seller/AddCarListing';
 const Home = React.lazy(() => import('./pages/Home'));
 const Login = React.lazy(() => import('./pages/auth/Login'));
 const Register = React.lazy(() => import('./pages/auth/Register'));
-const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const Profile = React.lazy(() => import('./pages/profile/Profile'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage/AboutPage'));
 const SupportPage = React.lazy(() => import('./pages/SupportPage/SupportPage'));
@@ -46,11 +45,8 @@ const ProtectedAuthRoutes = ({ children }) => {
     if (user && (location.pathname === '/login' || location.pathname === '/register')) {
       console.log("User is logged in, redirecting from auth page to dashboard...");
       // Redirect based on user role
-      if (user.role === 'seller') {
         navigate('/sellerDashboard', { replace: true });
-      } else {
-        navigate('/dashboard', { replace: true });
-      }
+     
     }
   }, [user, location.pathname, navigate]);
 
@@ -93,14 +89,8 @@ const SellerProtectedRoute = ({ children }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // If user is logged in but not a seller, redirect to buyer dashboard
-  if (user.role !== 'seller') {
-    console.log("User is not a seller, redirecting to buyer dashboard...");
-    return <Navigate to="/dashboard" replace />;
-  }
+    return children;  
 
-  // If user is a seller, render the requested content
-  return children;
 };
 
 // --- Loading Fallback Component ---
@@ -189,17 +179,7 @@ function App() {
                   />
                   <Route path="/" element={<Navigate to="/home" replace />} />
 
-                  {/* Protected routes for ALL authenticated users */}
-                  <Route
-                    path="/dashboard"
-                    element={
-                      <ProtectedRoute>
-                        <AppLayout>
-                          <Dashboard />
-                        </AppLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                 
                   <Route
                     path="/profile"
                     element={

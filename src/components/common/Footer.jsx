@@ -20,7 +20,7 @@ const Footer = () => {
     account: [
       { name: t("footer.account.login"), href: "/login" },
       { name: t("footer.account.register"), href: "/register" },
-      { name: t("footer.account.dashboard"), href: "/dashboard" },
+      { name: t("footer.account.dashboard"), href: "/sellerDashboard" },
       { name: t("footer.account.profile"), href: "/profile" },
     ],
     company: [

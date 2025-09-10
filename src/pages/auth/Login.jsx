@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { FiMail, FiLock, FiEye, FiEyeOff, FiUser, FiBriefcase } from 'react-icons/fi'; // Added icons
+import { FiMail, FiLock, FiEye, FiEyeOff,  } from 'react-icons/fi'; // Added icons
 import api from '../../services/api';
 import AppLayout from '../../components/layout/AppLayout';
 import Button from '../../components/common/Button';
@@ -17,7 +17,6 @@ const Login = () => {
     email: '',
     password: '',
     rememberMe: false,
-    userType: 'buyer' // Default to buyer
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -62,10 +61,7 @@ const Login = () => {
       newErrors.password = t('auth.login.errors.passwordTooShort');
     }
     
-    // User type validation (optional, but good to have)
-    if (!formData.userType) {
-      newErrors.userType = t('auth.login.errors.userTypeRequired');
-    }
+   
     
     return newErrors;
   };
@@ -90,14 +86,12 @@ const Login = () => {
           id: 'demo_seller_123', 
           name: 'Demo Seller', 
           email: 'seller@example.com', 
-          role: 'seller',
           company: 'Demo Auto Traders GmbH'
         },
         'buyer@example.com': { 
           id: 'demo_buyer_456', 
           name: 'Demo Buyer', 
           email: 'buyer@example.com', 
-          role: 'buyer',
           company: 'Demo Fleet Solutions Ltd.'
         }
       };
@@ -111,15 +105,10 @@ const Login = () => {
           // Login with the demo user data
           login(demoUser, formData.rememberMe);
           
-          // Redirect based on user role
-          if (demoUser.role === 'seller') {
+         
             navigate('/sellerDashboard');
-          } else {
-            navigate('/dashboard');
-          }
-        } else {
-          throw new Error(t('auth.login.errors.invalidCredentials'));
-        }
+          
+        } 
       } else {
         // --- Regular Login Logic (for non-demo users) ---
         // Use the new API service - automatically uses mock data
@@ -133,12 +122,9 @@ const Login = () => {
         const loggedInUser = response.user || response;
         login(loggedInUser, formData.rememberMe);
         
-        // Redirect based on user role from backend
-        if (loggedInUser.role === 'seller') {
+      
           navigate('/sellerDashboard');
-        } else {
-          navigate('/dashboard');
-        }
+        
       }
     } catch (error) {
       console.error('Login error:', error);

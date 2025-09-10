@@ -261,7 +261,7 @@ const Register = () => {
         // --- End Append ---
 
         await register(formDataToSend); // Ensure your backend handles the new fields
-        navigate('/dashboard'); // Or a confirmation page
+        navigate('/sellerDashboard'); // Or a confirmation page
       } catch (error) {
         setErrors({
           submit: error.message || t('auth.register.errors.registrationFailed')

@@ -557,7 +557,6 @@ phonePlaceholder:"+3412345671",
       
       "errors": {
         // Existing Errors
-                userTypeRequired: 'Please select a user type',
 
         "firstNameRequired": "First name is required",
         "lastNameRequired": "Last name is required",
@@ -1358,7 +1357,6 @@ phonePlaceholder:"+3412345671",
         errors: {
           invalidCredentials: "Ungültige E-Mail oder Passwort",
           required: "Dieses Feld ist erforderlich",
-                  userTypeRequired: 'Bitte wählen Sie einen Benutzertyp aus',
 
           invalidEmail: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
           passwordTooShort: "Das Passwort muss mindestens 8 Zeichen lang sein."
@@ -2260,7 +2258,6 @@ phonePlaceholder:"+3412345671",
         noAccount: "Nog geen account?",
         createAccount: "Account aanmaken",
         errors: {
-                  userTypeRequired: 'Selecteer alstublieft een gebruikerstype',
 
           invalidCredentials: "Ongeldig e-mailadres of wachtwoord",
           required: "Dit veld is verplicht",

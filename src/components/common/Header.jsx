@@ -322,7 +322,7 @@ const Header = () => {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate('/dashboard');
+                            navigate('/sellerDashboard');
                             setUserDropdownOpen(false);
                           }}
                           className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -475,7 +475,7 @@ const Header = () => {
                     
                     <button
                       onClick={() => {
-                        navigate('/dashboard');
+                        navigate('/sellerDashboard');
                         setMobileMenuOpen(false);
                       }}
                       className="flex items-center w-full p-3 text-left text-white hover:bg-background-deep-blue rounded-lg transition-colors"

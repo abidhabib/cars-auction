@@ -1,7 +1,7 @@
 // src/components/seller/SellerHeader.jsx
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { FiBell, FiChevronDown, FiX } from 'react-icons/fi';
+import { FiBell,  FiX } from 'react-icons/fi';
 
 // Dummy data for demo
 const demoNotifications = [
@@ -10,10 +10,7 @@ const demoNotifications = [
     { id: 'not_003', type: 'message', message: 'New message from Luxury Motors Ltd. regarding STK2023-002', time: new Date(Date.now() - 2 * 60 * 60 * 1000), read: true }
 ];
 
-const demoUserData = {
-    companyName: 'Premium Auto Traders GmbH',
-    avatar: 'https://via.placeholder.com/100x100/3b396d/FFFFFF?text=PT',
-};
+
 
 const SellerHeader = ({ activeTab, selectedVehicle, setSelectedVehicle, selectedChat, setSelectedChat, setChatOpen }) => {
   const { t } = useLanguage();

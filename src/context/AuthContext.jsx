@@ -47,11 +47,9 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       
       // Navigate based on user role - This should now work
-      if (userData.role === 'seller') {
+     
         navigate('/sellerDashboard');
-      } else {
-        navigate('/dashboard');
-      }
+      
     } catch (error) {
       console.error('Login error:', error);
       throw error;

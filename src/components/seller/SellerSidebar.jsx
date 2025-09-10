@@ -1,5 +1,4 @@
-// src/components/seller/SellerSidebar.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -11,9 +10,27 @@ import {
   FiPieChart,
   FiSettings,
   FiLogOut,
-  FiX as FiCloseMenu,
-  FiMenu
+  FiChevronLeft,
+  FiChevronRight
 } from 'react-icons/fi';
+
+const SidebarItem = ({ item, isActive, isOpen, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
+        isActive
+          ? 'bg-[#3b396d] text-white'
+          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+      } ${!isOpen ? 'justify-center' : ''}`}
+      title={!isOpen ? item.label : ''}
+      aria-label={!isOpen ? item.label : undefined}
+    >
+      <span className={`${isOpen ? 'mr-3' : ''}`}>{item.icon}</span>
+      {isOpen && <span>{item.label}</span>}
+    </button>
+  );
+};
 
 const SellerSidebar = ({ isOpen, toggleSidebar, activeTab, setActiveTab }) => {
   const { t } = useLanguage();
@@ -32,8 +49,8 @@ const SellerSidebar = ({ isOpen, toggleSidebar, activeTab, setActiveTab }) => {
 
   const handleItemClick = (itemId) => {
     setActiveTab(itemId);
-    if (window.innerWidth < 768) { // MD breakpoint
-        toggleSidebar();
+    if (window.innerWidth < 768 && isOpen) {
+      toggleSidebar();
     }
   };
 
@@ -46,73 +63,61 @@ const SellerSidebar = ({ isOpen, toggleSidebar, activeTab, setActiveTab }) => {
 
   return (
     <>
-      {/* Mobile sidebar toggle button */}
+      {/* Mobile Toggle Button */}
       <button
         type="button"
         className="fixed top-4 left-4 z-50 p-2 rounded-md text-gray-700 bg-white shadow-md md:hidden"
         onClick={toggleSidebar}
+        aria-label={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
       >
-        {isOpen ? <FiCloseMenu className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
+        {isOpen ? <FiChevronLeft className="h-6 w-6" /> : <FiChevronRight className="h-6 w-6" />}
       </button>
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-0 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed top-16 inset-y-0 left-0 z-40 bg-white shadow-lg transform transition-all duration-300 ease-in-out md:translate-x-0 md:static md:inset-0 ${
+          isOpen ? 'w-64 translate-x-0' : 'w-20 -translate-x-0'
         }`}
       >
-        <div className="flex items-center justify-between h-14 px-4 border-b border-gray-200">
-          <div className="flex items-center">
-            <img
-              className="h-6 w-auto"
-              src="/icon.svg" // Make sure you have this or use a placeholder
-              alt="Car Network Logo"
-            />
-            <span className="ml-2 text-xl font-bold text-[#3b396d]">Seller Hub</span>
-          </div>
-          <button
-            type="button"
-            className="md:hidden text-gray-500 hover:text-gray-700"
-            onClick={toggleSidebar}
-          >
-            <FiCloseMenu className="h-6 w-6" />
-          </button>
-        </div>
+   
+
         <div className="flex-1 overflow-y-auto">
-          <nav className="px-2 py-4 space-y-1">
+          <nav className="py-4 space-y-1">
             {sidebarItems.map((item) => (
-              <button
+              <SidebarItem
                 key={item.id}
+                item={item}
+                isActive={activeTab === item.id}
+                isOpen={isOpen}
                 onClick={() => handleItemClick(item.id)}
-                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg ${
-                  activeTab === item.id
-                    ? 'bg-[#3b396d] text-white'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                }`}
-              >
-                <span className="mr-3">{item.icon}</span>
-                <span>{item.label}</span>
-              </button>
+              />
             ))}
           </nav>
         </div>
+
         <div className="p-4 border-t border-gray-200">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50"
+            className={`w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-all duration-200 ${
+              !isOpen ? 'justify-center' : ''
+            }`}
+            title={!isOpen ? (t('logout') || 'Logout') : ''}
+            aria-label={!isOpen ? (t('logout') || 'Logout') : undefined}
           >
-            <FiLogOut className="mr-3 h-5 w-5" />
-            {t('logout') || 'Logout'}
+            <FiLogOut className={`${isOpen ? 'mr-3 h-5 w-5' : 'h-5 w-5'}`} />
+            {isOpen && <span>{t('logout') || 'Logout'}</span>}
           </button>
         </div>
       </div>
 
+     
       {/* Mobile Overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 z-30 bg-black bg-opacity-50 md:hidden"
           onClick={toggleSidebar}
-        ></div>
+          aria-hidden="true"
+        />
       )}
     </>
   );
