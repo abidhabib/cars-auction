@@ -598,27 +598,66 @@ phonePlaceholder:"+3412345671",
     },
 
   sellerDashboard: {
-     view: 'View',
+    make: 'Make',
+  model: 'Model',
+  year: 'Year',
+  mileage: 'Mileage (km)',
+  fuelType: 'Fuel Type',
+  transmission: 'Transmission',
+  color: 'Color',
+  condition: 'Condition',
+  vin: 'VIN',
+  description: 'Description',
+  status: 'Status',
+  auctionType: 'Auction Type',
+  reservePrice: 'Reserve Price (€)',
+  buyItNowPrice: 'Buy It Now Price (€)',
+  auctionEnds: 'Auction Ends',
+  location: 'Location',
+  imageUrl: 'Image URL',
+  feature: 'Feature',
+  // Fuel types
+  petrol: 'Petrol',
+  diesel: 'Diesel',
+  electric: 'Electric',
+  hybrid: 'Hybrid',
+  
+  // Transmissions
+  manual: 'Manual',
+  automatic: 'Automatic',
+  
+  // Conditions
+  new: 'New',
+  likeNew: 'Like New',
+  excellent: 'Excellent',
+  good: 'Good',
+  fair: 'Fair',
+  
+  // Auction types
+  publicAuction: 'Public Auction',
+  privateAuction: 'Private Auction',
+  
+  // Statuses
+  active: 'Active',
+  sold: 'Sold',
+  draft: 'Draft',
+  
+  // Features
+  leatherSeats: 'Leather Seats',
+  sunroof: 'Sunroof',
+  navigationSystem: 'Navigation System',
+  backupCamera: 'Backup Camera',
+  
+  // Generic actions
+  add: 'Add',
+  remove: 'Remove',
+  cancel: 'Cancel',
+  save: 'Save',
+  update: 'Update',
   edit: 'Edit',
   delete: 'Delete',
-  cancel: 'Cancel',
-  retry: 'Retry',
-  deleting: 'Deleting...',
-  previous: 'Previous',
-  next: 'Next',
-  to: 'to',
-  of: 'of',
-  results: 'results',
+  view: 'View',
   back: 'Back',
-  copyLink: 'Copy Link',
-  viewDetails: 'View Details',
-  filters: 'Filters',
-    // Alerts & Messages
-    addVehicleAlert: 'Redirecting to Add Vehicle form...',
-    linkCopied: 'Link copied to clipboard!',
-    linkCopyFailed: 'Failed to copy link.',
-    logoutAlert: 'Logging out...',
-    viewBidHistoryAlert: 'Opening bid history...',
     
     // Sidebar Navigation
     sidebar: {
@@ -650,10 +689,18 @@ phonePlaceholder:"+3412345671",
     // Inventory Tab
     inventory: {
       addVehicle: 'Add Vehicle',
+      editVehicle:'Edit Vehicle',
+      basicInfo:'Basic Info',
       vehicleDetails: 'Vehicle Details',
       mileage: 'Mileage',
       fuelType: 'Fuel Type',
       transmission: 'Transmission',
+        buyItNowPrice: 'Buy It Now Price',
+        images:'images',
+        saving:'saving',
+        addImageUrl:'Add ImageUrl',
+features:'Features',
+addFeature:'Add Feature',
       color: 'Color',
       condition: 'Condition',
       location: 'Location',
@@ -667,8 +714,15 @@ phonePlaceholder:"+3412345671",
       searchPlaceholder: 'Search vehicles...',
       vehicle: 'Vehicle',
       details: 'Details',
+      description:'Description',
+      model:'Model',
+      make:'Make',
+      Year:'Year',
+      vim:'Vim',
       status: 'Status',
       price: 'Price',
+      pricingAuction:'Pricing Auction',
+      auctionType:'auctionType',
       actions: 'Actions',
       private: 'Private',
       publish: 'Publish',
@@ -699,12 +753,7 @@ phonePlaceholder:"+3412345671",
     },
 
     // Filters
-    filters: {
-      all: 'All Vehicles',
-      active: 'Active',
-      sold: 'Sold',
-      draft: 'Draft'
-    },
+  
 
     // Messages/Chat Tab
     messages: {
@@ -739,19 +788,7 @@ phonePlaceholder:"+3412345671",
     comingSoon: 'Coming Soon',
     comingSoonDesc: 'This section is under development.',
     viewAll: 'View All',
-    viewDetails: 'View Details',
-    back: 'Back to List',
-    copyLink: 'Copy Link',
-    edit: 'Edit',
-    delete: 'Delete',
-    cancel: 'Cancel',
-    retry: 'Retry',
-    deleting: 'Deleting...',
-    previous: 'Previous',
-    next: 'Next',
-    to: 'to',
-    of: 'of',
-    results: 'results'
+  
   }
 
   ,
@@ -1937,8 +1974,6 @@ phonePlaceholder:"+3412345671",
   },
 
     header: {
-          searchPlaceholder:'Explore Auctions',
-
       mainMenu: {
         home: "Home",
         buyCars: "Auto's kopen",

@@ -69,7 +69,7 @@ const SellerSidebar = ({ isOpen, toggleSidebar, activeTab, setActiveTab }) => {
         } flex flex-col md:static md:translate-x-0 md:inset-0`}
       >
         {/* Top Section */}
-        <div className={`flex items-center justify-between h-14 px-4 border-b border-gray-200 ${!isOpen ? 'justify-center' : ''}`}>
+        <div className={`flex items-center h-14 px-4 border-b border-gray-200 ${!isOpen ? 'justify-center' : 'justify-center'}`}>
           {isOpen ? (
             <div className="flex items-center">
               <img
@@ -77,11 +77,11 @@ const SellerSidebar = ({ isOpen, toggleSidebar, activeTab, setActiveTab }) => {
                 src="/icon.svg"
                 alt="Car Network Logo"
               />
-              <span className="ml-2 text-xl font-bold text-[#3b396d] truncate">Seller Hub</span>
+              <span className="ml-2 text-xl font-bold text-[#3b396d] truncate">Managment</span>
             </div>
           ) : (
-            <div className="flex items-center justify-center w-8 h-8 bg-[#3b396d] rounded-lg">
-              <span className="text-white font-bold text-sm">SH</span>
+            <div className="flex items-center justify-center   rounded-lg">
+            <img src="./icon.svg" alt="" width={30} />
             </div>
           )}
         </div>

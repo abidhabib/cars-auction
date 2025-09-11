@@ -1,109 +1,508 @@
 // src/components/seller/InventoryTab.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { FiPlus, FiSearch, FiFilter, FiEye, FiEdit, FiLink, FiCopy, FiTrash2, FiRefreshCw, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { 
+  FiPlus, FiSearch, FiFilter, FiEye, FiEdit, FiLink, 
+  FiCopy, FiTrash2, FiRefreshCw, FiChevronLeft, 
+  FiChevronRight, FiStar, FiClock, FiDollarSign 
+} from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import {demoVehicles} from './demoVehicles'
 
 // Vehicle Service (Mock API calls)
 const VehicleService = {
-  // Mock API call to fetch vehicles
   async fetchVehicles(filters = {}) {
-    // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
-    // In real app: return fetch('/api/vehicles', { method: 'GET' }).then(res => res.json());
-    return demoVehicles;
+    let results = [...demoVehicles];
+    
+    // Apply filters
+    if (filters.status && filters.status !== 'all') {
+      results = results.filter(v => v.status === filters.status);
+    }
+    
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase();
+      results = results.filter(v => 
+        v.make.toLowerCase().includes(searchTerm) ||
+        v.model.toLowerCase().includes(searchTerm) ||
+        v.stockNumber.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    // Apply sorting
+    if (filters.sortBy) {
+      results.sort((a, b) => {
+        let aValue = a[filters.sortBy];
+        let bValue = b[filters.sortBy];
+        
+        if (filters.sortBy === 'year') {
+          return filters.sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+        }
+        
+        if (typeof aValue === 'string') {
+          aValue = aValue.toLowerCase();
+          bValue = bValue.toLowerCase();
+        }
+        
+        if (aValue < bValue) return filters.sortOrder === 'asc' ? -1 : 1;
+        if (aValue > bValue) return filters.sortOrder === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    
+    return results;
   },
 
-  // Mock API call to delete vehicle
   async deleteVehicle(vehicleId) {
-    // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 300));
-    // In real app: return fetch(`/api/vehicles/${vehicleId}`, { method: 'DELETE' }).then(res => res.json());
     return { success: true, message: 'Vehicle deleted successfully' };
   },
 
-  // Mock API call to update vehicle status
   async updateVehicleStatus(vehicleId, status) {
-    // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 300));
-    // In real app: return fetch(`/api/vehicles/${vehicleId}/status`, { 
-    //   method: 'PUT', 
-    //   body: JSON.stringify({ status }),
-    //   headers: { 'Content-Type': 'application/json' }
-    // }).then(res => res.json());
     return { success: true, message: 'Vehicle status updated successfully' };
+  },
+  
+  async toggleFeatured(vehicleId) {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return { success: true, message: 'Featured status updated successfully' };
   }
 };
 
-// Dummy data for demo
-const demoVehicles = [
-  {
-    id: 'veh_001',
-    stockNumber: 'STK2023-001',
-    make: 'BMW',
-    model: 'X5',
-    year: 2022,
-    mileage: 25000,
-    fuelType: 'Diesel',
-    transmission: 'Automatic',
-    color: 'Black',
-    condition: 'Excellent',
-    mainImage: 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=500&q=80',
-    status: 'active',
-    currentBid: 45000,
-    reservePrice: 40000,
-    buyItNowPrice: 52000,
-    auctionEnds: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
-    location: 'Berlin, DE',
-    auctionType: 'public',
-    bids: [{ id: 1, amount: 42000 }, { id: 2, amount: 45000 }],
-    auctionLink: 'https://auction.example.com/private/veh_001'
-  },
-  {
-    id: 'veh_002',
-    stockNumber: 'STK2023-002',
-    make: 'Audi',
-    model: 'A6',
-    year: 2021,
-    mileage: 32000,
-    fuelType: 'Petrol',
-    transmission: 'Automatic',
-    color: 'White',
-    condition: 'Good',
-    mainImage: 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=500&q=80',
-    status: 'sold',
-    finalSalePrice: 38500,
-    soldDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
-    buyer: {
-      id: 'buyer_def',
-      name: 'Luxury Motors Ltd.',
-      email: 'sales@luxurymotors.co.uk',
-      phone: '+44 20 7123 4567',
-      location: 'London, UK'
-    },
-    location: 'Hamburg, DE',
-    auctionType: 'private',
-    auctionLink: 'https://auction.example.com/private/veh_002'
-  },
-  {
-    id: 'veh_003',
-    stockNumber: 'STK2023-003',
-    make: 'Mercedes-Benz',
-    model: 'GLE',
-    year: 2023,
-    mileage: 5000,
-    fuelType: 'Hybrid',
-    transmission: 'Automatic',
-    color: 'Silver',
-    condition: 'Like New',
-    mainImage: 'https://images.unsplash.com/photo-1558981000-f5f2a3c4b4e4?auto=format&fit=crop&w=500&q=80',
-    status: 'draft',
-    askingPrice: 65000,
-    location: 'Munich, DE',
-    auctionType: 'public',
-    auctionLink: 'https://auction.example.com/private/veh_003'
-  }
-];
+// Dummy data for demo (50 vehicles)
+
+
+// Example of auto-generating vehicles
+const makes = ['BMW', 'Audi', 'Mercedes-Benz', 'Tesla', 'Volkswagen', 'Toyota', 'Porsche', 'Volvo', 'Ford', 'Jaguar'];
+const models = ['X5', 'A6', 'GLE', 'Model 3', 'Golf', 'Corolla', 'Cayenne', 'XC90', 'Mustang', 'F-Pace'];
+
+for (let i = 4; i <= 50; i++) {
+  const make = makes[i % makes.length];
+  const model = models[i % models.length];
+  demoVehicles.push({
+    id: `veh_${String(i).padStart(3, '0')}`,
+    stockNumber: `STK2023-${String(i).padStart(3, '0')}`,
+    make,
+    model,
+    year: 2015 + (i % 9), // 2015–2023
+    mileage: 10000 * (i % 15),
+    fuelType: ['Petrol', 'Diesel', 'Hybrid', 'Electric'][i % 4],
+    transmission: ['Automatic', 'Manual'][i % 2],
+    color: ['Black', 'White', 'Silver', 'Red', 'Blue'][i % 5],
+    condition: ['Excellent', 'Good', 'Fair', 'Like New'][i % 4],
+    mainImage: `https://source.unsplash.com/800x500/?car,${make},${model},${i}`,
+    images: [
+      `https://source.unsplash.com/800x500/?car,${make},${i}`,
+      `https://source.unsplash.com/800x500/?vehicle,${model},${i}`,
+      `https://source.unsplash.com/800x500/?automobile,${make},${model},${i}`
+    ],
+    status: ['active', 'sold', 'draft'][i % 3],
+    currentBid: 20000 + i * 500,
+    reservePrice: 18000 + i * 500,
+    buyItNowPrice: 25000 + i * 600,
+    auctionEnds: new Date(Date.now() + i * 3600000),
+    location: ['Berlin, DE', 'Hamburg, DE', 'Munich, DE', 'London, UK'][i % 4],
+    auctionType: ['public', 'private'][i % 2],
+    auctionLink: `https://auction.example.com/private/veh_${String(i).padStart(3, '0')}`,
+    featured: i % 5 === 0,
+    vim: `VIN1234567890${i}`,
+    description: `${make} ${model} in ${i % 2 === 0 ? 'great' : 'excellent'} condition.`
+  });
+}
+
+
+// Sub-components for better organization
+const DeleteConfirmationModal = ({ 
+  isOpen, 
+  onClose, 
+  onConfirm, 
+  isDeleting, 
+  t 
+}) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
+          {t('sellerDashboard.inventory.deleteConfirmTitle') || 'Delete Vehicle'}
+        </h3>
+        <p className="text-gray-500 mb-6">
+          {t('sellerDashboard.inventory.deleteConfirmText') || 'Are you sure you want to delete this vehicle? This action cannot be undone.'}
+        </p>
+        <div className="flex justify-end space-x-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
+          >
+            {t('sellerDashboard.cancel') || 'Cancel'}
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isDeleting}
+            className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+          >
+            {isDeleting ? (
+              <span className="flex items-center">
+                <FiRefreshCw className="animate-spin mr-2 h-4 w-4" />
+                {t('sellerDashboard.deleting') || 'Deleting...'}
+              </span>
+            ) : (
+              t('sellerDashboard.delete') || 'Delete'
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const VehicleDetailView = ({ 
+  vehicle, 
+  onBack, 
+  onEdit, 
+  onDelete, 
+  onStatusChange, 
+  onToggleFeatured,
+  t 
+}) => {
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showBidHistory, setShowBidHistory] = useState(false);
+  const navigate = useNavigate();
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    await onDelete(vehicle.id);
+    setDeleting(false);
+    setShowDeleteConfirm(false);
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert(t('sellerDashboard.linkCopied') || 'Link copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      alert(t('sellerDashboard.linkCopyFailed') || 'Failed to copy link.');
+    });
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex(prev => 
+      prev === vehicle.images.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex(prev => 
+      prev === 0 ? vehicle.images.length - 1 : prev - 1
+    );
+  };
+
+  const translateWithFallback = (key, fallback) => {
+    const translation = t(key);
+    return translation && !translation.includes('missing') ? translation : fallback;
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow border border-gray-100 overflow-hidden">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center mb-4">
+          <button 
+            onClick={onBack}
+            className="flex items-center text-[#3b396d] hover:text-[#2a285a] mr-4"
+          >
+            <FiChevronLeft className="h-5 w-5 mr-1" />
+            {translateWithFallback('sellerDashboard.back', 'Back')}
+          </button>
+          <h2 className="text-xl font-bold text-gray-900">
+            {vehicle.year} {vehicle.make} {vehicle.model}
+          </h2>
+        </div>
+
+        <div className="flex flex-col lg:flex-row">
+          <div className="lg:w-1/3 mb-4 lg:mb-0 lg:pr-6">
+            <div className="relative">
+              <img 
+                src={vehicle.images?.[currentImageIndex] || vehicle.mainImage} 
+                alt={`${vehicle.make} ${vehicle.model}`} 
+                className="w-full h-64 object-cover rounded-lg"
+                onError={(e) => {
+                  e.target.src = '/car1.jpg';
+                }}
+              />
+              {vehicle.images?.length > 1 && (
+                <>
+                  <button 
+                    onClick={prevImage}
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+                  >
+                    <FiChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button 
+                    onClick={nextImage}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+                  >
+                    <FiChevronRight className="h-5 w-5" />
+                  </button>
+                  <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-1">
+                    {vehicle.images.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-2 h-2 rounded-full ${index === currentImageIndex ? 'bg-white' : 'bg-white bg-opacity-50'}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+              {vehicle.featured && (
+                <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs flex items-center">
+                  <FiStar className="mr-1" /> Featured
+                </div>
+              )}
+            </div>
+            
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              {vehicle.images?.slice(0, 3).map((img, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`h-16 w-full ${currentImageIndex === index ? 'ring-2 ring-[#3b396d]' : ''}`}
+                >
+                  <img 
+                    src={img} 
+                    alt={`${vehicle.make} ${vehicle.model} ${index + 1}`} 
+                    className="h-full w-full object-cover rounded"
+                    onError={(e) => {
+                  e.target.src = '/car1.jpg';
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          <div className="lg:w-2/3">
+            <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">{vehicle.year} {vehicle.make} {vehicle.model}</h3>
+                <p className="text-gray-600">{vehicle.stockNumber}</p>
+                {vehicle.vim && <p className="text-xs text-gray-500 mt-1">VIN: {vehicle.vim}</p>}
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  vehicle.status === 'active' ? 'bg-green-100 text-green-800' :
+                  vehicle.status === 'sold' ? 'bg-blue-100 text-blue-800' :
+                  'bg-gray-100 text-gray-800'
+                }`}>
+                  {vehicle.status === 'active' ? translateWithFallback('sellerDashboard.vehicleStatus.active', 'Active') :
+                   vehicle.status === 'sold' ? translateWithFallback('sellerDashboard.vehicleStatus.sold', 'Sold') :
+                   translateWithFallback('sellerDashboard.vehicleStatus.draft', 'Draft')}
+                </span>
+                <button 
+                  className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+                  onClick={() => onEdit(vehicle.id)}
+                  title={`edit`}
+                >
+                  <FiEdit className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {vehicle.description && (
+              <div className="mb-4">
+                <p className="text-sm text-gray-700">{vehicle.description}</p>
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+              <div>
+                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.mileage', 'Mileage')}</p>
+                <p className="font-medium">{vehicle.mileage?.toLocaleString()} km</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.fuelType', 'Fuel Type')}</p>
+                <p className="font-medium">{vehicle.fuelType}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.transmission', 'Transmission')}</p>
+                <p className="font-medium">{vehicle.transmission}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.color', 'Color')}</p>
+                <p className="font-medium">{vehicle.color}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.condition', 'Condition')}</p>
+                <p className="font-medium">{vehicle.condition}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.location', 'Location')}</p>
+                <p className="font-medium">{vehicle.location}</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3 mb-6">
+              {vehicle.status === 'active' && (
+                <>
+                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
+                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.currentBid', 'Current Bid')}</p>
+                    <p className="text-2xl font-bold text-[#3b396d]">€{vehicle.currentBid?.toLocaleString()}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {translateWithFallback('sellerDashboard.inventory.reservePrice', 'Reserve')}: €{vehicle.reservePrice?.toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
+                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.auctionEnds', 'Auction Ends')}</p>
+                    <p className="text-lg font-bold text-gray-900">
+                      {vehicle.auctionEnds?.toLocaleDateString()} <br />
+                      <span className="text-sm font-normal">{vehicle.auctionEnds?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    </p>
+                    <div className="flex items-center mt-1 text-xs text-gray-500">
+                      <FiClock className="mr-1" />
+                      {Math.floor((vehicle.auctionEnds - new Date()) / (1000 * 60 * 60 * 24))} days left
+                    </div>
+                  </div>
+                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
+                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.bids', 'Bids')}</p>
+                    <p className="text-2xl font-bold text-gray-900">{vehicle.bids?.length || 0}</p>
+                    <button
+                      onClick={() => setShowBidHistory(!showBidHistory)}
+                      className="text-xs text-[#3b396d] hover:text-[#2a285a] font-medium mt-1"
+                    >
+                      {showBidHistory ? 'Hide History' : 'View History'}
+                    </button>
+                  </div>
+                  {vehicle.buyItNowPrice && (
+                    <div className="bg-green-50 rounded-lg p-4 flex-1 min-w-[200px]">
+                      <p className="text-sm text-gray-500 mb-1">Buy It Now Price</p>
+                      <p className="text-2xl font-bold text-green-800">€{vehicle.buyItNowPrice?.toLocaleString()}</p>
+                    </div>
+                  )}
+                </>
+              )}
+              {vehicle.status === 'sold' && (
+                <>
+                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
+                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.finalSalePrice', 'Final Sale Price')}</p>
+                    <p className="text-2xl font-bold text-[#3b396d]">€{vehicle.finalSalePrice?.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
+                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.soldTo', 'Sold To')}</p>
+                    <p className="font-medium text-gray-900">{vehicle.buyer?.name}</p>
+                    <p className="text-xs text-gray-500">{vehicle.soldDate?.toLocaleDateString()}</p>
+                  </div>
+                </>
+              )}
+              {vehicle.status === 'draft' && vehicle.askingPrice && (
+                <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
+                  <p className="text-sm text-gray-500 mb-1">Asking Price</p>
+                  <p className="text-2xl font-bold text-[#3b396d]">€{vehicle.askingPrice?.toLocaleString()}</p>
+                </div>
+              )}
+            </div>
+
+            {showBidHistory && vehicle.bids?.length > 0 && (
+              <div className="mb-6 bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-medium text-gray-900 mb-3">Bid History</h4>
+                <div className="space-y-2">
+                  {vehicle.bids.map((bid, index) => (
+                    <div key={bid.id || index} className="flex justify-between items-center py-2 border-b border-gray-200">
+                      <div>
+                        <p className="font-medium">{bid.bidder || `Bidder #${index + 1}`}</p>
+                        <p className="text-xs text-gray-500">{bid.time?.toLocaleString()}</p>
+                      </div>
+                      <div className="text-lg font-bold text-[#3b396d]">€{bid.amount?.toLocaleString()}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {vehicle.auctionType === 'private' && (
+              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="flex items-start">
+                  <FiLink className="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-yellow-800">{translateWithFallback('sellerDashboard.inventory.privateAuction', 'Private Auction Link')}</p>
+                    <p className="text-xs text-yellow-700 mt-1 break-all">{vehicle.auctionLink}</p>
+                    <button
+                      onClick={() => copyToClipboard(vehicle.auctionLink)}
+                      className="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                    >
+                      <FiCopy className="mr-1 h-3 w-3" />
+                      {translateWithFallback('sellerDashboard.copyLink', 'Copy Link')}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                onClick={() => onEdit(vehicle.id)}
+                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
+              >
+                <FiEdit className="mr-2 h-4 w-4" />
+                {translateWithFallback('sellerDashboard.edit', 'Edit')}
+              </button>
+              
+              <button
+                onClick={() => onToggleFeatured(vehicle.id, !vehicle.featured)}
+                className={`inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] ${
+                  vehicle.featured 
+                    ? 'border-yellow-400 text-yellow-700 bg-yellow-100 hover:bg-yellow-200' 
+                    : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+                }`}
+              >
+                <FiStar className="mr-2 h-4 w-4" />
+                {vehicle.featured ? 'Unfeature' : 'Feature'}
+              </button>
+              
+              {vehicle.status !== 'sold' && (
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="inline-flex items-center px-4 py-2 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  <FiTrash2 className="mr-2 h-4 w-4" />
+                  {translateWithFallback('sellerDashboard.delete', 'Delete')}
+                </button>
+              )}
+              
+              {vehicle.status === 'draft' && (
+                <button
+                  onClick={() => onStatusChange(vehicle.id, 'active')}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                  {translateWithFallback('sellerDashboard.inventory.publish', 'Publish')}
+                </button>
+              )}
+              
+              {vehicle.status === 'active' && (
+                <button
+                  onClick={() => onStatusChange(vehicle.id, 'draft')}
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
+                >
+                  {translateWithFallback('sellerDashboard.inventory.unpublish', 'Unpublish')}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <DeleteConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+        isDeleting={deleting}
+        t={t}
+      />
+    </div>
+  );
+};
 
 const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, handleViewVehicle }) => {
   const { t } = useLanguage();
@@ -115,21 +514,25 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
     status: 'all',
     search: '',
     sortBy: 'year',
-    sortOrder: 'desc'
+    sortOrder: 'desc',
+    featured: false
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [deletingId, setDeletingId] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  // Fetch vehicles on component mount
+  // Fetch vehicles on component mount and when filters change
   useEffect(() => {
     loadVehicles();
-  }, []);
+  }, [filters.status, filters.sortBy, filters.sortOrder, filters.featured]);
 
-  const loadVehicles = async () => {
+  const loadVehicles = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
+      else setRefreshing(true);
+      
       const data = await VehicleService.fetchVehicles(filters);
       setVehicles(data);
       setError(null);
@@ -138,6 +541,7 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
       console.error('Error loading vehicles:', err);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -181,6 +585,30 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
     }
   };
 
+  const handleToggleFeatured = async (vehicleId, featured) => {
+    try {
+      const result = await VehicleService.toggleFeatured(vehicleId);
+      
+      if (result.success) {
+        setVehicles(prevVehicles => 
+          prevVehicles.map(v => 
+            v.id === vehicleId ? { ...v, featured } : v
+          )
+        );
+        alert(featured ? 'Vehicle featured successfully' : 'Vehicle unfeatured successfully');
+      } else {
+        throw new Error(result.message || 'Failed to update featured status');
+      }
+    } catch (err) {
+      alert('Failed to update featured status: ' + err.message);
+      console.error('Error updating featured status:', err);
+    }
+  };
+
+  const handleEditVehicle = (vehicleId) => {
+    navigate(`/seller/edit-vehicle/${vehicleId}`);
+  };
+
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {
       alert(t('sellerDashboard.linkCopied') || 'Link copied to clipboard!');
@@ -190,14 +618,17 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
     });
   };
 
-  const filteredVehicles = vehicles.filter(vehicle => {
-    const matchesStatus = filters.status === 'all' || vehicle.status === filters.status;
-    const matchesSearch = filters.search === '' ||
-      vehicle.make.toLowerCase().includes(filters.search.toLowerCase()) ||
-      vehicle.model.toLowerCase().includes(filters.search.toLowerCase()) ||
-      vehicle.stockNumber.toLowerCase().includes(filters.search.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
+  const filteredVehicles = useMemo(() => {
+    return vehicles.filter(vehicle => {
+      const matchesStatus = filters.status === 'all' || vehicle.status === filters.status;
+      const matchesSearch = filters.search === '' ||
+        vehicle.make.toLowerCase().includes(filters.search.toLowerCase()) ||
+        vehicle.model.toLowerCase().includes(filters.search.toLowerCase()) ||
+        vehicle.stockNumber.toLowerCase().includes(filters.search.toLowerCase());
+      const matchesFeatured = !filters.featured || vehicle.featured;
+      return matchesStatus && matchesSearch && matchesFeatured;
+    });
+  }, [vehicles, filters]);
 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -211,7 +642,7 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   };
 
   const getStatusOptions = () => [
@@ -224,11 +655,9 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
   const getSortOptions = () => [
     { value: 'year', label: t('sellerDashboard.inventory.sort.year') || 'Year' },
     { value: 'make', label: t('sellerDashboard.inventory.sort.make') || 'Make' },
-    { value: 'price', label: t('sellerDashboard.inventory.sort.price') || 'Price' },
     { value: 'mileage', label: t('sellerDashboard.inventory.sort.mileage') || 'Mileage' }
   ];
 
-  // Translation helper with fallbacks
   const translateWithFallback = (key, fallback) => {
     const translation = t(key);
     return translation && !translation.includes('missing') ? translation : fallback;
@@ -236,226 +665,15 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
 
   if (selectedVehicle) {
     return (
-      <div className="bg-white rounded-lg shadow border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center mb-4">
-            <button 
-              onClick={() => setSelectedVehicle(null)}
-              className="flex items-center text-[#3b396d] hover:text-[#2a285a] mr-4"
-            >
-              <FiChevronLeft className="h-5 w-5 mr-1" />
-              {translateWithFallback('back', 'Back')}
-            </button>
-            <h2 className="text-xl font-bold text-gray-900">
-              {selectedVehicle.year} {selectedVehicle.make} {selectedVehicle.model}
-            </h2>
-          </div>
-
-          <div className="flex flex-col md:flex-row">
-            <div className="md:w-1/3 mb-4 md:mb-0 md:pr-6">
-              <img 
-                src={selectedVehicle.mainImage} 
-                alt={`${selectedVehicle.make} ${selectedVehicle.model}`} 
-                className="w-full h-auto rounded-lg object-cover" 
-                onError={(e) => {
-                  e.target.src = '/placeholder-vehicle.jpg';
-                }}
-              />
-            </div>
-            <div className="md:w-2/3">
-              <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900">{selectedVehicle.year} {selectedVehicle.make} {selectedVehicle.model}</h3>
-                  <p className="text-gray-600">{selectedVehicle.stockNumber}</p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    selectedVehicle.status === 'active' ? 'bg-green-100 text-green-800' :
-                    selectedVehicle.status === 'sold' ? 'bg-blue-100 text-blue-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {selectedVehicle.status === 'active' ? translateWithFallback('sellerDashboard.vehicleStatus.active', 'Active') :
-                     selectedVehicle.status === 'sold' ? translateWithFallback('sellerDashboard.vehicleStatus.sold', 'Sold') :
-                     translateWithFallback('sellerDashboard.vehicleStatus.draft', 'Draft')}
-                  </span>
-                  <button 
-                    className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
-                    onClick={() => navigate(`/seller/edit-vehicle/${selectedVehicle.id}`)}
-                  >
-                    <FiEdit className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
-                <div>
-                  <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.mileage', 'Mileage')}</p>
-                  <p className="font-medium">{selectedVehicle.mileage?.toLocaleString()} km</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.fuelType', 'Fuel Type')}</p>
-                  <p className="font-medium">{selectedVehicle.fuelType}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.transmission', 'Transmission')}</p>
-                  <p className="font-medium">{selectedVehicle.transmission}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.color', 'Color')}</p>
-                  <p className="font-medium">{selectedVehicle.color}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.condition', 'Condition')}</p>
-                  <p className="font-medium">{selectedVehicle.condition}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.location', 'Location')}</p>
-                  <p className="font-medium">{selectedVehicle.location}</p>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {selectedVehicle.status === 'active' && (
-                  <>
-                    <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                      <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.currentBid', 'Current Bid')}</p>
-                      <p className="text-2xl font-bold text-[#3b396d]">€{selectedVehicle.currentBid?.toLocaleString()}</p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {translateWithFallback('sellerDashboard.inventory.reservePrice', 'Reserve')}: €{selectedVehicle.reservePrice?.toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                      <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.auctionEnds', 'Auction Ends')}</p>
-                      <p className="text-lg font-bold text-gray-900">
-                        {selectedVehicle.auctionEnds?.toLocaleDateString()} <br />
-                        <span className="text-sm font-normal">{selectedVehicle.auctionEnds?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                      </p>
-                    </div>
-                    <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                      <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.bids', 'Bids')}</p>
-                      <p className="text-2xl font-bold text-gray-900">{selectedVehicle.bids?.length || 0}</p>
-                      <button
-                        onClick={() => {
-                          navigate(`/seller/auction/${selectedVehicle.id}/bids`);
-                        }}
-                        className="text-xs text-[#3b396d] hover:text-[#2a285a] font-medium mt-1"
-                      >
-                        {translateWithFallback('viewDetails', 'View Details')}
-                      </button>
-                    </div>
-                  </>
-                )}
-                {selectedVehicle.status === 'sold' && (
-                  <>
-                    <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                      <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.finalSalePrice', 'Final Sale Price')}</p>
-                      <p className="text-2xl font-bold text-[#3b396d]">€{selectedVehicle.finalSalePrice?.toLocaleString()}</p>
-                    </div>
-                    <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                      <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.soldTo', 'Sold To')}</p>
-                      <p className="font-medium text-gray-900">{selectedVehicle.buyer?.name}</p>
-                      <p className="text-xs text-gray-500">{selectedVehicle.soldDate?.toLocaleDateString()}</p>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {selectedVehicle.auctionType === 'private' && (
-                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <div className="flex items-start">
-                    <FiLink className="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm font-medium text-yellow-800">{translateWithFallback('sellerDashboard.inventory.privateAuction', 'Private Auction Link')}</p>
-                      <p className="text-xs text-yellow-700 mt-1 break-all">{selectedVehicle.auctionLink}</p>
-                      <button
-                        onClick={() => copyToClipboard(selectedVehicle.auctionLink)}
-                        className="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                      >
-                        <FiCopy className="mr-1 h-3 w-3" />
-                        {translateWithFallback('copyLink', 'Copy Link')}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  onClick={() => navigate(`/seller/edit-vehicle/${selectedVehicle.id}`)}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
-                >
-                  <FiEdit className="mr-2 h-4 w-4" />
-                  {translateWithFallback('edit', 'Edit')}
-                </button>
-                
-                {selectedVehicle.status !== 'sold' && (
-                  <button
-                    onClick={() => setShowDeleteConfirm(selectedVehicle.id)}
-                    className="inline-flex items-center px-4 py-2 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                  >
-                    <FiTrash2 className="mr-2 h-4 w-4" />
-                    {translateWithFallback('delete', 'Delete')}
-                  </button>
-                )}
-                
-                {selectedVehicle.status === 'draft' && (
-                  <button
-                    onClick={() => handleStatusChange(selectedVehicle.id, 'active')}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    {translateWithFallback('sellerDashboard.inventory.publish', 'Publish')}
-                  </button>
-                )}
-                
-                {selectedVehicle.status === 'active' && (
-                  <button
-                    onClick={() => handleStatusChange(selectedVehicle.id, 'draft')}
-                    className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
-                  >
-                    {translateWithFallback('sellerDashboard.inventory.unpublish', 'Unpublish')}
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Delete Confirmation Modal */}
-        {showDeleteConfirm === selectedVehicle.id && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                {translateWithFallback('sellerDashboard.inventory.deleteConfirmTitle', 'Delete Vehicle')}
-              </h3>
-              <p className="text-gray-500 mb-6">
-                {translateWithFallback('sellerDashboard.inventory.deleteConfirmText', 'Are you sure you want to delete this vehicle? This action cannot be undone.')}
-              </p>
-              <div className="flex justify-end space-x-3">
-                <button
-                  onClick={() => setShowDeleteConfirm(null)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
-                >
-                  {translateWithFallback('cancel', 'Cancel')}
-                </button>
-                <button
-                  onClick={() => handleDeleteVehicle(selectedVehicle.id)}
-                  disabled={deletingId === selectedVehicle.id}
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
-                >
-                  {deletingId === selectedVehicle.id ? (
-                    <span className="flex items-center">
-                      <FiRefreshCw className="animate-spin mr-2 h-4 w-4" />
-                      {translateWithFallback('deleting', 'Deleting...')}
-                    </span>
-                  ) : (
-                    translateWithFallback('delete', 'Delete')
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      <VehicleDetailView
+        vehicle={selectedVehicle}
+        onBack={() => setSelectedVehicle(null)}
+        onEdit={handleEditVehicle}
+        onDelete={handleDeleteVehicle}
+        onStatusChange={handleStatusChange}
+        onToggleFeatured={handleToggleFeatured}
+        t={t}
+      />
     );
   }
 
@@ -476,8 +694,8 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
 
       {/* Filters */}
       <div className="bg-white rounded-lg shadow border border-gray-100 p-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="relative">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="relative md:col-span-2">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FiSearch className="h-5 w-5 text-gray-400" />
             </div>
@@ -512,16 +730,25 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
           
           <div className="flex space-x-2">
             <button 
-              onClick={loadVehicles}
-              disabled={loading}
+              onClick={() => loadVehicles(false)}
+              disabled={refreshing}
               className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] disabled:opacity-50"
             >
-              <FiRefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+              <FiRefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </button>
-            <button className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]">
-              <FiFilter className="mr-1 h-4 w-4" />
-              {translateWithFallback('filters', 'Filters')}
-            </button>
+            <div className="flex items-center px-3 border border-gray-300 rounded-md">
+              <input
+                id="featured-filter"
+                type="checkbox"
+                checked={filters.featured}
+                onChange={(e) => handleFilterChange('featured', e.target.checked)}
+                className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
+              />
+              <label htmlFor="featured-filter" className="ml-2 block text-sm text-gray-700">
+                <FiStar className="inline h-4 w-4 mr-1" />
+                Featured
+              </label>
+            </div>
           </div>
         </div>
       </div>
@@ -545,10 +772,10 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
               <h3 className="text-sm font-medium text-red-800">{error}</h3>
               <div className="mt-2 text-sm text-red-700">
                 <button 
-                  onClick={loadVehicles}
+                  onClick={() => loadVehicles()}
                   className="font-medium text-red-800 hover:text-red-900"
                 >
-                  {translateWithFallback('retry', 'Retry')}
+                  {translateWithFallback('sellerDashboard.retry', 'Retry')}
                 </button>
               </div>
             </div>
@@ -564,18 +791,28 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{translateWithFallback('sellerDashboard.inventory.vehicle', 'Vehicle')}</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{translateWithFallback('sellerDashboard.inventory.details', 'Details')}</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{translateWithFallback('sellerDashboard.inventory.status', 'Status')}</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{translateWithFallback('sellerDashboard.inventory.price', 'Price')}</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{translateWithFallback('sellerDashboard.inventory.actions', 'Actions')}</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {translateWithFallback('sellerDashboard.inventory.vehicle', 'Vehicle')}
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {translateWithFallback('sellerDashboard.inventory.details', 'Details')}
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {translateWithFallback('sellerDashboard.inventory.status', 'Status')}
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {translateWithFallback('sellerDashboard.inventory.price', 'Price')}
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {translateWithFallback('sellerDashboard.inventory.actions', 'Actions')}
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentVehicles.length === 0 ? (
                     <tr>
                       <td colSpan="5" className="px-6 py-4 text-center text-sm text-gray-500">
-                        {filters.search || filters.status !== 'all' 
+                        {filters.search || filters.status !== 'all' || filters.featured
                           ? translateWithFallback('sellerDashboard.inventory.noResults', 'No vehicles found matching your criteria') 
                           : translateWithFallback('sellerDashboard.inventory.noVehicles', 'No vehicles in inventory')}
                       </td>
@@ -585,15 +822,20 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
                       <tr key={vehicle.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="flex-shrink-0 h-12 w-16">
+                            <div className="flex-shrink-0 h-12 w-16 relative">
                               <img 
                                 className="h-12 w-16 object-cover rounded" 
                                 src={vehicle.mainImage} 
                                 alt={`${vehicle.make} ${vehicle.model}`}
                                 onError={(e) => {
-                                  e.target.src = '/placeholder-vehicle.jpg';
+                                  e.target.src = '/car2.jpg';
                                 }}
                               />
+                              {vehicle.featured && (
+                                <div className="absolute top-0 right-0 bg-yellow-500 text-white rounded-bl-md p-1">
+                                  <FiStar className="h-3 w-3" />
+                                </div>
+                              )}
                             </div>
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">{vehicle.make} {vehicle.model}</div>
@@ -624,11 +866,25 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {vehicle.status === 'sold' ? (
-                            <>€{vehicle.finalSalePrice?.toLocaleString()}</>
+                            <div className="flex items-center">
+                              <FiDollarSign className="h-4 w-4 text-green-600 mr-1" />
+                              <span>€{vehicle.finalSalePrice?.toLocaleString()}</span>
+                            </div>
                           ) : vehicle.status === 'active' ? (
-                            <>€{vehicle.currentBid?.toLocaleString()} <span className="text-gray-500 text-xs">(€{vehicle.reservePrice?.toLocaleString()} reserve)</span></>
+                            <div>
+                              <div className="flex items-center">
+                                <FiDollarSign className="h-4 w-4 text-[#3b396d] mr-1" />
+                                <span>€{vehicle.currentBid?.toLocaleString()}</span>
+                              </div>
+                              <div className="text-gray-500 text-xs">Reserve: €{vehicle.reservePrice?.toLocaleString()}</div>
+                            </div>
+                          ) : vehicle.askingPrice ? (
+                            <div className="flex items-center">
+                              <FiDollarSign className="h-4 w-4 text-gray-600 mr-1" />
+                              <span>€{vehicle.askingPrice?.toLocaleString()}</span>
+                            </div>
                           ) : (
-                            <>€{vehicle.askingPrice?.toLocaleString()}</>
+                            <span className="text-gray-500">No price set</span>
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -636,22 +892,29 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
                             <button
                               onClick={() => handleViewVehicle(vehicle)}
                               className="text-[#3b396d] hover:text-[#2a285a]"
-                              title={translateWithFallback('view', 'View')}
+                              title={translateWithFallback('sellerDashboard.view', 'View')}
                             >
                               <FiEye className="h-5 w-5" />
                             </button>
                             <button 
                               className="text-gray-500 hover:text-gray-700"
-                              onClick={() => navigate(`/seller/edit-vehicle/${vehicle.id}`)}
-                              title={translateWithFallback('edit', 'Edit')}
+                              onClick={() => handleEditVehicle(vehicle.id)}
+                              title={translateWithFallback('sellerDashboard.edit', 'Edit')}
                             >
                               <FiEdit className="h-5 w-5" />
+                            </button>
+                            <button
+                              onClick={() => handleToggleFeatured(vehicle.id, !vehicle.featured)}
+                              className={`${vehicle.featured ? 'text-yellow-500 hover:text-yellow-700' : 'text-gray-400 hover:text-gray-600'}`}
+                              title={vehicle.featured ? 'Unfeature' : 'Feature'}
+                            >
+                              <FiStar className="h-5 w-5" />
                             </button>
                             {vehicle.status !== 'sold' && (
                               <button
                                 onClick={() => setShowDeleteConfirm(vehicle.id)}
                                 className="text-red-500 hover:text-red-700"
-                                title={translateWithFallback('delete', 'Delete')}
+                                title={translateWithFallback('sellerDashboard.delete', 'Delete')}
                                 disabled={deletingId === vehicle.id}
                               >
                                 {deletingId === vehicle.id ? (
@@ -680,20 +943,20 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
                   disabled={currentPage === 1}
                   className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
                 >
-                  {translateWithFallback('previous', 'Previous')}
+                  {translateWithFallback('sellerDashboard.previous', 'Previous')}
                 </button>
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
                   className="relative ml-3 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
                 >
-                  {translateWithFallback('next', 'Next')}
+                  {translateWithFallback('sellerDashboard.next', 'Next')}
                 </button>
               </div>
               <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                 <div>
                   <p className="text-sm text-gray-700">
-                    {translateWithFallback('sellerDashboard.inventory.showing', 'Showing')} <span className="font-medium">{indexOfFirstItem + 1}</span> {translateWithFallback('to', 'to')} <span className="font-medium">{Math.min(indexOfLastItem, filteredVehicles.length)}</span> {translateWithFallback('of', 'of')} <span className="font-medium">{filteredVehicles.length}</span> {translateWithFallback('results', 'results')}
+                    {translateWithFallback('sellerDashboard.inventory.showing', 'Showing')} <span className="font-medium">{indexOfFirstItem + 1}</span> {translateWithFallback('sellerDashboard.to', 'to')} <span className="font-medium">{Math.min(indexOfLastItem, filteredVehicles.length)}</span> {translateWithFallback('sellerDashboard.of', 'of')} <span className="font-medium">{filteredVehicles.length}</span> {translateWithFallback('sellerDashboard.results', 'results')}
                   </p>
                 </div>
                 <div>
@@ -736,41 +999,13 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
         </>
       )}
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && showDeleteConfirm !== selectedVehicle?.id && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {translateWithFallback('sellerDashboard.inventory.deleteConfirmTitle', 'Delete Vehicle')}
-            </h3>
-            <p className="text-gray-500 mb-6">
-              {translateWithFallback('sellerDashboard.inventory.deleteConfirmText', 'Are you sure you want to delete this vehicle? This action cannot be undone.')}
-            </p>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setShowDeleteConfirm(null)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
-              >
-                {translateWithFallback('cancel', 'Cancel')}
-              </button>
-              <button
-                onClick={() => handleDeleteVehicle(showDeleteConfirm)}
-                disabled={deletingId === showDeleteConfirm}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
-              >
-                {deletingId === showDeleteConfirm ? (
-                  <span className="flex items-center">
-                    <FiRefreshCw className="animate-spin mr-2 h-4 w-4" />
-                    {translateWithFallback('deleting', 'Deleting...')}
-                  </span>
-                ) : (
-                  translateWithFallback('delete', 'Delete')
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DeleteConfirmationModal
+        isOpen={!!showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(null)}
+        onConfirm={() => handleDeleteVehicle(showDeleteConfirm)}
+        isDeleting={deletingId === showDeleteConfirm}
+        t={t}
+      />
     </div>
   );
 };

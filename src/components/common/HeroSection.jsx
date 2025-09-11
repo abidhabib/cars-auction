@@ -9,7 +9,6 @@ const HeroSection = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
-  const [ setCurrentCarIndex] = useState(0);
 
 
 
@@ -40,12 +39,8 @@ const HeroSection = () => {
   useEffect(() => {
     setIsVisible(true);
     
-    // Rotate featured cars every 5 seconds
-    const carInterval = setInterval(() => {
-      setCurrentCarIndex((prevIndex) => (prevIndex + 1) % featuredCars.length);
-    }, 5000);
-    
-    return () => clearInterval(carInterval);
+
+    return () => clearInterval(1500);
   }, []);
 
   return (

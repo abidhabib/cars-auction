@@ -4,7 +4,7 @@ import React from 'react';
 const ChatListItem = ({ chat, onClick, t }) => { // Receive t as prop
   return (
     <div className="flex items-start p-3 hover:bg-gray-50 rounded-lg cursor-pointer" onClick={onClick}>
-      <img src={chat.buyer.avatar} alt={chat.buyer.name} className="h-10 w-10 rounded-full mr-3" />
+      <img src={chat.buyer.avatar} alt={chat.buyer.name} className=" w-10 rounded-full mr-3" />
       <div className="flex-1 min-w-0">
         <div className="flex justify-between">
           <p className="text-sm font-medium text-gray-900 truncate">{chat.buyer.name}</p>

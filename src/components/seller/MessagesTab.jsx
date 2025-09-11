@@ -13,7 +13,7 @@ const demoChats = [
       buyer: {
         id: 'buyer_abc',
         name: 'European Fleet Solutions',
-        avatar: 'https://via.placeholder.com/40x40/2a285a/FFFFFF?text=EFS'
+        avatar: 'https://1000logos.net/wp-content/uploads/2020/06/Lotus-Logo.png'
       },
       lastMessage: 'Hi, interested in the BMW. Is it still available for inspection?',
       unread: 2,
@@ -32,7 +32,7 @@ const demoChats = [
       buyer: {
         id: 'buyer_def',
         name: 'Luxury Motors Ltd.',
-        avatar: 'https://via.placeholder.com/40x40/3b396d/FFFFFF?text=LM'
+        avatar: 'https://1000logos.net/wp-content/uploads/2018/09/Alfa-Romeo-Logo.png'
       },
       lastMessage: 'Congratulations on the sale!',
       unread: 0,
@@ -171,7 +171,7 @@ const MessagesTab = ({ selectedChat, setSelectedChat, setChatOpen, chatOpen }) =
               }`}
             >
               <div className="flex items-center">
-                <img src={chat.buyer.avatar} alt={chat.buyer.name} className="h-10 w-10 rounded-full mr-3" />
+                <img src={chat.buyer.avatar} alt={chat.buyer.name} className="w-10 rounded-full mr-3" />
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between">
                     <p className="text-sm font-medium text-gray-900 truncate">{chat.buyer.name}</p>

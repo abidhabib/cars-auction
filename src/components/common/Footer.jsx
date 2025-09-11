@@ -13,7 +13,7 @@ const Footer = () => {
   const footerLinks = {
     services: [
       { name: t("footer.services.buyCars"), href: "/buy" },
-      { name: t("footer.services.sellCars"), href: "/sell" },
+      { name: t("footer.services.sellCars"), href: "/sellerDashboard" },
       { name: t("footer.services.auctions"), href: "/auctions" },
       { name: t("footer.services.directBuy"), href: "/direct-buy" },
     ],

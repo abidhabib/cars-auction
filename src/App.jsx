@@ -14,6 +14,7 @@ import SplashScreen from './components/common/SplashScreen';
 import AppLayout from './components/layout/AppLayout';
 import SellerDashboard from './pages/seller/SellerDashboard';
 import AddCarListing from './components/seller/AddCarListing';
+import EditCarListing from './components/seller/EditCarListing'; // Add this import
 
 // Lazy load all pages and components
 const Home = React.lazy(() => import('./pages/Home'));
@@ -24,6 +25,7 @@ const AboutPage = React.lazy(() => import('./pages/AboutPage/AboutPage'));
 const SupportPage = React.lazy(() => import('./pages/SupportPage/SupportPage'));
 const TermsOfService = React.lazy(() => import('./pages/TermsOfService'));
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
+
 // --- Helper Component for Scroll ---
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -228,6 +230,17 @@ function App() {
                       <SellerProtectedRoute>
                         <AppLayout>
                           <AddCarListing />
+                        </AppLayout>
+                      </SellerProtectedRoute>
+                    }
+                  />
+                  {/* Add this route for editing vehicles */}
+                  <Route
+                    path="/seller/edit-vehicle/:id"
+                    element={
+                      <SellerProtectedRoute>
+                        <AppLayout>
+                          <EditCarListing />
                         </AppLayout>
                       </SellerProtectedRoute>
                     }

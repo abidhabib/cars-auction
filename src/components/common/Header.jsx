@@ -75,7 +75,7 @@ const Header = () => {
 
   const mainMenuItems = [
     { name: t('header.mainMenu.buyCars') || 'Buy Cars', icon: <FiShoppingCart className="text-logo-dark-blue" />, href: '/buy' },
-    { name: t('header.mainMenu.sellCars') || 'Sell Cars', icon: <FiTag className="text-logo-dark-blue" />, href: '/sell' }
+    { name: t('header.mainMenu.sellCars') || 'Sell Cars', icon: <FiTag className="text-logo-dark-blue" />, href: '/sellerDashboard' }
   ];
 
   const mobileMenuItems = [
