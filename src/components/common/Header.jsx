@@ -115,9 +115,11 @@ const Header = () => {
 
       {/* Header */}
       <header 
-        className={`fixed w-full z-50 transition-all duration-300 shadow bg-logo-dark-blue py-3 ${scrolled ? 'shadow-md shadow-white' : ''}`}
+        className={`fixed w-full z-50 transition-all duration-300 shadow bg-logo-dark-blue py-4  ${scrolled ? 'shadow-md shadow-white' : ''}`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     
+
+        <div className=" mx-auto px-4 sm:px-6 lg:px-24">
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center">

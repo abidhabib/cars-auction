@@ -30,7 +30,7 @@ const Footer = () => {
       { name: t("footer.company.press"), href: "/press" },
     ],
     support: [
-      { name: t("footer.support.help"), href: "/help" },
+      { name: t("footer.support.help"), href: "/contact?tab=contact" },
       { name: t("footer.support.faq"), href: "/contact?tab=faq" },
       { name: t("footer.support.privacy"), href: "/privacy" },
       { name: t("footer.support.terms"), href: "/terms" },

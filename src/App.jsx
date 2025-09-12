@@ -95,12 +95,7 @@ const SellerProtectedRoute = ({ children }) => {
 
 };
 
-// --- Loading Fallback Component ---
-const LoadingFallback = () => (
-  <div className="flex justify-center items-center min-h-screen bg-logo-dark-blue font-sans">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
-  </div>
-);
+
 
 // --- Main App Component ---
 function App() {
@@ -124,7 +119,7 @@ function App() {
         <AuthProvider>
           <ProtectedAuthRoutes>
             <div className="App min-h-screen">
-              <React.Suspense fallback={<LoadingFallback />}>
+              <React.Suspense fallback={<SplashScreen />}>
                 <Routes>
                   {/* Public Authentication routes */}
                   <Route path="/login" element={<Login />} />

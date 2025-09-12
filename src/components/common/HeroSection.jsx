@@ -1,18 +1,19 @@
 // src/components/common/HeroSection.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import CountUp from "react-countup";
-import Button from './Button';
+import Button from "./Button";
+
+// Import Lottie
+import lottie from "lottie-web";
 
 const HeroSection = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
+  const lottieContainer = useRef(null);
 
-
-
-  // Buy/Sell card data with background images
   const actionCards = [
     {
       id: 1,
@@ -20,8 +21,7 @@ const HeroSection = () => {
       title: "Buy a Car",
       subtitle: "Browse thousands of inspected vehicles at the best prices.",
       cta: "Start Buying",
-      backgroundImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      gradient: "from-blue-600/80 to-indigo-800/80",
+      backgroundImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
       color: "indigo"
     },
     {
@@ -30,147 +30,161 @@ const HeroSection = () => {
       title: "Sell a Car",
       subtitle: "List your car quickly and reach thousands of buyers instantly.",
       cta: "Start Selling",
-      backgroundImage: "./car2.jpg",
-      gradient: "from-amber-600/80 to-orange-700/80",
-      color: "amber"
+      backgroundImage: "./car2.jpg", // Ensure this path is correct
+      color: "blue"
     }
   ];
 
   useEffect(() => {
     setIsVisible(true);
     
+    if (lottieContainer.current) {
+      const anim = lottie.loadAnimation({
+        container: lottieContainer.current,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'https://www.carcollect.com/hubfs/raw_assets/public/carcollect-2021-theme/js/lottie/general/general_en.json'
+      });
 
-    return () => clearInterval(1500);
+      return () => anim.destroy();
+    }
   }, []);
 
   return (
-    <section 
-      className="min-h-screen w-full flex items-center justify-center sm:pt-16 sm:pb-12 overflow-x-hidden font-sans relative"
-  style={{
-  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cpath d='M45 30c2-2 5-3 8-3 4 0 7 2 9 5 2 3 2 6 0 9-2 2-5 3-8 3-4 0-7-2-9-5-2-3-2-6 0-9zm25 15c2-1 4-3 5-5 1-2 1-5 0-7-1-2-3-3-5-3-2 0-4 1-5 3-1 2-1 5 0 7 1 2 3 4 5 5zm-15 20c1-1 3-2 4-2 2 0 3 1 4 2 1 1 1 3 0 4-1 1-3 2-4 2-2 0-3-1-4-2-1-1-1-3 0-4zm35-10c1-1 2-3 2-5 0-2-1-3-2-4-1-1-2-1-3 0-1 1-2 3-2 5 0 2 1 3 2 4 1 1 2 1 3 0zm-25 15c1-1 2-2 2-4 0-2-1-3-2-4-1-1-2-1-3 0-1 1-2 2-2 4 0 2 1 3 2 4 1 1 2 1 3 0z' fill='%232563eb' fill-opacity='0.08'/%3E%3C/svg%3E"), linear-gradient(135deg, #f0f4ff 0%, #fff7ed 100%)`,
-  backgroundSize: '200px 100px, auto',
-  backgroundPosition: 'center, center',
-  backgroundRepeat: 'repeat, no-repeat'
-}}
-    >
-      {/* Subtle animated gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white/50 to-amber-50/30 animate-gradient-x"></div>
+    <section className="w-full min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden font-sans bg-logo-dark-blue">
       
-      {/* Grid pattern overlay for depth */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 items-center">
-          {/* Text Content */}
-          <div className={`text-gray-900 transition-all duration-700 ease-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <div className="mb-6">
-              <span className="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-wide bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-full shadow-md shadow-blue-500/30">
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-                {t('hero.tagline') || 'Premium Car Auctions'}
-              </span>
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 tracking-tight">
-              {t('hero.title') || 'Find Your Dream Car at Auction'}
-            </h1>
-            
-            <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl leading-relaxed">
-              {t('about.hero.subtitle') || 'Discover premium vehicles from trusted sellers. Bid with confidence in our secure online auctions.'}
-            </p>
+{/* Background Video with Fallback */}
+<div className="absolute inset-0 w-full h-full">
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="absolute inset-0 w-full h-full object-cover"
+    poster="./hero_bg.png" 
+  >
+    <source src="./hero_bg.mp4" type="video/mp4" />
+    {/* If video is not supported */}
+    <img
+      src="./hero_bg.jpg"
+      alt="Background"
+      className="absolute inset-0 w-full h-full object-cover"
+    />
+  </video>
+</div>
 
-            {/* Stats counter */}
-            <div className="flex flex-wrap gap-6 mb-10">
-              <div className="flex items-center">
-                <div className="text-2xl font-bold text-blue-600">
-                  <CountUp end={25000} duration={3} separator="," />+
-                </div>
-                <div className="ml-2 text-sm text-gray-600">Vehicles</div>
-              </div>
-              <div className="flex items-center">
-                <div className="text-2xl font-bold text-blue-600">
-                  <CountUp end={95} duration={3} />%
-                </div>
-                <div className="ml-2 text-sm text-gray-600">Satisfaction</div>
-              </div>
-              <div className="flex items-center">
-                <div className="text-2xl font-bold text-blue-600">
-                  <CountUp end={120} duration={3} />+
-                </div>
-                <div className="ml-2 text-sm text-gray-600">Countries</div>
-              </div>
-            </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Button
-                variant="primary"
-                size="lg"
-                onClick={() => navigate('/explore')}
-                className="px-8 py-3.5 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 group"
-              >
-                <span className="flex items-center">
-                  {t('hero.explore') || 'Explore Auctions'}
-                  <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-              </Button>
-              
-              <Button
-                variant="secondary"
-                size="lg"
-                onClick={() => navigate('/how-it-works')}
-                className="px-8 py-3.5 font-semibold border-2 hover:bg-gray-50 transition-all duration-300 group"
-              >
-                <span className="flex items-center">
-                  {t('hero.howItWorks') || 'How It Works'}
-                  <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </span>
-              </Button>
-            </div>
+      {/* Floating Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-indigo-600/5 z-10 animate-pulse"></div>
 
+      {/* Content Container */}
+      <div className="relative z-20 w-full px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between gap-12 md:gap-16">
+
+        {/* LEFT COLUMN: Text Content */}
+        <div className={`flex-1 max-w-2xl transition-all duration-1000 ease-out ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
+          {/* Same as before */}
+          {/* Tagline Badge */}
+          <div className="mb-6">
+            <span className="inline-flex items-center px-5 py-2.5 text-sm font-semibold tracking-wide border text-white rounded-full shadow-lg shadow-white/10 backdrop-blur-sm">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              {t('hero.tagline') || 'Premium Car Auctions'}
+            </span>
           </div>
 
-          {/* Right Column - Car Showcase and Action Cards */}
-          <div className="space-y-6">
-           
-            
-            {/* Buy & Sell Cards with Background Images */}
-            <div className="grid grid-cols-2 gap-2">
-              {actionCards.map((card) => (
-                <div
-                  key={card.id}
-                  onClick={() => navigate(`/${card.type}`)}
-                  className="group cursor-pointer rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative h-80"
-                >
-                  {/* Background Image */}
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${card.backgroundImage})` }}
-                  >
-                    {/* Gradient Overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-90 group-hover:opacity-95 transition-opacity`}></div>
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="relative z-10 h-full flex flex-col items-center justify-center text-center p-4 text-white">
-                    <h3 className="text-lg font-bold mb-2">{t(`hero.${card.type}Section.title`) || card.title}</h3>
-                    <p className="text-sm opacity-90 mb-3">{t(`hero.${card.type}Section.sub`) || card.subtitle}</p>
-                    <span className="inline-flex items-center text-sm font-semibold bg-white/20 px-3 py-1 rounded-lg backdrop-blur-sm group-hover:bg-white/30 transition-colors">
-                      {t(`hero.${card.type}Section.cta`) || card.cta}
-                      <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              ))}
+          {/* Main Title */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 tracking-tight text-white">
+            {t('hero.title') || 'Find Your Dream Car at Auction'}
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-lg md:text-xl text-blue-100 mb-10 max-w-2xl leading-relaxed text-gray-100">
+            {t('about.hero.subtitle') || 'Discover premium vehicles from trusted sellers. Bid with confidence in our secure online auctions.'}
+          </p>
+
+          {/* Stats Counter Row */}
+          <div className="flex flex-wrap gap-8 mb-12">
+            <div className="flex flex-col items-start">
+              <span className="text-3xl md:text-4xl font-bold text-blue-100">
+                <CountUp end={25000} duration={3} separator="," />+
+              </span>
+              <span className="text-sm text-blue-200 mt-1">Vehicles</span>
             </div>
+            <div className="flex flex-col items-start">
+              <span className="text-3xl md:text-4xl font-bold text-blue-100">
+                <CountUp end={95} duration={3} />%
+              </span>
+              <span className="text-sm text-blue-200 mt-1">Satisfaction</span>
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="text-3xl md:text-4xl font-bold text-blue-100">
+                <CountUp end={120} duration={3} />+
+              </span>
+              <span className="text-sm text-blue-200 mt-1">Countries</span>
+            </div>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button
+              size="lg"
+              variant="primary"
+              onClick={() => navigate('/explore')}
+            >
+              <span className="flex items-center">
+                {t('hero.explore') || 'Explore Auctions'}
+                <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </span>
+            </Button>
+            
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => navigate('/how-it-works')}
+            >
+              <span className="flex items-center">
+                {t('hero.howItWorks') || 'How It Works'}
+                <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </span>
+            </Button>
           </div>
         </div>
+{/* RIGHT COLUMN: Action Cards */}
+<div className="flex flex-col gap-6 w-full md:w-96">
+  {actionCards.map((card) => (
+    <div
+      key={card.id}
+      className="relative rounded-xl overflow-hidden bg-white/30 shadow-2xl transform transition-all duration-300 hover:scale-105"
+      style={{
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: '200px'
+      }}
+    >
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+      
+      <div className="relative z-10 p-6 flex flex-col h-full justify-between text-white">
+        <div>
+          <h3 className="text-2xl font-bold">{card.title}</h3>
+          <p className="mt-2 text-blue-100 text-sm">{card.subtitle}</p>
+        </div>
+        
+        <button
+          onClick={() => navigate(`/${card.type}`)}
+          className="mt-4 py-3 px-6 rounded-lg font-semibold bg-white text-logo-dark-blue hover:bg-gray-100 transition-colors duration-300 shadow-lg"
+        >
+          {card.cta}
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
       </div>
     </section>
   );

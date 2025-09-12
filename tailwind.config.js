@@ -14,7 +14,7 @@ module.exports = {
           // Add lighter/darker shades here if needed for hover, gradients, etc.
           // 50: '#f0f0f7',
           // 100: '#d9d8e6',
-          // 900: '#1a1931',
+          900: '#1a1931',
         },
         // Background Deep Blue: Used for backgrounds, only with white logo
         'background-deep-blue': {
