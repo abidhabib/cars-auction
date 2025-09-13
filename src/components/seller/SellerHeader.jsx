@@ -1,7 +1,8 @@
 // src/components/seller/SellerHeader.jsx
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { FiBell,  FiX } from 'react-icons/fi';
+import { FiBell, FiX, FiSearch, FiChevronLeft } from 'react-icons/fi';
+import SearchBar from './SearchBar';
 
 // Dummy data for demo
 const demoNotifications = [
@@ -10,31 +11,18 @@ const demoNotifications = [
     { id: 'not_003', type: 'message', message: 'New message from Luxury Motors Ltd. regarding STK2023-002', time: new Date(Date.now() - 2 * 60 * 60 * 1000), read: true }
 ];
 
-
-
-const SellerHeader = ({ activeTab, selectedVehicle, setSelectedVehicle, selectedChat, setSelectedChat, setChatOpen }) => {
+const SellerHeader = ({ 
+  activeTab, 
+  selectedVehicle, 
+  setSelectedVehicle, 
+  selectedChat, 
+  setSelectedChat, 
+  setChatOpen,
+  searchTerm,
+  setSearchTerm
+}) => {
   const { t } = useLanguage();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-
-  // Determine the title based on the active tab and context
-  const getTitle = () => {
-    if (activeTab === 'overview') return t('sellerDashboard.sidebar.overview') || 'Overview';
-    if (activeTab === 'inventory') {
-        if (selectedVehicle) {
-            return `${selectedVehicle.make} ${selectedVehicle.model}`;
-        }
-        return t('sellerDashboard.sidebar.inventory') || 'My Inventory';
-    }
-    if (activeTab === 'messages') {
-        if (selectedChat) {
-            return selectedChat.buyer.name;
-        }
-        return t('sellerDashboard.sidebar.messages') || 'Messages';
-    }
-    if (activeTab === 'analytics') return t('sellerDashboard.sidebar.analytics') || 'Analytics';
-    if (activeTab === 'settings') return t('sellerDashboard.sidebar.settings') || 'Settings';
-    return t('sellerDashboard.sidebar.overview') || 'Overview'; // Default fallback
-  };
 
   const handleBackToList = () => {
     if (activeTab === 'inventory' && selectedVehicle) {
@@ -45,23 +33,61 @@ const SellerHeader = ({ activeTab, selectedVehicle, setSelectedVehicle, selected
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // In a real app, you would trigger a search action here
+    console.log('Searching for:', searchTerm);
+  };
+
   return (
     <header className="bg-white shadow-sm z-30">
-      <div className="flex items-center justify-between px-4 py-2.5 sm:px-6">
-        <div className="flex items-center">
-          <h1 className="text-lg font-semibold text-gray-900">
-            {getTitle()}
-          </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-2.5 sm:px-6 gap-3">
+        <div className="flex items-center w-full sm:w-auto">
+          {
+            <div className="flex-1 max-w-full mr-4">
+              <SearchBar  className="max-w-md w-full" />
+              {/* <form onSubmit={handleSearch} className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiSearch className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder={t('sellerDashboard.inventory.searchPlaceholder') || "Search vehicles..."}
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] text-sm"
+                />
+              </form> */}
+            </div>
+          }
+          
+          {/* Back button when viewing details */}
           {(selectedVehicle || selectedChat) && (
             <button
               onClick={handleBackToList}
-              className="ml-4 text-sm font-medium text-[#3b396d] hover:text-[#2a285a]"
+              className="flex items-center text-sm font-medium text-[#3b396d] hover:text-[#2a285a]"
             >
+              <FiChevronLeft className="mr-1 h-4 w-4" />
               {t('back') || 'Back to List'}
             </button>
           )}
         </div>
+
+        {/* Right side: Title (without tab name) and Notifications */}
         <div className="flex items-center space-x-4">
+          {/* Title - Only show when viewing details */}
+          {(selectedVehicle || selectedChat) && (
+            <h1 className="text-lg font-semibold text-gray-900">
+              {selectedVehicle ? (
+                `${selectedVehicle.make} ${selectedVehicle.model}`
+              ) : selectedChat ? (
+                selectedChat.buyer.name
+              ) : (
+                ''
+              )}
+            </h1>
+          )}
+
           {/* Notifications */}
           <div className="relative">
             <button
@@ -109,8 +135,6 @@ const SellerHeader = ({ activeTab, selectedVehicle, setSelectedVehicle, selected
               </div>
             )}
           </div>
-
-          
         </div>
       </div>
     </header>

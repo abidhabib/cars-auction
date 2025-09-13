@@ -203,9 +203,8 @@ function App() {
                     path="/sellerDashboard"
                     element={
                       <SellerProtectedRoute>
-                        <AppLayout>
                           <SellerDashboard />
-                        </AppLayout>
+                        
                       </SellerProtectedRoute>
                     }
                   />

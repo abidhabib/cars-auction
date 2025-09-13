@@ -789,6 +789,13 @@ addFeature:'Add Feature',
     comingSoonDesc: 'This section is under development.',
     viewAll: 'View All',
   
+  },
+   search: {
+    placeholder: 'Search cars by make, model, year or tags...',
+    searching: 'Searching...',
+    viewAllResults: 'View all results',
+    noResults: 'No cars found',
+    tryDifferent: 'Try a different search term'
   }
 
   ,
@@ -1234,6 +1241,13 @@ phonePlaceholder:"+3412345671",
       },
     
     },
+    search: {
+    placeholder: 'Suchen Sie Autos nach Marke, Modell, Baujahr oder Tags...',
+    searching: 'Suchen...',
+    viewAllResults: 'Alle Ergebnisse anzeigen',
+    noResults: 'Keine Autos gefunden',
+    tryDifferent: 'Versuchen Sie einen anderen Suchbegriff'
+  },
     // Success Stories
     successStories: {
       title: "Erfolgsgeschichten",
@@ -2100,6 +2114,13 @@ phonePlaceholder:"+3412345671",
     fullAddress: '123 Autoweg, Autostad, AC 12345',
     addressDesc: 'Bezoek ons tijdens kantoortijden',
     mapPlaceholder: 'Interactieve kaartlocatie'
+  },
+    search: {
+    placeholder: 'Zoek auto\'s op merk, model, bouwjaar of tags...',
+    searching: 'Zoeken...',
+    viewAllResults: 'Bekijk alle resultaten',
+    noResults: 'Geen auto\'s gevonden',
+    tryDifferent: 'Probeer een andere zoekterm'
   },
   
   faq: {
