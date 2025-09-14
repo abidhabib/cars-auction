@@ -188,11 +188,11 @@ function App() {
                     }
                   />
                   <Route
-                    path="/buy/*"
+                    path="/buy"
                     element={
                       <ProtectedRoute>
                         <AppLayout>
-                          <div className="min-h-screen pt-16">Buy Section</div>
+                          <div className="min-h-screen pt-16">Buy section</div>
                         </AppLayout>
                       </ProtectedRoute>
                     }

@@ -22,7 +22,7 @@ const SellerSidebar = ({ activeTab, setActiveTab }) => {
   const topItems = [
     { id: 'overview', label: t('sellerDashboard.sidebar.overview') || 'Overview', icon: <FiHome className="h-6 w-6" /> },
     { id: 'inventory', label: t('sellerDashboard.sidebar.inventory') || 'My Inventory', icon: <FiPackage className="h-6 w-6" /> },
-    { id: 'buy-car', label: t('sellerDashboard.sidebar.buyCar') || 'Buy Cars', icon: <FiShoppingCart className="h-6 w-6" /> }, // Moved to 3rd position
+    { id: 'buy', label: t('sellerDashboard.sidebar.buyCar') || 'Buy Cars', icon: <FiShoppingCart className="h-6 w-6" /> }, // Moved to 3rd position
     { id: 'auctions', label: t('sellerDashboard.sidebar.myAuctions') || 'My Auctions', icon: <FiBarChart2 className="h-6 w-6" /> },
     { id: 'sales', label: t('sellerDashboard.sidebar.sales') || 'Sales & Transactions', icon: <FiDollarSign className="h-6 w-6" /> },
     { id: 'messages', label: t('sellerDashboard.sidebar.messages') || 'Messages', icon: <FiMessageSquare className="h-6 w-6" /> }

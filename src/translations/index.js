@@ -37,6 +37,7 @@ export const translations = {
       "subscriptionFailed": "Subscription failed. Please try again."
     }
   },
+ 
     languageName: "English",
     // Header
     header: {
