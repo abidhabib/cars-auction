@@ -47,7 +47,7 @@ const ProtectedAuthRoutes = ({ children }) => {
     if (user && (location.pathname === '/login' || location.pathname === '/register')) {
       console.log("User is logged in, redirecting from auth page to dashboard...");
       // Redirect based on user role
-        navigate('/sellerDashboard', { replace: true });
+        navigate('/Dashboard', { replace: true });
      
     }
   }, [user, location.pathname, navigate]);
@@ -188,11 +188,11 @@ function App() {
                     }
                   />
                   <Route
-                    path="/buy/*"
+                    path="/buy"
                     element={
                       <ProtectedRoute>
                         <AppLayout>
-                          <div className="min-h-screen pt-16">Buy Section</div>
+                          <div className="min-h-screen pt-16">Buy section</div>
                         </AppLayout>
                       </ProtectedRoute>
                     }
@@ -200,7 +200,7 @@ function App() {
 
                   {/* Seller-specific protected routes */}
                   <Route
-                    path="/sellerDashboard"
+                    path="/Dashboard"
                     element={
                       <SellerProtectedRoute>
                           <SellerDashboard />

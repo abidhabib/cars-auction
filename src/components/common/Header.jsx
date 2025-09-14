@@ -75,7 +75,7 @@ const Header = () => {
 
   const mainMenuItems = [
     { name: t('header.mainMenu.buyCars') || 'Buy Cars', icon: <FiShoppingCart className="text-logo-dark-blue" />, href: '/buy' },
-    { name: t('header.mainMenu.sellCars') || 'Sell Cars', icon: <FiTag className="text-logo-dark-blue" />, href: '/sellerDashboard' }
+    { name: t('header.mainMenu.sellCars') || 'Sell Cars', icon: <FiTag className="text-logo-dark-blue" />, href: '/Dashboard' }
   ];
 
   const mobileMenuItems = [
@@ -242,7 +242,7 @@ const Header = () => {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate('/sellerDashboard');
+                            navigate('/Dashboard');
                             setUserDropdownOpen(false);
                           }}
                           className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

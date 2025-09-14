@@ -37,6 +37,7 @@ export const translations = {
       "subscriptionFailed": "Subscription failed. Please try again."
     }
   },
+ 
     languageName: "English",
     // Header
     header: {
@@ -246,6 +247,114 @@ export const translations = {
       }
 
     },
+    
+     buyCars: {
+    title: 'Buy Cars',
+    subtitle: 'Find your perfect vehicle from our marketplace',
+    resultsFound: 'Results Found',
+    filters: 'Filters',
+    clearAll: 'Clear All',
+    activeFilters: 'Active Filters',
+    noResults: 'No cars found',
+    tryDifferentFilters: 'Try adjusting your filters or search term',
+    resetFilters: 'Reset Filters',
+    viewDetails: 'View Details',
+    bid: 'Bid',
+    buyItNow: 'Buy It Now',
+    
+    // Filter Categories
+    make: 'Make',
+    model: 'Model',
+    year: 'Year',
+    price: 'Price',
+    fuelType: 'Fuel Type',
+    transmission: 'Transmission',
+    country: 'Country',
+    allCountries: 'All Countries',
+    selectModel: 'Select Model',
+    allModels: 'All Models',
+    
+    // Filter Placeholders
+    from: 'From',
+    to: 'To',
+    
+    // Vehicle Status
+    vehicleStatus: {
+      active: 'Active',
+      sold: 'Sold',
+      draft: 'Draft'
+    },
+    
+    // Stats Cards
+    countries: 'Countries',
+    dealers: 'Dealers',
+    carsSold: 'Cars Sold',
+    
+    // Sorting Options
+    sort: {
+      newest: 'Newest First',
+      oldest: 'Oldest First',
+      priceLow: 'Price: Low to High',
+      priceHigh: 'Price: High to Low'
+    },
+    
+    // Vehicle Details
+    mileage: 'Mileage',
+    fuelType: 'Fuel Type',
+    transmission: 'Transmission',
+    color: 'Color',
+    condition: 'Condition',
+    location: 'Location',
+    currentBid: 'Current Bid',
+    reservePrice: 'Reserve Price',
+    finalSalePrice: 'Final Sale Price',
+    soldTo: 'Sold To',
+    auctionEnds: 'Auction Ends',
+    bids: 'Bids',
+    viewBidHistory: 'View Bid History',
+    privateAuction: 'Private Auction Link',
+    copyLink: 'Copy Link',
+    
+    // Additional Vehicle Info
+    tags: 'Tags',
+    status: 'Status',
+    vin: 'VIN',
+    registrationDate: 'Registration Date',
+    seller: 'Seller',
+    sellerRating: 'Seller Rating',
+    sellerReviews: 'Seller Reviews',
+    verified: 'Verified',
+    inspectionReport: 'Inspection Report',
+    overallRating: 'Overall Rating',
+    exterior: 'Exterior',
+    interior: 'Interior',
+    mechanical: 'Mechanical',
+    accidentHistory: 'Accident History',
+        view:'View',
+
+    
+    // Chat Integration
+    chatWithSeller: 'Chat with Seller',
+    sendMessage: 'Send Message',
+    typeMessage: 'Type your message...',
+    
+    // Pagination
+    previous: 'Previous',
+    next: 'Next',
+    page: 'Page',
+    of: 'of',
+    
+    // Error Messages
+    linkCopied: 'Link copied to clipboard!',
+    linkCopyFailed: 'Failed to copy link.',
+    viewAllResults: 'View all results',
+    
+    // Search
+    search: {
+      placeholder: 'Search cars by make, model, year...',
+      searchTerm: 'Search Term'
+    }
+  }, 
 
  about: {
     title: 'About Us',
@@ -419,6 +528,42 @@ phonePlaceholder:"+3412345671",
       description: "Europe's largest wholesale platform for used cars. Connecting dealers across Europe with digital solutions for buying and selling vehicles."
     },
     auth: {
+       profile: {
+      personalInfo: 'Personal Information',
+      businessInfo: 'Business Information',
+      addressInfo: 'Address Information',
+      accountSettings: 'Account Settings',
+      accountStatus: 'Account Status',
+      editProfile: 'Edit Profile',
+      changePassword: 'Change Password',
+      memberSince: 'Member Since',
+      accountType: 'Account Type',
+      dealer: 'Dealer',
+      verificationStatus: 'Verification Status',
+      verified: 'Verified',
+      notVerified: 'Not Verified',
+      save: 'Save',
+      cancel: 'Cancel',
+      currentPassword: 'Current Password',
+      newPassword: 'New Password',
+      confirmPassword: 'Confirm New Password',
+      logout: 'Logout',
+      error: 'Error',
+      retry: 'Retry',
+      saving: 'Saving...',
+      changing: 'Changing...',
+      updateError: 'Failed to update profile. Please try again.',
+      passwordChangeSuccess: 'Password changed successfully!',
+      errors: {
+        currentPasswordRequired: 'Current password is required',
+        newPasswordRequired: 'New password is required',
+        confirmPasswordRequired: 'Please confirm your new password',
+        passwordsDoNotMatch: 'New passwords do not match',
+        passwordTooShort: 'Password must be at least 8 characters',
+        updateFailed: 'Failed to update profile'
+      }
+    },
+
       login: {
         title: "Welcome back",
         subtitle: "Sign in to your account",
@@ -1346,6 +1491,114 @@ phonePlaceholder:"+3412345671",
         description: "Verkaufen Sie Autos, die nicht in Ihr Portfolio passen, einfach und komplett online an 60.000 Händler. Erzielen Sie die höchsten Preise und digitalisieren Sie Ihre Inzahlungnahmen mit der Car NetworkEVA App."
       }
     },
+    buyCars: {
+    title: 'Autos Kaufen',
+    subtitle: 'Finden Sie Ihr perfektes Fahrzeug auf unserem Marktplatz',
+    resultsFound: 'Ergebnisse Gefunden',
+    filters: 'Filter',
+    clearAll: 'Alles Löschen',
+    activeFilters: 'Aktive Filter',
+    noResults: 'Keine Autos gefunden',
+    tryDifferentFilters: 'Versuchen Sie, Ihre Filter oder Suchbegriffe anzupassen',
+    resetFilters: 'Filter Zurücksetzen',
+    viewDetails: 'Details Ansehen',
+    bid: 'Bieten',
+    buyItNow: 'Sofort Kaufen',
+    
+    // Filter Categories
+    make: 'Marke',
+    model: 'Modell',
+    year: 'Baujahr',
+    price: 'Preis',
+    fuelType: 'Kraftstoffart',
+    transmission: 'Getriebe',
+    country: 'Land',
+    allCountries: 'Alle Länder',
+    selectModel: 'Modell Auswählen',
+    allModels: 'Alle Modelle',
+    
+    // Filter Placeholders
+    from: 'Von',
+    to: 'Bis',
+    
+    // Vehicle Status
+    vehicleStatus: {
+      active: 'Aktiv',
+      sold: 'Verkauft',
+      draft: 'Entwurf'
+    },
+    
+    // Stats Cards
+    countries: 'Länder',
+    dealers: 'Händler',
+    carsSold: 'Verkaufte Autos',
+    
+    // Sorting Options
+    sort: {
+      newest: 'Neueste Zuerst',
+      oldest: 'Älteste Zuerst',
+      priceLow: 'Preis: Niedrig zu Hoch',
+      priceHigh: 'Preis: Hoch zu Niedrig'
+    },
+    
+    // Vehicle Details
+    mileage: 'Kilometerstand',
+    fuelType: 'Kraftstoffart',
+    transmission: 'Getriebe',
+    color: 'Farbe',
+    condition: 'Zustand',
+    location: 'Standort',
+    currentBid: 'Aktuelles Gebot',
+    reservePrice: 'Mindestpreis',
+    finalSalePrice: 'Endverkaufspreis',
+    soldTo: 'Verkauft An',
+    auctionEnds: 'Auktion Endet',
+    bids: 'Gebote',
+    viewBidHistory: 'Gebotsverlauf Ansehen',
+    privateAuction: 'Privater Auktionslink',
+    copyLink: 'Link Kopieren',
+    view:'Sicht',
+
+    
+    // Additional Vehicle Info
+    tags: 'Tags',
+    status: 'Status',
+    vin: 'VIN',
+    registrationDate: 'Erstzulassungsdatum',
+    seller: 'Verkäufer',
+    sellerRating: 'Verkäuferbewertung',
+    sellerReviews: 'Verkäuferbewertungen',
+    verified: 'Verifiziert',
+    inspectionReport: 'Inspektionsbericht',
+    overallRating: 'Gesamtbewertung',
+    exterior: 'Außen',
+    interior: 'Innen',
+    mechanical: 'Mechanik',
+    accidentHistory: 'Unfallgeschichte',
+    
+    // Chat Integration
+    chatWithSeller: 'Mit Verkäufer Chatten',
+    sendMessage: 'Nachricht Senden',
+    typeMessage: 'Geben Sie Ihre Nachricht ein...',
+    
+    // Pagination
+    previous: 'Zurück',
+    next: 'Weiter',
+    page: 'Seite',
+    of: 'von',
+    
+    // Error Messages
+    linkCopied: 'Link in die Zwischenablage kopiert!',
+    linkCopyFailed: 'Link konnte nicht kopiert werden.',
+    viewAllResults: 'Alle Ergebnisse anzeigen',
+    
+    // Search
+    search: {
+      placeholder: 'Suchen Sie Autos nach Marke, Modell, Baujahr...',
+      searchTerm: 'Suchbegriff'
+    }
+  },
+
     // Authentication
     profile: {
       personalInfo: "Persönliche Informationen",
@@ -2158,7 +2411,113 @@ phonePlaceholder:"+3412345671",
     }
   },
  
+buyCars: {
+    title: 'Auto\'s Kopen',
+    subtitle: 'Vind uw perfecte voertuig op onze marktplaats',
+    resultsFound: 'Resultaten Gevonden',
+    filters: 'Filters',
+    clearAll: 'Alles Wissen',
+    activeFilters: 'Actieve Filters',
+    noResults: 'Geen auto\'s gevonden',
+    tryDifferentFilters: 'Probeer uw filters of zoekterm aan te passen',
+    resetFilters: 'Filters Resetten',
+    viewDetails: 'Bekijk Details',
+    bid: 'Bieden',
+    buyItNow: 'Direct Kopen',
+    
+    // Filter Categories
+    make: 'Merk',
+    model: 'Model',
+    year: 'Bouwjaar',
+    price: 'Prijs',
+    fuelType: 'Brandstof Type',
+    transmission: 'Transmissie',
+    country: 'Land',
+    allCountries: 'Alle Landen',
+    selectModel: 'Selecteer Model',
+    allModels: 'Alle Modellen',
+    
+    // Filter Placeholders
+    from: 'Van',
+    to: 'Tot',
+    
+    // Vehicle Status
+    vehicleStatus: {
+      active: 'Actief',
+      sold: 'Verkocht',
+      draft: 'Concept'
+    },
+    
+    // Stats Cards
+    countries: 'Landen',
+    dealers: 'Dealers',
+    carsSold: 'Verkochte Auto\'s',
+    
+    // Sorting Options
+    sort: {
+      newest: 'Nieuwste Eerst',
+      oldest: 'Oudste Eerst',
+      priceLow: 'Prijs: Laag naar Hoog',
+      priceHigh: 'Prijs: Hoog naar Laag'
+    },
+    
+    // Vehicle Details
+    mileage: 'Kilometerstand',
+    fuelType: 'Brandstoftype',
+    transmission: 'Transmissie',
+    color: 'Kleur',
+    condition: 'Conditie',
+    location: 'Locatie',
+    currentBid: 'Huidig Bod',
+    reservePrice: 'Reserveprijs',
+    finalSalePrice: 'Eindverkoopprijs',
+    soldTo: 'Verkocht Aan',
+    auctionEnds: 'Veiling Eindigt',
+    bids: 'Biedingen',
+    viewBidHistory: 'Biedingsgeschiedenis Bekijken',
+    privateAuction: 'Privé Veiling Link',
+    copyLink: 'Link Kopiëren',
+    view:'weergave',
 
+    
+    // Additional Vehicle Info
+    tags: 'Tags',
+    status: 'Status',
+    vin: 'VIN',
+    registrationDate: 'Datum Eerste Registratie',
+    seller: 'Verkoper',
+    sellerRating: 'Verkopersbeoordeling',
+    sellerReviews: 'Verkopersbeoordelingen',
+    verified: 'Geverifieerd',
+    inspectionReport: 'Inspectierapport',
+    overallRating: 'Algemene Beoordeling',
+    exterior: 'Buitenkant',
+    interior: 'Interieur',
+    mechanical: 'Mechanisch',
+    accidentHistory: 'Ongevalsgeschiedenis',
+    
+    // Chat Integration
+    chatWithSeller: 'Chatten met Verkoper',
+    sendMessage: 'Bericht Verzenden',
+    typeMessage: 'Typ uw bericht...',
+    
+    // Pagination
+    previous: 'Vorige',
+    next: 'Volgende',
+    page: 'Pagina',
+    of: 'van',
+    
+    // Error Messages
+    linkCopied: 'Link gekopieerd naar klembord!',
+    linkCopyFailed: 'Link kopiëren mislukt.',
+    viewAllResults: 'Bekijk alle resultaten',
+    
+    // Search
+    search: {
+      placeholder: 'Zoek auto\'s op merk, model, bouwjaar...',
+      searchTerm: 'Zoekterm'
+    }
+  },
     // Hero Section
     hero: {
       title: "Europa's grootste groothandelsplatform voor gebruikte auto's",

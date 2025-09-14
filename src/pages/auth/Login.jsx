@@ -101,7 +101,7 @@ const Login = () => {
         
         if (formData.password === 'password123') {
           login(demoUser, formData.rememberMe);
-          navigate('/sellerDashboard');
+          navigate('/Dashboard');
         } 
       } else {
         const response = await api.auth.login({
@@ -111,7 +111,7 @@ const Login = () => {
         
         const loggedInUser = response.user || response;
         login(loggedInUser, formData.rememberMe);
-        navigate('/sellerDashboard');
+        navigate('/Dashboard');
       }
     } catch (error) {
       console.error('Login error:', error);
