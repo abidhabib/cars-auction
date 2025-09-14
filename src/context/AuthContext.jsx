@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
       
       // Navigate based on user role - This should now work
      
-        navigate('/sellerDashboard');
+        navigate('/Dashboard');
       
     } catch (error) {
       console.error('Login error:', error);

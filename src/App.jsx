@@ -47,7 +47,7 @@ const ProtectedAuthRoutes = ({ children }) => {
     if (user && (location.pathname === '/login' || location.pathname === '/register')) {
       console.log("User is logged in, redirecting from auth page to dashboard...");
       // Redirect based on user role
-        navigate('/sellerDashboard', { replace: true });
+        navigate('/Dashboard', { replace: true });
      
     }
   }, [user, location.pathname, navigate]);
@@ -200,7 +200,7 @@ function App() {
 
                   {/* Seller-specific protected routes */}
                   <Route
-                    path="/sellerDashboard"
+                    path="/Dashboard"
                     element={
                       <SellerProtectedRoute>
                           <SellerDashboard />

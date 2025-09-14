@@ -419,6 +419,42 @@ phonePlaceholder:"+3412345671",
       description: "Europe's largest wholesale platform for used cars. Connecting dealers across Europe with digital solutions for buying and selling vehicles."
     },
     auth: {
+       profile: {
+      personalInfo: 'Personal Information',
+      businessInfo: 'Business Information',
+      addressInfo: 'Address Information',
+      accountSettings: 'Account Settings',
+      accountStatus: 'Account Status',
+      editProfile: 'Edit Profile',
+      changePassword: 'Change Password',
+      memberSince: 'Member Since',
+      accountType: 'Account Type',
+      dealer: 'Dealer',
+      verificationStatus: 'Verification Status',
+      verified: 'Verified',
+      notVerified: 'Not Verified',
+      save: 'Save',
+      cancel: 'Cancel',
+      currentPassword: 'Current Password',
+      newPassword: 'New Password',
+      confirmPassword: 'Confirm New Password',
+      logout: 'Logout',
+      error: 'Error',
+      retry: 'Retry',
+      saving: 'Saving...',
+      changing: 'Changing...',
+      updateError: 'Failed to update profile. Please try again.',
+      passwordChangeSuccess: 'Password changed successfully!',
+      errors: {
+        currentPasswordRequired: 'Current password is required',
+        newPasswordRequired: 'New password is required',
+        confirmPasswordRequired: 'Please confirm your new password',
+        passwordsDoNotMatch: 'New passwords do not match',
+        passwordTooShort: 'Password must be at least 8 characters',
+        updateFailed: 'Failed to update profile'
+      }
+    },
+
       login: {
         title: "Welcome back",
         subtitle: "Sign in to your account",
