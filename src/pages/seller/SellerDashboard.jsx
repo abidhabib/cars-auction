@@ -9,7 +9,7 @@ import OverviewTab from '../../components/seller/OverviewTab';
 import InventoryTab from '../../components/seller/InventoryTab';
 import MessagesTab from '../../components/seller/MessagesTab';
 import AnalyticsTab from '../../components/seller/AnalyticsTab';
-import BuyCarsTab from '../../components/seller/BuyCarsTab'; // NEW COMPONENT
+import BuyCarsTab from '../../components/seller/BuyCarsTab';
 import { FiSettings } from 'react-icons/fi';
 
 const SellerDashboard = () => {
@@ -77,7 +77,7 @@ const SellerDashboard = () => {
         />;
       case 'analytics':
         return <AnalyticsTab />;
-      case 'buy': // NEW BUY TAB
+      case 'buy':
         return <BuyCarsTab 
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -108,14 +108,8 @@ const SellerDashboard = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <SellerSidebar
-        isOpen={sidebarOpen}
-        toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
-      
-      <div className="flex-1 flex flex-col overflow-hidden">
+      {/* Fixed Header - Always on top */}
+      <div className="fixed top-0 left-0 right-0 z-50">
         <SellerHeader
           activeTab={activeTab}
           selectedVehicle={selectedVehicle}
@@ -127,8 +121,19 @@ const SellerDashboard = () => {
           setSearchTerm={setSearchTerm}
           setActiveTab={setActiveTab}
         />
+      </div>
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6">
+      {/* Fixed Sidebar - Below Header */}
+      <div className="fixed top-16 left-0 h-[calc(100vh-4rem)] z-40">
+        <SellerSidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+      </div>
+
+      {/* Main Content Area - Properly spaced to avoid overlap */}
+      <div className="flex-1 mt-16 ml-20"> {/* ml-20 for sidebar width, mt-16 for header height */}
+        <main className="sm:pt-2 h-[calc(100vh-4rem)] overflow-y-auto">
           {renderActiveTab()}
         </main>
       </div>

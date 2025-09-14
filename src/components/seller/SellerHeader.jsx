@@ -13,7 +13,8 @@ import {
   FiMessageSquare,
   FiHeadphones,
   FiSettings,
-  FiMenu
+  FiMenu,
+  FiGlobe
 } from 'react-icons/fi';
 import SearchBar from './SearchBar';
 
@@ -28,18 +29,20 @@ const SellerHeader = ({
   setSearchTerm,
   setActiveTab
 }) => {
-  const { t, language } = useLanguage();
+  const { t, language, setLanguage, supportedLanguages, getLanguageName } = useLanguage();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [agentChatOpen, setAgentChatOpen] = useState(false);
+  const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
   
   const dropdownRefs = {
     notifications: useRef(null),
     user: useRef(null),
-    agent: useRef(null)
+    agent: useRef(null),
+    language: useRef(null)
   };
 
   // Close dropdowns when clicking outside
@@ -50,6 +53,7 @@ const SellerHeader = ({
           if (key === 'notifications') setNotificationsOpen(false);
           if (key === 'user') setUserDropdownOpen(false);
           if (key === 'agent') setAgentChatOpen(false);
+          if (key === 'language') setLanguageDropdownOpen(false);
         }
       });
     };
@@ -81,7 +85,7 @@ const SellerHeader = ({
     <>
       {/* Header - Fixed position with proper z-index */}
       <header className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50 h-16">
-        <div className="max-w-full mx-auto  sm:px-6 lg:px-8 h-full">
+        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="flex items-center justify-between h-full">
             {/* Left side: Logo and Search */}
             <div className="flex items-center">
@@ -102,23 +106,53 @@ const SellerHeader = ({
               {/* Search Bar - Using your SearchBar component */}
               <div className="hidden md:block w-64 lg:w-80">
                 <SearchBar/>
-                {/* <form onSubmit={handleSearch} className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FiSearch className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder={t('sellerDashboard.inventory.searchPlaceholder') || "Search vehicles..."}
-                    className="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] text-sm"
-                  />
-                </form> */}
               </div>
             </div>
 
             {/* Right side: Icons and Profile */}
             <div className="flex items-center space-x-4">
+              {/* Language Dropdown */}
+              <div className="relative hidden sm:block" ref={dropdownRefs.language}>
+                <button 
+                  onClick={() => {
+                    setLanguageDropdownOpen(!languageDropdownOpen);
+                    setNotificationsOpen(false);
+                    setUserDropdownOpen(false);
+                    setAgentChatOpen(false);
+                  }}
+                  className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-[#3b396d] transition-colors rounded-lg hover:bg-gray-100"
+                >
+                  <FiGlobe className="mr-1 text-[#3b396d]" />
+                  <span className="hidden md:inline">{getLanguageName(language)}</span>
+                  <FiChevronLeft className={`ml-1 h-4 w-4 transition-transform ${
+                    languageDropdownOpen ? 'rotate-180' : ''
+                  }`} />
+                </button>
+                
+                {languageDropdownOpen && (
+                  <div className="origin-top-right absolute right-0 mt-2 w-40 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                    <div className="py-1">
+                      {supportedLanguages.map((langCode) => (
+                        <button
+                          key={langCode}
+                          onClick={() => {
+                            setLanguage(langCode);
+                            setLanguageDropdownOpen(false);
+                          }}
+                          className={`block w-full text-left px-4 py-2 text-sm ${
+                            language === langCode 
+                              ? 'text-[#3b396d] bg-[#f8f9ff]' 
+                              : 'text-gray-700 hover:bg-[#f8f9ff]'
+                          }`}
+                        >
+                          {getLanguageName(langCode)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
               {/* Notifications */}
               <div className="relative" ref={dropdownRefs.notifications}>
                 <button
@@ -126,6 +160,7 @@ const SellerHeader = ({
                     setNotificationsOpen(!notificationsOpen);
                     setUserDropdownOpen(false);
                     setAgentChatOpen(false);
+                    setLanguageDropdownOpen(false);
                   }}
                   className="p-2 text-gray-500 hover:text-[#3b396d] rounded-full hover:bg-gray-100 relative"
                 >
@@ -172,6 +207,7 @@ const SellerHeader = ({
                     setAgentChatOpen(!agentChatOpen);
                     setNotificationsOpen(false);
                     setUserDropdownOpen(false);
+                    setLanguageDropdownOpen(false);
                   }}
                   className="p-2 text-gray-500 hover:text-[#3b396d] rounded-full hover:bg-gray-100 relative"
                 >
@@ -225,6 +261,7 @@ const SellerHeader = ({
                   setNotificationsOpen(false);
                   setUserDropdownOpen(false);
                   setAgentChatOpen(false);
+                  setLanguageDropdownOpen(false);
                 }}
                 className="p-2 text-gray-500 hover:text-[#3b396d] rounded-full hover:bg-gray-100 relative"
               >
@@ -239,6 +276,7 @@ const SellerHeader = ({
                     setUserDropdownOpen(!userDropdownOpen);
                     setNotificationsOpen(false);
                     setAgentChatOpen(false);
+                    setLanguageDropdownOpen(false);
                   }}
                   className="flex items-center text-sm rounded-full focus:outline-none"
                 >

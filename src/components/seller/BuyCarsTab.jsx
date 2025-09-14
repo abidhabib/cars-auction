@@ -1,6 +1,7 @@
 // src/components/seller/BuyCarsTab.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 import { 
   FiSearch, 
   FiFilter, 
@@ -28,43 +29,15 @@ import { loadMockCarsData } from '../../mock/data/mockCarsData';
 
 const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
   const { t, language } = useLanguage();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
   const [activeFilters, setActiveFilters] = useState({});
   const [filteredCars, setFilteredCars] = useState([]);
   const [allCars, setAllCars] = useState([]);
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [mobileDropdownStates, setMobileDropdownStates] = useState({
-    make: false,
-    model: false,
-    year: false,
-    price: false,
-    fuelType: false,
-    transmission: false,
-    country: false
-  });
-  const [desktopDropdownStates, setDesktopDropdownStates] = useState({
-    make: false,
-    model: false,
-    year: false,
-    price: false,
-    fuelType: false,
-    transmission: false,
-    country: false
-  });
+  const [filterPanelOpen, setFilterPanelOpen] = useState(false);
   const carsPerPage = 8;
-
-  // Refs for dropdowns
-  const dropdownRefs = {
-    make: useRef(null),
-    model: useRef(null),
-    year: useRef(null),
-    price: useRef(null),
-    fuelType: useRef(null),
-    transmission: useRef(null),
-    country: useRef(null)
-  };
 
   // Load mock data
   useEffect(() => {
@@ -126,23 +99,8 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     }
     
     setFilteredCars(filtered);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   }, [activeFilters, allCars, searchTerm]);
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      Object.entries(dropdownRefs).forEach(([key, ref]) => {
-        if (ref.current && !ref.current.contains(event.target)) {
-          setDesktopDropdownStates(prev => ({ ...prev, [key]: false }));
-          setMobileDropdownStates(prev => ({ ...prev, [key]: false }));
-        }
-      });
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   // Get unique makes and models
   const makes = [...new Set(allCars.map(car => car.make))];
@@ -175,40 +133,11 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     setSelectedMake('');
     setSelectedModel('');
     setCurrentPage(1);
-    setDesktopDropdownStates({
-      make: false,
-      model: false,
-      year: false,
-      price: false,
-      fuelType: false,
-      transmission: false,
-      country: false
-    });
-    setMobileDropdownStates({
-      make: false,
-      model: false,
-      year: false,
-      price: false,
-      fuelType: false,
-      transmission: false,
-      country: false
-    });
   };
 
-  // Toggle mobile dropdown
-  const toggleMobileDropdown = (dropdownKey) => {
-    setMobileDropdownStates(prev => ({
-      ...prev,
-      [dropdownKey]: !prev[dropdownKey]
-    }));
-  };
-
-  // Toggle desktop dropdown
-  const toggleDesktopDropdown = (dropdownKey) => {
-    setDesktopDropdownStates(prev => ({
-      ...prev,
-      [dropdownKey]: !prev[dropdownKey]
-    }));
+  // Toggle filter panel
+  const toggleFilterPanel = () => {
+    setFilterPanelOpen(!filterPanelOpen);
   };
 
   // Handle view car
@@ -252,7 +181,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     };
 
     return (
-      <div className="relative w-full h-48 overflow-hidden rounded-t-xl">
+      <div className="relative w-full h-40 overflow-hidden rounded-t-xl">
         {images.length > 1 && (
           <>
             <button
@@ -260,14 +189,14 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
               className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-1 hover:bg-opacity-100 transition-opacity"
               aria-label="Previous image"
             >
-              <FiChevronLeft className="h-5 w-5 text-[#3b396d]" />
+              <FiChevronLeft className="h-4 w-4 text-[#3b396d]" />
             </button>
             <button
               onClick={nextImage}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-1 hover:bg-opacity-100 transition-opacity"
               aria-label="Next image"
             >
-              <FiChevronRight className="h-5 w-5 text-[#3b396d]" />
+              <FiChevronRight className="h-4 w-4 text-[#3b396d]" />
             </button>
             <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
               {images.map((_, index) => (
@@ -293,55 +222,37 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     );
   };
 
-  // Filter Section Component
-  const FilterSection = ({ title, children, isOpen, onToggle, dropdownKey }) => (
-    <div className="border-b border-gray-200">
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
-      >
-        <span className="font-medium text-gray-900">{title}</span>
-        <FiChevronDown className={`h-5 w-5 text-[#3b396d] transition-transform duration-200 ${
-          isOpen ? 'rotate-180' : ''
-        }`} />
-      </button>
-      {isOpen && (
-        <div className="p-4 space-y-3 bg-gray-50">
-          {children}
-        </div>
-      )}
-    </div>
-  );
-
   return (
     <div className="">
-
-
-      {/* Main Content */}
-      <div className="max-w-full mx-auto  sm:px-6  py-8">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Filter Sidebar */}
-          <div className="lg:w-64 bg-white rounded-xl shadow-sm p-2 sticky top-8 h-fit">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">
-                {t('buyCars.filters') || 'Filters'}
-              </h2>
-              <button
-                onClick={clearAllFilters}
-                className="text-sm text-red-600 hover:text-red-800 font-medium"
-              >
-                {t('buyCars.clearAll') || 'Clear All'}
-              </button>
-            </div>
-
-            {/* Make Filter */}
-            <FilterSection
-              title={t('buyCars.make') || 'Make'}
-              isOpen={desktopDropdownStates.make}
-              onToggle={() => toggleDesktopDropdown('make')}
-              dropdownKey="make"
+      {/* Main Content - No extra margins/padding */}
+      <div className="flex flex-col lg:flex-row">
+        {/* Filter Panel - CarCollect Style */}
+        <div className={`lg:w-64 bg-white border-r border-gray-200 p-4 lg:sticky lg:h-[calc(100vh)] lg:overflow-y-auto ${
+          filterPanelOpen ? 'block' : 'hidden lg:block'
+        }`}>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">
+              {t('buyCars.filters') || 'Filters'}
+            </h2>
+            {/* <button
+              onClick={clearAllFilters}
+              className="text-sm text-red-600 hover:text-red-800 font-medium"
             >
-              <div className="space-y-2">
+              {t('buyCars.clearAll') || 'Clear All'}
+            </button> */}
+          </div>
+
+          {/* Make Filter */}
+          <div className="border-b border-gray-200 mb-4">
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+              onClick={() => setSelectedMake(selectedMake ? '' : makes[0])}>
+              <span className="font-medium text-gray-900 text-sm">{t('buyCars.make') || 'Make'}</span>
+              <FiChevronDown className={`h-4 w-4 text-[#3b396d] transition-transform ${
+                selectedMake ? 'rotate-180' : ''
+              }`} />
+            </div>
+            {selectedMake && (
+              <div className="p-3 space-y-2 bg-gray-50">
                 {makes.map(make => (
                   <label key={make} className="flex items-center">
                     <input
@@ -354,17 +265,21 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                   </label>
                 ))}
               </div>
-            </FilterSection>
+            )}
+          </div>
 
-            {/* Model Filter */}
-            {selectedMake && (
-              <FilterSection
-                title={t('buyCars.model') || 'Model'}
-                isOpen={desktopDropdownStates.model}
-                onToggle={() => toggleDesktopDropdown('model')}
-                dropdownKey="model"
-              >
-                <div className="space-y-2">
+          {/* Model Filter */}
+          {selectedMake && (
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+                onClick={() => setSelectedModel(selectedModel ? '' : getModelsByMake(selectedMake)[0])}>
+                <span className="font-medium text-gray-900 text-sm">{t('buyCars.model') || 'Model'}</span>
+                <FiChevronDown className={`h-4 w-4 text-[#3b396d] transition-transform ${
+                  selectedModel ? 'rotate-180' : ''
+                }`} />
+              </div>
+              {selectedModel && (
+                <div className="p-3 space-y-2 bg-gray-50">
                   {getModelsByMake(selectedMake).map(model => (
                     <label key={model} className="flex items-center">
                       <input
@@ -377,91 +292,132 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                     </label>
                   ))}
                 </div>
-              </FilterSection>
+              )}
+            </div>
+          )}
+
+          {/* Year Range */}
+          <div className="border-b border-gray-200 mb-4">
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+              onClick={() => {
+                const yearFilterOpen = activeFilters.yearFrom || activeFilters.yearTo;
+                if (!yearFilterOpen) {
+                  handleFilterChange('yearFrom', '2020');
+                  handleFilterChange('yearTo', '2024');
+                } else {
+                  handleFilterChange('yearFrom', '');
+                  handleFilterChange('yearTo', '');
+                }
+              }}>
+              <span className="font-medium text-gray-900 text-sm">{t('buyCars.year') || 'Year'}</span>
+              <FiChevronDown className={`h-4 w-4 text-[#3b396d] transition-transform ${
+                (activeFilters.yearFrom || activeFilters.yearTo) ? 'rotate-180' : ''
+              }`} />
+            </div>
+            {(activeFilters.yearFrom || activeFilters.yearTo) && (
+              <div className="p-3 space-y-3 bg-gray-50">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label htmlFor="yearFrom" className="block text-xs text-gray-500 mb-1">
+                      {t('buyCars.from') || 'From'}
+                    </label>
+                    <input
+                      type="number"
+                      id="yearFrom"
+                      value={activeFilters.yearFrom || ''}
+                      onChange={(e) => handleFilterChange('yearFrom', e.target.value)}
+                      className="block w-full px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
+                      placeholder="2020"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="yearTo" className="block text-xs text-gray-500 mb-1">
+                      {t('buyCars.to') || 'To'}
+                    </label>
+                    <input
+                      type="number"
+                      id="yearTo"
+                      value={activeFilters.yearTo || ''}
+                      onChange={(e) => handleFilterChange('yearTo', e.target.value)}
+                      className="block w-full px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
+                      placeholder="2024"
+                    />
+                  </div>
+                </div>
+              </div>
             )}
+          </div>
 
-            {/* Year Range */}
-            <FilterSection
-              title={t('buyCars.year') || 'Year'}
-              isOpen={desktopDropdownStates.year}
-              onToggle={() => toggleDesktopDropdown('year')}
-              dropdownKey="year"
-            >
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label htmlFor="yearFrom" className="block text-xs text-gray-500 mb-1">
-                    {t('buyCars.from') || 'From'}
-                  </label>
-                  <input
-                    type="number"
-                    id="yearFrom"
-                    value={activeFilters.yearFrom || ''}
-                    onChange={(e) => handleFilterChange('yearFrom', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
-                    placeholder="2020"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="yearTo" className="block text-xs text-gray-500 mb-1">
-                    {t('buyCars.to') || 'To'}
-                  </label>
-                  <input
-                    type="number"
-                    id="yearTo"
-                    value={activeFilters.yearTo || ''}
-                    onChange={(e) => handleFilterChange('yearTo', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
-                    placeholder="2024"
-                  />
+          {/* Price Range */}
+          <div className="border-b border-gray-200 mb-4">
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+              onClick={() => {
+                const priceFilterOpen = activeFilters.priceFrom || activeFilters.priceTo;
+                if (!priceFilterOpen) {
+                  handleFilterChange('priceFrom', '0');
+                  handleFilterChange('priceTo', '100000');
+                } else {
+                  handleFilterChange('priceFrom', '');
+                  handleFilterChange('priceTo', '');
+                }
+              }}>
+              <span className="font-medium text-gray-900 text-sm">{t('buyCars.price') || 'Price'}</span>
+              <FiChevronDown className={`h-4 w-4 text-[#3b396d] transition-transform ${
+                (activeFilters.priceFrom || activeFilters.priceTo) ? 'rotate-180' : ''
+              }`} />
+            </div>
+            {(activeFilters.priceFrom || activeFilters.priceTo) && (
+              <div className="p-3 space-y-3 bg-gray-50">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label htmlFor="priceFrom" className="block text-xs text-gray-500 mb-1">
+                      {t('buyCars.from') || 'From'}
+                    </label>
+                    <input
+                      type="number"
+                      id="priceFrom"
+                      value={activeFilters.priceFrom || ''}
+                      onChange={(e) => handleFilterChange('priceFrom', e.target.value)}
+                      className="block w-full px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
+                      placeholder="€0"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="priceTo" className="block text-xs text-gray-500 mb-1">
+                      {t('buyCars.to') || 'To'}
+                    </label>
+                    <input
+                      type="number"
+                      id="priceTo"
+                      value={activeFilters.priceTo || ''}
+                      onChange={(e) => handleFilterChange('priceTo', e.target.value)}
+                      className="block w-full px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
+                      placeholder="€100,000"
+                    />
+                  </div>
                 </div>
               </div>
-            </FilterSection>
+            )}
+          </div>
 
-            {/* Price Range */}
-            <FilterSection
-              title={t('buyCars.price') || 'Price'}
-              isOpen={desktopDropdownStates.price}
-              onToggle={() => toggleDesktopDropdown('price')}
-              dropdownKey="price"
-            >
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label htmlFor="priceFrom" className="block text-xs text-gray-500 mb-1">
-                    {t('buyCars.from') || 'From'}
-                  </label>
-                  <input
-                    type="number"
-                    id="priceFrom"
-                    value={activeFilters.priceFrom || ''}
-                    onChange={(e) => handleFilterChange('priceFrom', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
-                    placeholder="€0"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="priceTo" className="block text-xs text-gray-500 mb-1">
-                    {t('buyCars.to') || 'To'}
-                  </label>
-                  <input
-                    type="number"
-                    id="priceTo"
-                    value={activeFilters.priceTo || ''}
-                    onChange={(e) => handleFilterChange('priceTo', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
-                    placeholder="€100,000"
-                  />
-                </div>
-              </div>
-            </FilterSection>
-
-            {/* Fuel Type */}
-            <FilterSection
-              title={t('buyCars.fuelType') || 'Fuel Type'}
-              isOpen={desktopDropdownStates.fuelType}
-              onToggle={() => toggleDesktopDropdown('fuelType')}
-              dropdownKey="fuelType"
-            >
-              <div className="space-y-2">
+          {/* Fuel Type */}
+          <div className="border-b border-gray-200 mb-4">
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+              onClick={() => {
+                const fuelFilterOpen = activeFilters.fuelType;
+                if (!fuelFilterOpen) {
+                  handleFilterChange('fuelType', 'Petrol');
+                } else {
+                  handleFilterChange('fuelType', '');
+                }
+              }}>
+              <span className="font-medium text-gray-900 text-sm">{t('buyCars.fuelType') || 'Fuel Type'}</span>
+              <FiChevronDown className={`h-4 w-4 text-[#3b396d] transition-transform ${
+                activeFilters.fuelType ? 'rotate-180' : ''
+              }`} />
+            </div>
+            {activeFilters.fuelType && (
+              <div className="p-3 space-y-2 bg-gray-50">
                 {['Petrol', 'Diesel', 'Hybrid', 'Electric'].map(fuel => (
                   <label key={fuel} className="flex items-center">
                     <input
@@ -476,16 +432,27 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                   </label>
                 ))}
               </div>
-            </FilterSection>
+            )}
+          </div>
 
-            {/* Transmission */}
-            <FilterSection
-              title={t('buyCars.transmission') || 'Transmission'}
-              isOpen={desktopDropdownStates.transmission}
-              onToggle={() => toggleDesktopDropdown('transmission')}
-              dropdownKey="transmission"
-            >
-              <div className="space-y-2">
+          {/* Transmission */}
+          <div className="border-b border-gray-200 mb-4">
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+              onClick={() => {
+                const transmissionFilterOpen = activeFilters.transmission;
+                if (!transmissionFilterOpen) {
+                  handleFilterChange('transmission', 'Automatic');
+                } else {
+                  handleFilterChange('transmission', '');
+                }
+              }}>
+              <span className="font-medium text-gray-900 text-sm">{t('buyCars.transmission') || 'Transmission'}</span>
+              <FiChevronDown className={`h-4 w-4 text-[#3b396d] transition-transform ${
+                activeFilters.transmission ? 'rotate-180' : ''
+              }`} />
+            </div>
+            {activeFilters.transmission && (
+              <div className="p-3 space-y-2 bg-gray-50">
                 {['Automatic', 'Manual'].map(transmission => (
                   <label key={transmission} className="flex items-center">
                     <input
@@ -500,118 +467,138 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                   </label>
                 ))}
               </div>
-            </FilterSection>
-
-            {/* Country */}
-            <FilterSection
-              title={t('buyCars.country') || 'Country'}
-              isOpen={desktopDropdownStates.country}
-              onToggle={() => toggleDesktopDropdown('country')}
-              dropdownKey="country"
-            >
-              <select
-                value={activeFilters.country || ''}
-                onChange={(e) => handleFilterChange('country', e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
-              >
-                <option value="">{t('buyCars.allCountries') || 'All Countries'}</option>
-                <option value="DE">Germany</option>
-                <option value="NL">Netherlands</option>
-                <option value="BE">Belgium</option>
-                <option value="FR">France</option>
-                <option value="ES">Spain</option>
-                <option value="IT">Italy</option>
-                <option value="UK">United Kingdom</option>
-              </select>
-            </FilterSection>
+            )}
           </div>
 
-          {/* Main Content Area */}
-          <div className="flex-1">
-            {/* Header with Results Count */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <h2 className="text-xl font-bold text-[#3b396d] mb-1">
-                    {t('buyCars.title') || 'Buy Cars'}
-                  </h2>
-                  <p className="text-gray-600 text-sm">
-                    {t('buyCars.subtitle') || 'Find your perfect vehicle from our marketplace'}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm text-gray-500">
-                    {t('buyCars.resultsFound') || 'Results Found'}
-                  </div>
-                  <div className="text-lg font-bold text-[#3b396d]">
-                    {filteredCars.length}
-                  </div>
+          {/* Country */}
+          <div className="border-b border-gray-200 mb-4">
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+              onClick={() => {
+                const countryFilterOpen = activeFilters.country;
+                if (!countryFilterOpen) {
+                  handleFilterChange('country', 'DE');
+                } else {
+                  handleFilterChange('country', '');
+                }
+              }}>
+              <span className="font-medium text-gray-900 text-sm">{t('buyCars.country') || 'Country'}</span>
+              <FiChevronDown className={`h-4 w-4 text-[#3b396d] transition-transform ${
+                activeFilters.country ? 'rotate-180' : ''
+              }`} />
+            </div>
+            {activeFilters.country && (
+              <div className="p-3 bg-gray-50">
+                <select
+                  value={activeFilters.country || ''}
+                  onChange={(e) => handleFilterChange('country', e.target.value)}
+                  className="block w-full px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
+                >
+                  <option value="">{t('buyCars.allCountries') || 'All Countries'}</option>
+                  <option value="DE">Germany</option>
+                  <option value="NL">Netherlands</option>
+                  <option value="BE">Belgium</option>
+                  <option value="FR">France</option>
+                  <option value="ES">Spain</option>
+                  <option value="IT">Italy</option>
+                  <option value="UK">United Kingdom</option>
+                </select>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="flex-1">
+          {/* Filter Header - CarCollect Style */}
+          <div className="bg-white border-b border-gray-200 py-3 px-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <button
+                  onClick={toggleFilterPanel}
+                  className="flex items-center text-sm font-medium text-[#3b396d] hover:text-[#2a285a]"
+                >
+                  <FiFilter className="mr-2 h-4 w-4" />
+                  {t('buyCars.filters') || 'Filters'}
+                  <FiChevronDown className={`ml-1 h-4 w-4 transition-transform ${
+                    filterPanelOpen ? 'rotate-180' : ''
+                  }`} />
+                </button>
+                <div className="ml-4 text-sm text-gray-500">
+                  {filteredCars.length} {t('buyCars.resultsFound') || 'results found'}
                 </div>
               </div>
+              <div className="flex items-center space-x-2">
+                <select className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]">
+                  <option>{t('buyCars.sort.newest') || 'Newest First'}</option>
+                  <option>{t('buyCars.sort.oldest') || 'Oldest First'}</option>
+                  <option>{t('buyCars.sort.priceLow') || 'Price: Low to High'}</option>
+                  <option>{t('buyCars.sort.priceHigh') || 'Price: High to Low'}</option>
+                </select>
+              </div>
             </div>
+          </div>
 
-            {/* Active Filters */}
-            {(Object.keys(activeFilters).length > 0 || searchTerm) && (
-              <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center">
-                    <FiFilter className="h-5 w-5 text-[#3b396d] mr-2" />
-                    <span className="font-medium text-gray-900">
-                      {t('buyCars.activeFilters') || 'Active Filters'} ({Object.keys(activeFilters).filter(key => activeFilters[key]).length + (searchTerm ? 1 : 0)})
-                    </span>
-                  </div>
-                  <button
-                    onClick={clearAllFilters}
-                    className="text-sm text-red-600 hover:text-red-800 font-medium"
-                  >
-                    {t('buyCars.clearAll') || 'Clear All'}
-                  </button>
+          {/* Active Filters */}
+          {(Object.keys(activeFilters).length > 0 || searchTerm) && (
+            <div className="bg-white border-b border-gray-200 py-3 px-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <FiFilter className="h-4 w-4 text-[#3b396d] mr-2" />
+                  <span className="text-sm font-medium text-gray-900">
+                    {t('buyCars.activeFilters') || 'Active Filters'} ({Object.keys(activeFilters).filter(key => activeFilters[key]).length + (searchTerm ? 1 : 0)})
+                  </span>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {searchTerm && (
-                    <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#3b396d] text-white">
-                      {t('search.searchTerm') || 'Search'}: "{searchTerm}"
+                <button
+                  onClick={clearAllFilters}
+                  className="text-sm text-red-600 hover:text-red-800 font-medium"
+                >
+                  {t('buyCars.clearAll') || 'Clear All'}
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {searchTerm && (
+                  <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#3b396d] text-white">
+                    {t('search.searchTerm') || 'Search'}: "{searchTerm}"
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="ml-1 text-white hover:text-gray-200"
+                    >
+                      <FiX className="h-3 w-3" />
+                    </button>
+                  </div>
+                )}
+                {Object.entries(activeFilters).map(([key, value]) => (
+                  value && (
+                    <div key={key} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#3b396d] text-white">
+                      {key}: {value}
                       <button
-                        onClick={() => setSearchTerm('')}
-                        className="ml-2 text-white hover:text-gray-200"
+                        onClick={() => handleFilterChange(key, '')}
+                        className="ml-1 text-white hover:text-gray-200"
                       >
                         <FiX className="h-3 w-3" />
                       </button>
                     </div>
-                  )}
-                  {Object.entries(activeFilters).map(([key, value]) => (
-                    value && (
-                      <div key={key} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#3b396d] text-white">
-                        {key}: {value}
-                        <button
-                          onClick={() => handleFilterChange(key, '')}
-                          className="ml-2 text-white hover:text-gray-200"
-                        >
-                          <FiX className="h-3 w-3" />
-                        </button>
-                      </div>
-                    )
-                  ))}
-                </div>
+                  )
+                ))}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Car Grid with Image Sliders */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {/* Car Grid */}
+          <div className="p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {currentCars.map((car) => (
                 <div key={car.id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300">
-                  {/* Car Image Slider */}
                   <CarImageSlider car={car} />
                   
-                  {/* Car Details */}
                   <div className="p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                      <h3 className="text-base font-semibold text-gray-900 truncate">
                         {car.year} {car.make} {car.model}
                       </h3>
                       <div className="flex items-center">
                         <FiDollarSign className="h-4 w-4 text-[#3b396d] mr-1" />
-                        <span className="text-lg font-bold text-[#3b396d]">
+                        <span className="text-base font-bold text-[#3b396d]">
                           €{car.price?.toLocaleString()}
                         </span>
                       </div>
@@ -648,7 +635,6 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                       </div>
                     </div>
                     
-                    {/* Compact Action Buttons */}
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleViewCar(car.id)}
@@ -672,7 +658,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center mt-8">
+              <div className="flex justify-center mt-6">
                 <nav className="inline-flex items-center space-x-1">
                   <button
                     onClick={() => paginate(currentPage - 1)}
@@ -710,7 +696,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
             {/* No Results */}
             {filteredCars.length === 0 && (
               <div className="text-center py-12">
-                <FiInfo className="mx-auto h-16 w-16 text-gray-400" />
+                <FiInfo className="mx-auto h-12 w-12 text-gray-400" />
                 <h3 className="mt-4 text-lg font-medium text-gray-900">
                   {t('buyCars.noResults') || 'No cars found'}
                 </h3>
