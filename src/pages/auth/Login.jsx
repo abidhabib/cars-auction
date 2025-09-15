@@ -170,95 +170,94 @@ const Login = () => {
       </div>
 
       {/* LEFT SIDE - HERO CONTENT */}
-      <div className="hidden md:flex md:w-1/2 relative overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ 
-            backgroundImage: "url('https://trade.carcollect.com/_next/static/media/masking_tool_login_desktop.b0215844.jpg')" 
-          }}
-        />
-        
-        {/* Dark Overlay */}
-        
-        {/* Logo */}
-<div className="absolute top-6 left-6 z-10">
-          <img 
-            src="/logoLight.svg" 
-            alt="Company Logo" 
-            className="h-10 w-auto cursor-pointer"
-                  onClick={() => navigate('/home')}
-          />
+    <div className="hidden md:flex md:w-1/2 relative overflow-hidden">
+  <div 
+    className="absolute inset-0 object-none bg-center"
+    style={{ 
+      backgroundImage: "url('./login_bg.jpg')"
+    }}
+  />
+  
+  {/* Darker Overlay */}
+  <div className="absolute inset-0 bg-logo-dark-blue bg-opacity-50"></div>
+  
+  {/* Logo */}
+  <div className="absolute top-6 left-6 z-10">
+    <img 
+      src="/logoLight.svg" 
+      alt="Company Logo" 
+      className="h-10 w-auto cursor-pointer"
+      onClick={() => navigate('/home')}
+    />
+  </div>
+  
+  {/* Content */}
+  <div className="relative z-1 flex flex-col justify-center items-start p-12 text-white">
+    <div className="max-w-lg">
+      <div className="flex items-center mb-4">
+        <div className="bg-blue-500/20 p-2 rounded-lg">
+          <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
         </div>
-        
-        {/* Content */}
-        <div className="relative z-1 flex flex-col justify-center items-start p-12 text-white">
-          <div className="max-w-lg">
-            <div className="flex items-center mb-4">
-              <div className="bg-blue-500/20 p-2 rounded-lg">
-                <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <span className="ml-3 text-sm font-semibold uppercase tracking-wider text-blue-300">
-                {t('hero.tagline') || "The future of car trading"}
-              </span>
-            </div>
-
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              {t('hero.title') || "Europe's largest wholesale platform for used cars"}
-            </h1>
-            
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="flex items-center">
-                <div className="mr-2 text-blue-400">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span className="text-sm">{t('hero.benefit1') || 'Competitive Pricing'}</span>
-              </div>
-              <div className="flex items-center">
-                <div className="mr-2 text-blue-400">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-
-                <span className="text-sm">{t('hero.benefit2') || 'Wide Selection'}</span>
-              </div>
-              <div className="flex items-center">
-                <div className="mr-2 text-blue-400">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span className="text-sm">{t('hero.benefit3') || 'Expert Support'}</span>
-              </div>
-            </div>
-            
-            <div className="flex flex-wrap gap-3">
-              <Button
-                variant="outline"
-                size="md"
-                onClick={() => navigate('/features')}
-                className="px-5 py-2.5 text-sm font-semibold bg-transparent border border-white text-white hover:bg-white/10"
-              >
-                {t('hero.explore') || 'Explore'}
-              </Button>
-              <Button
-                              variant="outline"
-
-                size="md"
-                onClick={() => navigate('/how-it-works')}
-                className="px-5 py-2.5 text-sm font-semibold bg-transparent border border-white text-white hover:bg-white/10"
-              >
-                {t('hero.howItWorks') || 'How it works'}
-              </Button>
-            </div>
-          </div>
-        </div>
+        <span className="ml-3 text-sm font-semibold uppercase tracking-wider text-white">
+          {t('hero.tagline') || "The future of car trading"}
+        </span>
       </div>
 
+      {/* Bigger and Bolder Title */}
+      <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-wide">
+        {t('hero.title') || "Europe's largest wholesale platform for used cars"}
+      </h1>
+      
+      <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="flex items-center">
+          <div className="mr-2 text-blue-400">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <span className="text-sm">{t('hero.benefit1') || 'Competitive Pricing'}</span>
+        </div>
+        <div className="flex items-center">
+          <div className="mr-2 text-blue-400">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <span className="text-sm">{t('hero.benefit2') || 'Wide Selection'}</span>
+        </div>
+        <div className="flex items-center">
+          <div className="mr-2 text-blue-400">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <span className="text-sm">{t('hero.benefit3') || 'Expert Support'}</span>
+        </div>
+      </div>
+      
+      <div className="flex flex-wrap gap-3">
+        <Button
+          variant="outline"
+          size="md"
+          onClick={() => navigate('/features')}
+          className="px-6 py-3 text-base font-bold bg-transparent border border-white text-white hover:bg-white/10"
+        >
+          {t('hero.explore') || 'Explore'}
+        </Button>
+        <Button
+          variant="outline"
+          size="md"
+          onClick={() => navigate('/how-it-works')}
+          className="px-6 py-3 text-base font-bold bg-transparent border border-white text-white hover:bg-white/10"
+        >
+          {t('hero.howItWorks') || 'How it works'}
+        </Button>
+      </div>
+    </div>
+  </div>
+</div>
       {/* RIGHT SIDE - LOGIN FORM */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md">
