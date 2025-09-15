@@ -1,7 +1,6 @@
 // src/components/seller/SellerSidebar.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { useNavigate } from 'react-router-dom';
 import { 
   FiHome, 
   FiPackage, 
@@ -16,9 +15,8 @@ import {
   FiChevronRight
 } from 'react-icons/fi';
 
-const SellerSidebar = ({ activeTab, setActiveTab }) => {
+const SellerSidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) => {
   const { t } = useLanguage();
-  const [collapsed, setCollapsed] = useState(false);
 
   const topItems = [
     { id: 'overview', label: t('sellerDashboard.sidebar.overview') || 'Overview', icon: <FiHome className="h-5 w-5" /> },
@@ -47,13 +45,11 @@ const SellerSidebar = ({ activeTab, setActiveTab }) => {
   };
 
   const toggleSidebar = () => {
-    setCollapsed(!collapsed);
+    setSidebarOpen(!sidebarOpen);
   };
 
   return (
-    <div className={`h-full bg-[#3b396d] text-white flex flex-col transition-all duration-300 ${
-      collapsed ? 'w-16' : 'w-64'
-    }`}>
+    <div className={`h-full bg-[#3b396d] text-white flex flex-col transition-all duration-300`}>
       {/* Top Section - Main Navigation */}
       <nav className="flex-1 py-4 overflow-y-auto">
         <div className="space-y-1 px-3">
@@ -65,11 +61,11 @@ const SellerSidebar = ({ activeTab, setActiveTab }) => {
                 activeTab === item.id
                   ? 'bg-white bg-opacity-20 text-white'
                   : 'text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-10'
-              } ${collapsed ? 'justify-center h-12' : 'px-4 py-3'}`}
-              title={collapsed ? item.label : ''}
+              } ${sidebarOpen ? 'px-4 py-3' : 'justify-center h-12'}`}
+              title={sidebarOpen ? '' : item.label}
             >
               <span className="flex-shrink-0">{item.icon}</span>
-              {!collapsed && (
+              {sidebarOpen && (
                 <span className="ml-3 text-sm font-medium">{item.label}</span>
               )}
             </button>
@@ -88,11 +84,11 @@ const SellerSidebar = ({ activeTab, setActiveTab }) => {
                 activeTab === item.id
                   ? 'bg-white bg-opacity-20 text-white'
                   : 'text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-10'
-              } ${collapsed ? 'justify-center h-12' : 'px-4 py-3'}`}
-              title={collapsed ? item.label : ''}
+              } ${sidebarOpen ? 'px-4 py-3' : 'justify-center h-12'}`}
+              title={sidebarOpen ? '' : item.label}
             >
               <span className="flex-shrink-0">{item.icon}</span>
-              {!collapsed && (
+              {sidebarOpen && (
                 <span className="ml-3 text-sm font-medium">{item.label}</span>
               )}
             </button>
@@ -102,16 +98,16 @@ const SellerSidebar = ({ activeTab, setActiveTab }) => {
           <button
             onClick={toggleSidebar}
             className={`w-full flex items-center rounded-lg transition-all duration-200 text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-10 ${
-              collapsed ? 'justify-center h-12' : 'px-4 py-3'
+              sidebarOpen ? 'px-4 py-3' : 'justify-center h-12'
             }`}
-            title={collapsed ? 'Expand' : 'Collapse'}
+            title={sidebarOpen ? 'Collapse' : 'Expand'}
           >
             <span className="flex-shrink-0">
-              {collapsed ? <FiChevronRight className="h-5 w-5" /> : <FiChevronLeft className="h-5 w-5" />}
+              {sidebarOpen ? <FiChevronLeft className="h-5 w-5" /> : <FiChevronRight className="h-5 w-5" />}
             </span>
-            {!collapsed && (
+            {sidebarOpen && (
               <span className="ml-3 text-sm font-medium">
-                {collapsed ? '' : 'Collapse'}
+                Collapse
               </span>
             )}
           </button>

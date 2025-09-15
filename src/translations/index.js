@@ -268,7 +268,13 @@ maxPhotos:'Max Photos'
     buyItNow: 'Buy It Now',
     active:'Active',
     highestBid:'Highest Bid',
-    
+    placeBid: 'Place Bid',
+auctionInfo: 'auction info',
+overall:'overall',
+description:'description',
+accidents:'Accidents',
+ sellerInfo: 'Seller Info',
+  reviews: 'Reviews',
     // Filter Categories
     make: 'Make',
     model: 'Model',
@@ -1555,6 +1561,13 @@ phonePlaceholder:"+3412345671",
     bid: 'Bieten',
     buyItNow: 'Sofort Kaufen',
     highestBid: 'Höchstgebot',
+placeBid: 'Gebot abgeben',
+auctionInfo: 'Auktionsinformationen',
+overall: 'Insgesamt',
+description: 'Beschreibung',
+accidents: 'Unfälle',
+sellerInfo: 'Verkäuferinformationen',
+reviews: 'Bewertungen',
 
     // Filter Categories
     make: 'Marke',
@@ -2508,6 +2521,14 @@ buyCars: {
     bid: 'Bieden',
     buyItNow: 'Direct Kopen',
     vhighestBid: 'Hoogste bod',
+    placeBid: 'Bod plaatsen',
+    auctionInfo: 'Veilinginformatie',
+    overall: 'Totaal',
+    description: 'Beschrijving',
+    accidents: 'Ongelukken',
+    sellerInfo: 'Verkoperinformatie',
+    reviews: 'Beoordelingen',
+
 
     // Filter Categories
     make: 'Merk',

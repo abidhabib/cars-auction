@@ -17,7 +17,7 @@ const SellerDashboard = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { user } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
@@ -115,6 +115,8 @@ const SellerDashboard = () => {
       {/* Fixed Header - Always on top */}
       <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white shadow-md">
         <SellerHeader
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
           activeTab={activeTab}
           selectedVehicle={selectedVehicle}
           setSelectedVehicle={setSelectedVehicle}
@@ -128,18 +130,28 @@ const SellerDashboard = () => {
       </header>
 
       {/* Fixed Sidebar - Below Header */}
-      <aside className="fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white shadow-lg z-40 overflow-y-auto">
+      <aside 
+        className={`fixed top-16 h-[calc(100vh-4rem)] bg-white shadow-lg z-40 overflow-y-auto transition-all duration-300 ease-in-out`}
+        style={{
+          width: sidebarOpen ? '16rem' : '5rem',
+          left: 0
+        }}
+      >
         <SellerSidebar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
       </aside>
 
       {/* Main Content Area - Properly spaced to avoid overlap */}
-      <main className={`flex-1 pt-16 bg-gray-50 h-[calc(100vh-4rem)] overflow-y-auto ${
-        activeTab === 'buy' ? 'ml-0' : 'ml-64'
-      }`}>
-        <div className="py-8  max-w-7xl mx-auto">
+      <main className={`flex-1 pt-16 bg-gray-50 h-[calc(100vh-4rem)] overflow-y-auto transition-all duration-300 ease-in-out ${
+        activeTab === 'buy' ? 'ml-0' : ''
+      }`} style={{
+        marginLeft: sidebarOpen ? '16rem' : '5rem'
+      }}>
+        <div className="py-8 max-w-7xl mx-auto">
           {renderActiveTab()}
         </div>
       </main>
