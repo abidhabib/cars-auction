@@ -1,7 +1,13 @@
-import { steps } from "framer-motion";
 
 export const translations = {
   en: {
+     notificationsBid: {
+    title: "Notifications",
+    newBid: "You have a new bid",
+    timeAgo: "{time} ago",
+    carSold: "Your car has been sold",
+    viewAll: "View all"
+  },
     "bidding": {
     "placeBid": "Place Bid",
     "close": "Close",
@@ -477,6 +483,10 @@ support: {
     meetOurTeam:'Meet Our Team',
 teamDescription: 'Our dedicated team is here to guide you with personalized support and expert assistance.',
 phonePlaceholder:"+3412345671",
+availableAgents: "Available Agents",
+  chatDescription: "Chat Description",
+  agentChat: "Agent Chat",
+  startChat: "Start Chat",
 
     // Contact Form
     sendMessage: 'Send us a message',
@@ -1261,6 +1271,35 @@ addCarListing: {
 
   },
   de: {
+      notificationsBid: {
+    title: "Benachrichtigungen",
+    newBid: "Sie haben ein neues Gebot",
+    timeAgo: "vor {time}",
+    carSold: "Ihr Auto wurde verkauft",
+    viewAll: "Alle anzeigen"
+  }
+,
+
+     bidding: {
+    placeBid: "Gebot abgeben",
+    close: "Schließen",
+    currentHighestBid: "Aktuell höchstes Gebot",
+    noBids: "Noch keine Gebote",
+    yourBids: "Ihre Gebote",
+    bidAmount: "Gebotsbetrag",
+    bidInfoTitle: "Wichtige Informationen",
+    bidInfo1: "Ihr Gebot ist verbindlich, sobald es eingereicht wurde",
+    bidInfo2: "Sie werden benachrichtigt, wenn Sie überboten werden",
+    bidInfo3: "Gebote müssen höher sein als das aktuell höchste Gebot",
+    cancel: "Abbrechen",
+    submitBid: "Gebot einreichen",
+    submitting: "Wird eingereicht...",
+    invalidAmount: "Bitte geben Sie einen gültigen Gebotsbetrag ein",
+    bidTooLow: "Gebot muss höher sein als das aktuell höchste Gebot",
+    minimumIncrement: "Mindeststeigerung ist €{amount}",
+    bidSuccess: "Gebot erfolgreich abgegeben!",
+    bidError: "Fehler beim Abgeben des Gebots. Bitte versuchen Sie es erneut."
+  },
     cookies: {
       message: "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern. Durch die Nutzung unserer Website stimmen Sie unserer Cookie-Richtlinie zu.",
       accept: "Alle akzeptieren",
@@ -1417,6 +1456,11 @@ addCarListing: {
     getDirections: 'Routebeschrijving',
 teamDescription: 'Unser engagiertes Team steht Ihnen mit persönlicher Unterstützung und fachkundiger Beratung zur Seite.'
 ,
+  startChat: "Chat starten",
+
+availableAgents: "Verfügbare Agenten",
+  chatDescription: "Chat-Beschreibung",
+  agentChat: "Agenten-Chat",
 phonePlaceholder:"+3412345671",
 
     // Contact Form
@@ -2382,6 +2426,34 @@ step7: 'Überprüfen & Veröffentlichen'
   
   },
   nl: {
+    notificationsBid: {
+    title: "Meldingen",
+    newBid: "U heeft een nieuw bod",
+    timeAgo: "{time} geleden",
+    carSold: "Uw auto is verkocht",
+    viewAll: "Alles bekijken"
+  }
+,
+    bidding: {
+    placeBid: "Bod plaatsen",
+    close: "Sluiten",
+    currentHighestBid: "Huidig hoogste bod",
+    noBids: "Nog geen biedingen",
+    yourBids: "Uw biedingen",
+    bidAmount: "Bodbedrag",
+    bidInfoTitle: "Belangrijke informatie",
+    bidInfo1: "Uw bod is bindend zodra het is ingediend",
+    bidInfo2: "U wordt op de hoogte gebracht als u overboden wordt",
+    bidInfo3: "Biedingen moeten hoger zijn dan het huidige hoogste bod",
+    cancel: "Annuleren",
+    submitBid: "Bod indienen",
+    submitting: "Indienen...",
+    invalidAmount: "Voer een geldig bodbedrag in",
+    bidTooLow: "Bod moet hoger zijn dan het huidige hoogste bod",
+    minimumIncrement: "Minimale biedstap is €{amount}",
+    bidSuccess: "Bod succesvol geplaatst!",
+    bidError: "Plaatsen van bod mislukt. Probeer opnieuw."
+  },
     "search": {
   "gridView": "Rasterweergave",       // nl
   "listView": "Lijstweergave",
@@ -2534,6 +2606,10 @@ step7: 'Überprüfen & Veröffentlichen'
     teamDescription: 'Ons toegewijde team staat voor u klaar met persoonlijke ondersteuning en deskundige hulp.'
 ,
 phonePlaceholder:"+3412345671",
+ availableAgents: "Beschikbare agenten",
+  chatDescription: "Chatbeschrijving",
+  agentChat: "Agentenchat",
+  startChat: "Chat starten",
 
     // Contact Form
     sendMessage: 'Stuur ons een bericht',
@@ -3472,7 +3548,4 @@ step7: 'Beoordelen & Publiceren'
   viewAll: 'Bekijk Alles'
 
   },
-
-
-
 };

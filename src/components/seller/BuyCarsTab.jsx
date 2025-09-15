@@ -739,7 +739,7 @@ const BuyCarsTab = ({
                 </div>
               </div>
             )}
-            <div className="border-t border-gray-200 pt-6 mt-2">
+            {/* <div className="border-t border-gray-200 pt-6 mt-2">
               <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
                 <FiUser className="mr-2 text-[#3b396d]" />
                 {t('buyCars.sellerInfo') || 'Seller Information'}
@@ -772,7 +772,7 @@ const BuyCarsTab = ({
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         {fullscreenImage && (
@@ -1101,7 +1101,7 @@ const BuyCarsTab = ({
           <div className="p-4">
             {filteredCars.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4 sm:gap-4">
+                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4 sm:gap-4 mt-8">
                   {currentCars.map((car) => (
                     <div
                       key={car.id}

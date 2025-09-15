@@ -128,7 +128,7 @@ const SellerDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-transparent">
       {/* Fixed Header - Always on top */}
       <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white shadow-md">
         <SellerHeader
@@ -149,7 +149,7 @@ const SellerDashboard = () => {
 
       {/* Fixed Sidebar - Below Header */}
       <aside 
-        className={`fixed top-16 h-[calc(100vh-4rem)] bg-white shadow-lg z-40 overflow-y-auto transition-all duration-300 ease-in-out`}
+        className={`fixed top-16 h-[calc(100vh-4rem)] bg-transparent  z-40 overflow-y-auto transition-all duration-300 ease-in-out`}
         style={{
           width: sidebarOpen ? '16rem' : '5rem',
           left: 0

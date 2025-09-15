@@ -169,7 +169,7 @@ const SellerHeader = ({
                   <div className="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                     <div className="py-1">
                       <div className="px-4 py-2 border-b border-gray-200 flex justify-between items-center">
-                        <h3 className="text-sm font-medium text-gray-900">{t('notifications.title') || 'Notifications'}</h3>
+                        <h3 className="text-sm font-medium text-gray-900">{t('notificationsBid.title') || 'Notifications'}</h3>
                         <button 
                           onClick={() => setNotificationsOpen(false)}
                           className="text-gray-400 hover:text-gray-500 focus:outline-none"
@@ -180,17 +180,17 @@ const SellerHeader = ({
                       </div>
                       <div className="max-h-60 overflow-y-auto">
                         <a href="#" className="block px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff]">
-                          <p className="font-medium text-[#3b396d]">{t('notifications.newBid', { car: 'BMW X5 (STK2023-001)' }) || 'New bid on your BMW X5 (STK2023-001)'}</p>
-                          <p className="text-gray-500 text-xs mt-1">{t('notifications.timeAgo', { time: '2 hours' }) || '2 hours ago'}</p>
+                          <p className="font-medium text-[#3b396d]">{t('notificationsBid.newBid', { car: 'BMW X5 (STK2023-001)' }) || 'New bid on your BMW X5 (STK2023-001)'}</p>
+                          <p className="text-gray-500 text-xs mt-1">{t('notificationsBid.timeAgo', { time: '2 hours' }) || '2 hours ago'}</p>
                         </a>
                         <a href="#" className="block px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff] bg-[#f8f9ff]">
-                          <p className="font-medium text-[#3b396d]">{t('notifications.carSold', { car: 'Audi A6 (STK2023-002)' }) || 'Your Audi A6 (STK2023-002) has been sold!'}</p>
-                          <p className="text-gray-500 text-xs mt-1">{t('notifications.timeAgo', { time: '1 day' }) || '1 day ago'}</p>
+                          <p className="font-medium text-[#3b396d]">{t('notificationsBid.carSold', { car: 'Audi A6 (STK2023-002)' }) || 'Your Audi A6 (STK2023-002) has been sold!'}</p>
+                          <p className="text-gray-500 text-xs mt-1">{t('notificationsBid.timeAgo', { time: '1 day' }) || '1 day ago'}</p>
                         </a>
                       </div>
                       <div className="px-4 py-2 border-t border-gray-200 text-center">
                         <a href="#" className="text-sm font-medium text-[#3b396d] hover:text-[#2a285a]">
-                          {t('notifications.viewAll') || 'View all'}
+                          {t('notificationsBid.viewAll') || 'View all'}
                         </a>
                       </div>
                     </div>
