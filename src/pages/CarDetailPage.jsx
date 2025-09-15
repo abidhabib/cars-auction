@@ -72,7 +72,7 @@ const CarDetailPage = () => {
           <img
             src={images[currentImageIndex]}
             alt={`${car.make} ${car.model}`}
-            className="w-full h-full object-cover"
+            className="object-cover"
           />
           {images.length > 1 && (
             <>

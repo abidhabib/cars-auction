@@ -267,6 +267,7 @@ maxPhotos:'Max Photos'
     bid: 'Bid',
     buyItNow: 'Buy It Now',
     active:'Active',
+    highestBid:'Highest Bid',
     
     // Filter Categories
     make: 'Make',
@@ -930,13 +931,13 @@ addFeature:'Add Feature',
       units: 'units',
       financialSummary: 'Financial Summary',
       period: 'Period',
-      grossSales: 'Gross Sales',
+      grosssales: 'Gross Sales',
       fees: 'Platform Fees',
-      netEarnings: 'Net Earnings',
+      netearnings: 'Net Earnings',
       ytdTotal: 'YTD Total',
       revenueChartTitle: 'Monthly Revenue Trend',
       topModelsChartTitle: 'Sales Distribution by Model',
-      avgSellingPrice: 'Avg. Selling Price'
+      avgSellingPrice: 'Avg. Selling Price',
     },
 
     // Generic UI
@@ -1553,7 +1554,8 @@ phonePlaceholder:"+3412345671",
     viewDetails: 'Details Ansehen',
     bid: 'Bieten',
     buyItNow: 'Sofort Kaufen',
-    
+    highestBid: 'Höchstgebot',
+
     // Filter Categories
     make: 'Marke',
     model: 'Modell',
@@ -1995,13 +1997,7 @@ buyCar: 'Auto kaufen'
       draft: 'Entwurf'
     },
 
-    // Filters
-    filters: {
-      all: 'Alle Fahrzeuge',
-      active: 'Aktiv',
-      sold: 'Verkauft',
-      draft: 'Entwurf'
-    },
+   
 
     // Messages/Chat Tab
     messages: {
@@ -2028,7 +2024,9 @@ buyCar: 'Auto kaufen'
       ytdTotal: 'Jahresgesamt',
       revenueChartTitle: 'Monatlicher Umsatztrend',
       topModelsChartTitle: 'Verkaufsverteilung nach Modell',
-      avgSellingPrice: 'Durchschn. Verkaufspreis'
+      avgSellingPrice: 'Durchschn. Verkaufspreis',
+      grosssale: 'Bruttoverkauf',
+  netearning: 'Nettoeinnahme'
     },
 
     // Generic UI
@@ -2509,7 +2507,8 @@ buyCars: {
     viewDetails: 'Bekijk Details',
     bid: 'Bieden',
     buyItNow: 'Direct Kopen',
-    
+    vhighestBid: 'Hoogste bod',
+
     // Filter Categories
     make: 'Merk',
     model: 'Model',

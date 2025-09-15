@@ -139,7 +139,7 @@ const SellerDashboard = () => {
       <main className={`flex-1 pt-16 bg-gray-50 h-[calc(100vh-4rem)] overflow-y-auto ${
         activeTab === 'buy' ? 'ml-0' : 'ml-64'
       }`}>
-        <div className="py-8 px-8 max-w-7xl mx-auto">
+        <div className="py-8  max-w-7xl mx-auto">
           {renderActiveTab()}
         </div>
       </main>
