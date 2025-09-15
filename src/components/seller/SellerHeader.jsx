@@ -2,41 +2,31 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
+import { useNavigate, useLocation } from 'react-router-dom'; 
 import { 
   FiBell, 
   FiX, 
-  FiSearch, 
-  FiChevronLeft, // Used for language dropdown arrow
+  FiChevronLeft, 
   FiUser, 
   FiLogOut,
   FiMessageSquare,
   FiHeadphones,
-  FiSettings,
   FiMenu,
   FiGlobe
 } from 'react-icons/fi';
-// Ensure the path to your SearchBar is correct
-import SearchBar from './SearchBar'; // Adjust path if needed
+import SearchBar from './SearchBar'; 
 
 const SellerHeader = ({ 
-  sidebarOpen,
-  setSidebarOpen,
-  activeTab,
-  selectedVehicle,
-  setSelectedVehicle,
-  selectedChat,
-  setSelectedChat,
   setChatOpen,
   searchTerm,
   setSearchTerm,
-  setActiveTab,
-  onCarSelect // Add this new prop for search integration
+  setActiveTab, // This is important for switching tabs
+  onCarSelect 
 }) => {
   const { t, language, setLanguage, supportedLanguages, getLanguageName } = useLanguage();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation(); // Get current location
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -50,7 +40,6 @@ const SellerHeader = ({
     language: useRef(null)
   };
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       Object.entries(dropdownRefs).forEach(([key, ref]) => {
@@ -69,34 +58,27 @@ const SellerHeader = ({
 
   const handleLogout = async () => {
     try {
-      await logout(); // Assuming logout is an async function
-      navigate('/'); // Redirect to home page after logout
+      await logout();
+      navigate('/');
     } catch (error) {
       console.error("Logout failed:", error);
-      // Optionally, show an error message to the user
     }
   };
 
-  // Function to determine the base path for navigation, considering language
   const getBasePath = () => {
-    // Example logic, adjust based on your routing structure
-    // Assumes language routes are like /en/, /de/, etc.
     const pathParts = location.pathname.split('/').filter(p => p);
     if (supportedLanguages.includes(pathParts[0])) {
       return `/${pathParts[0]}`;
     }
-    return ''; // Default to root if no language prefix or unsupported
+    return ''; 
   };
 
   return (
     <>
-      {/* Header - Fixed position with proper z-index */}
       <header className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50 h-16">
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="flex items-center justify-between h-full">
-            {/* Left side: Logo and Search */}
             <div className="flex items-center">
-              {/* Logo - Visible with proper positioning */}
               <div className="flex items-center mr-6">
                 <button 
                   onClick={() => navigate('/')} // Navigate to home
@@ -112,26 +94,22 @@ const SellerHeader = ({
                 </button>
               </div>
               
-              {/* Search Bar - Using your SearchBar component with wider width */}
               <div className="hidden md:block w-96 lg:w-[36rem] xl:w-[42rem]">
                 <SearchBar
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
-                  onSearch={setSearchTerm} // Optional: if SearchBar needs to inform parent of term changes
-                  onCarSelect={onCarSelect} // Pass the handler from SellerDashboard
-                  className="w-full" // Pass className if needed
+                  onSearch={setSearchTerm} 
+                  onCarSelect={onCarSelect} 
+                  className="w-full"
                 />
               </div>
             </div>
 
-            {/* Right side: Icons and Profile */}
             <div className="flex items-center space-x-4">
-              {/* Language Dropdown */}
               <div className="relative hidden sm:block" ref={dropdownRefs.language}>
                 <button 
                   onClick={() => {
                     setLanguageDropdownOpen(!languageDropdownOpen);
-                    // Close other dropdowns
                     setNotificationsOpen(false);
                     setUserDropdownOpen(false);
                     setAgentChatOpen(false);
@@ -170,12 +148,10 @@ const SellerHeader = ({
                 )}
               </div>
               
-              {/* Notifications */}
               <div className="relative" ref={dropdownRefs.notifications}>
                 <button
                   onClick={() => {
                     setNotificationsOpen(!notificationsOpen);
-                    // Close other dropdowns
                     setUserDropdownOpen(false);
                     setAgentChatOpen(false);
                     setLanguageDropdownOpen(false);
@@ -186,7 +162,6 @@ const SellerHeader = ({
                   aria-label={t('navigation.notifications') || "Notifications"}
                 >
                   <FiBell className="h-5 w-5" />
-                  {/* Notification indicator - example */}
                   <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white"></span>
                 </button>
                 
@@ -204,7 +179,6 @@ const SellerHeader = ({
                         </button>
                       </div>
                       <div className="max-h-60 overflow-y-auto">
-                        {/* Example notification items */}
                         <a href="#" className="block px-4 py-3 text-sm text-gray-700 hover:bg-[#f8f9ff]">
                           <p className="font-medium text-[#3b396d]">{t('notifications.newBid', { car: 'BMW X5 (STK2023-001)' }) || 'New bid on your BMW X5 (STK2023-001)'}</p>
                           <p className="text-gray-500 text-xs mt-1">{t('notifications.timeAgo', { time: '2 hours' }) || '2 hours ago'}</p>
@@ -213,7 +187,6 @@ const SellerHeader = ({
                           <p className="font-medium text-[#3b396d]">{t('notifications.carSold', { car: 'Audi A6 (STK2023-002)' }) || 'Your Audi A6 (STK2023-002) has been sold!'}</p>
                           <p className="text-gray-500 text-xs mt-1">{t('notifications.timeAgo', { time: '1 day' }) || '1 day ago'}</p>
                         </a>
-                        {/* Add more notifications as needed */}
                       </div>
                       <div className="px-4 py-2 border-t border-gray-200 text-center">
                         <a href="#" className="text-sm font-medium text-[#3b396d] hover:text-[#2a285a]">
@@ -225,12 +198,10 @@ const SellerHeader = ({
                 )}
               </div>
 
-              {/* Chat with Agent */}
               <div className="relative" ref={dropdownRefs.agent}>
                 <button
                   onClick={() => {
                     setAgentChatOpen(!agentChatOpen);
-                     // Close other dropdowns
                      setNotificationsOpen(false);
                      setUserDropdownOpen(false);
                      setLanguageDropdownOpen(false);
@@ -241,7 +212,6 @@ const SellerHeader = ({
                   aria-label={t('support.chatWithAgent') || "Chat with agent"}
                 >
                   <FiHeadphones className="h-5 w-5" />
-                  {/* Agent availability indicator - example */}
                   <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-green-400 ring-2 ring-white animate-pulse"></span>
                 </button>
                 
@@ -270,10 +240,8 @@ const SellerHeader = ({
                         <p className="text-gray-600 text-sm mb-4">
                           {t('support.chatDescription') || 'Connect with our support team for immediate assistance.'}
                         </p>
-                        {/* Example button to navigate to contact or open a chat window */}
                         <button
                           onClick={() => {
-                            // Example navigation, adjust path as needed
                             const basePath = getBasePath();
                             navigate(`${basePath}/contact`);
                             setAgentChatOpen(false);
@@ -288,11 +256,9 @@ const SellerHeader = ({
                 )}
               </div>
 
-              {/* Messages/Chat */}
               <button
                 onClick={() => {
                   setChatOpen(true);
-                  // Close other dropdowns
                   setNotificationsOpen(false);
                   setUserDropdownOpen(false);
                   setAgentChatOpen(false);
@@ -302,11 +268,9 @@ const SellerHeader = ({
                 aria-label={t('navigation.messages') || "Messages"}
               >
                 <FiMessageSquare className="h-5 w-5" />
-                {/* Message indicator - example */}
                 <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-blue-400 ring-2 ring-white"></span>
               </button>
 
-              {/* User Profile Dropdown - Updated Section */}
               <div className="relative" ref={dropdownRefs.user}>
                 <button
                   onClick={() => {
@@ -354,21 +318,17 @@ const SellerHeader = ({
                       )}
                     </div>
 
-                    {/* Profile Link */}
-                    <a
-                      href={`${getBasePath()}/profile`} // Adjust path if needed
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
-                      onClick={(e) => {
-                        e.preventDefault(); // Prevent default link behavior
+                    {/* Profile Link - Changed to use setActiveTab instead of navigate */}
+                    <button
+                      onClick={() => {
                         setUserDropdownOpen(false); // Close dropdown
-                        // Navigate using React Router
-                        const basePath = getBasePath();
-                        navigate(`${basePath}/profile`);
+                        setActiveTab('profile'); // Switch to profile tab
                       }}
+                      className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#f8f9ff] hover:text-[#3b396d] transition-colors"
                     >
                       <FiUser className="mr-2 h-4 w-4 text-[#3b396d]" />
                       {t('header.userMenu.profile') || 'Profile'}
-                    </a>
+                    </button>
 
                   
 

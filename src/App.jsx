@@ -19,7 +19,6 @@ import SellerDashboard from './pages/seller/SellerDashboard';
 const Home = React.lazy(() => import('./pages/Home'));
 const Login = React.lazy(() => import('./pages/auth/Login'));
 const Register = React.lazy(() => import('./pages/auth/Register'));
-const Profile = React.lazy(() => import('./pages/profile/Profile'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage/AboutPage'));
 const SupportPage = React.lazy(() => import('./pages/SupportPage/SupportPage'));
 const TermsOfService = React.lazy(() => import('./pages/TermsOfService'));
@@ -172,16 +171,7 @@ function App() {
                   <Route path="/" element={<Navigate to="/home" replace />} />
 
                  
-                  <Route
-                    path="/profile"
-                    element={
-                      <ProtectedRoute>
-                        <AppLayout>
-                          <Profile />
-                        </AppLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+         
                  
 
                   {/* Seller-specific protected routes */}

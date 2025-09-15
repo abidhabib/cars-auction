@@ -2,6 +2,26 @@ import { steps } from "framer-motion";
 
 export const translations = {
   en: {
+    "bidding": {
+    "placeBid": "Place Bid",
+    "close": "Close",
+    "currentHighestBid": "Current highest bid",
+    "noBids": "No bids yet",
+    "yourBids": "Your bids",
+    "bidAmount": "Bid Amount",
+    "bidInfoTitle": "Important Information",
+    "bidInfo1": "Your bid is binding once submitted",
+    "bidInfo2": "You will be notified if you are outbid",
+    "bidInfo3": "Bids must be higher than the current highest bid",
+    "cancel": "Cancel",
+    "submitBid": "Submit Bid",
+    "submitting": "Submitting...",
+    "invalidAmount": "Please enter a valid bid amount",
+    "bidTooLow": "Bid must be higher than current highest bid",
+    "minimumIncrement": "Minimum bid increment is €{amount}",
+    "bidSuccess": "Bid placed successfully!",
+    "bidError": "Failed to place bid. Please try again."
+  },
 
     cookies: {
       message: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies as described in our Cookie Policy.",
