@@ -1,360 +1,70 @@
-// src/components/listings/AddCarListing.jsx
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useLanguage } from '../../context/LanguageContext'; // Assuming this path
-import { FiCheck, FiChevronLeft, FiChevronRight, FiUpload, FiCamera, FiDollarSign, FiClock, FiInfo, FiEdit2, FiSave, FiEye, FiLink,FiTrash2 } from 'react-icons/fi';
-import Button from '../common/Button'; // Assuming this path or use your Button component
-// import AppLayout from '../layout/AppLayout'; // If needed as a wrapper
+import  { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext'; 
+import { FiCheck, FiChevronLeft, FiChevronRight, FiUpload,  FiDollarSign,  FiInfo, FiEdit2, FiSave, FiEye, FiLink,FiTrash2, FiX, FiPlus } from 'react-icons/fi';
+import Button from '../common/Button';
+import useCarListingData from '../../hooks/useCarListingData';
 
 const AddCarListing = () => {
   const { t } = useLanguage();
-  const navigate = useNavigate();
 
-  // --- State Management ---
-  const [currentStep, setCurrentStep] = useState(1);
-  const [saleType, setSaleType] = useState(''); // 'direct-buy', 'general-auction', 'private-sale'
-  const [auctionTiming, setAuctionTiming] = useState({
-    preset: '3-days', // '24-hours', '3-days', '5-days', '7-days', 'custom'
-    startDate: '',
-    startTime: '10:00', // Default time
-    endDate: '',
-    endTime: '18:00',   // Default time
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone // Get user's local timezone
-  });
-  const [vehicleIdentification, setVehicleIdentification] = useState({
-    method: 'manual', // 'vin' or 'manual'
-    vin: '',
-    make: '',
-    model: '',
-    year: '',
-    trim: '',
-    licensePlate: '',
-    mileage: '',
-    mileageUnit: 'km', // 'km' or 'mi'
-    registrationDate: '',
-    previousOwners: ''
-  });
-  const [mediaAndDescription, setMediaAndDescription] = useState({
-    photos: [], // Array of File objects or preview URLs
-    headline: '',
-    description: '',
-    serviceHistory: 'full', // 'full', 'partial', 'none'
-    hasAccident: false,
-    accidentDetails: ''
-  });
-  const [conditionAssessment, setConditionAssessment] = useState({
-    // This is a simplified structure. You might want more detailed nested objects.
-    damageReport: {}, // Could be an object with keys for different car parts
-    technicalChecklist: {
-      engine: 'good', // 'good', 'average', 'poor', 'not-working'
-      transmission: 'good',
-      brakes: 'good',
-      electronics: 'good',
-      suspension: 'good',
-      exhaust: 'good'
-    },
-    interiorChecklist: {
-      upholstery: 'good', // 'good', 'average', 'poor', 'worn'
-      dashboard: 'good',
-      seats: 'good'
-    },
-    tyreReport: {
-      frontLeft: { condition: 'good', brand: '', treadDepth: '' },
-      frontRight: { condition: 'good', brand: '', treadDepth: '' },
-      rearLeft: { condition: 'good', brand: '', treadDepth: '' },
-      rearRight: { condition: 'good', brand: '', treadDepth: '' }
-    }
-  });
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [vinDecodeLoading, setVinDecodeLoading] = useState(false);
-  const [vinDecodeError, setVinDecodeError] = useState('');
 
-  // --- Constants ---
-  const TOTAL_STEPS = 6;
-  const SALE_TYPES = [
-    {
-      id: 'direct-buy',
-      title: t('addCarListing.saleTypes.directBuy.title') || 'Direct Buy',
-      description: t('addCarListing.saleTypes.directBuy.description') || 'Set a fixed price. Users can buy it immediately or make bids, which you can choose to accept or decline.',
-      icon: <FiDollarSign className="h-6 w-6" />
-    },
-    {
-      id: 'general-auction',
-      title: t('addCarListing.saleTypes.generalAuction.title') || 'General Auction',
-      description: t('addCarListing.saleTypes.generalAuction.description') || 'Run a blind auction with a defined time window. Bidders won\'t see others\' offers. You are not obligated to accept the highest bid.',
-      icon: <FiClock className="h-6 w-6" />
-    },
-    {
-      id: 'private-sale',
-      title: t('addCarListing.saleTypes.privateSale.title') || 'Private Sale',
-      description: t('addCarListing.saleTypes.privateSale.description') || 'Your listing will be hidden from the public. Only people with your unique link can view and bid on it.',
-      icon: <FiEye className="h-6 w-6" />
-    }
-  ];
+  // --- Use the custom hook to get state, functions, and constants ---
+  const {
+    // State (now managed by the hook)
+    saleType, setSaleType,
+    auctionTiming, setAuctionTiming,
+    vehicleIdentification, setVehicleIdentification,
+    mediaAndDescription, setMediaAndDescription,
+    conditionAssessment, setConditionAssessment,
+    damagePoints, setDamagePoints,
+    selectedOptions, setSelectedOptions,
+    errors, setErrors,
+    isSubmitting, setIsSubmitting,
+    vinDecodeLoading, setVinDecodeLoading,
+    vinDecodeError, setVinDecodeError,
+    currentStep, setCurrentStep, // <-- Assuming you moved currentStep to the hook
 
-  const AUCTION_PRESETS = [
-    { id: '24-hours', label: t('addCarListing.auctionTiming.presets.24hours') || '24 Hours' },
-    { id: '3-days', label: t('addCarListing.auctionTiming.presets.3days') || '3 Days' },
-    { id: '5-days', label: t('addCarListing.auctionTiming.presets.5days') || '5 Days' },
-    { id: '7-days', label: t('addCarListing.auctionTiming.presets.7days') || '7 Days' },
-    { id: 'custom', label: t('addCarListing.auctionTiming.presets.custom') || 'Custom' }
-  ];
+    // Constants (provided by the hook)
+    TOTAL_STEPS,
+    SALE_TYPES,
+    AUCTION_PRESETS,
+    INITIAL_AUCTION_TIMING,
+    INITIAL_VEHICLE_IDENTIFICATION,
+    INITIAL_MEDIA_AND_DESCRIPTION,
+    INITIAL_CONDITION_ASSESSMENT,
 
-  // --- Helper Functions ---
-  const calculateDatesFromPreset = (preset) => {
-    const now = new Date();
-    let end = new Date(now);
-    switch(preset) {
-      case '24-hours':
-        end.setHours(now.getHours() + 24);
-        break;
-      case '3-days':
-        end.setDate(now.getDate() + 3);
-        break;
-      case '5-days':
-        end.setDate(now.getDate() + 5);
-        break;
-      case '7-days':
-        end.setDate(now.getDate() + 7);
-        break;
-      default:
-        return { startDate: auctionTiming.startDate, startTime: auctionTiming.startTime, endDate: auctionTiming.endDate, endTime: auctionTiming.endTime };
-    }
-    const formattedStartDate = now.toISOString().split('T')[0];
-    const formattedEndDate = end.toISOString().split('T')[0];
-    return {
-        startDate: formattedStartDate,
-        startTime: auctionTiming.startTime, // Keep default or use current time?
-        endDate: formattedEndDate,
-        endTime: auctionTiming.endTime // Keep default or calculate?
-    };
-  };
+    // Utility Functions (provided by the hook)
+    calculateDatesFromPreset,
+    validateStep,
 
-  // --- Handlers ---
-  const handleSaleTypeSelect = (typeId) => {
-    setSaleType(typeId);
-    // Reset auction timing if switching away from auction
-    if (typeId !== 'general-auction') {
-        setAuctionTiming({
-            preset: '3-days',
-            startDate: '',
-            startTime: '10:00',
-            endDate: '',
-            endTime: '18:00',
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-        });
-    } else {
-        // Pre-fill dates if switching to auction
-        const dates = calculateDatesFromPreset('3-days');
-        setAuctionTiming(prev => ({ ...prev, ...dates }));
-    }
-  };
+    // Core Logic Functions (provided by the hook)
+    handleSaleTypeSelect,
+    handleAuctionPresetChange,
+    handleAuctionTimingChange,
+    handleVinDecode,
+    handlePhotoUpload,
+    removePhoto,
+    handleNext, // <-- Assuming you moved handleNext to the hook
+    handleBack, // <-- Assuming you moved handleBack to the hook
+    handleSubmit,
 
-  const handleAuctionPresetChange = (presetId) => {
-    setAuctionTiming(prev => {
-        if (presetId === 'custom') {
-            return { ...prev, preset: presetId };
-        } else {
-            const dates = calculateDatesFromPreset(presetId);
-            return { ...prev, preset: presetId, ...dates };
-        }
-    });
-  };
+  } = useCarListingData(); // <-- Call the hook
 
-  const handleAuctionTimingChange = (field, value) => {
-    setAuctionTiming(prev => ({ ...prev, [field]: value }));
-    // Clear preset if user manually changes a custom field
-    if (auctionTiming.preset !== 'custom') {
-        setAuctionTiming(prev => ({ ...prev, preset: 'custom' }));
-    }
-  };
 
-  const handleVinDecode = async () => {
-    if (!vehicleIdentification.vin) {
-        setVinDecodeError(t('addCarListing.vehicleId.vinRequired') || 'Please enter a VIN.');
-        return;
-    }
-    setVinDecodeLoading(true);
-    setVinDecodeError('');
-    try {
-        // --- Simulate API Call ---
-        // In a real app, you'd call your backend API here
-        // const response = await fetch(`/api/decode-vin/${vehicleIdentification.vin}`);
-        // const data = await response.json();
-        // Simulate a delay and mock data
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        const mockData = {
-            make: 'BMW',
-            model: 'X5',
-            year: '2020',
-            trim: 'xDrive40i',
-            // ... other decoded fields
-        };
-        setVehicleIdentification(prev => ({ ...prev, ...mockData }));
-        alert(t('addCarListing.vehicleId.vinDecoded') || 'VIN decoded successfully! (Simulated)');
-        // --- End Simulation ---
-    } catch (err) {
-        console.error("VIN Decode Error:", err);
-        setVinDecodeError(t('addCarListing.vehicleId.vinDecodeFailed') || 'Failed to decode VIN. Please check the number and try again.');
-    } finally {
-        setVinDecodeLoading(false);
-    }
-  };
 
-  const handlePhotoUpload = (e) => {
-    const files = Array.from(e.target.files);
-    // Basic validation and file handling logic would go here
-    // For now, we'll just add them to the state
-    setMediaAndDescription(prev => ({
-        ...prev,
-        photos: [...prev.photos, ...files.map(file => URL.createObjectURL(file))] // Store preview URLs
-    }));
-    // In a real app, you'd likely store File objects and upload them later
-  };
 
-  const removePhoto = (index) => {
-    setMediaAndDescription(prev => {
-        const newPhotos = [...prev.photos];
-        URL.revokeObjectURL(newPhotos[index]); // Clean up memory
-        newPhotos.splice(index, 1);
-        return { ...prev, photos: newPhotos };
-    });
-  };
+ 
 
-  const validateStep = (step) => {
-    const newErrors = {};
-    switch(step) {
-        case 1: // Sale Type
-            if (!saleType) newErrors.saleType = t('addCarListing.errors.saleTypeRequired') || 'Please select a sale type.';
-            if (saleType === 'direct-buy' && !mediaAndDescription.directBuyPrice) {
-                newErrors.directBuyPrice = t('addCarListing.errors.directBuyPriceRequired') || 'Direct buy price is required.';
-            }
-            break;
-        case 2: // Auction Timing (Conditional)
-            if (saleType === 'general-auction') {
-                if (!auctionTiming.startDate || !auctionTiming.startTime) {
-                    newErrors.auctionStart = t('addCarListing.errors.auctionStartRequired') || 'Auction start date and time are required.';
-                }
-                if (!auctionTiming.endDate || !auctionTiming.endTime) {
-                    newErrors.auctionEnd = t('addCarListing.errors.auctionEndRequired') || 'Auction end date and time are required.';
-                }
-                // Basic date/time comparison logic needed here
-                // Convert to Date objects for comparison
-                const startDateTimeStr = `${auctionTiming.startDate}T${auctionTiming.startTime}`;
-                const endDateTimeStr = `${auctionTiming.endDate}T${auctionTiming.endTime}`;
-                const startDateObj = new Date(startDateTimeStr);
-                const endDateObj = new Date(endDateTimeStr);
 
-                if (isNaN(startDateObj.getTime()) || isNaN(endDateObj.getTime())) {
-                     newErrors.auctionDates = t('addCarListing.errors.invalidAuctionDates') || 'Invalid date or time format.';
-                } else {
-                    const diffMs = endDateObj - startDateObj;
-                    const diffHours = diffMs / (1000 * 60 * 60);
+ 
 
-                    if (diffHours < 1) {
-                        newErrors.auctionDuration = t('addCarListing.errors.auctionTooShort') || 'Auction must be at least 1 hour long.';
-                    }
-                    if (diffHours > (14 * 24)) { // 14 days
-                        newErrors.auctionDuration = t('addCarListing.errors.auctionTooLong') || 'Auction cannot exceed 14 days.';
-                    }
-                    if (endDateObj <= new Date()) {
-                        newErrors.auctionEndFuture = t('addCarListing.errors.auctionEndFuture') || 'Auction end time must be in the future.';
-                    }
-                }
-            }
-            break;
-        case 3: // Vehicle ID
-            if (vehicleIdentification.method === 'vin' && !vehicleIdentification.vin) {
-                newErrors.vin = t('addCarListing.errors.vinRequired') || 'VIN is required.';
-            }
-            if (vehicleIdentification.method === 'manual') {
-                if (!vehicleIdentification.make) newErrors.make = t('addCarListing.errors.makeRequired') || 'Make is required.';
-                if (!vehicleIdentification.model) newErrors.model = t('addCarListing.errors.modelRequired') || 'Model is required.';
-                if (!vehicleIdentification.year) newErrors.year = t('addCarListing.errors.yearRequired') || 'Year is required.';
-                // Add validation for other manual fields as needed
-            }
-            break;
-        case 4: // Media & Description
-            if (mediaAndDescription.photos.length === 0) {
-                newErrors.photos = t('addCarListing.errors.photosRequired') || 'At least one photo is required.';
-            }
-            if (!mediaAndDescription.headline) {
-                newErrors.headline = t('addCarListing.errors.headlineRequired') || 'A headline is required.';
-            }
-            if (!mediaAndDescription.description) {
-                newErrors.description = t('addCarListing.errors.descriptionRequired') || 'A detailed description is required.';
-            }
-            if (mediaAndDescription.hasAccident && !mediaAndDescription.accidentDetails) {
-                newErrors.accidentDetails = t('addCarListing.errors.accidentDetailsRequired') || 'Please describe the accident.';
-            }
-            break;
-        case 5: // Condition Assessment
-            // Add validation for condition assessment fields if necessary
-            break;
-        case 6: // Review & Publish
-            // Generally, this step validates previous steps, so no specific validation here
-            break;
-        default:
-            break;
-    }
-    return newErrors;
-  };
+ 
 
-  const handleNext = () => {
-    const newErrors = validateStep(currentStep);
-    if (Object.keys(newErrors).length === 0) {
-        setErrors({}); // Clear previous errors on this step
-        setCurrentStep(prev => Math.min(prev + 1, TOTAL_STEPS));
-    } else {
-        setErrors(newErrors);
-    }
-  };
 
-  const handleBack = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
-  };
 
-  const handleSubmit = async (action) => { // action: 'save-draft' or 'publish'
-    const finalErrors = validateStep(currentStep); // Validate current step (Review)
-    // You might want to validate all steps here for a final check before submission
-    if (Object.keys(finalErrors).length === 0) {
-        setIsSubmitting(true);
-        try {
-            // Prepare data for submission
-            // This involves collecting data from all state objects
-            const listingData = {
-                saleType,
-                auctionTiming: saleType === 'general-auction' ? auctionTiming : undefined,
-                vehicleIdentification,
-                mediaAndDescription,
-                conditionAssessment,
-                status: action === 'publish' ? 'published' : 'draft'
-            };
 
-            console.log("Submitting Listing Data:", listingData); // For debugging/demo
 
-            // --- Simulate API Call ---
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            alert(action === 'publish' ?
-                (t('addCarListing.publishSuccess') || 'Listing published successfully!') :
-                (t('addCarListing.draftSaved') || 'Draft saved successfully!')
-            );
-            // Navigate to success page or listings dashboard
-            // navigate('/seller/my-listings');
-            // --- End Simulation ---
-        } catch (error) {
-            console.error("Submission Error:", error);
-            setErrors({ submit: error.message || (t('addCarListing.submitError') || 'An error occurred during submission. Please try again.') });
-        } finally {
-            setIsSubmitting(false);
-        }
-    } else {
-        setErrors(finalErrors);
-    }
-  };
 
-  // --- Render Functions for Steps ---
   const renderStepIndicator = () => {
     return (
       <div className="mb-8">
@@ -417,10 +127,9 @@ const AddCarListing = () => {
           >
             <div className="flex flex-col items-center text-center">
               <div className={`p-3 rounded-full mb-4 ${
-                saleType === type.id ? 'bg-[#3b396d] text-white' : 'bg-gray-100 text-gray-600'
+                saleType === type.id ? 'bg-[#3b396d] text-white' : ''
               }`}>
-                {type.icon}
-              </div>
+                   </div>
               <h3 className="font-semibold text-gray-900 mb-2">{type.title}</h3>
               <p className="text-sm text-gray-600">{type.description}</p>
             </div>
@@ -444,7 +153,7 @@ const AddCarListing = () => {
               type="number"
               id="directBuyPrice"
               name="directBuyPrice"
-              value={mediaAndDescription.directBuyPrice || ''} // Temporary storage
+              value={mediaAndDescription.directBuyPrice || ''}
               onChange={(e) => setMediaAndDescription(prev => ({ ...prev, directBuyPrice: e.target.value }))}
               className="block text-sm w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] transition"
               placeholder={t('addCarListing.saleTypes.directBuy.description') || 'Enter price'}
@@ -454,7 +163,6 @@ const AddCarListing = () => {
         </div>
       )}
 
-      {/* Conditional Private Sale Note */}
       {saleType === 'private-sale' && (
         <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200 flex items-start">
           <FiInfo className="h-5 w-5 text-yellow-600 mt-0.5 mr-3 flex-shrink-0" />
@@ -514,7 +222,7 @@ const AddCarListing = () => {
               id="startDate"
               value={auctionTiming.startDate}
               onChange={(e) => handleAuctionTimingChange('startDate', e.target.value)}
-              min={new Date().toISOString().split('T')[0]} // Today or future
+              min={new Date().toISOString().split('T')[0]}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] transition"
             />
           </div>
@@ -543,7 +251,7 @@ const AddCarListing = () => {
               id="endDate"
               value={auctionTiming.endDate}
               onChange={(e) => handleAuctionTimingChange('endDate', e.target.value)}
-              min={auctionTiming.startDate || new Date().toISOString().split('T')[0]} // Must be after start date or today
+              min={auctionTiming.startDate || new Date().toISOString().split('T')[0]}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] transition"
             />
           </div>
@@ -797,66 +505,136 @@ const AddCarListing = () => {
     </div>
   );
 
-  const renderStep4_MediaDescription = () => (
+const renderStep4_MediaDescription = () => {
+  const photoPositions = [
+    'Front left',
+    'Front right',
+    'Left rear',
+    'Right rear',
+    'Dashboard',
+    'Odometer',
+    'Interior'
+  ];
+
+  const getPositionLabel = (index) => {
+    if (index < photoPositions.length) {
+      return photoPositions[index];
+    }
+    return `Additional ${index - photoPositions.length + 1}`;
+  };
+
+  return (
     <div className="space-y-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step4.title') || 'Visual Documentation & Description'}</h2>
         <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step4.description') || 'Add photos and tell the story of your vehicle.'}</p>
       </div>
 
-      {/* Photo Upload */}
+      {/* Smart Photo Upload */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          {t('addCarListing.media.photosLabel') || 'Photos'} *
-        </label>
-        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg border-gray-300">
-          <div className="space-y-1 text-center">
-            <FiCamera className="mx-auto h-12 w-12 text-gray-400" />
-            <div className="flex text-sm text-gray-600 justify-center">
-              <label htmlFor="photo-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-[#3b396d] hover:text-[#2a285a] focus-within:outline-none">
-                <span>{t('addCarListing.media.uploadButton') || 'Upload Photos'}</span>
-                <input
-                  id="photo-upload"
-                  name="photo-upload"
-                  type="file"
-                  className="sr-only"
-                  multiple
-                  accept="image/*"
-                  onChange={handlePhotoUpload}
-                />
-              </label>
-              <p className="pl-1">{t('addCarListing.media.dragDrop') || 'or drag and drop'}</p>
-            </div>
-            <p className="text-xs text-gray-500">{t('addCarListing.media.fileTypes') || 'PNG, JPG, GIF up to 10MB'}</p>
+        <div className="flex justify-between items-center mb-3">
+          <label className="block text-sm font-medium text-gray-700">
+            {t('addCarListing.media.photosLabel') || 'Photos'} *
+          </label>
+          <span className="text-xs text-gray-500">
+            {mediaAndDescription.photos.length}/28 { 'photos uploaded'}
+          </span>
+        </div>
+
+        {/* Smart Upload Grid */}
+        <div className="border border-gray-200 rounded-lg p-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+            {photoPositions.map((position, index) => {
+              const photoUrl = mediaAndDescription.photos[index];
+              return (
+                <div key={position} className="flex flex-col items-center">
+                  <div className="relative w-full h-20 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                    {photoUrl ? (
+                      <div className="relative w-full h-full">
+                        <img
+                          src={photoUrl}
+                          alt={position}
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removePhoto(index)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                          aria-label={t('addCarListing.media.removePhoto') || "Remove photo"}
+                        >
+                          <FiX className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ) : (
+                      <label htmlFor={`photo-upload-${index}`} className="cursor-pointer w-full h-full flex items-center justify-center">
+                        <FiPlus className="h-5 w-5 text-gray-400" />
+                        <input
+                          id={`photo-upload-${index}`}
+                          type="file"
+                          className="sr-only"
+                          accept="image/*"
+                          onChange={(e) => handlePhotoUpload(e, index)}
+                        />
+                      </label>
+                    )}
+                  </div>
+                  <span className="text-xs text-gray-600 mt-1 text-center">{position}</span>
+                </div>
+              );
+            })}
+
+            {/* Additional Photos */}
+            {mediaAndDescription.photos.slice(photoPositions.length).map((photoUrl, index) => {
+              const actualIndex = photoPositions.length + index;
+              return (
+                <div key={actualIndex} className="flex flex-col items-center">
+                  <div className="relative w-full h-20 border border-gray-200 rounded-lg flex items-center justify-center bg-gray-50">
+                    <img
+                      src={photoUrl}
+                      alt={`Additional ${index + 1}`}
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(actualIndex)}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                      aria-label={t('addCarListing.media.removePhoto') || "Remove photo"}
+                    >
+                      <FiX className="h-3 w-3" />
+                    </button>
+                  </div>
+                  <span className="text-xs text-gray-600 mt-1 text-center">
+                    {t('addCarListing.media.additional') || 'Additional'} {index + 1}
+                  </span>
+                </div>
+              );
+            })}
+
+            {/* Smart Upload Button (only show if under limit) */}
+            {mediaAndDescription.photos.length < 28 && (
+              <div className="flex flex-col items-center">
+                <div className="relative w-full h-20 border-2 border-dashed border-blue-300 rounded-lg flex flex-col items-center justify-center bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer">
+                  <FiUpload className="h-5 w-5 text-blue-500" />
+                  <span className="text-xs text-blue-600 mt-1 text-center px-1">
+                    {'Smart Upload'}
+                  </span>
+                  <input
+                    type="file"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    multiple
+                    accept="image/*"
+                    onChange={(e) => handlePhotoUpload(e)}
+                  />
+                </div>
+                <span className="text-xs text-gray-500 mt-1 text-center">
+                  {t('media.maxPhotos') || 'Max. 28 photos'}
+                </span>
+              </div>
+            )}
           </div>
         </div>
-        {errors.photos && <p className="mt-2 text-sm text-red-600">{errors.photos}</p>}
 
-        {/* Preview Uploaded Photos */}
-        {mediaAndDescription.photos.length > 0 && (
-          <div className="mt-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">{t('addCarListing.media.previewTitle') || 'Preview'}</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {mediaAndDescription.photos.map((photoUrl, index) => (
-                <div key={index} className="relative group">
-                  <img
-                    src={photoUrl} // This is the preview URL from URL.createObjectURL
-                    alt={`Preview ${index + 1}`}
-                    className="h-24 w-full object-cover rounded-lg border border-gray-200"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removePhoto(index)}
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                    aria-label={t('addCarListing.media.removePhoto') || "Remove photo"}
-                  >
-                    <FiTrash2 className="h-3 w-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {errors.photos && <p className="mt-2 text-sm text-red-600">{errors.photos}</p>}
       </div>
 
       {/* Description Fields */}
@@ -927,22 +705,21 @@ const AddCarListing = () => {
                     {t('yes') || 'Yes'}
                   </label>
                 </div>
-                </div>
                 <div className="flex items-center">
                   <input
                     id="accident-no"
                     name="has-accident"
                     type="radio"
                     checked={mediaAndDescription.hasAccident === false}
-                    onChange={() => setMediaAndDescription(prev => ({ ...prev, hasAccident: false, accidentDetails: '' }))} // Reset details if 'No' is selected
+                    onChange={() => setMediaAndDescription(prev => ({ ...prev, hasAccident: false, accidentDetails: '' }))}
                     className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
                   />
                   <label htmlFor="accident-no" className="ml-2 block text-sm text-gray-700">
                     {t('no') || 'No'}
                   </label>
                 </div>
-              </fieldset>
-            
+              </div>
+            </fieldset>
           </div>
         </div>
 
@@ -966,155 +743,501 @@ const AddCarListing = () => {
       </div>
     </div>
   );
+};
+const renderStep5_ExteriorOptions = () => {
+ 
+  const handleDamagePointClick = (position) => {
+    if (damagePoints.includes(position)) {
+      setDamagePoints(prev => prev.filter(p => p !== position));
+    } else {
+      setDamagePoints(prev => [...prev, position]);
+    }
+  };
 
-  const renderStep5_Condition = () => (
+  const handleOptionChange = (option) => {
+    if (selectedOptions.includes(option)) {
+      setSelectedOptions(prev => prev.filter(o => o !== option));
+    } else {
+      setSelectedOptions(prev => [...prev, option]);
+    }
+  };
+
+  const resetAll = () => {
+    setDamagePoints([]);
+    setSelectedOptions([]);
+  };
+
+  const getPositionLabel = (position) => {
+    const labels = {
+      'front-left': t('addCarListing.exterior.frontLeft') || 'Front Left',
+      'front-right': t('addCarListing.exterior.frontRight') || 'Front Right',
+      'left-side': t('addCarListing.exterior.leftSide') || 'Left Side',
+      'right-side': t('addCarListing.exterior.rightSide') || 'Right Side',
+      'rear-left': t('addCarListing.exterior.rearLeft') || 'Rear Left',
+      'rear-right': t('addCarListing.exterior.rearRight') || 'Rear Right',
+      'roof': t('addCarListing.exterior.roof') || 'Roof',
+      'trunk': t('addCarListing.exterior.trunk') || 'Trunk'
+    };
+    return labels[position] || position.replace('-', ' ');
+  };
+
+  return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step5.title') || 'Condition Assessment'}</h2>
-        <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step5.description') || 'Provide a detailed condition report to build trust with buyers.'}</p>
+        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step5.title') || 'Exterior & Options'}</h2>
+        <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step5.description') || 'Mark any damages and select exterior options.'}</p>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-5">
-        <h3 className="font-medium text-gray-800 mb-4 flex items-center">
-          <FiInfo className="mr-2 h-4 w-4 text-[#3b396d]" />
-          {t('addCarListing.condition.damageReport.title') || 'Damage Report'}
-        </h3>
-        <p className="text-sm text-gray-600 mb-4">
-          {t('addCarListing.condition.damageReport.description') || 'Please indicate any damage on the vehicle. (Interactive diagram would go here in a real implementation)'}
-        </p>
-        <div className="text-center p-8 bg-gray-50 rounded border-2 border-dashed border-gray-300">
-          <FiInfo className="mx-auto h-10 w-10 text-gray-400 mb-2" />
-          <p className="text-gray-500 text-sm">
-            {t('addCarListing.condition.damageReport.placeholder') || 'Interactive car diagram for damage reporting (Not implemented in this demo)'}
-          </p>
-        </div>
-        {/* In a real app, this would be a complex interactive SVG or canvas element */}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Technical Checklist */}
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h3 className="font-medium text-gray-800 mb-4">{t('addCarListing.condition.technicalChecklist.title') || 'Technical Checklist'}</h3>
-          <div className="space-y-3">
-            {Object.entries(conditionAssessment.technicalChecklist).map(([key, value]) => (
-              <div key={key} className="flex items-center justify-between">
-                <span className="text-sm text-gray-700 capitalize">{key}</span>
-                <select
-                  value={value}
-                  onChange={(e) => setConditionAssessment(prev => ({
-                    ...prev,
-                    technicalChecklist: { ...prev.technicalChecklist, [key]: e.target.value }
-                  }))}
-                  className="text-sm border-gray-300 rounded focus:ring-[#3b396d] focus:border-[#3b396d]"
-                >
-                  <option value="good">{t('addCarListing.condition.rating.good') || 'Good'}</option>
-                  <option value="average">{t('addCarListing.condition.rating.average') || 'Average'}</option>
-                  <option value="poor">{t('addCarListing.condition.rating.poor') || 'Poor'}</option>
-                  <option value="not-working">{t('addCarListing.condition.rating.notWorking') || 'Not Working'}</option>
-                </select>
-              </div>
-            ))}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              {t('addCarListing.exterior.damageTitle') || 'Exterior | Damages'}
+            </h3>
+            <button
+              onClick={resetAll}
+              className="text-sm text-red-600 hover:text-red-800 font-medium"
+            >
+              {t('addCarListing.exterior.reset') || 'Reset'}
+            </button>
           </div>
-        </div>
 
-        {/* Interior Checklist */}
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h3 className="font-medium text-gray-800 mb-4">{t('addCarListing.condition.interiorChecklist.title') || 'Interior Checklist'}</h3>
-          <div className="space-y-3">
-            {Object.entries(conditionAssessment.interiorChecklist).map(([key, value]) => (
-              <div key={key} className="flex items-center justify-between">
-                <span className="text-sm text-gray-700 capitalize">{key}</span>
-                <select
-                  value={value}
-                  onChange={(e) => setConditionAssessment(prev => ({
-                    ...prev,
-                    interiorChecklist: { ...prev.interiorChecklist, [key]: e.target.value }
-                  }))}
-                  className="text-sm border-gray-300 rounded focus:ring-[#3b396d] focus:border-[#3b396d]"
-                >
-                  <option value="good">{t('addCarListing.condition.rating.good') || 'Good'}</option>
-                  <option value="average">{t('addCarListing.condition.rating.average') || 'Average'}</option>
-                  <option value="poor">{t('addCarListing.condition.rating.poor') || 'Poor'}</option>
-                  <option value="worn">{t('addCarListing.condition.rating.worn') || 'Worn'}</option>
-                </select>
-              </div>
-            ))}
+          <div className="mb-4">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={damagePoints.length === 0}
+                onChange={() => {
+                  if (damagePoints.length > 0) {
+                    setDamagePoints([]);
+                  }
+                }}
+                className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
+              />
+              <span className="ml-2 text-sm text-gray-700">
+                {t('addCarListing.exterior.noDamage') || 'Vehicle has no exterior damage'}
+              </span>
+            </label>
           </div>
-        </div>
-      </div>
 
-      {/* Tyre Report */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5">
-        <h3 className="font-medium text-gray-800 mb-4">{t('addCarListing.condition.tyreReport.title') || 'Tyre Report'}</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {Object.entries(conditionAssessment.tyreReport).map(([tyrePosition, tyreData]) => (
-            <div key={tyrePosition} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
-              <h4 className="text-sm font-medium text-gray-700 mb-2 capitalize">{tyrePosition.replace(/([A-Z])/g, ' $1').trim()}</h4>
-              <div className="space-y-2">
-                <div>
-                  <label className="block text-xs text-gray-600 mb-1">{t('addCarListing.condition.tyreReport.brand') || 'Brand'}</label>
-                  <input
-                    type="text"
-                    value={tyreData.brand}
-                    onChange={(e) => setConditionAssessment(prev => ({
-                      ...prev,
-                      tyreReport: {
-                        ...prev.tyreReport,
-                        [tyrePosition]: { ...prev.tyreReport[tyrePosition], brand: e.target.value }
-                      }
-                    }))}
-                    className="w-full text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]"
-                    placeholder={t('addCarListing.condition.tyreReport.brandPlaceholder') || 'e.g., Michelin'}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-gray-600 mb-1">{t('addCarListing.condition.tyreReport.treadDepth') || 'Tread Depth (mm)'}</label>
-                  <input
-                    type="number"
-                    value={tyreData.treadDepth}
-                    onChange={(e) => setConditionAssessment(prev => ({
-                      ...prev,
-                      tyreReport: {
-                        ...prev.tyreReport,
-                        [tyrePosition]: { ...prev.tyreReport[tyrePosition], treadDepth: e.target.value }
-                      }
-                    }))}
-                    className="w-full text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]"
-                    placeholder="e.g., 6.5"
-                    step="0.5"
-                    min="0"
-                    max="20"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-gray-600 mb-1">{t('addCarListing.condition.tyreReport.condition') || 'Condition'}</label>
-                  <select
-                    value={tyreData.condition}
-                    onChange={(e) => setConditionAssessment(prev => ({
-                      ...prev,
-                      tyreReport: {
-                        ...prev.tyreReport,
-                        [tyrePosition]: { ...prev.tyreReport[tyrePosition], condition: e.target.value }
-                      }
-                    }))}
-                    className="w-full text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]"
+          <div className="relative h-96 bg-gray-100 rounded-lg overflow-hidden">
+            <img
+                                          src="/exterior_view.png"
+
+              alt="Car top view"
+              className="w-full h-full object-contain opacity-50"
+            />
+            
+            {/* Damage points overlay */}
+            <div className="absolute inset-0 pointer-events-none">
+              {/* Front left */}
+              <button
+                onClick={() => handleDamagePointClick('front-left')}
+                className={`absolute top-1/4 left-1/4 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  damagePoints.includes('front-left') 
+                    ? 'bg-red-500 scale-110 z-10' 
+                    : 'bg-white bg-opacity-70 hover:bg-opacity-100'
+                }`}
+                aria-label="Front left damage"
+              >
+                {damagePoints.includes('front-left') && (
+                  <FiX className="h-5 w-5 text-white" />
+                )}
+              </button>
+              
+              {/* Front right */}
+              <button
+                onClick={() => handleDamagePointClick('front-right')}
+                className={`absolute top-1/4 right-1/4 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  damagePoints.includes('front-right') 
+                    ? 'bg-red-500 scale-110 z-10' 
+                    : 'bg-white bg-opacity-70 hover:bg-opacity-100'
+                }`}
+                aria-label="Front right damage"
+              >
+                {damagePoints.includes('front-right') && (
+                  <FiX className="h-5 w-5 text-white" />
+                )}
+              </button>
+              
+              {/* Left side */}
+              <button
+                onClick={() => handleDamagePointClick('left-side')}
+                className={`absolute top-1/2 left-1/4 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  damagePoints.includes('left-side') 
+                    ? 'bg-red-500 scale-110 z-10' 
+                    : 'bg-white bg-opacity-70 hover:bg-opacity-100'
+                }`}
+                aria-label="Left side damage"
+              >
+                {damagePoints.includes('left-side') && (
+                  <FiX className="h-5 w-5 text-white" />
+                )}
+              </button>
+              
+              {/* Right side */}
+              <button
+                onClick={() => handleDamagePointClick('right-side')}
+                className={`absolute top-1/2 right-1/4 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  damagePoints.includes('right-side') 
+                    ? 'bg-red-500 scale-110 z-10' 
+                    : 'bg-white bg-opacity-70 hover:bg-opacity-100'
+                }`}
+                aria-label="Right side damage"
+              >
+                {damagePoints.includes('right-side') && (
+                  <FiX className="h-5 w-5 text-white" />
+                )}
+              </button>
+              
+              {/* Rear left */}
+              <button
+                onClick={() => handleDamagePointClick('rear-left')}
+                className={`absolute bottom-1/4 left-1/4 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  damagePoints.includes('rear-left') 
+                    ? 'bg-red-500 scale-110 z-10' 
+                    : 'bg-white bg-opacity-70 hover:bg-opacity-100'
+                }`}
+                aria-label="Rear left damage"
+              >
+                {damagePoints.includes('rear-left') && (
+                  <FiX className="h-5 w-5 text-white" />
+                )}
+              </button>
+              
+              {/* Rear right */}
+              <button
+                onClick={() => handleDamagePointClick('rear-right')}
+                className={`absolute bottom-1/4 right-1/4 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  damagePoints.includes('rear-right') 
+                    ? 'bg-red-500 scale-110 z-10' 
+                    : 'bg-white bg-opacity-70 hover:bg-opacity-100'
+                }`}
+                aria-label="Rear right damage"
+              >
+                {damagePoints.includes('rear-right') && (
+                  <FiX className="h-5 w-5 text-white" />
+                )}
+              </button>
+              
+              {/* Roof */}
+              <button
+                onClick={() => handleDamagePointClick('roof')}
+                className={`absolute top-1/4 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  damagePoints.includes('roof') 
+                    ? 'bg-red-500 scale-110 z-10' 
+                    : 'bg-white bg-opacity-70 hover:bg-opacity-100'
+                }`}
+                aria-label="Roof damage"
+              >
+                {damagePoints.includes('roof') && (
+                  <FiX className="h-5 w-5 text-white" />
+                )}
+              </button>
+              
+              {/* Trunk */}
+              <button
+                onClick={() => handleDamagePointClick('trunk')}
+                className={`absolute bottom-1/4 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  damagePoints.includes('trunk') 
+                    ? 'bg-red-500 scale-110 z-10' 
+                    : 'bg-white bg-opacity-70 hover:bg-opacity-100'
+                }`}
+                aria-label="Trunk damage"
+              >
+                {damagePoints.includes('trunk') && (
+                  <FiX className="h-5 w-5 text-white" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Selected Damage Areas */}
+          {damagePoints.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">
+                {t('addCarListing.exterior.selectedDamages') || 'Selected Damage Areas'}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {damagePoints.map((point) => (
+                  <span
+                    key={point}
+                    className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-red-100 text-red-800"
                   >
-                    <option value="good">{t('addCarListing.condition.rating.good') || 'Good'}</option>
-                    <option value="average">{t('addCarListing.condition.rating.average') || 'Average'}</option>
-                    <option value="poor">{t('addCarListing.condition.rating.poor') || 'Poor'}</option>
-                  </select>
-                </div>
+                    {getPositionLabel(point)}
+                  </span>
+                ))}
               </div>
+            </div>
+          )}
+        </div>
+
+        {/* Exterior Options Section */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              {t('addCarListing.exterior.optionsTitle') || 'Exterior | Options'}
+            </h3>
+            <button
+              onClick={resetAll}
+              className="text-sm text-red-600 hover:text-red-800 font-medium"
+            >
+              {t('addCarListing.exterior.reset') || 'Reset'}
+            </button>
+          </div>
+
+          <div className="mb-4">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={selectedOptions.length === 0}
+                onChange={() => {
+                  if (selectedOptions.length > 0) {
+                    setSelectedOptions([]);
+                  }
+                }}
+                className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
+              />
+              <span className="ml-2 text-sm text-gray-700">
+                {t('addCarListing.exterior.noOptions') || 'Vehicle has no exterior options'}
+              </span>
+            </label>
+          </div>
+
+          <div className="space-y-3">
+            {[
+              { value: 'alloy-wheels', label: t('addCarListing.exterior.alloyWheels') || 'Alloy wheels' },
+              { value: 'metallic-paint', label: t('addCarListing.exterior.metallicPaint') || 'Metallic paint' },
+              { value: 'panoramic-roof', label: t('addCarListing.exterior.panoramicRoof') || 'Panoramic roof' },
+              { value: 'sunroof', label: t('addCarListing.exterior.sunroof') || 'Sunroof / open roof' },
+              { value: 'parking-sensors', label: t('addCarListing.exterior.parkingSensors') || 'Parking sensors' },
+              { value: 'backup-camera', label: t('addCarListing.exterior.backupCamera') || 'Backup camera' },
+              { value: 'tow-hitch', label: t('addCarListing.exterior.towHitch') || 'Tow hitch' },
+              { value: 'air-suspension', label: t('addCarListing.exterior.airSuspension') || 'Air suspension' },
+              { value: 'xenon-headlights', label: t('addCarListing.exterior.xenonHeadlights') || 'Xenon headlights' },
+              { value: 'led-lighting', label: t('addCarListing.exterior.ledLighting') || 'LED lighting' },
+            ].map((option) => (
+              <label key={option.value} className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedOptions.includes(option.value)}
+                  onChange={() => handleOptionChange(option.value)}
+                  className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
+                />
+                <span className="ml-2 text-sm text-gray-700">{option.label}</span>
+              </label>
+            ))}
+          </div>
+
+          {/* Extra options dropdown */}
+          <div className="mt-4">
+            <label htmlFor="extra-options" className="block text-sm font-medium text-gray-700 mb-2">
+              {t('addCarListing.exterior.extraOptions') || 'Extra options'}
+            </label>
+            <select
+              id="extra-options"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]"
+            >
+              <option value="">{t('addCarListing.exterior.selectExtra') || 'Select extra options...'}</option>
+              <option value="custom-bodykit">Custom body kit</option>
+              <option value="carbon-fiber">Carbon fiber parts</option>
+              <option value="spoiler">Spoiler</option>
+              <option value="custom-exhaust">Custom exhaust</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          {/* Selected Options List */}
+          {selectedOptions.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">
+                {t('addCarListing.exterior.selectedOptions') || 'Selected Options'}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {selectedOptions.map((option) => (
+                  <span
+                    key={option}
+                    className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800"
+                  >
+                    {t(`addCarListing.exterior.${option}`) || option.replace('-', ' ')}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+// Make sure setConditionAssessment is destructured from useCarListingData in your main component
+// const { ..., conditionAssessment, setConditionAssessment, ... } = useCarListingData();
+
+const renderStep6_Condition = () => (
+  <div className="space-y-6">
+    {/* Step Title and Description - Corrected Translations */}
+    <div className="text-center mb-6">
+      <h2 className="text-2xl font-bold text-gray-900">
+        {t('addCarListing.stepDetails.step5.title') || 'Condition Assessment'} {/* Fixed key */}
+      </h2>
+      <p className="text-gray-600 mt-2">
+        {t('addCarListing.stepDetails.step5.description') || 'Provide a detailed condition report to build trust with buyers.'} {/* Fixed key */}
+      </p>
+    </div>
+
+
+
+    {/* Checklists Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      {/* Technical Checklist */}
+      <div className="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 className="font-medium text-gray-800 mb-4">
+          {t('addCarListing.condition.technicalChecklist.title') || 'Technical Checklist'}
+        </h3>
+        <div className="space-y-3">
+          {/* Safely map over technical checklist entries */}
+          {Object.entries(conditionAssessment.technicalChecklist || {}).map(([key, value]) => (
+            <div key={key} className="flex items-center justify-between">
+              <span className="text-sm text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span> {/* Consistent key formatting */}
+              <select
+                value={value}
+                onChange={(e) => setConditionAssessment(prev => ({
+                  ...prev,
+                  technicalChecklist: { ...prev.technicalChecklist, [key]: e.target.value }
+                }))}
+                className="text-sm border border-gray-300 rounded focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]" // Added border class
+              >
+                <option value="good">{t('addCarListing.condition.rating.good') || 'Good'}</option>
+                <option value="average">{t('addCarListing.condition.rating.average') || 'Average'}</option>
+                <option value="poor">{t('addCarListing.condition.rating.poor') || 'Poor'}</option>
+                <option value="not-working">{t('addCarListing.condition.rating.notWorking') || 'Not Working'}</option>
+              </select>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Interior Checklist */}
+      <div className="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 className="font-medium text-gray-800 mb-4">
+          {t('addCarListing.condition.interiorChecklist.title') || 'Interior Checklist'}
+        </h3>
+        <div className="space-y-3">
+          {/* Safely map over interior checklist entries */}
+          {Object.entries(conditionAssessment.interiorChecklist || {}).map(([key, value]) => (
+            <div key={key} className="flex items-center justify-between">
+              <span className="text-sm text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span> {/* Consistent key formatting */}
+              <select
+                value={value}
+                onChange={(e) => setConditionAssessment(prev => ({
+                  ...prev,
+                  interiorChecklist: { ...prev.interiorChecklist, [key]: e.target.value }
+                }))}
+                className="text-sm border border-gray-300 rounded focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]" // Added border class
+              >
+                <option value="good">{t('addCarListing.condition.rating.good') || 'Good'}</option>
+                <option value="average">{t('addCarListing.condition.rating.average') || 'Average'}</option>
+                <option value="poor">{t('addCarListing.condition.rating.poor') || 'Poor'}</option>
+                <option value="worn">{t('addCarListing.condition.rating.worn') || 'Worn'}</option>
+              </select>
             </div>
           ))}
         </div>
       </div>
     </div>
-  );
 
-  const renderStep6_ReviewPublish = () => {
-    // This step renders a summary of the data entered in previous steps.
-    // In a real app, you'd display the actual data.
+    {/* Tyre Report Section */}
+    <div className="bg-white border border-gray-200 rounded-lg p-5">
+      <h3 className="font-medium text-gray-800 mb-4">
+        {t('addCarListing.condition.tyreReport.title') || 'Tyre Report'}
+      </h3>
+      {/* Grid for Tyre Inputs */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        {/* Safely map over tyre report entries */}
+        {Object.entries(conditionAssessment.tyreReport || {}).map(([tyrePosition, tyreData]) => (
+          <div key={tyrePosition} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+            {/* Improved tyre position label formatting */}
+            <h4 className="text-sm font-medium text-gray-700 mb-2">
+              {tyrePosition
+                .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+                .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter
+              }
+            </h4>
+            <div className="space-y-2">
+              {/* Tyre Brand Input */}
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  {t('addCarListing.condition.tyreReport.brand') || 'Brand'}
+                </label>
+                <input
+                  type="text"
+                  value={tyreData?.brand || ''} 
+                  onChange={(e) => setConditionAssessment(prev => ({
+                    ...prev,
+                    tyreReport: {
+                      ...prev.tyreReport,
+                      [tyrePosition]: { ...prev.tyreReport[tyrePosition], brand: e.target.value }
+                    }
+                  }))}
+                  className="w-full text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]"
+                  placeholder={t('addCarListing.condition.tyreReport.brandPlaceholder') || 'e.g., Michelin'}
+                />
+              </div>
+              {/* Tread Depth Input */}
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  {t('addCarListing.condition.tyreReport.treadDepth') || 'Tread Depth (mm)'}
+                </label>
+                <input
+                  type="number"
+                  value={tyreData?.treadDepth || ''} 
+                  onChange={(e) => setConditionAssessment(prev => ({
+                    ...prev,
+                    tyreReport: {
+                      ...prev.tyreReport,
+                      [tyrePosition]: { ...prev.tyreReport[tyrePosition], treadDepth: e.target.value }
+                    }
+                  }))}
+                  className="w-full text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]"
+                  placeholder="e.g., 6.5"
+                  step="0.5"
+                  min="0"
+                  max="20"
+                />
+              </div>
+              {/* Tyre Condition Select */}
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  {t('addCarListing.condition.tyreReport.condition') || 'Condition'}
+                </label>
+                <select
+                  value={tyreData?.condition || 'good'}
+                  onChange={(e) => setConditionAssessment(prev => ({
+                    ...prev,
+                    tyreReport: {
+                      ...prev.tyreReport,
+                      [tyrePosition]: { ...prev.tyreReport[tyrePosition], condition: e.target.value }
+                    }
+                  }))}
+                  className="w-full text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]"
+                >
+                  <option value="good">{t('addCarListing.condition.rating.good') || 'Good'}</option>
+                  <option value="average">{t('addCarListing.condition.rating.average') || 'Average'}</option>
+                  <option value="poor">{t('addCarListing.condition.rating.poor') || 'Poor'}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+
+  const renderStep7_ReviewPublish = () => {
+ 
     return (
       <div className="space-y-6">
         <div className="text-center mb-6">
@@ -1277,37 +1400,30 @@ const AddCarListing = () => {
   };
 
   const renderCurrentStep = () => {
-    // Conditional rendering based on sale type and current step
     if (currentStep === 2 && saleType !== 'general-auction') {
-        // Skip Step 2 (Auction Timing) if not an auction
         setCurrentStep(3);
-        return null; // Or render a loading/skip indicator briefly
+        return null;
     }
 
-    switch (currentStep) {
-      case 1: return renderStep1_SaleType();
-      case 2: return renderStep2_AuctionTiming();
-      case 3: return renderStep3_VehicleId();
-      case 4: return renderStep4_MediaDescription();
-      case 5: return renderStep5_Condition();
-      case 6: return renderStep6_ReviewPublish();
-      default: return <div>{t('addCarListing.unknownStep') || 'Unknown step'}</div>;
-    }
+   switch (currentStep) {
+  case 1: return renderStep1_SaleType();
+  case 2: return renderStep2_AuctionTiming();
+  case 3: return renderStep3_VehicleId();
+  case 4: return renderStep4_MediaDescription();
+  case 5: return renderStep5_ExteriorOptions();
+  case 6: return renderStep6_Condition();      
+  case 7: return renderStep7_ReviewPublish();  
+  default: return <div>{t('addCarListing.unknownStep') || 'Unknown step'}</div>;
+}
   };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-white shadow-sm">
-            <img
-              src="/icon.svg"
-              alt="Car Network Logo"
-              className="h-10 w-auto"
-            />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900">{t('addCarListing.title') || 'Add New Car Listing'}</h1>
+         
+          <h1 className="text-3xl font-bold text-gray-900 mt-12">{t('addCarListing.title') || 'Add New Car Listing'}</h1>
           <p className="text-gray-600 mt-2">{t('addCarListing.subtitle') || 'Follow the steps to list your vehicle for sale.'}</p>
         </div>
 

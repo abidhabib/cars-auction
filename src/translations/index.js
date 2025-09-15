@@ -2,6 +2,7 @@ import { steps } from "framer-motion";
 
 export const translations = {
   en: {
+
     cookies: {
       message: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies as described in our Cookie Policy.",
       accept: "Accept",
@@ -37,7 +38,9 @@ export const translations = {
       "subscriptionFailed": "Subscription failed. Please try again."
     }
   },
- 
+   media:{
+maxPhotos:'Max Photos'
+  },
     languageName: "English",
     // Header
     header: {
@@ -154,6 +157,8 @@ export const translations = {
         }
       ]
     },
+
+    
     // Daily Cars Section
     dailyCars: {
       title: "More than 3,000 cars added daily",
@@ -261,6 +266,7 @@ export const translations = {
     viewDetails: 'View Details',
     bid: 'Bid',
     buyItNow: 'Buy It Now',
+    active:'Active',
     
     // Filter Categories
     make: 'Make',
@@ -803,7 +809,7 @@ phonePlaceholder:"+3412345671",
   delete: 'Delete',
   view: 'View',
   back: 'Back',
-    
+    all: 'All',
     // Sidebar Navigation
     sidebar: {
       overview: 'Overview',
@@ -812,7 +818,9 @@ phonePlaceholder:"+3412345671",
       sales: 'Sales & Transactions',
       messages: 'Messages',
       analytics: 'Analytics',
-      settings: 'Settings'
+      settings: 'Settings',
+      addVehicle:'Publish Vehicle',
+      buyCar:'Buy Car'
     },
 
     // Stats Cards
@@ -946,6 +954,7 @@ addFeature:'Add Feature',
   ,
   
 addCarListing: {
+
     title: 'Add New Car Listing',
     subtitle: 'Follow the steps to list your vehicle for sale.',
     unknownStep: 'Unknown step',
@@ -968,6 +977,43 @@ addCarListing: {
       accidentDetailsRequired: 'Please describe the accident.',
       submit: 'An error occurred during submission. Please try again.',
     },
+       exterior: {
+      damageTitle: 'Exterior | Damages',
+      optionsTitle: 'Exterior | Options',
+      noDamage: 'Vehicle has no exterior damage',
+      noOptions: 'Vehicle has no exterior options',
+      selectedDamages: 'Selected Damage Areas',
+      selectedOptions: 'Selected Options',
+      extraOptions: 'Extra options',
+      selectExtra: 'Select extra options...',
+      frontLeft: 'Front Left',
+      frontRight: 'Front Right',
+      leftSide: 'Left Side',
+      rightSide: 'Right Side',
+      rearLeft: 'Rear Left',
+      rearRight: 'Rear Right',
+      roof: 'Roof',
+      trunk: 'Trunk',
+      alloyWheels: 'Alloy wheels',
+      metallicPaint: 'Metallic paint',
+      panoramicRoof: 'Panoramic roof',
+      sunroof: 'Sunroof / open roof',
+      parkingSensors: 'Parking sensors',
+      backupCamera: 'Backup camera',
+      towHitch: 'Tow hitch',
+      airSuspension: 'Air suspension',
+      xenonHeadlights: 'Xenon headlights',
+      ledLighting: 'LED lighting',
+      customBodykit: 'Custom body kit',
+      carbonFiber: 'Carbon fiber parts',
+      spoiler: 'Spoiler',
+      customExhaust: 'Custom exhaust',
+      other: 'Other',
+      reset: 'Reset'
+    },
+  
+ 
+
     saveDraft: 'Save Draft',
     savingDraft: 'Saving Draft...',
     publishButton: 'Publish Listing',
@@ -978,12 +1024,13 @@ addCarListing: {
 
     // Step names for the progress indicator
     stepNames: {
-      step1: 'Sale Type',
+     step1: 'Sale Type',
       step2: 'Auction Timing',
-      step3: 'Vehicle ID',
+      step3: 'Vehicle Identification',
       step4: 'Media & Description',
-      step5: 'Condition',
-      step6: 'Review & Publish',
+      step5: 'Exterior & Options', // Add this line
+      step6: 'Condition Assessment',
+      step7: 'Review & Publish'
     },
 
     saleTypes: {
@@ -1135,15 +1182,12 @@ addCarListing: {
   edit: 'Edit',
   back: 'Back',
   next: 'Next',
-  // ... (other existing translations)
 
   loading: 'Loading...', // General loading message
   downloadReport: 'Download Report',
-  back: 'Back',
-  next: 'Next',
+
   logout: 'Logout',
   notifications: 'Notifications',
-  downloadReport: 'Download Report',
   viewDetails: 'View Details',
   copyLink: 'Copy Link',
   filters: 'Filters',
@@ -1175,7 +1219,9 @@ addCarListing: {
       "subscriptionFailed": "Die Anmeldung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
     }
   },
-
+  media:{
+    maxPhotos: 'Maximale Fotos'
+  },
   languageName: "Deutsch",
   // Header
    months: {
@@ -1870,7 +1916,10 @@ phonePlaceholder:"+3412345671",
       sales: 'Verkäufe & Transaktionen',
       messages: 'Nachrichten',
       analytics: 'Analyse',
-      settings: 'Einstellungen'
+      settings: 'Einstellungen',
+      addVehicle: 'Fahrzeug hinzufügen',
+buyCar: 'Auto kaufen'
+
     },
 
     // Stats Cards
@@ -1981,24 +2030,13 @@ phonePlaceholder:"+3412345671",
     comingSoon: 'Demnächst verfügbar',
     comingSoonDesc: 'Dieser Bereich befindet sich in der Entwicklung.',
     viewAll: 'Alle anzeigen',
-    viewDetails: 'Details anzeigen',
-    back: 'Zurück zur Liste',
-    copyLink: 'Link kopieren',
-    edit: 'Bearbeiten',
-    delete: 'Löschen',
-    cancel: 'Abbrechen',
-    retry: 'Erneut versuchen',
-    deleting: 'Wird gelöscht...',
-    previous: 'Zurück',
-    next: 'Weiter',
-    to: 'bis',
-    of: 'von',
-    results: 'Ergebnisse'
+   
   }
 
   ,
   
-   addCarListing: {
+    addCarListing: {
+
     title: 'Neues Fahrzeug inserieren',
     subtitle: 'Folgen Sie den Schritten, um Ihr Fahrzeug zum Verkauf anzubieten.',
     unknownStep: 'Unbekannter Schritt',
@@ -2021,6 +2059,42 @@ phonePlaceholder:"+3412345671",
       accidentDetailsRequired: 'Bitte beschreiben Sie den Unfall.',
       submit: 'Beim Absenden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
     },
+
+exterior: {
+  damageTitle: 'Außen | Schäden',
+  optionsTitle: 'Außen | Optionen',
+  noDamage: 'Fahrzeug hat keine Außenschäden',
+  noOptions: 'Fahrzeug hat keine Außenoptionen',
+  selectedDamages: 'Ausgewählte Schadensbereiche',
+  selectedOptions: 'Ausgewählte Optionen',
+  extraOptions: 'Zusätzliche Optionen',
+  selectExtra: 'Zusätzliche Optionen auswählen...',
+  frontLeft: 'Vorne links',
+  frontRight: 'Vorne rechts',
+  leftSide: 'Linke Seite',
+  rightSide: 'Rechte Seite',
+  rearLeft: 'Hinten links',
+  rearRight: 'Hinten rechts',
+  roof: 'Dach',
+  trunk: 'Kofferraum',
+  alloyWheels: 'Leichtmetallfelgen',
+  metallicPaint: 'Metallic-Lackierung',
+  panoramicRoof: 'Panoramadach',
+  sunroof: 'Schiebedach / offenes Dach',
+  parkingSensors: 'Parksensoren',
+  backupCamera: 'Rückfahrkamera',
+  towHitch: 'Anhängerkupplung',
+  airSuspension: 'Luftfederung',
+  xenonHeadlights: 'Xenon-Scheinwerfer',
+  ledLighting: 'LED-Beleuchtung',
+  customBodykit: 'Individuelles Bodykit',
+  carbonFiber: 'Carbonteile',
+  spoiler: 'Spoiler',
+  customExhaust: 'Individuelle Auspuffanlage',
+  other: 'Sonstiges',
+  reset: 'Zurücksetzen'
+}
+,
     saveDraft: 'Entwurf speichern',
     savingDraft: 'Entwurf wird gespeichert...',
     publishButton: 'Inserat veröffentlichen',
@@ -2031,12 +2105,14 @@ phonePlaceholder:"+3412345671",
 
     // Step names for the progress indicator
     stepNames: {
-      step1: 'Verkaufsart',
-      step2: 'Auktionszeit',
-      step3: 'Fahrzeug-ID',
-      step4: 'Medien & Beschreibung',
-      step5: 'Zustand',
-      step6: 'Überprüfen & Veröffentlichen',
+     step1: 'Verkaufsart',
+step2: 'Auktionszeit',
+step3: 'Fahrzeugidentifikation',
+step4: 'Medien & Beschreibung',
+step5: 'Außen & Optionen',
+step6: 'Zustandsbewertung',
+step7: 'Überprüfen & Veröffentlichen'
+
     },
 
     saleTypes: {
@@ -2223,6 +2299,9 @@ phonePlaceholder:"+3412345671",
     oct: 'Okt',
     nov: 'Nov',
     dec: 'Dec',
+  },
+  media: {
+    maxPhotos: 'Maximale foto’s'
   },
     // Header
     newsletter: {
@@ -2901,7 +2980,10 @@ buyCars: {
       sales: 'Verkoop & Transacties',
       messages: 'Berichten',
       analytics: 'Analyse',
-      settings: 'Instellingen'
+      settings: 'Instellingen',
+      addVehicle: 'Voertuig toevoegen',
+buyCar: 'Auto kopen'
+
     },
 
     // Stats Cards
@@ -2972,12 +3054,7 @@ buyCars: {
     },
 
     // Filters
-    filters: {
-      all: 'Alle voertuigen',
-      active: 'Actief',
-      sold: 'Verkocht',
-      draft: 'Concept'
-    },
+   
 
     // Messages/Chat Tab
     messages: {
@@ -3012,22 +3089,11 @@ buyCars: {
     comingSoon: 'Binnenkort beschikbaar',
     comingSoonDesc: 'Deze sectie is in ontwikkeling.',
     viewAll: 'Alles bekijken',
-    viewDetails: 'Details bekijken',
-    back: 'Terug naar lijst',
-    copyLink: 'Link kopiëren',
-    edit: 'Bewerken',
-    delete: 'Verwijderen',
-    cancel: 'Annuleren',
-    retry: 'Opnieuw proberen',
-    deleting: 'Verwijderen...',
-    previous: 'Vorige',
-    next: 'Volgende',
-    to: 'tot',
-    of: 'van',
-    results: 'resultaten'
+   
   }
   ,
    addCarListing: {
+
     title: 'Nieuwe auto aanbieden',
     subtitle: 'Volg de stappen om uw voertuig te verkopen.',
     unknownStep: 'Onbekende stap',
@@ -3050,6 +3116,41 @@ buyCars: {
       accidentDetailsRequired: 'Beschrijf het ongeval alstublieft.',
       submit: 'Er is een fout opgetreden tijdens het verzenden. Probeer het opnieuw.',
     },
+    exterior: {
+  damageTitle: 'Buitenkant | Schade',
+  optionsTitle: 'Buitenkant | Opties',
+  noDamage: 'Voertuig heeft geen buitenschade',
+  noOptions: 'Voertuig heeft geen buitenopties',
+  selectedDamages: 'Geselecteerde schadegebieden',
+  selectedOptions: 'Geselecteerde opties',
+  extraOptions: 'Extra opties',
+  selectExtra: 'Selecteer extra opties...',
+  frontLeft: 'Voorkant links',
+  frontRight: 'Voorkant rechts',
+  leftSide: 'Linkerzijde',
+  rightSide: 'Rechterzijde',
+  rearLeft: 'Achterkant links',
+  rearRight: 'Achterkant rechts',
+  roof: 'Dak',
+  trunk: 'Kofferbak',
+  alloyWheels: 'Lichtmetalen velgen',
+  metallicPaint: 'Metallic lak',
+  panoramicRoof: 'Panoramadak',
+  sunroof: 'Schuifdak / open dak',
+  parkingSensors: 'Parkeersensoren',
+  backupCamera: 'Achteruitrijcamera',
+  towHitch: 'Trekhaak',
+  airSuspension: 'Luchtvering',
+  xenonHeadlights: 'Xenon koplampen',
+  ledLighting: 'LED-verlichting',
+  customBodykit: 'Aangepaste bodykit',
+  carbonFiber: 'Carbonfiber onderdelen',
+  spoiler: 'Spoiler',
+  customExhaust: 'Aangepaste uitlaat',
+  other: 'Overig',
+  reset: 'Resetten'
+}
+,
     saveDraft: 'Concept opslaan',
     savingDraft: 'Concept wordt opgeslagen...',
     publishButton: 'Aanbod publiceren',
@@ -3060,12 +3161,14 @@ buyCars: {
 
     // Step names for the progress indicator
     stepNames: {
-      step1: 'Verkoopmethode',
-      step2: 'Veilingstijd',
-      step3: 'Voertuig-ID',
-      step4: 'Media & Beschrijving',
-      step5: 'Conditie',
-      step6: 'Controleren & Publiceren',
+     step1: 'Verkooptype',
+step2: 'Veilingstijd',
+step3: 'Voertuigidentificatie',
+step4: 'Media & Beschrijving',
+step5: 'Buitenkant & Opties',
+step6: 'Staatbeoordeling',
+step7: 'Beoordelen & Publiceren'
+
     },
 
     saleTypes: {

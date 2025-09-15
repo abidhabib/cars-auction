@@ -1,35 +1,29 @@
 // src/components/seller/BuyCarsTab.jsx
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { useNavigate } from 'react-router-dom';
 import { 
-  FiSearch, 
   FiFilter, 
   FiChevronDown, 
-  FiChevronUp, 
   FiChevronLeft, 
   FiChevronRight, 
   FiDollarSign, 
   FiMapPin, 
   FiClock, 
   FiEye, 
-  FiHeart, 
   FiTag, 
-  FiPlus, 
-  FiMinus, 
   FiX,
   FiAward,
-  FiCheck,
   FiUser,
-  FiSettings,
-  FiPhone,
-  FiInfo
+  FiInfo,
+  FiChevronLeft as FiBack,
+  FiStar,
+  FiCheckCircle
 } from 'react-icons/fi';
 import { loadMockCarsData } from '../../mock/data/mockCarsData';
+import { FaArrowAltCircleLeft } from 'react-icons/fa';
 
 const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
   const { t, language } = useLanguage();
-  const navigate = useNavigate();
   const [activeFilters, setActiveFilters] = useState({});
   const [filteredCars, setFilteredCars] = useState([]);
   const [allCars, setAllCars] = useState([]);
@@ -37,6 +31,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
   const [selectedModel, setSelectedModel] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
+  const [selectedCar, setSelectedCar] = useState(null); // New state for selected car
   const carsPerPage = 8;
 
   // Load mock data
@@ -140,9 +135,10 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     setFilterPanelOpen(!filterPanelOpen);
   };
 
-  // Handle view car
+  // Handle view car - now sets the selected car
   const handleViewCar = (carId) => {
-    console.log(`Viewing car ${carId}`);
+    const car = allCars.find(c => c.id === carId);
+    setSelectedCar(car);
   };
 
   // Handle place bid
@@ -150,9 +146,9 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     console.log(`Placing bid on car ${carId}`);
   };
 
-  // Handle buy it now
-  const handleBuyItNow = (carId) => {
-    console.log(`Buying car ${carId} immediately`);
+  // Handle back to car list
+  const handleBackToList = () => {
+    setSelectedCar(null);
   };
 
   // Pagination
@@ -222,11 +218,244 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     );
   };
 
+  // Car Detail View Component
+  const CarDetailView = ({ car }) => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const images = car.photos || [car.image];
+
+    const nextImage = () => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      );
+    };
+
+    const prevImage = () => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      );
+    };
+
+    const formatDate = (date) => {
+      return new Date(date).toLocaleDateString(language === 'de' ? 'de-DE' : 'en-US');
+    };
+
+    return (
+      <div className="p-4">
+        <button
+          onClick={handleBackToList}
+          className="flex items-center text-[#3b396d] hover:text-[#2a285a] mb-4"
+        >
+          <FaArrowAltCircleLeft className="mr-2" /> Back
+        </button>
+
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+          {/* Image Gallery */}
+          <div className="relative h-80 overflow-hidden">
+            <img
+              src={images[currentImageIndex]}
+              alt={`${car.make} ${car.model}`}
+              className="w-full h-full object-cover"
+            />
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 hover:bg-opacity-100 transition-opacity"
+                >
+                  <FiChevronLeft className="h-6 w-6 text-[#3b396d]" />
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full p-2 hover:bg-opacity-100 transition-opacity"
+                >
+                  <FiChevronRight className="h-6 w-6 text-[#3b396d]" />
+                </button>
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                  {images.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`w-3 h-3 rounded-full ${
+                        index === currentImageIndex ? 'bg-[#3b396d]' : 'bg-white bg-opacity-50'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="p-6">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {car.year} {car.make} {car.model}
+                </h1>
+                <div className="flex items-center mt-2">
+                  <FiMapPin className="mr-1 text-gray-500" />
+                  <span className="text-gray-600">{car.location}</span>
+                </div>
+              </div>
+              <div className="mt-4 md:mt-0 text-right">
+                <div className="text-3xl font-bold text-[#3b396d]">
+                  €{car.price?.toLocaleString()}
+                </div>
+                <div className="text-gray-600">
+                  {t('buyCars.buyItNow')}: €{car.buyItNowPrice?.toLocaleString()}
+                </div>
+              </div>
+            </div>
+
+            {/* Key Details */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="text-sm text-gray-500">{t('buyCars.mileage') || 'Mileage'}</div>
+                <div className="font-semibold">{car.mileage?.toLocaleString()} km</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="text-sm text-gray-500">{t('buyCars.fuelType') || 'Fuel Type'}</div>
+                <div className="font-semibold">{car.fuelType}</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="text-sm text-gray-500">{t('buyCars.transmission') || 'Transmission'}</div>
+                <div className="font-semibold">{car.transmission}</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="text-sm text-gray-500">{t('buyCars.condition') || 'Condition'}</div>
+                <div className="font-semibold">{car.condition}</div>
+              </div>
+            </div>
+
+            {/* Auction Info */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="font-semibold text-blue-800">{t('buyCars.auctionInfo') || 'Auction Information'}</h3>
+                  <p className="text-sm text-blue-600">
+                    {t('buyCars.auctionEnds')}: {formatDate(car.auctionEnds)}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <div className="text-lg font-bold text-[#3b396d]">
+                    {car.bids} {t('buyCars.bids') || 'Bids'}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {t('buyCars.highestBid')}: €{car.highestBid?.toLocaleString()}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 flex space-x-3">
+                <button
+                  onClick={() => handlePlaceBid(car.id)}
+                  className="flex-1 bg-[#3b396d] text-white py-2 px-4 rounded-lg hover:bg-[#2a285a] transition-colors"
+                >
+                  {t('buyCars.placeBid') || 'Place Bid'}
+                </button>
+                <button className="flex-1 border border-[#3b396d] text-[#3b396d] py-2 px-4 rounded-lg hover:bg-[#3b396d] hover:text-white transition-colors">
+                  {t('buyCars.buyItNow') || 'Buy It Now'}
+                </button>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {t('buyCars.description') || 'Description'}
+              </h3>
+              <p className="text-gray-700">{car.description}</p>
+            </div>
+
+            {/* Inspection Report */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                {t('buyCars.inspectionReport') || 'Inspection Report'}
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <div className="bg-gray-50 p-3 rounded-lg text-center">
+                  <div className="text-sm text-gray-500">{t('buyCars.overall') || 'Overall'}</div>
+                  <div className="font-bold text-lg">{car.inspectionReport.overallRating}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg text-center">
+                  <div className="text-sm text-gray-500">{t('buyCars.exterior') || 'Exterior'}</div>
+                  <div className="font-bold text-lg">{car.inspectionReport.exterior}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg text-center">
+                  <div className="text-sm text-gray-500">{t('buyCars.interior') || 'Interior'}</div>
+                  <div className="font-bold text-lg">{car.inspectionReport.interior}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg text-center">
+                  <div className="text-sm text-gray-500">{t('buyCars.mechanical') || 'Mechanical'}</div>
+                  <div className="font-bold text-lg">{car.inspectionReport.mechanical}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg text-center">
+                  <div className="text-sm text-gray-500">{t('buyCars.accidents') || 'Accidents'}</div>
+                  <div className="font-bold text-lg">{car.inspectionReport.accidentHistory}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Seller Info */}
+            <div className="border-t border-gray-200 pt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                {t('buyCars.sellerInfo') || 'Seller Information'}
+              </h3>
+              <div className="flex items-center">
+                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                <div className="ml-4">
+                  <div className="flex items-center">
+                    <h4 className="font-semibold">{car.seller}</h4>
+                    {car.verified && (
+                      <FiCheckCircle className="ml-2 text-green-500" title={t('buyCars.verifiedSeller') || 'Verified Seller'} />
+                    )}
+                  </div>
+                  <div className="flex items-center mt-1">
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <FiStar
+                          key={i}
+                          className={i < Math.floor(car.sellerRating) ? 'fill-current' : ''}
+                        />
+                      ))}
+                    </div>
+                    <span className="ml-2 text-gray-600">
+                      {car.sellerRating} ({car.sellerReviews} {t('buyCars.reviews') || 'reviews'})
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Tags */}
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {t('buyCars.tags') || 'Tags'}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {car.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-[#3b396d] text-white text-sm rounded-full"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Show detail view if a car is selected
+  if (selectedCar) {
+    return <CarDetailView car={selectedCar} />;
+  }
+
   return (
     <div className="">
-      {/* Main Content - No extra margins/padding */}
+      
       <div className="flex flex-col lg:flex-row">
-        {/* Filter Panel - CarCollect Style */}
         <div className={`lg:w-64 bg-white border-r border-gray-200 p-4 lg:sticky lg:h-[calc(100vh)] lg:overflow-y-auto ${
           filterPanelOpen ? 'block' : 'hidden lg:block'
         }`}>
@@ -234,12 +463,12 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
             <h2 className="text-lg font-semibold text-gray-900">
               {t('buyCars.filters') || 'Filters'}
             </h2>
-            {/* <button
+            <button
               onClick={clearAllFilters}
               className="text-sm text-red-600 hover:text-red-800 font-medium"
             >
               {t('buyCars.clearAll') || 'Clear All'}
-            </button> */}
+            </button>
           </div>
 
           {/* Make Filter */}
@@ -527,14 +756,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                   {filteredCars.length} {t('buyCars.resultsFound') || 'results found'}
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <select className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]">
-                  <option>{t('buyCars.sort.newest') || 'Newest First'}</option>
-                  <option>{t('buyCars.sort.oldest') || 'Oldest First'}</option>
-                  <option>{t('buyCars.sort.priceLow') || 'Price: Low to High'}</option>
-                  <option>{t('buyCars.sort.priceHigh') || 'Price: High to Low'}</option>
-                </select>
-              </div>
+             
             </div>
           </div>
 
@@ -543,7 +765,6 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
             <div className="bg-white border-b border-gray-200 py-3 px-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <FiFilter className="h-4 w-4 text-[#3b396d] mr-2" />
                   <span className="text-sm font-medium text-gray-900">
                     {t('buyCars.activeFilters') || 'Active Filters'} ({Object.keys(activeFilters).filter(key => activeFilters[key]).length + (searchTerm ? 1 : 0)})
                   </span>
@@ -588,7 +809,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
           <div className="p-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {currentCars.map((car) => (
-                <div key={car.id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300">
+                <div key={car.id} className="bg-white rounded- shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300">
                   <CarImageSlider car={car} />
                   
                   <div className="p-4">

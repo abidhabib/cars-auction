@@ -609,14 +609,7 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
     navigate(`/seller/edit-vehicle/${vehicleId}`);
   };
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert(t('sellerDashboard.linkCopied') || 'Link copied to clipboard!');
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
-      alert(t('sellerDashboard.linkCopyFailed') || 'Failed to copy link.');
-    });
-  };
+ 
 
   const filteredVehicles = useMemo(() => {
     return vehicles.filter(vehicle => {
@@ -646,10 +639,10 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
   };
 
   const getStatusOptions = () => [
-    { value: 'all', label: t('sellerDashboard.filters.all') || 'All Vehicles' },
-    { value: 'active', label: t('sellerDashboard.filters.active') || 'Active' },
-    { value: 'sold', label: t('sellerDashboard.filters.sold') || 'Sold' },
-    { value: 'draft', label: t('sellerDashboard.filters.draft') || 'Draft' }
+    { value: 'all', label: t('sellerDashboard.all') || 'All Vehicles' },
+    { value: 'active', label: t('sellerDashboard.active') || 'Active' },
+    { value: 'sold', label: t('sellerDashboard.sold') || 'Sold' },
+    { value: 'draft', label: t('sellerDashboard.draft') || 'Draft' }
   ];
 
   const getSortOptions = () => [
@@ -683,17 +676,11 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
         <h2 className="text-xl font-bold text-gray-900">
           {translateWithFallback('sellerDashboard.sidebar.inventory', 'My Inventory')}
         </h2>
-        <button
-          onClick={handleAddVehicle}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#3b396d] hover:bg-[#2a285a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
-        >
-          <FiPlus className="-ml-1 mr-2 h-5 w-5" />
-          {translateWithFallback('sellerDashboard.inventory.addVehicle', 'Add Vehicle')}
-        </button>
+       
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow border border-gray-100 p-4">
+      <div >
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="relative md:col-span-2">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -746,7 +733,7 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
               />
               <label htmlFor="featured-filter" className="ml-2 block text-sm text-gray-700">
                 <FiStar className="inline h-4 w-4 mr-1" />
-                Featured
+                
               </label>
             </div>
           </div>

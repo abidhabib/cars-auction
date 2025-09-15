@@ -1,6 +1,6 @@
 // src/pages/seller/SellerDashboard.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import SellerSidebar from '../../components/seller/SellerSidebar';
@@ -11,10 +11,11 @@ import MessagesTab from '../../components/seller/MessagesTab';
 import AnalyticsTab from '../../components/seller/AnalyticsTab';
 import BuyCarsTab from '../../components/seller/BuyCarsTab';
 import { FiSettings } from 'react-icons/fi';
+import AddCarListing from '../../components/seller/AddCarListing'
 
 const SellerDashboard = () => {
   const navigate = useNavigate();
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
@@ -26,10 +27,10 @@ const SellerDashboard = () => {
   // Set active tab based on URL hash
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
-    if (hash && ['overview', 'inventory', 'messages', 'analytics', 'buy'].includes(hash)) {
+    if (hash && ['overview', 'inventory','add', 'messages', 'analytics', 'buy'].includes(hash)) {
       setActiveTab(hash);
     }
-  }, []);
+  }, [setActiveTab]);
 
   // Update URL hash when active tab changes
   useEffect(() => {
@@ -37,7 +38,7 @@ const SellerDashboard = () => {
   }, [activeTab]);
 
   const handleAddVehicle = () => {
-    navigate('/seller/addvehicle');
+    navigate('addvehicle');
   };
 
   const handleViewVehicle = (vehicle) => {
@@ -68,6 +69,9 @@ const SellerDashboard = () => {
           handleAddVehicle={handleAddVehicle}
           handleViewVehicle={handleViewVehicle}
         />;
+        
+      case 'add':
+        return <AddCarListing />;
       case 'messages':
         return <MessagesTab
           selectedChat={selectedChat}
@@ -109,7 +113,7 @@ const SellerDashboard = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Fixed Header - Always on top */}
-      <div className="fixed top-0 left-0 right-0 z-50">
+      <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white shadow-md">
         <SellerHeader
           activeTab={activeTab}
           selectedVehicle={selectedVehicle}
@@ -121,22 +125,24 @@ const SellerDashboard = () => {
           setSearchTerm={setSearchTerm}
           setActiveTab={setActiveTab}
         />
-      </div>
+      </header>
 
       {/* Fixed Sidebar - Below Header */}
-      <div className="fixed top-16 left-0 h-[calc(100vh-4rem)] z-40">
+      <aside className="fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white shadow-lg z-40 overflow-y-auto">
         <SellerSidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-      </div>
+      </aside>
 
       {/* Main Content Area - Properly spaced to avoid overlap */}
-      <div className="flex-1 mt-16 ml-20"> {/* ml-20 for sidebar width, mt-16 for header height */}
-        <main className="sm:pt-2 h-[calc(100vh-4rem)] overflow-y-auto">
+      <main className={`flex-1 pt-16 bg-gray-50 h-[calc(100vh-4rem)] overflow-y-auto ${
+        activeTab === 'buy' ? 'ml-0' : 'ml-64'
+      }`}>
+        <div className="py-8 max-w-7xl mx-auto">
           {renderActiveTab()}
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };

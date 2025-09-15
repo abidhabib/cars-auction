@@ -62,20 +62,6 @@ const SellerHeader = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleBackToList = () => {
-    if (activeTab === 'inventory' && selectedVehicle) {
-      setSelectedVehicle(null);
-    } else if (activeTab === 'messages' && selectedChat) {
-      setSelectedChat(null);
-      setChatOpen(false);
-    }
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log('Searching for:', searchTerm);
-  };
-
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -103,9 +89,9 @@ const SellerHeader = ({
                 </button>
               </div>
               
-              {/* Search Bar - Using your SearchBar component */}
-              <div className="hidden md:block w-64 lg:w-80">
-                <SearchBar/>
+              {/* Search Bar - Using your SearchBar component with wider width */}
+              <div className="hidden md:block w-96 lg:w-[36rem] xl:w-[42rem]">
+                <SearchBar />
               </div>
             </div>
 

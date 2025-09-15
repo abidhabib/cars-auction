@@ -77,13 +77,9 @@ const ProtectedRoute = ({ children }) => {
 
 // --- Helper Component: Protect Seller Routes ---
 const SellerProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const location = useLocation();
 
-  // Show a loading state while checking auth status
-  if (loading) {
-    return <LoadingFallback />;
-  }
 
   // If user is not logged in, redirect to login page
   if (!user) {
@@ -187,16 +183,7 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-                  <Route
-                    path="/buy"
-                    element={
-                      <ProtectedRoute>
-                        <AppLayout>
-                          <div className="min-h-screen pt-16">Buy section</div>
-                        </AppLayout>
-                      </ProtectedRoute>
-                    }
-                  />
+                 
 
                   {/* Seller-specific protected routes */}
                   <Route
@@ -208,6 +195,7 @@ function App() {
                       </SellerProtectedRoute>
                     }
                   />
+                  
                   <Route
                     path="/sell/*"
                     element={
@@ -218,16 +206,7 @@ function App() {
                       </SellerProtectedRoute>
                     }
                   />
-                  <Route
-                    path="/seller/addvehicle"
-                    element={
-                      <SellerProtectedRoute>
-                        <AppLayout>
-                          <AddCarListing />
-                        </AppLayout>
-                      </SellerProtectedRoute>
-                    }
-                  />
+                 
                   {/* Add this route for editing vehicles */}
                   <Route
                     path="/seller/edit-vehicle/:id"
