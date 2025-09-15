@@ -3,9 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { FiSearch, FiChevronRight, FiDollarSign, FiClock, FiGrid } from 'react-icons/fi';
-import mockCars from '../../mock/data/cars';
-// Mock car data - Replace with your actual mock data import
-
+import { loadMockCarsData } from '../../mock/data/mockCarsData';
 
 const SearchBar = ({ className = '', viewMode = 'list' }) => {
   const { t } = useLanguage();
@@ -16,6 +14,13 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [resultsViewMode, setResultsViewMode] = useState(viewMode);
   const searchRef = useRef(null);
+  const [mockCars, setMockCars] = useState([]);
+
+  // Load mock data on component mount
+  useEffect(() => {
+    const cars = loadMockCarsData();
+    setMockCars(cars);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -42,10 +47,10 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
     setTimeout(() => {
       const termLower = term.toLowerCase();
       const results = mockCars.filter(car => 
-        car.make.toLowerCase().includes(termLower) ||
-        car.model.toLowerCase().includes(termLower) ||
-        car.year.toString().includes(termLower) ||
-        car.tags.some(tag => tag.toLowerCase().includes(termLower))
+        car.vehicleIdentification.make.toLowerCase().includes(termLower) ||
+        car.vehicleIdentification.model.toLowerCase().includes(termLower) ||
+        car.vehicleIdentification.year.toString().includes(termLower) ||
+        (car.mediaAndDescription.headline && car.mediaAndDescription.headline.toLowerCase().includes(termLower))
       );
       
       setSearchResults(results);
@@ -79,6 +84,7 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
 
   // Format date
   const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleDateString(undefined, { 
       month: 'short', 
@@ -90,6 +96,7 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
 
   // Format time remaining
   const formatTimeRemaining = (dateString) => {
+    if (!dateString) return 'N/A';
     const endDate = new Date(dateString);
     const now = new Date();
     const diffTime = endDate - now;
@@ -101,6 +108,14 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
     
     if (days > 0) return `${days}d ${hours}h`;
     return `${hours}h`;
+  };
+
+  // Get main image for car
+  const getMainImage = (car) => {
+    if (car.mediaAndDescription.photos && car.mediaAndDescription.photos.length > 0) {
+      return car.mediaAndDescription.photos[0];
+    }
+    return car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
   };
 
   return (
@@ -140,7 +155,7 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
             <div className="flex items-center">
               <span className="text-sm font-medium text-gray-700">
-                {searchResults.length} {t('search.results') || 'results'}
+                {searchResults.length}  results
               </span>
               {searchTerm && (
                 <span className="ml-2 text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
@@ -188,20 +203,20 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
                       className="flex items-center w-full px-4 py-4 hover:bg-[#f8f9ff] transition-colors group"
                     >
                       <img 
-                        src={car.mainImage} 
-                        alt={`${car.make} ${car.model}`} 
+                        src={getMainImage(car)} 
+                        alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model}`} 
                         className="h-16 w-20 object-cover rounded-lg mr-4"
                       />
                       <div className="flex-1 text-left">
                         <div className="font-semibold text-gray-900 group-hover:text-[#3b396d]">
-                          {car.year} {car.make} {car.model}
+                          {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
                         </div>
                         <div className="text-sm text-gray-500 mt-1">
-                          {car.mileage?.toLocaleString()} km • {car.fuelType} • {car.transmission}
+                          {parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} {car.vehicleIdentification.mileageUnit} • {car.fuelType} • {car.transmission}
                         </div>
                         <div className="flex items-center text-sm text-gray-500 mt-1">
                           <FiDollarSign className="h-4 w-4 mr-1 text-[#3b396d]" />
-                          <span className="font-medium text-[#3b396d]">€{car.currentBid?.toLocaleString()}</span>
+                          <span className="font-medium text-[#3b396d]">€{car.price?.toLocaleString()}</span>
                           <span className="mx-2">•</span>
                           <FiClock className="h-4 w-4 mr-1" />
                           <span>Ends {formatDate(car.auctionEnds)}</span>
@@ -222,8 +237,8 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
                     >
                       <div className="relative">
                         <img 
-                          src={car.mainImage} 
-                          alt={`${car.make} ${car.model}`} 
+                          src={getMainImage(car)} 
+                          alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model}`} 
                           className="w-full h-32 object-cover"
                         />
                         <div className="absolute top-2 right-2 bg-[#3b396d] text-white text-xs font-medium px-2 py-1 rounded">
@@ -232,15 +247,15 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
                       </div>
                       <div className="p-3 text-left">
                         <div className="font-semibold text-gray-900 group-hover:text-[#3b396d] truncate">
-                          {car.year} {car.make} {car.model}
+                          {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
                         </div>
                         <div className="text-xs text-gray-500 mt-1">
-                          {car.mileage?.toLocaleString()} km • {car.fuelType}
+                          {parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} {car.vehicleIdentification.mileageUnit} • {car.fuelType}
                         </div>
                         <div className="flex items-center justify-between mt-2">
                           <div className="flex items-center text-sm">
                             <FiDollarSign className="h-4 w-4 mr-1 text-[#3b396d]" />
-                            <span className="font-bold text-[#3b396d]">€{car.currentBid?.toLocaleString()}</span>
+                            <span className="font-bold text-[#3b396d]">€{car.price?.toLocaleString()}</span>
                           </div>
                         </div>
                       </div>

@@ -255,7 +255,9 @@ maxPhotos:'Max Photos'
     
      buyCars: {
         exteriorOptions: 'Exterior Options',
-
+memberSince: 'Member since',
+verifiedSeller:'verified Seller',
+    memberSinceInvalid: 'Date not available',
     title: 'Buy Cars',
     subtitle: 'Find your perfect vehicle from our marketplace',
     resultsFound: 'Results Found',
@@ -322,8 +324,7 @@ accidents:'Accidents',
     
     // Vehicle Details
     mileage: 'Mileage',
-    fuelType: 'Fuel Type',
-    transmission: 'Transmission',
+  
     color: 'Color',
     condition: 'Condition',
     location: 'Location',
@@ -949,6 +950,7 @@ addFeature:'Add Feature',
       grosssales: 'Gross Sales',
       fees: 'Platform Fees',
       netearnings: 'Net Earnings',
+      unitsSold:'Units Sold',
       ytdTotal: 'YTD Total',
       revenueChartTitle: 'Monthly Revenue Trend',
       topModelsChartTitle: 'Sales Distribution by Model',
@@ -1011,6 +1013,8 @@ addCarListing: {
       rightSide: 'Right Side',
       rearLeft: 'Rear Left',
       rearRight: 'Rear Right',
+      additional:'additional',
+      rearleft:'rear-left',
         alloyWheels: 'Alloy wheels',
       ledLighting: 'LED lighting',
       panoramicRoof: 'Panoramic roof',
@@ -1568,8 +1572,11 @@ phonePlaceholder:"+3412345671",
     resetFilters: 'Filter Zurücksetzen',
     viewDetails: 'Details Ansehen',
     bid: 'Bieten',
+    verifiedSeller:'Verifizierter Verkäufer',
+auctionTiming:'Auktionszeitplan',
       exteriorOptions: 'Außenoptionen',
-
+  memberSince: 'Mitglied seit',
+    memberSinceInvalid: 'Datum nicht verfügbar',
       vehicleIdentification: 'Fahrzeugidentifikation',
   conditionAssessment: 'Zustandsbewertung',
   serviceHistory: 'Servicehistorie',
@@ -2049,6 +2056,8 @@ buyCar: 'Auto kaufen'
       financialSummary: 'Finanzübersicht',
       period: 'Zeitraum',
       grossSales: 'Bruttoumsatz',
+            unitsSold:'Verkaufte Einheiten',
+
       fees: 'Plattformgebühren',
       netEarnings: 'Nettoertrag',
       ytdTotal: 'Jahresgesamt',
@@ -2303,11 +2312,9 @@ step7: 'Überprüfen & Veröffentlichen'
 
   loading: 'Wird geladen...', // Allgemeine Lade-Nachricht
   downloadReport: 'Bericht herunterladen', // Allgemeiner Download-Button-Text
-  back: 'Zurück',
   next: 'Weiter',
   logout: 'Ausloggen',
   notifications: 'Benachrichtigungen',
-  downloadReport: 'Bericht herunterladen',
   viewDetails: 'Details anzeigen',
   copyLink: 'Link kopieren',
   filters: 'Filter',
@@ -2538,8 +2545,12 @@ buyCars: {
     resetFilters: 'Filters Resetten',
     viewDetails: 'Bekijk Details',
     bid: 'Bieden',
-      exteriorOptions: 'Exterieur opties',
+    auctionTiming:'Veilingtijd',
 
+      exteriorOptions: 'Exterieur opties',
+    memberSince: 'Lid sinds',
+    memberSinceInvalid: 'Datum niet beschikbaar',
+verifiedSeller:'Geverifieerde Verkoper',
     buyItNow: 'Direct Kopen',
     vhighestBid: 'Hoogste bod',
     placeBid: 'Bod plaatsen',
@@ -3129,6 +3140,7 @@ buyCar: 'Auto kopen'
       financialSummary: 'Financieel Overzicht',
       period: 'Periode',
       grossSales: 'Bruto Verkopen',
+      unitsSold:'Verkochte Eenheden',
       fees: 'Platformkosten',
       netEarnings: 'Netto Winst',
       ytdTotal: 'YTD Totaal',
