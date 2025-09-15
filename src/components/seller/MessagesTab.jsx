@@ -188,6 +188,7 @@ const MessagesTab = ({ selectedChat, setSelectedChat, setChatOpen, chatOpen }) =
           
           {/* Conversations List */}
           <div className="flex-1 overflow-y-auto">
+            
             {filteredChats.length > 0 ? (
               filteredChats.map((chat) => (
                 <div
@@ -250,7 +251,7 @@ const MessagesTab = ({ selectedChat, setSelectedChat, setChatOpen, chatOpen }) =
         </div>
 
         {/* Chat Area */}
-        <div className={`flex-1 flex flex-col bg-white ${chatOpen ? 'flex' : 'hidden md:flex'}`}>
+        <div className={`flex-1 min-h-[80vh] flex flex-col bg-white ${chatOpen ? 'flex' : 'hidden md:flex'}`}>
           {/* Chat Header */}
           <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-white">
             <div className="flex items-center">
@@ -477,18 +478,7 @@ const MessagesTab = ({ selectedChat, setSelectedChat, setChatOpen, chatOpen }) =
         <p className="text-gray-500 max-w-md mb-6">
           Select a conversation from the list to start chatting.
         </p>
-        <div className="bg-gray-50 rounded-xl p-6 max-w-md">
-          <h4 className="font-medium text-gray-900 mb-3">Anonymous Messaging</h4>
-          <p className="text-sm text-gray-600 mb-3">
-            All communications are anonymous to protect your privacy. Buyers are identified only by their type.
-          </p>
-          <div className="flex items-center text-sm text-gray-500">
-            <div className="bg-gray-200 border-2 border-dashed rounded-xl w-8 h-8 flex items-center justify-center mr-2">
-              <FiUser className="text-gray-500 h-4 w-4" />
-            </div>
-            <span>Buyer Type: Dealer, Private Buyer, etc.</span>
-          </div>
-        </div>
+       
       </div>
     </div>
   );
