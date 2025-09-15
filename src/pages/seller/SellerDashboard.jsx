@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import SellerSidebar from '../../components/seller/SellerSidebar';
-import SellerHeader from '../../components/seller/SellerHeader';
+import SellerHeader from '../../components/seller/SellerHeader'; // Ensure SellerHeader uses the updated SearchBar
 import OverviewTab from '../../components/seller/OverviewTab';
 import InventoryTab from '../../components/seller/InventoryTab';
 import MessagesTab from '../../components/seller/MessagesTab';
 import AnalyticsTab from '../../components/seller/AnalyticsTab';
-import BuyCarsTab from '../../components/seller/BuyCarsTab';
+import BuyCarsTab from '../../components/seller/BuyCarsTab'; // Make sure this accepts externalSelectedCar
 import { FiSettings } from 'react-icons/fi';
-import AddCarListing from '../../components/seller/AddCarListing'
+import AddCarListing from '../../components/seller/AddCarListing';
 
 const SellerDashboard = () => {
   const navigate = useNavigate();
@@ -23,6 +23,9 @@ const SellerDashboard = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // State to hold the car selected via SearchBar
+  const [carSelectedFromSearch, setCarSelectedFromSearch] = useState(null); 
 
   // Set active tab based on URL hash
   useEffect(() => {
@@ -54,6 +57,25 @@ const SellerDashboard = () => {
     setSidebarOpen(false);
   };
 
+  // Handler for when a car is selected from the SearchBar
+  // This will trigger the BuyCarsTab to show the detail view
+  const handleCarSelectFromSearch = (car) => {
+    setCarSelectedFromSearch(car);
+    // Ensure the 'buy' tab is active to show the detail
+    if (activeTab !== 'buy') {
+        setActiveTab('buy');
+    }
+    // Optional: Close sidebar for better view on mobile
+    // setSidebarOpen(false); 
+  };
+
+  // Handler to clear the car selected from search (e.g., when user clicks 'Back' in CarDetailView)
+  const handleBackToListFromSearch = () => {
+    setCarSelectedFromSearch(null);
+    // Optionally reset search term if desired
+    // setSearchTerm('');
+  };
+
   const renderActiveTab = () => {
     switch (activeTab) {
       case 'overview':
@@ -82,10 +104,14 @@ const SellerDashboard = () => {
       case 'analytics':
         return <AnalyticsTab />;
       case 'buy':
+        // Pass the car selected from search and the back handler to BuyCarsTab
         return <BuyCarsTab 
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           setActiveTab={setActiveTab}
+          // New props for search integration
+          externalSelectedCar={carSelectedFromSearch}
+          onBackToList={handleBackToListFromSearch}
         />;
       case 'settings':
         return (
@@ -126,6 +152,8 @@ const SellerDashboard = () => {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           setActiveTab={setActiveTab}
+          // Pass the handler to SellerHeader so it can pass it to SearchBar
+          onCarSelect={handleCarSelectFromSearch} 
         />
       </header>
 
@@ -146,8 +174,9 @@ const SellerDashboard = () => {
       </aside>
 
       {/* Main Content Area - Properly spaced to avoid overlap */}
+      {/* Adjust margin/padding if needed when BuyCarsTab shows detail view */}
       <main className={`flex-1 pt-16 bg-gray-50 h-[calc(100vh-4rem)] overflow-y-auto transition-all duration-300 ease-in-out ${
-        activeTab === 'buy' ? 'ml-0' : ''
+        activeTab === 'buy' ? 'ml-0' : '' // Consider if ml-0 is needed for 'buy' tab
       }`} style={{
         marginLeft: sidebarOpen ? '16rem' : '5rem'
       }}>

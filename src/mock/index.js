@@ -1,8 +1,6 @@
 // src/mock/index.js
 import { CONFIG } from '../config';
-import { mockCars } from './data/cars';
 import { mockAuctions } from './data/auctions';
-import { mockProfile } from './data/profile';
 import { mockDashboardStats } from './data/dashboard';
 
 // Utility to simulate API delay

@@ -13,8 +13,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import SplashScreen from './components/common/SplashScreen';
 import AppLayout from './components/layout/AppLayout';
 import SellerDashboard from './pages/seller/SellerDashboard';
-import AddCarListing from './components/seller/AddCarListing';
-import EditCarListing from './components/seller/EditCarListing'; // Add this import
+
 
 // Lazy load all pages and components
 const Home = React.lazy(() => import('./pages/Home'));

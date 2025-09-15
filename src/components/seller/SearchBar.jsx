@@ -1,13 +1,14 @@
 // src/components/common/SearchBar.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // useLocation might still be useful for initial search term
 import { useLanguage } from '../../context/LanguageContext';
-import { FiSearch, FiChevronRight, FiDollarSign, FiClock, FiGrid } from 'react-icons/fi';
+import { FiSearch, FiChevronRight, FiDollarSign, FiClock, FiGrid, FiX } from 'react-icons/fi';
 import { loadMockCarsData } from '../../mock/data/mockCarsData';
 
-const SearchBar = ({ className = '', viewMode = 'list' }) => {
+const SearchBar = ({ className = '', viewMode = 'list', onSearch = null, onCarSelect = null }) => { // Added onCarSelect prop
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const location = useLocation(); // Keep if you still need URL-based search term handling
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -21,6 +22,16 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
     const cars = loadMockCarsData();
     setMockCars(cars);
   }, []);
+
+  // Extract search term from URL on page load (optional, based on your routing needs)
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const query = params.get('q');
+  //   if (query) {
+  //     setSearchTerm(query);
+  //     performSearch(query);
+  //   }
+  // }, [location.search]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -42,17 +53,22 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
     }
 
     setIsLoading(true);
-    
+
     // Simulate API delay
     setTimeout(() => {
       const termLower = term.toLowerCase();
-      const results = mockCars.filter(car => 
+      const results = mockCars.filter(car =>
         car.vehicleIdentification.make.toLowerCase().includes(termLower) ||
         car.vehicleIdentification.model.toLowerCase().includes(termLower) ||
         car.vehicleIdentification.year.toString().includes(termLower) ||
-        (car.mediaAndDescription.headline && car.mediaAndDescription.headline.toLowerCase().includes(termLower))
+        car.vehicleIdentification.trim.toLowerCase().includes(termLower) ||
+        (car.mediaAndDescription.headline && car.mediaAndDescription.headline.toLowerCase().includes(termLower)) ||
+        car.fuelType.toLowerCase().includes(termLower) ||
+        car.transmission.toLowerCase().includes(termLower) ||
+        car.color.toLowerCase().includes(termLower) ||
+        car.location.toLowerCase().includes(termLower)
       );
-      
+
       setSearchResults(results);
       setIsLoading(false);
     }, 300);
@@ -62,35 +78,74 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
   const handleInputChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    setShowResults(true);
-    performSearch(value);
+    if (value.trim()) {
+      setShowResults(true);
+      performSearch(value);
+    } else {
+      setShowResults(false);
+      setSearchResults([]);
+    }
+    // Optionally call onSearch if parent needs to know about input changes
+    // if (onSearch) onSearch(value);
   };
 
-  // Handle search submission
+  // Handle search submission (e.g., pressing Enter)
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
-      setShowResults(false);
+      // Call parent search handler if provided (e.g., for updating URL or global state)
+      if (onSearch) {
+        onSearch(searchTerm);
+      }
+      // Keep dropdown open or close it based on your UX preference
+      // setShowResults(false); // Might want to keep it open to show results
     }
   };
 
-  // Handle result click
+  // Handle result click - Call the onCarSelect callback instead of navigating
   const handleResultClick = (carId) => {
-    navigate(`/car/${carId}`);
+    // Find the car object
+    const selectedCar = mockCars.find(car => car.id === carId);
+
+    if (selectedCar) {
+      // Call the callback passed from the parent to handle the selection
+      // This allows the parent component to set the selectedCar state in BuyCarsTab
+      if (onCarSelect) {
+        onCarSelect(selectedCar);
+      } else {
+        console.warn("onCarSelect callback not provided to SearchBar");
+        // Fallback to navigation if callback not provided
+        navigate(`/car/${carId}`);
+      }
+    } else {
+      console.error("Car not found for ID:", carId);
+    }
+
+    // Close the search dropdown
     setShowResults(false);
+    // Optionally clear the search term
+    // setSearchTerm('');
+  };
+
+  // Clear search
+  const clearSearch = () => {
     setSearchTerm('');
+    setSearchResults([]);
+    setShowResults(false);
+    if (onSearch) {
+      onSearch('');
+    }
   };
 
   // Format date
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return date.toLocaleDateString(undefined, { 
-      month: 'short', 
-      day: 'numeric', 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return date.toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -100,12 +155,12 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
     const endDate = new Date(dateString);
     const now = new Date();
     const diffTime = endDate - now;
-    
+
     if (diffTime <= 0) return 'Ended';
-    
+
     const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    
+
     if (days > 0) return `${days}d ${hours}h`;
     return `${hours}h`;
   };
@@ -113,8 +168,13 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
   // Get main image for car
   const getMainImage = (car) => {
     if (car.mediaAndDescription.photos && car.mediaAndDescription.photos.length > 0) {
-      return car.mediaAndDescription.photos[0];
+      // Basic check for valid URL
+      const photo = car.mediaAndDescription.photos[0];
+      if (typeof photo === 'string' && (photo.startsWith('http') || photo.startsWith('/'))) {
+        return photo;
+      }
     }
+    // Fallback image
     return car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
   };
 
@@ -128,22 +188,18 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
           type="text"
           value={searchTerm}
           onChange={handleInputChange}
-          onFocus={() => setShowResults(true)}
+          onFocus={() => searchTerm && setShowResults(true)}
           placeholder={t('search.placeholder') || "Search cars by make, model, year or tags..."}
           className="block w-full pl-12 pr-12 py-3.5 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] text-base shadow-sm"
         />
         {searchTerm && (
           <button
             type="button"
-            onClick={() => {
-              setSearchTerm('');
-              setSearchResults([]);
-            }}
+            onClick={clearSearch}
             className="absolute inset-y-0 right-0 pr-4 flex items-center"
+            aria-label={t('search.clear') || "Clear search"}
           >
-            <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <FiX className="h-5 w-5 text-gray-400 hover:text-gray-600" />
           </button>
         )}
       </form>
@@ -155,7 +211,7 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
             <div className="flex items-center">
               <span className="text-sm font-medium text-gray-700">
-                {searchResults.length}  results
+                {searchResults.length} {t('search.results') || 'results'}
               </span>
               {searchTerm && (
                 <span className="ml-2 text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
@@ -167,7 +223,8 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
               <button
                 onClick={() => setResultsViewMode('list')}
                 className={`p-1.5 rounded-md ${resultsViewMode === 'list' ? 'bg-[#3b396d] text-white' : 'text-gray-400 hover:text-gray-600'}`}
-                title="List view"
+                title={t('search.listView') || "List view"}
+                aria-label={t('search.listView') || "List view"}
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -176,7 +233,8 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
               <button
                 onClick={() => setResultsViewMode('grid')}
                 className={`p-1.5 rounded-md ${resultsViewMode === 'grid' ? 'bg-[#3b396d] text-white' : 'text-gray-400 hover:text-gray-600'}`}
-                title="Grid view"
+                title={t('search.gridView') || "Grid view"}
+                aria-label={t('search.gridView') || "Grid view"}
               >
                 <FiGrid className="h-4 w-4" />
               </button>
@@ -199,27 +257,33 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
                   {searchResults.map((car) => (
                     <button
                       key={car.id}
-                      onClick={() => handleResultClick(car.id)}
-                      className="flex items-center w-full px-4 py-4 hover:bg-[#f8f9ff] transition-colors group"
+                      onClick={() => handleResultClick(car.id)} // Use the modified handler
+                      className="flex items-center w-full px-4 py-4 hover:bg-[#f8f9ff] transition-colors group text-left"
+                      type="button" // Prevent form submission
                     >
-                      <img 
-                        src={getMainImage(car)} 
-                        alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model}`} 
+                      <img
+                        src={getMainImage(car)}
+                        alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model}`}
                         className="h-16 w-20 object-cover rounded-lg mr-4"
+                        onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'; }}
                       />
                       <div className="flex-1 text-left">
                         <div className="font-semibold text-gray-900 group-hover:text-[#3b396d]">
                           {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
                         </div>
                         <div className="text-sm text-gray-500 mt-1">
-                          {parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} {car.vehicleIdentification.mileageUnit} • {car.fuelType} • {car.transmission}
+                          {parseInt(car.vehicleIdentification.mileage, 10)?.toLocaleString()} {car.vehicleIdentification.mileageUnit} • {car.fuelType} • {car.transmission}
                         </div>
                         <div className="flex items-center text-sm text-gray-500 mt-1">
                           <FiDollarSign className="h-4 w-4 mr-1 text-[#3b396d]" />
                           <span className="font-medium text-[#3b396d]">€{car.price?.toLocaleString()}</span>
-                          <span className="mx-2">•</span>
-                          <FiClock className="h-4 w-4 mr-1" />
-                          <span>Ends {formatDate(car.auctionEnds)}</span>
+                          {car.auctionEnds && (
+                            <>
+                              <span className="mx-2">•</span>
+                              <FiClock className="h-4 w-4 mr-1" />
+                              <span>Ends {formatDate(car.auctionEnds)}</span>
+                            </>
+                          )}
                         </div>
                       </div>
                       <FiChevronRight className="h-5 w-5 text-gray-400 ml-2 flex-shrink-0 group-hover:text-[#3b396d]" />
@@ -232,25 +296,29 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
                   {searchResults.map((car) => (
                     <button
                       key={car.id}
-                      onClick={() => handleResultClick(car.id)}
-                      className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow group"
+                      onClick={() => handleResultClick(car.id)} // Use the modified handler
+                      className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow group text-left"
+                      type="button" // Prevent form submission
                     >
                       <div className="relative">
-                        <img 
-                          src={getMainImage(car)} 
-                          alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model}`} 
+                        <img
+                          src={getMainImage(car)}
+                          alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model}`}
                           className="w-full h-32 object-cover"
+                          onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'; }}
                         />
-                        <div className="absolute top-2 right-2 bg-[#3b396d] text-white text-xs font-medium px-2 py-1 rounded">
-                          {formatTimeRemaining(car.auctionEnds)}
-                        </div>
+                        {car.auctionEnds && (
+                          <div className="absolute top-2 right-2 bg-[#3b396d] text-white text-xs font-medium px-2 py-1 rounded">
+                            {formatTimeRemaining(car.auctionEnds)}
+                          </div>
+                        )}
                       </div>
                       <div className="p-3 text-left">
                         <div className="font-semibold text-gray-900 group-hover:text-[#3b396d] truncate">
                           {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
                         </div>
                         <div className="text-xs text-gray-500 mt-1">
-                          {parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} {car.vehicleIdentification.mileageUnit} • {car.fuelType}
+                          {parseInt(car.vehicleIdentification.mileage, 10)?.toLocaleString()} {car.vehicleIdentification.mileageUnit} • {car.fuelType}
                         </div>
                         <div className="flex items-center justify-between mt-2">
                           <div className="flex items-center text-sm">
@@ -263,15 +331,16 @@ const SearchBar = ({ className = '', viewMode = 'list' }) => {
                   ))}
                 </div>
               )}
-              
-              <div className="border-t border-gray-200 px-4 py-3 bg-gray-50">
+
+              {/* Optional: View All Results Button */}
+              {/* <div className="border-t border-gray-200 px-4 py-3 bg-gray-50">
                 <button
-                  onClick={handleSearchSubmit}
+                  onClick={() => { /* Handle "View All" if needed, maybe navigate to search results page * / }}
                   className="w-full text-center text-sm font-medium text-[#3b396d] hover:text-[#2a285a]"
                 >
                   {t('search.viewAllResults') || 'View all results'} ({searchResults.length})
                 </button>
-              </div>
+              </div> */}
             </div>
           ) : searchTerm ? (
             <div className="py-12 px-4 text-center">

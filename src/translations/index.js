@@ -115,6 +115,17 @@ maxPhotos:'Max Photos'
       }
 
     },
+    "search": {
+    // ... existing search keys
+    "gridView": "Grid view",
+    "listView": "List view",
+    "clear": "Clear search",
+    "searching": "Searching...",
+    "results": "results",
+    "viewAllResults": "View all results",
+    "noResults": "No cars found",
+    "tryDifferent": "Try a different search term"
+  },
     // Success Stories
     successStories: {
       title: "Success Stories",
@@ -574,6 +585,8 @@ phonePlaceholder:"+3412345671",
       error: 'Error',
       retry: 'Retry',
       saving: 'Saving...',
+              profile:'Profile',
+
       changing: 'Changing...',
       updateError: 'Failed to update profile. Please try again.',
       passwordChangeSuccess: 'Password changed successfully!',
@@ -1161,6 +1174,14 @@ addCarListing: {
       descriptionLabel: 'Full Description',
       descriptionPlaceholder: 'Describe the vehicle in detail, including its history, features, condition, and any unique aspects. What makes it special?',
       serviceHistoryLabel: 'Service History',
+       maxPhotos: "Maximum photos",
+      frontLeft: "Front left",
+      frontRight: "Front right",
+      leftRear: "Left rear",
+      rightRear: "Right rear",
+      dashboard: "Dashboard",
+      odometer: "Odometer",
+      interior: "Interior",
       serviceHistory: {
         full: 'Full',
         partial: 'Partial',
@@ -1228,6 +1249,17 @@ addCarListing: {
       privacyPolicyLink: "Datenschutzerklärung"
       
     },
+    "search": {
+  "gridView": "Rasteransicht",        // de
+  "listView": "Listenansicht",
+  "clear": "Suche löschen",
+  "searching": "Suche läuft...",
+  "results": "Ergebnisse",
+  "viewAllResults": "Alle Ergebnisse anzeigen",
+  "noResults": "Keine Autos gefunden",
+  "tryDifferent": "Versuchen Sie es mit einem anderen Suchbegriff"
+}
+,
       "newsletter": {
     "title": "Abonnieren Sie unseren Newsletter",
     "description": "Abonnieren Sie unseren Newsletter, um Updates, Neuigkeiten und Sonderangebote direkt in Ihren Posteingang zu erhalten.",
@@ -2265,6 +2297,14 @@ step7: 'Überprüfen & Veröffentlichen'
       descriptionLabel: 'Vollständige Beschreibung',
       descriptionPlaceholder: 'Beschreiben Sie das Fahrzeug detailliert, einschließlich seiner Geschichte, Ausstattung, Zustand und besonderer Merkmale. Was macht es besonders?',
       serviceHistoryLabel: 'Servicehistorie',
+        maxPhotos: "Maximale Fotos",
+      frontLeft: "Vorne links",
+      frontRight: "Vorne rechts",
+      leftRear: "Hinten links",
+      rightRear: "Hinten rechts",
+      dashboard: "Armaturenbrett",
+      odometer: "Kilometerzähler",
+      interior: "Innenraum",
       serviceHistory: {
         full: 'Vollständig',
         partial: 'Teilweise',
@@ -2322,6 +2362,17 @@ step7: 'Überprüfen & Veröffentlichen'
   
   },
   nl: {
+    "search": {
+  "gridView": "Rasterweergave",       // nl
+  "listView": "Lijstweergave",
+  "clear": "Zoekopdracht wissen",
+  "searching": "Zoeken...",
+  "results": "Resultaten",
+  "viewAllResults": "Alle resultaten bekijken",
+  "noResults": "Geen auto's gevonden",
+  "tryDifferent": "Probeer een andere zoekterm"
+},
+
     languageName: "Nederlands",
     cookies: {
       message: "We gebruiken cookies om uw ervaring te verbeteren. Door onze site te blijven gebruiken, gaat u akkoord met ons gebruik van cookies.",
@@ -2343,9 +2394,7 @@ step7: 'Überprüfen & Veröffentlichen'
     nov: 'Nov',
     dec: 'Dec',
   },
-  media: {
-    maxPhotos: 'Maximale foto’s'
-  },
+
     // Header
     newsletter: {
     "title": "Abonneer op onze nieuwsbrief",
@@ -3341,6 +3390,14 @@ step7: 'Beoordelen & Publiceren'
       descriptionLabel: 'Volledige beschrijving',
       descriptionPlaceholder: 'Beschrijf het voertuig in detail, inclusief de geschiedenis, kenmerken, staat en eventuele unieke aspecten. Wat maakt het bijzonder?',
       serviceHistoryLabel: 'Onderhoudsgeschiedenis',
+       maxPhotos: "Maximale foto’s",
+      frontLeft: "Voorkant links",
+      frontRight: "Voorkant rechts",
+      leftRear: "Achterkant links",
+      rightRear: "Achterkant rechts",
+      dashboard: "Dashboard",
+      odometer: "Kilometerteller",
+      interior: "Interieur",
       serviceHistory: {
         full: 'Volledig',
         partial: 'Gedeeltelijk',
@@ -3385,7 +3442,6 @@ step7: 'Beoordelen & Publiceren'
   edit: 'Bewerken',
   back: 'Terug',
 
-  back: 'Terug',
   next: 'Volgende',
   logout: 'Uitloggen',
   notifications: 'Meldingen',
