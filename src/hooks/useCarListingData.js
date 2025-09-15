@@ -1,8 +1,6 @@
 // src/hooks/useCarListingData.js
 import { useState } from 'react';
-import { useLanguage } from '../context/LanguageContext'; // Adjust path as needed
-import { FiDollarSign, FiClock, FiEye } from 'react-icons/fi'; // Import icons
-
+import { useLanguage } from '../context/LanguageContext'; 
 const useCarListingData = () => {
   const { t } = useLanguage();
 

@@ -207,17 +207,7 @@ function App() {
                     }
                   />
                  
-                  {/* Add this route for editing vehicles */}
-                  <Route
-                    path="/seller/edit-vehicle/:id"
-                    element={
-                      <SellerProtectedRoute>
-                        <AppLayout>
-                          <EditCarListing />
-                        </AppLayout>
-                      </SellerProtectedRoute>
-                    }
-                  />
+                
 
                   {/* Catch-all route */}
                   <Route path="*" element={<Navigate to="/home" replace />} />

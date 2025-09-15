@@ -749,6 +749,8 @@ phonePlaceholder:"+3412345671",
     },
 
   sellerDashboard: {
+    of:'of',
+    results:'results',
     make: 'Make',
   model: 'Model',
   year: 'Year',
@@ -841,6 +843,7 @@ phonePlaceholder:"+3412345671",
 
     // Inventory Tab
     inventory: {
+      year:'year',
       addVehicle: 'Add Vehicle',
       editVehicle:'Edit Vehicle',
       basicInfo:'Basic Info',
@@ -1887,6 +1890,7 @@ phonePlaceholder:"+3412345671",
 
   sellerDashboard: {
     // Alerts & Messages
+
      view: 'Ansehen',
   edit: 'Bearbeiten',
   delete: 'Löschen',
@@ -1940,6 +1944,8 @@ buyCar: 'Auto kaufen'
 
     // Inventory Tab
     inventory: {
+            year:'year',
+
       addVehicle: 'Fahrzeug hinzufügen',
       vehicleDetails: 'Fahrzeugdetails',
       mileage: 'Laufleistung',
@@ -3004,6 +3010,8 @@ buyCar: 'Auto kopen'
 
     // Inventory Tab
     inventory: {
+            year:'year',
+
       addVehicle: 'Voertuig toevoegen',
       vehicleDetails: 'Voertuigdetails',
       mileage: 'Kilometerstand',

@@ -1,63 +1,14 @@
 // src/components/seller/EditCarListing.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { useNavigate, useParams } from 'react-router-dom';
-import { FiArrowLeft, FiSave, FiUpload, FiTrash2, FiPlus, FiX, FiRefreshCw } from 'react-icons/fi';
+// Removed useNavigate and useParams as they are not needed for tab-based navigation
+import { FiArrowLeft, FiSave, FiPlus, FiX, FiRefreshCw, FiInfo } from 'react-icons/fi';
+import { demoVehicles } from './demoVehicles';
 
-// Mock API service
+// Mock API service (remains the same)
 const VehicleService = {
   async getVehicleById(vehicleId) {
     await new Promise(resolve => setTimeout(resolve, 500));
-    const demoVehicles = [
-      {
-        id: 'veh_001',
-        stockNumber: 'STK2023-001',
-        make: 'BMW',
-        model: 'X5',
-        year: 2022,
-        mileage: 25000,
-        fuelType: 'Diesel',
-        transmission: 'Automatic',
-        color: 'Black',
-        condition: 'Excellent',
-        images: [
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=500&q=80',
-          'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=500&q=80'
-        ],
-        status: 'active',
-        currentBid: 45000,
-        reservePrice: 40000,
-        buyItNowPrice: 52000,
-        auctionEnds: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-        location: 'Berlin, DE',
-        auctionType: 'public',
-        vim: 'WBA12345678901234',
-        description: 'Premium SUV with all options. One owner, no accidents.',
-        features: ['Leather Seats', 'Sunroof', 'Navigation System', 'Backup Camera']
-      },
-      {
-        id: 'veh_002',
-        stockNumber: 'STK2023-002',
-        make: 'Audi',
-        model: 'A6',
-        year: 2021,
-        mileage: 32000,
-        fuelType: 'Petrol',
-        transmission: 'Automatic',
-        color: 'White',
-        condition: 'Good',
-        images: [
-          'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=500&q=80'
-        ],
-        status: 'draft',
-        askingPrice: 38500,
-        location: 'Hamburg, DE',
-        auctionType: 'private',
-        vim: 'WAU12345678901234',
-        description: 'Well-maintained executive sedan with full service history.',
-        features: ['Heated Seats', 'Apple CarPlay', 'LED Headlights']
-      }
-    ];
     return demoVehicles.find(vehicle => vehicle.id === vehicleId) || null;
   },
 
@@ -78,19 +29,18 @@ const VehicleService = {
   }
 };
 
-const EditCarListing = () => {
+const EditCarListing = ({ id, onBack }) => {
   const { t } = useLanguage();
-  const navigate = useNavigate();
-  const { id } = useParams();
   const isEditing = Boolean(id);
 
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const fileInputRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
 
   const [formData, setFormData] = useState({
-    // Basic Information
     make: '',
     model: '',
     year: new Date().getFullYear(),
@@ -101,25 +51,16 @@ const EditCarListing = () => {
     condition: 'Good',
     vim: '',
     description: '',
-    
-    // Pricing & Auction
     status: 'draft',
     reservePrice: '',
     buyItNowPrice: '',
     auctionType: 'public',
     auctionEnds: '',
-    
-    // Location
     location: '',
-    
-    // Media
     images: [],
-    
-    // Features
     features: []
   });
 
-  const [newImageUrl, setNewImageUrl] = useState('');
   const [newFeature, setNewFeature] = useState('');
 
   useEffect(() => {
@@ -172,21 +113,47 @@ const EditCarListing = () => {
     }));
   };
 
-  const handleAddImage = () => {
-    if (newImageUrl.trim() && !formData.images.includes(newImageUrl)) {
-      setFormData(prev => ({
-        ...prev,
-        images: [...prev.images, newImageUrl.trim()]
-      }));
-      setNewImageUrl('');
-    }
-  };
-
   const handleRemoveImage = (index) => {
     setFormData(prev => ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
     }));
+  };
+
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    setUploading(true);
+    try {
+      // Simulate file upload process
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Convert files to data URLs for demo purposes
+      const uploadedImages = await Promise.all(
+        files.map(file => {
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file);
+          });
+        })
+      );
+
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...uploadedImages]
+      }));
+    } catch (err) {
+      setError('Failed to upload images');
+      console.error('Upload error:', err);
+    } finally {
+      setUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const handleAddFeature = () => {
@@ -221,8 +188,9 @@ const EditCarListing = () => {
       
       if (result.success) {
         setSuccess(result.message);
+        // Instead of navigating, call the onBack callback after a delay
         setTimeout(() => {
-          navigate('/seller/inventory');
+          if (onBack) onBack();
         }, 1500);
       } else {
         setError(result.message || 'Failed to save vehicle');
@@ -242,37 +210,38 @@ const EditCarListing = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center py-12">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3b396d]"></div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <div className="flex items-center mb-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
+      {/* Header with Back Button and Title */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-200">
         <button
-          onClick={() => navigate('/sellerDashboard')}
-          className="flex items-center text-[#3b396d] hover:text-[#2a285a] mr-4"
+          onClick={onBack}
+          className="flex items-center text-[#3b396d] hover:text-[#2a285a] self-start"
         >
-          <FiArrowLeft className="h-5 w-5 mr-1" />
-          {translateWithFallback('sellerDashboard.back', 'Back to Inventory')}
+          <FiArrowLeft className="h-5 w-5 mr-2" />
+          <span className="font-medium">{translateWithFallback('sellerDashboard.back', 'Back to Inventory')}</span>
         </button>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center sm:text-left flex-1 px-4">
           {isEditing 
             ? translateWithFallback('sellerDashboard.inventory.editVehicle', 'Edit Vehicle Listing')
             : translateWithFallback('sellerDashboard.inventory.addVehicle', 'Add New Vehicle')
           }
         </h1>
+        <div className="w-24"></div>
       </div>
 
+      {/* Notifications */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+        <div className="bg-red-50 border-l-4 border-red-500 rounded-md p-4 mb-6">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
+              <FiInfo className="h-5 w-5 text-red-500" />
             </div>
             <div className="ml-3">
               <h3 className="text-sm font-medium text-red-800">{error}</h3>
@@ -282,10 +251,10 @@ const EditCarListing = () => {
       )}
 
       {success && (
-        <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
+        <div className="bg-green-50 border-l-4 border-green-500 rounded-md p-4 mb-6">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
             </div>
@@ -296,16 +265,18 @@ const EditCarListing = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
+      {/* Main Form */}
+      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        
+        {/* Basic Information Section */}
+        <div className="p-6 border-b border-gray-200 bg-gray-50">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
             {translateWithFallback('sellerDashboard.inventory.basicInfo', 'Basic Information')}
           </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label htmlFor="make" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.make', 'Make')} *
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="md:col-span-1">
+              <label htmlFor="make" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.make', 'Make')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -314,13 +285,14 @@ const EditCarListing = () => {
                 required
                 value={formData.make}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+                placeholder="e.g., BMW"
               />
             </div>
             
-            <div>
-              <label htmlFor="model" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.model', 'Model')} *
+            <div className="md:col-span-1">
+              <label htmlFor="model" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.model', 'Model')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -329,13 +301,14 @@ const EditCarListing = () => {
                 required
                 value={formData.model}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+                placeholder="e.g., X5"
               />
             </div>
             
-            <div>
-              <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.year', 'Year')} *
+            <div className="md:col-span-1">
+              <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.year', 'Year')} <span className="text-red-500">*</span>
               </label>
               <select
                 id="year"
@@ -343,7 +316,7 @@ const EditCarListing = () => {
                 required
                 value={formData.year}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
               >
                 {Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i).map(year => (
                   <option key={year} value={year}>{year}</option>
@@ -352,8 +325,8 @@ const EditCarListing = () => {
             </div>
             
             <div>
-              <label htmlFor="mileage" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.mileage', 'Mileage')} (km) *
+              <label htmlFor="mileage" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.mileage', 'Mileage')} (km) <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -363,13 +336,14 @@ const EditCarListing = () => {
                 min="0"
                 value={formData.mileage}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+                placeholder="e.g., 25000"
               />
             </div>
             
             <div>
-              <label htmlFor="fuelType" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.fuelType', 'Fuel Type')} *
+              <label htmlFor="fuelType" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.fuelType', 'Fuel Type')} <span className="text-red-500">*</span>
               </label>
               <select
                 id="fuelType"
@@ -377,7 +351,7 @@ const EditCarListing = () => {
                 required
                 value={formData.fuelType}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
               >
                 <option value="Petrol">Petrol</option>
                 <option value="Diesel">Diesel</option>
@@ -388,8 +362,8 @@ const EditCarListing = () => {
             </div>
             
             <div>
-              <label htmlFor="transmission" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.transmission', 'Transmission')} *
+              <label htmlFor="transmission" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.transmission', 'Transmission')} <span className="text-red-500">*</span>
               </label>
               <select
                 id="transmission"
@@ -397,7 +371,7 @@ const EditCarListing = () => {
                 required
                 value={formData.transmission}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
               >
                 <option value="Automatic">Automatic</option>
                 <option value="Manual">Manual</option>
@@ -406,8 +380,8 @@ const EditCarListing = () => {
             </div>
             
             <div>
-              <label htmlFor="color" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.color', 'Color')} *
+              <label htmlFor="color" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.color', 'Color')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -416,13 +390,14 @@ const EditCarListing = () => {
                 required
                 value={formData.color}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+                placeholder="e.g., Black"
               />
             </div>
             
             <div>
-              <label htmlFor="condition" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.condition', 'Condition')} *
+              <label htmlFor="condition" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.condition', 'Condition')} <span className="text-red-500">*</span>
               </label>
               <select
                 id="condition"
@@ -430,7 +405,7 @@ const EditCarListing = () => {
                 required
                 value={formData.condition}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
               >
                 <option value="Excellent">Excellent</option>
                 <option value="Very Good">Very Good</option>
@@ -440,9 +415,9 @@ const EditCarListing = () => {
               </select>
             </div>
             
-            <div>
-              <label htmlFor="vim" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.vim', 'VIN')} *
+            <div className="md:col-span-2 lg:col-span-3">
+              <label htmlFor="vim" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.vim', 'VIN')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -451,13 +426,14 @@ const EditCarListing = () => {
                 required
                 value={formData.vim}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+                placeholder="e.g., 1HGBH41JXMN109186"
               />
             </div>
             
-            <div className="md:col-span-2">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.description', 'Description')} *
+            <div className="md:col-span-2 lg:col-span-3">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.description', 'Description')} <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="description"
@@ -466,21 +442,22 @@ const EditCarListing = () => {
                 rows="4"
                 value={formData.description}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+                placeholder="Provide a detailed description of the vehicle..."
               />
             </div>
           </div>
         </div>
 
+        {/* Pricing & Auction Section */}
         <div className="p-6 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
             {translateWithFallback('sellerDashboard.inventory.pricingAuction', 'Pricing & Auction Details')}
           </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.status', 'Status')} *
+              <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.status', 'Status')} <span className="text-red-500">*</span>
               </label>
               <select
                 id="status"
@@ -488,7 +465,7 @@ const EditCarListing = () => {
                 required
                 value={formData.status}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
               >
                 <option value="draft">Draft</option>
                 <option value="active">Active</option>
@@ -497,8 +474,8 @@ const EditCarListing = () => {
             </div>
             
             <div>
-              <label htmlFor="auctionType" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.auctionType', 'Auction Type')} *
+              <label htmlFor="auctionType" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.auctionType', 'Auction Type')} <span className="text-red-500">*</span>
               </label>
               <select
                 id="auctionType"
@@ -506,7 +483,7 @@ const EditCarListing = () => {
                 required
                 value={formData.auctionType}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
               >
                 <option value="public">Public Auction</option>
                 <option value="private">Private Auction</option>
@@ -514,8 +491,8 @@ const EditCarListing = () => {
             </div>
             
             <div>
-              <label htmlFor="reservePrice" className="block text-sm font-medium text-gray-700 mb-1">
-                {translateWithFallback('sellerDashboard.inventory.reservePrice', 'Reserve Price')} (€) *
+              <label htmlFor="reservePrice" className="block text-sm font-medium text-gray-700 mb-2">
+                {translateWithFallback('sellerDashboard.inventory.reservePrice', 'Reserve Price')} (€) <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -526,12 +503,13 @@ const EditCarListing = () => {
                 step="100"
                 value={formData.reservePrice}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+                placeholder="e.g., 40000"
               />
             </div>
             
             <div>
-              <label htmlFor="buyItNowPrice" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="buyItNowPrice" className="block text-sm font-medium text-gray-700 mb-2">
                 {translateWithFallback('sellerDashboard.inventory.buyItNowPrice', 'Buy It Now Price')} (€)
               </label>
               <input
@@ -542,14 +520,15 @@ const EditCarListing = () => {
                 step="100"
                 value={formData.buyItNowPrice}
                 onChange={handleInputChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+                placeholder="e.g., 52000"
               />
             </div>
             
             {formData.status === 'active' && (
-              <div>
-                <label htmlFor="auctionEnds" className="block text-sm font-medium text-gray-700 mb-1">
-                  {translateWithFallback('sellerDashboard.inventory.auctionEnds', 'Auction End Date')} *
+              <div className="md:col-span-2">
+                <label htmlFor="auctionEnds" className="block text-sm font-medium text-gray-700 mb-2">
+                  {translateWithFallback('sellerDashboard.inventory.auctionEnds', 'Auction End Date')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -559,21 +538,21 @@ const EditCarListing = () => {
                   value={formData.auctionEnds}
                   onChange={handleInputChange}
                   min={new Date().toISOString().split('T')[0]}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
                 />
               </div>
             )}
           </div>
         </div>
 
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
+        {/* Location Section */}
+        <div className="p-6 border-b border-gray-200 bg-gray-50">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
             {translateWithFallback('sellerDashboard.inventory.location', 'Location')}
           </h2>
-          
-          <div className="mb-6">
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
-              {translateWithFallback('sellerDashboard.inventory.location', 'Location')} *
+          <div className="max-w-md">
+            <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+              {translateWithFallback('sellerDashboard.inventory.location', 'Location')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -582,121 +561,138 @@ const EditCarListing = () => {
               required
               value={formData.location}
               onChange={handleInputChange}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
               placeholder="City, Country"
             />
           </div>
         </div>
 
+        {/* Images Section */}
         <div className="p-6 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
             {translateWithFallback('sellerDashboard.inventory.images', 'Vehicle Images')}
           </h2>
           
-          <div className="mb-4">
-            <label htmlFor="newImageUrl" className="block text-sm font-medium text-gray-700 mb-1">
-              {translateWithFallback('sellerDashboard.inventory.addImageUrl', 'Add Image URL')}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {translateWithFallback('sellerDashboard.inventory.addImages', 'Add Images')}
             </label>
-            <div className="flex">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
-                type="url"
-                id="newImageUrl"
-                value={newImageUrl}
-                onChange={(e) => setNewImageUrl(e.target.value)}
-                className="flex-1 rounded-l-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
-                placeholder="https://example.com/image.jpg"
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                accept="image/*"
+                multiple
+                disabled={uploading}
+                className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition min-w-0"
               />
-              <button
-                type="button"
-                onClick={handleAddImage}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md text-white bg-[#3b396d] hover:bg-[#2a285a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
-              >
-                <FiPlus className="h-4 w-4 mr-1" />
-                Add
-              </button>
+              {uploading && (
+                <div className="flex items-center text-sm text-gray-500">
+                  <FiRefreshCw className="animate-spin mr-2" />
+                  Uploading...
+                </div>
+              )}
             </div>
+            <p className="mt-2 text-sm text-gray-500">
+              {translateWithFallback('sellerDashboard.inventory.imageHelp', 'Select one or more images to upload')}
+            </p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {formData.images.map((image, index) => (
-              <div key={index} className="relative group">
-                <img
-                  src={image}
-                  alt={`Vehicle ${index + 1}`}
-                  className="h-32 w-full object-cover rounded-md"
-                  onError={(e) => {
-                    e.target.src = '/car3.jpg';
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <FiX className="h-4 w-4" />
-                </button>
+          {formData.images.length > 0 && (
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-3">Current Images</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {formData.images.map((image, index) => (
+                  <div key={index} className="relative group aspect-square">
+                    <img
+                      src={image}
+                      alt={`Vehicle ${index + 1}`}
+                      className="h-full w-full object-cover rounded-lg border border-gray-300"
+                      onError={(e) => {
+                        e.target.src = 'https://placehold.co/400x300?text=Image+Not+Found';
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md hover:bg-red-600"
+                      aria-label={`Remove image ${index + 1}`}
+                    >
+                      <FiX className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
 
-        <div className="p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
+        {/* Features Section */}
+        <div className="p-6 bg-white">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
             {translateWithFallback('sellerDashboard.inventory.features', 'Features & Options')}
           </h2>
           
-          <div className="mb-4">
-            <label htmlFor="newFeature" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="mb-6">
+            <label htmlFor="newFeature" className="block text-sm font-medium text-gray-700 mb-2">
               {translateWithFallback('sellerDashboard.inventory.addFeature', 'Add Feature')}
             </label>
-            <div className="flex">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 id="newFeature"
                 value={newFeature}
                 onChange={(e) => setNewFeature(e.target.value)}
-                className="flex-1 rounded-l-md border-gray-300 shadow-sm focus:border-[#3b396d] focus:ring focus:ring-[#3b396d] focus:ring-opacity-50"
+                className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition min-w-0"
                 placeholder="e.g., Leather Seats, Sunroof"
               />
               <button
                 type="button"
                 onClick={handleAddFeature}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md text-white bg-[#3b396d] hover:bg-[#2a285a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
+                className="inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-[#3b396d] hover:bg-[#2a285a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] transition whitespace-nowrap"
               >
                 <FiPlus className="h-4 w-4 mr-1" />
-                Add
+                Add Feature
               </button>
             </div>
           </div>
           
-          <div className="flex flex-wrap gap-2">
-            {formData.features.map((feature, index) => (
-              <span key={index} className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                {feature}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveFeature(index)}
-                  className="ml-1 text-blue-500 hover:text-blue-700"
-                >
-                  <FiX className="h-3 w-3" />
-                </button>
-              </span>
-            ))}
-          </div>
+          {formData.features.length > 0 && (
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-3">Current Features</h3>
+              <div className="flex flex-wrap gap-2">
+                {formData.features.map((feature, index) => (
+                  <span key={index} className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                    {feature}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFeature(index)}
+                      className="ml-1.5 text-blue-500 hover:text-blue-700 focus:outline-none"
+                      aria-label={`Remove feature ${feature}`}
+                    >
+                      <FiX className="h-3.5 w-3.5" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="px-6 py-4 bg-gray-50 flex justify-end space-x-3">
+        {/* Form Actions */}
+        <div className="px-6 py-5 bg-gray-50 flex flex-col sm:flex-row justify-end gap-3">
           <button
             type="button"
-            onClick={() => navigate('/seller/inventory')}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
+            onClick={onBack}
+            className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] transition"
           >
             {translateWithFallback('sellerDashboard.cancel', 'Cancel')}
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#3b396d] hover:bg-[#2a285a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] disabled:opacity-50"
+            className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-[#3b396d] border border-transparent rounded-lg shadow-sm hover:bg-[#2a285a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] disabled:opacity-70 transition flex items-center justify-center"
           >
             {saving ? (
               <>
