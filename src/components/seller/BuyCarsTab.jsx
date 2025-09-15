@@ -17,7 +17,16 @@ import {
   FiInfo,
   FiChevronLeft as FiBack,
   FiStar,
-  FiCheckCircle
+  FiCheckCircle,
+  FiCalendar,
+  FiTool,
+  FiSettings,
+  FiNavigation,
+  FiWind,
+  FiZap,
+  FiCamera,
+  FiFileText,
+  FiAlertTriangle
 } from 'react-icons/fi';
 import { loadMockCarsData } from '../../mock/data/mockCarsData';
 import { FaArrowAltCircleLeft } from 'react-icons/fa';
@@ -31,35 +40,32 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
   const [selectedModel, setSelectedModel] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
-  const [selectedCar, setSelectedCar] = useState(null); // New state for selected car
+  const [selectedCar, setSelectedCar] = useState(null);
   const carsPerPage = 8;
 
-  // Load mock data
   useEffect(() => {
     const mockCars = loadMockCarsData();
     setAllCars(mockCars);
     setFilteredCars(mockCars);
   }, []);
 
-  // Apply filters
   useEffect(() => {
     let filtered = [...allCars];
     
-    // Apply active filters
     Object.entries(activeFilters).forEach(([key, value]) => {
       if (value) {
         switch (key) {
           case 'make':
-            filtered = filtered.filter(car => car.make.toLowerCase().includes(value.toLowerCase()));
+            filtered = filtered.filter(car => car.vehicleIdentification.make.toLowerCase().includes(value.toLowerCase()));
             break;
           case 'model':
-            filtered = filtered.filter(car => car.model.toLowerCase().includes(value.toLowerCase()));
+            filtered = filtered.filter(car => car.vehicleIdentification.model.toLowerCase().includes(value.toLowerCase()));
             break;
           case 'yearFrom':
-            filtered = filtered.filter(car => car.year >= parseInt(value));
+            filtered = filtered.filter(car => car.vehicleIdentification.year >= parseInt(value));
             break;
           case 'yearTo':
-            filtered = filtered.filter(car => car.year <= parseInt(value));
+            filtered = filtered.filter(car => car.vehicleIdentification.year <= parseInt(value));
             break;
           case 'priceFrom':
             filtered = filtered.filter(car => car.price >= parseInt(value));
@@ -82,13 +88,12 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
       }
     });
     
-    // Apply search term
     if (searchTerm) {
       const termLower = searchTerm.toLowerCase();
       filtered = filtered.filter(car => 
-        car.make.toLowerCase().includes(termLower) ||
-        car.model.toLowerCase().includes(termLower) ||
-        car.year.toString().includes(termLower) ||
+        car.vehicleIdentification.make.toLowerCase().includes(termLower) ||
+        car.vehicleIdentification.model.toLowerCase().includes(termLower) ||
+        car.vehicleIdentification.year.toString().includes(termLower) ||
         car.location.toLowerCase().includes(termLower)
       );
     }
@@ -97,20 +102,17 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     setCurrentPage(1);
   }, [activeFilters, allCars, searchTerm]);
 
-  // Get unique makes and models
-  const makes = [...new Set(allCars.map(car => car.make))];
+  const makes = [...new Set(allCars.map(car => car.vehicleIdentification.make))];
   const getModelsByMake = (make) => {
-    return [...new Set(allCars.filter(car => car.make === make).map(car => car.model))];
+    return [...new Set(allCars.filter(car => car.vehicleIdentification.make === make).map(car => car.vehicleIdentification.model))];
   };
 
-  // Handle filter change
   const handleFilterChange = (filterName, value) => {
     setActiveFilters(prev => ({
       ...prev,
       [filterName]: value
     }));
     
-    // Clear model when make changes
     if (filterName === 'make') {
       setSelectedMake(value);
       setSelectedModel('');
@@ -121,7 +123,6 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     }
   };
 
-  // Clear all filters
   const clearAllFilters = () => {
     setActiveFilters({});
     setSearchTerm('');
@@ -130,28 +131,23 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     setCurrentPage(1);
   };
 
-  // Toggle filter panel
   const toggleFilterPanel = () => {
     setFilterPanelOpen(!filterPanelOpen);
   };
 
-  // Handle view car - now sets the selected car
   const handleViewCar = (carId) => {
     const car = allCars.find(c => c.id === carId);
     setSelectedCar(car);
   };
 
-  // Handle place bid
   const handlePlaceBid = (carId) => {
     console.log(`Placing bid on car ${carId}`);
   };
 
-  // Handle back to car list
   const handleBackToList = () => {
     setSelectedCar(null);
   };
 
-  // Pagination
   const totalPages = Math.ceil(filteredCars.length / carsPerPage);
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
@@ -159,10 +155,9 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Car Image Slider Component
   const CarImageSlider = ({ car }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const images = car.photos || [car.image];
+    const images = car.mediaAndDescription.photos || [car.image];
 
     const nextImage = () => {
       setCurrentImageIndex((prevIndex) => 
@@ -208,7 +203,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
         )}
         <img
           src={images[currentImageIndex]}
-          alt={`${car.make} ${car.model} - Image ${currentImageIndex + 1}`}
+          alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model} - Image ${currentImageIndex + 1}`}
           className="w-full h-full object-cover transition-opacity duration-300"
           onError={(e) => {
             e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
@@ -218,10 +213,9 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     );
   };
 
-  // Car Detail View Component
   const CarDetailView = ({ car }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const images = car.photos || [car.image];
+    const images = car.mediaAndDescription.photos || [car.image];
 
     const nextImage = () => {
       setCurrentImageIndex((prevIndex) => 
@@ -239,13 +233,66 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
       return new Date(date).toLocaleDateString(language === 'de' ? 'de-DE' : 'en-US');
     };
 
+    const formatDateTime = (dateString) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString(language === 'de' ? 'de-DE' : 'en-US') + 
+             ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
+    const getConditionColor = (condition) => {
+      switch (condition) {
+        case 'good': return 'text-green-600';
+        case 'average': return 'text-yellow-600';
+        case 'poor': return 'text-orange-600';
+        case 'not-working': return 'text-red-600';
+        case 'worn': return 'text-red-600';
+        default: return 'text-gray-600';
+      }
+    };
+
+    const getConditionText = (condition) => {
+      return t(`addCarListing.condition.rating.${condition}`) || condition;
+    };
+
+    const renderDamagePoints = () => {
+      if (!car.damagePoints || car.damagePoints.length === 0) {
+        return <span className="text-green-600">{t('buyCars.noDamage') || 'No damage reported'}</span>;
+      }
+      
+      return (
+        <div className="flex flex-wrap gap-2">
+          {car.damagePoints.map((point, index) => (
+            <span key={index} className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
+              {t(`addCarListing.exterior.${point}`) || point}
+            </span>
+          ))}
+        </div>
+      );
+    };
+
+    const renderSelectedOptions = () => {
+      if (!car.selectedOptions || car.selectedOptions.length === 0) {
+        return <span className="text-gray-500">{t('buyCars.noOptions') || 'No options selected'}</span>;
+      }
+      
+      return (
+        <div className="flex flex-wrap gap-2">
+          {car.selectedOptions.map((option, index) => (
+            <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+              { option.replace(/-/g, ' ')}
+            </span>
+          ))}
+        </div>
+      );
+    };
+
     return (
       <div className="p-4">
         <button
           onClick={handleBackToList}
           className="flex items-center text-[#3b396d] hover:text-[#2a285a] mb-4"
         >
-          <FaArrowAltCircleLeft className="mr-2" /> Back
+          <FaArrowAltCircleLeft className="mr-2" /> {t('buyCars.backToList') || 'Back to Listings'}
         </button>
 
         <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
@@ -253,7 +300,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
           <div className="relative h-80 overflow-hidden">
             <img
               src={images[currentImageIndex]}
-              alt={`${car.make} ${car.model}`}
+              alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model}`}
               className="w-full h-full object-cover"
             />
             {images.length > 1 && (
@@ -289,7 +336,10 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
             <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {car.year} {car.make} {car.model}
+                  {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
+                  {car.vehicleIdentification.trim && (
+                    <span className="text-lg font-normal text-gray-600 ml-2">({car.vehicleIdentification.trim})</span>
+                  )}
                 </h1>
                 <div className="flex items-center mt-2">
                   <FiMapPin className="mr-1 text-gray-500" />
@@ -300,9 +350,11 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                 <div className="text-3xl font-bold text-[#3b396d]">
                   €{car.price?.toLocaleString()}
                 </div>
-                <div className="text-gray-600">
-                  {t('buyCars.buyItNow')}: €{car.buyItNowPrice?.toLocaleString()}
-                </div>
+                {car.saleType === 'direct-buy' && car.mediaAndDescription.directBuyPrice && (
+                  <div className="text-gray-600">
+                    {t('buyCars.buyItNow')}: €{parseInt(car.mediaAndDescription.directBuyPrice)?.toLocaleString()}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -310,7 +362,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div className="bg-gray-50 p-3 rounded-lg">
                 <div className="text-sm text-gray-500">{t('buyCars.mileage') || 'Mileage'}</div>
-                <div className="font-semibold">{car.mileage?.toLocaleString()} km</div>
+                <div className="font-semibold">{parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} {car.vehicleIdentification.mileageUnit}</div>
               </div>
               <div className="bg-gray-50 p-3 rounded-lg">
                 <div className="text-sm text-gray-500">{t('buyCars.fuelType') || 'Fuel Type'}</div>
@@ -327,84 +379,234 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
             </div>
 
             {/* Auction Info */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="font-semibold text-blue-800">{t('buyCars.auctionInfo') || 'Auction Information'}</h3>
-                  <p className="text-sm text-blue-600">
-                    {t('buyCars.auctionEnds')}: {formatDate(car.auctionEnds)}
-                  </p>
+            {car.saleType === 'general-auction' && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="font-semibold text-blue-800">{t('buyCars.auctionInfo') || 'Auction Information'}</h3>
+                    <p className="text-sm text-blue-600">
+                      {t('buyCars.auctionEnds')}: {formatDateTime(car.auctionTiming.endDate + 'T' + car.auctionTiming.endTime)}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-[#3b396d]">
+                      {car.bids} {t('buyCars.bids') || 'Bids'}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      {t('buyCars.highestBid')}: €{car.highestBid?.toLocaleString()}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-bold text-[#3b396d]">
-                    {car.bids} {t('buyCars.bids') || 'Bids'}
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    {t('buyCars.highestBid')}: €{car.highestBid?.toLocaleString()}
-                  </div>
+                <div className="mt-3 flex space-x-3">
+                  <button
+                    onClick={() => handlePlaceBid(car.id)}
+                    className="flex-1 bg-[#3b396d] text-white py-2 px-4 rounded-lg hover:bg-[#2a285a] transition-colors"
+                  >
+                    {t('buyCars.placeBid') || 'Place Bid'}
+                  </button>
+                  {car.buyItNowPrice && (
+                    <button className="flex-1 border border-[#3b396d] text-[#3b396d] py-2 px-4 rounded-lg hover:bg-[#3b396d] hover:text-white transition-colors">
+                      {t('buyCars.buyItNow') || 'Buy It Now'}
+                    </button>
+                  )}
                 </div>
               </div>
-              <div className="mt-3 flex space-x-3">
-                <button
-                  onClick={() => handlePlaceBid(car.id)}
-                  className="flex-1 bg-[#3b396d] text-white py-2 px-4 rounded-lg hover:bg-[#2a285a] transition-colors"
-                >
-                  {t('buyCars.placeBid') || 'Place Bid'}
-                </button>
-                <button className="flex-1 border border-[#3b396d] text-[#3b396d] py-2 px-4 rounded-lg hover:bg-[#3b396d] hover:text-white transition-colors">
-                  {t('buyCars.buyItNow') || 'Buy It Now'}
-                </button>
-              </div>
-            </div>
+            )}
 
             {/* Description */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
+                <FiFileText className="mr-2" />
                 {t('buyCars.description') || 'Description'}
               </h3>
-              <p className="text-gray-700">{car.description}</p>
-            </div>
-
-            {/* Inspection Report */}
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                {t('buyCars.inspectionReport') || 'Inspection Report'}
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <div className="text-sm text-gray-500">{t('buyCars.overall') || 'Overall'}</div>
-                  <div className="font-bold text-lg">{car.inspectionReport.overallRating}</div>
+              <p className="text-gray-700">{car.mediaAndDescription.description}</p>
+              
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-medium text-gray-900">{t('buyCars.headline') || 'Headline'}</h4>
+                  <p className="text-gray-700">{car.mediaAndDescription.headline}</p>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <div className="text-sm text-gray-500">{t('buyCars.exterior') || 'Exterior'}</div>
-                  <div className="font-bold text-lg">{car.inspectionReport.exterior}</div>
+                <div>
+                  <h4 className="font-medium text-gray-900">{t('buyCars.serviceHistory') || 'Service History'}</h4>
+                  <p className="text-gray-700 capitalize">{car.mediaAndDescription.serviceHistory}</p>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <div className="text-sm text-gray-500">{t('buyCars.interior') || 'Interior'}</div>
-                  <div className="font-bold text-lg">{car.inspectionReport.interior}</div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <div className="text-sm text-gray-500">{t('buyCars.mechanical') || 'Mechanical'}</div>
-                  <div className="font-bold text-lg">{car.inspectionReport.mechanical}</div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <div className="text-sm text-gray-500">{t('buyCars.accidents') || 'Accidents'}</div>
-                  <div className="font-bold text-lg">{car.inspectionReport.accidentHistory}</div>
+                <div>
+                  <h4 className="font-medium text-gray-900">{t('buyCars.accidentHistory') || 'Accident History'}</h4>
+                  <p className="text-gray-700">
+                    {car.mediaAndDescription.hasAccident 
+                      ? t('yes') || 'Yes' 
+                      : t('no') || 'No'}
+                  </p>
+                  {car.mediaAndDescription.hasAccident && car.mediaAndDescription.accidentDetails && (
+                    <p className="text-gray-700 mt-1">{car.mediaAndDescription.accidentDetails}</p>
+                  )}
                 </div>
               </div>
             </div>
 
+            {/* Vehicle Identification */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                <FiInfo className="mr-2" />
+                {t('buyCars.vehicleIdentification') || 'Vehicle Identification'}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="text-sm text-gray-500">{t('addCarListing.vehicleId.makeLabel') || 'Make'}</div>
+                  <div className="font-semibold">{car.vehicleIdentification.make}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="text-sm text-gray-500">{t('addCarListing.vehicleId.modelLabel') || 'Model'}</div>
+                  <div className="font-semibold">{car.vehicleIdentification.model}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="text-sm text-gray-500">{t('addCarListing.vehicleId.yearLabel') || 'Year'}</div>
+                  <div className="font-semibold">{car.vehicleIdentification.year}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="text-sm text-gray-500">{t('addCarListing.vehicleId.trimLabel') || 'Trim'}</div>
+                  <div className="font-semibold">{car.vehicleIdentification.trim || '-'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="text-sm text-gray-500">{t('addCarListing.vehicleId.mileageLabel') || 'Mileage'}</div>
+                  <div className="font-semibold">{parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} {car.vehicleIdentification.mileageUnit}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="text-sm text-gray-500">{t('addCarListing.vehicleId.licensePlateLabel') || 'License Plate'}</div>
+                  <div className="font-semibold">{car.vehicleIdentification.licensePlate || '-'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="text-sm text-gray-500">{t('addCarListing.vehicleId.registrationDateLabel') || 'Registration Date'}</div>
+                  <div className="font-semibold">{car.vehicleIdentification.registrationDate || '-'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="text-sm text-gray-500">{t('addCarListing.vehicleId.previousOwnersLabel') || 'Previous Owners'}</div>
+                  <div className="font-semibold">{car.vehicleIdentification.previousOwners || '0'}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Condition Assessment */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                <FiTool className="mr-2" />
+                {t('buyCars.conditionAssessment') || 'Condition Assessment'}
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium text-gray-900 mb-3">{t('addCarListing.condition.technicalChecklist.title') || 'Technical Checklist'}</h4>
+                  <div className="space-y-2">
+                    {Object.entries(car.conditionAssessment.technicalChecklist || {}).map(([key, value]) => (
+                      <div key={key} className="flex justify-between">
+                        <span className="text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span>
+                        <span className={`font-medium ${getConditionColor(value)}`}>
+                          {getConditionText(value)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium text-gray-900 mb-3">{t('addCarListing.condition.interiorChecklist.title') || 'Interior Checklist'}</h4>
+                  <div className="space-y-2">
+                    {Object.entries(car.conditionAssessment.interiorChecklist || {}).map(([key, value]) => (
+                      <div key={key} className="flex justify-between">
+                        <span className="text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span>
+                        <span className={`font-medium ${getConditionColor(value)}`}>
+                          {getConditionText(value)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <h4 className="font-medium text-gray-900 mb-3">{t('addCarListing.condition.tyreReport.title') || 'Tyre Report'}</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                {Object.entries(car.conditionAssessment.tyreReport || {}).map(([position, tyreData]) => (
+                  <div key={position} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+                    <h5 className="text-sm font-medium text-gray-700 mb-2 capitalize">
+                      {position.replace(/([A-Z])/g, ' $1')}
+                    </h5>
+                    <div className="space-y-1">
+                      <div className="text-xs">
+                        <span className="text-gray-500">{t('addCarListing.condition.tyreReport.brand') || 'Brand'}:</span>{' '}
+                        <span className="font-medium">{tyreData.brand || '-'}</span>
+                      </div>
+                      <div className="text-xs">
+                        <span className="text-gray-500">{t('addCarListing.condition.tyreReport.treadDepth') || 'Tread'}:</span>{' '}
+                        <span className="font-medium">{tyreData.treadDepth ? `${tyreData.treadDepth}mm` : '-'}</span>
+                      </div>
+                      <div className="text-xs">
+                        <span className="text-gray-500">{t('addCarListing.condition.tyreReport.condition') || 'Condition'}:</span>{' '}
+                        <span className={`font-medium ${getConditionColor(tyreData.condition)}`}>
+                          {getConditionText(tyreData.condition)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Exterior Options & Damages */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                <FiSettings className="mr-2" />
+                {t('buyCars.exteriorOptions') || 'Exterior Options & Damages'}
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">{t('addCarListing.exterior.damageTitle') || 'Damages'}</h4>
+                  {renderDamagePoints()}
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">{t('addCarListing.exterior.optionsTitle') || 'Options'}</h4>
+                  {renderSelectedOptions()}
+                </div>
+              </div>
+            </div>
+
+            {/* Auction Timing (for auction listings) */}
+            {car.saleType === 'general-auction' && (
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                  <FiCalendar className="mr-2" />
+                  {t('buyCars.auctionTiming') || 'Auction Timing'}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <div className="text-sm text-gray-500">{t('addCarListing.auctionTiming.startDateLabel') || 'Start Date'}</div>
+                    <div className="font-semibold">{formatDateTime(car.auctionTiming.startDate + 'T' + car.auctionTiming.startTime)}</div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <div className="text-sm text-gray-500">{t('addCarListing.auctionTiming.endDateLabel') || 'End Date'}</div>
+                    <div className="font-semibold">{formatDateTime(car.auctionTiming.endDate + 'T' + car.auctionTiming.endTime)}</div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <div className="text-sm text-gray-500">{t('addCarListing.auctionTiming.timezoneLabel') || 'Timezone'}</div>
+                    <div className="font-semibold">{car.auctionTiming.timezone}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Seller Info */}
             <div className="border-t border-gray-200 pt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                <FiUser className="mr-2" />
                 {t('buyCars.sellerInfo') || 'Seller Information'}
               </h3>
               <div className="flex items-center">
                 <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
                 <div className="ml-4">
                   <div className="flex items-center">
-                    <h4 className="font-semibold">{car.seller}</h4>
-                    {car.verified && (
+                    <h4 className="font-semibold">{car.seller.name}</h4>
+                    {car.seller.verified && (
                       <FiCheckCircle className="ml-2 text-green-500" title={t('buyCars.verifiedSeller') || 'Verified Seller'} />
                     )}
                   </div>
@@ -413,32 +615,18 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                       {[...Array(5)].map((_, i) => (
                         <FiStar
                           key={i}
-                          className={i < Math.floor(car.sellerRating) ? 'fill-current' : ''}
+                          className={i < Math.floor(car.seller.rating) ? 'fill-current' : ''}
                         />
                       ))}
                     </div>
                     <span className="ml-2 text-gray-600">
-                      {car.sellerRating} ({car.sellerReviews} {t('buyCars.reviews') || 'reviews'})
+                      {car.seller.rating} ({car.seller.reviews} {t('buyCars.reviews') || 'reviews'})
                     </span>
                   </div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    {t('buyCars.memberSince') || 'Member since'}: {formatDate(car.seller.memberSince)}
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Tags */}
-            <div className="mt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {t('buyCars.tags') || 'Tags'}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {car.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-[#3b396d] text-white text-sm rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
               </div>
             </div>
           </div>
@@ -447,7 +635,6 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
     );
   };
 
-  // Show detail view if a car is selected
   if (selectedCar) {
     return <CarDetailView car={selectedCar} />;
   }
@@ -736,9 +923,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
           </div>
         </div>
 
-        {/* Main Content Area */}
         <div className="flex-1">
-          {/* Filter Header - CarCollect Style */}
           <div className="bg-white border-b border-gray-200 py-3 px-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -760,7 +945,6 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
             </div>
           </div>
 
-          {/* Active Filters */}
           {(Object.keys(activeFilters).length > 0 || searchTerm) && (
             <div className="bg-white border-b border-gray-200 py-3 px-4">
               <div className="flex items-center justify-between">
@@ -779,7 +963,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
               <div className="flex flex-wrap gap-2 mt-2">
                 {searchTerm && (
                   <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#3b396d] text-white">
-                    {t('search.searchTerm') || 'Search'}: "{searchTerm}"
+                    {t('search.searchTerm') || 'Search'}: {searchTerm}
                     <button
                       onClick={() => setSearchTerm('')}
                       className="ml-1 text-white hover:text-gray-200"
@@ -805,7 +989,6 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
             </div>
           )}
 
-          {/* Car Grid */}
           <div className="p-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {currentCars.map((car) => (
@@ -815,7 +998,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                   <div className="p-4">
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="text-base font-semibold text-gray-900 truncate">
-                        {car.year} {car.make} {car.model}
+                        {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
                       </h3>
                       <div className="flex items-center">
                         <FiDollarSign className="h-4 w-4 text-[#3b396d] mr-1" />
@@ -826,7 +1009,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                     </div>
                     
                     <div className="text-sm text-gray-600 mb-3">
-                      {car.mileage?.toLocaleString()} km • {car.fuelType} • {car.transmission}
+                      {parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} {car.vehicleIdentification.mileageUnit} • {car.fuelType} • {car.transmission}
                     </div>
                     
                     <div className="text-xs text-gray-500 mb-4">
@@ -877,7 +1060,6 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
               ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center mt-6">
                 <nav className="inline-flex items-center space-x-1">
@@ -914,7 +1096,6 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
               </div>
             )}
 
-            {/* No Results */}
             {filteredCars.length === 0 && (
               <div className="text-center py-12">
                 <FiInfo className="mx-auto h-12 w-12 text-gray-400" />

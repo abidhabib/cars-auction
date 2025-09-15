@@ -516,12 +516,7 @@ const renderStep4_MediaDescription = () => {
     'Interior'
   ];
 
-  const getPositionLabel = (index) => {
-    if (index < photoPositions.length) {
-      return photoPositions[index];
-    }
-    return `Additional ${index - photoPositions.length + 1}`;
-  };
+
 
   return (
     <div className="space-y-6">

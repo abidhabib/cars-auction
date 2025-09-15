@@ -254,6 +254,8 @@ maxPhotos:'Max Photos'
     },
     
      buyCars: {
+        exteriorOptions: 'Exterior Options',
+
     title: 'Buy Cars',
     subtitle: 'Find your perfect vehicle from our marketplace',
     resultsFound: 'Results Found',
@@ -265,6 +267,13 @@ maxPhotos:'Max Photos'
     resetFilters: 'Reset Filters',
     viewDetails: 'View Details',
     bid: 'Bid',
+    vehicleIdentification: 'Vehicle Identification',
+  conditionAssessment: 'Condition Assessment',
+  serviceHistory: 'Service History',
+  headline: 'Headline',
+  noDamage: 'Vehicle has no exterior damage',
+
+    auctionTiming:'Auction Timing',
     buyItNow: 'Buy It Now',
     active:'Active',
     highestBid:'Highest Bid',
@@ -1002,18 +1011,18 @@ addCarListing: {
       rightSide: 'Right Side',
       rearLeft: 'Rear Left',
       rearRight: 'Rear Right',
-      roof: 'Roof',
-      trunk: 'Trunk',
-      alloyWheels: 'Alloy wheels',
-      metallicPaint: 'Metallic paint',
+        alloyWheels: 'Alloy wheels',
+      ledLighting: 'LED lighting',
       panoramicRoof: 'Panoramic roof',
-      sunroof: 'Sunroof / open roof',
       parkingSensors: 'Parking sensors',
       backupCamera: 'Backup camera',
+      roof: 'Roof',
+      trunk: 'Trunk',
+      metallicPaint: 'Metallic paint',
+      sunroof: 'Sunroof / open roof',
       towHitch: 'Tow hitch',
       airSuspension: 'Air suspension',
       xenonHeadlights: 'Xenon headlights',
-      ledLighting: 'LED lighting',
       customBodykit: 'Custom body kit',
       carbonFiber: 'Carbon fiber parts',
       spoiler: 'Spoiler',
@@ -1559,6 +1568,14 @@ phonePlaceholder:"+3412345671",
     resetFilters: 'Filter Zurücksetzen',
     viewDetails: 'Details Ansehen',
     bid: 'Bieten',
+      exteriorOptions: 'Außenoptionen',
+
+      vehicleIdentification: 'Fahrzeugidentifikation',
+  conditionAssessment: 'Zustandsbewertung',
+  serviceHistory: 'Servicehistorie',
+  headline: 'Überschrift',
+  noDamage: 'Fahrzeug hat keine äußeren Schäden',
+
     buyItNow: 'Sofort Kaufen',
     highestBid: 'Höchstgebot',
 placeBid: 'Gebot abgeben',
@@ -2109,7 +2126,9 @@ exterior: {
   spoiler: 'Spoiler',
   customExhaust: 'Individuelle Auspuffanlage',
   other: 'Sonstiges',
-  reset: 'Zurücksetzen'
+  reset: 'Zurücksetzen',
+  
+  
 }
 ,
     saveDraft: 'Entwurf speichern',
@@ -2519,6 +2538,8 @@ buyCars: {
     resetFilters: 'Filters Resetten',
     viewDetails: 'Bekijk Details',
     bid: 'Bieden',
+      exteriorOptions: 'Exterieur opties',
+
     buyItNow: 'Direct Kopen',
     vhighestBid: 'Hoogste bod',
     placeBid: 'Bod plaatsen',
@@ -2528,7 +2549,11 @@ buyCars: {
     accidents: 'Ongelukken',
     sellerInfo: 'Verkoperinformatie',
     reviews: 'Beoordelingen',
-
+     vehicleIdentification: 'Voertuigidentificatie',
+  conditionAssessment: 'Staat beoordeling',
+  serviceHistory: 'Onderhoudsgeschiedenis',
+  headline: 'Koptekst',
+  noDamage: 'Voertuig heeft geen exterieur schade',
 
     // Filter Categories
     make: 'Merk',
