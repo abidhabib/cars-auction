@@ -13,6 +13,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import SplashScreen from './components/common/SplashScreen';
 import AppLayout from './components/layout/AppLayout';
 import SellerDashboard from './pages/seller/SellerDashboard';
+import NewsletterPage from './pages/NewsletterPage/NewsletterPage';
 
 
 // Lazy load all pages and components
@@ -136,6 +137,17 @@ function App() {
                       </AppLayout>
                     }
                   />
+
+<Route
+  path="/seller/newsletter"
+  element={
+    <SellerProtectedRoute>
+      <AppLayout>
+        <NewsletterPage />
+      </AppLayout>
+    </SellerProtectedRoute>
+  }
+/>
                   <Route
                     path="/contact"
                     element={

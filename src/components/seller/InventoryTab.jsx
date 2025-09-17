@@ -1,26 +1,24 @@
 // src/components/seller/InventoryTab.jsx
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
-  FiPlus, FiSearch, FiFilter, FiEye, FiEdit, FiLink, 
-  FiCopy, FiTrash2, FiRefreshCw, FiChevronLeft, 
-  FiChevronRight, FiStar, FiClock, FiDollarSign 
+  FiPlus, FiSearch, FiFilter, FiEdit, FiTrash2, 
+  FiRefreshCw, FiStar, FiDollarSign, FiChevronLeft, 
+  FiChevronRight, FiExternalLink,  FiChevronUp
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import {demoVehicles} from './demoVehicles'
-import EditCarListing from './EditCarListing'; 
+import { demoVehicles } from './demoVehicles';
+import EditCarListing from './EditCarListing';
 
 // Vehicle Service (Mock API calls)
 const VehicleService = {
   async fetchVehicles(filters = {}) {
     await new Promise(resolve => setTimeout(resolve, 500));
     let results = [...demoVehicles];
-    
     // Apply filters
     if (filters.status && filters.status !== 'all') {
       results = results.filter(v => v.status === filters.status);
     }
-    
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
       results = results.filter(v => 
@@ -29,51 +27,38 @@ const VehicleService = {
         v.stockNumber.toLowerCase().includes(searchTerm)
       );
     }
-    
     // Apply sorting
     if (filters.sortBy) {
       results.sort((a, b) => {
         let aValue = a[filters.sortBy];
         let bValue = b[filters.sortBy];
-        
         if (filters.sortBy === 'year') {
           return filters.sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
         }
-        
         if (typeof aValue === 'string') {
           aValue = aValue.toLowerCase();
           bValue = bValue.toLowerCase();
         }
-        
         if (aValue < bValue) return filters.sortOrder === 'asc' ? -1 : 1;
         if (aValue > bValue) return filters.sortOrder === 'asc' ? 1 : -1;
         return 0;
       });
     }
-    
     return results;
   },
-
   async deleteVehicle(vehicleId) {
     await new Promise(resolve => setTimeout(resolve, 300));
     return { success: true, message: 'Vehicle deleted successfully' };
   },
-
   async updateVehicleStatus(vehicleId, status) {
     await new Promise(resolve => setTimeout(resolve, 300));
     return { success: true, message: 'Vehicle status updated successfully' };
   },
-  
   async toggleFeatured(vehicleId) {
     await new Promise(resolve => setTimeout(resolve, 300));
     return { success: true, message: 'Featured status updated successfully' };
   }
 };
-
-// Dummy data for demo (50 vehicles)
-
-
-
 
 // Sub-components for better organization
 const DeleteConfirmationModal = ({ 
@@ -84,7 +69,6 @@ const DeleteConfirmationModal = ({
   t 
 }) => {
   if (!isOpen) return null;
-  
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
@@ -121,9 +105,10 @@ const DeleteConfirmationModal = ({
   );
 };
 
-const VehicleDetailView = ({ 
+// Compact Vehicle Detail Drawer
+const VehicleDetailDrawer = ({ 
   vehicle, 
-  onBack, 
+  onClose, 
   onEdit, 
   onDelete, 
   onStatusChange, 
@@ -133,9 +118,7 @@ const VehicleDetailView = ({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [showBidHistory, setShowBidHistory] = useState(false);
-  const navigate = useNavigate();
-
+  
   const handleDelete = async () => {
     setDeleting(true);
     await onDelete(vehicle.id);
@@ -170,293 +153,258 @@ const VehicleDetailView = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow border border-gray-100 overflow-hidden">
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center mb-4">
-          <button 
-            onClick={onBack}
-            className="flex items-center text-[#3b396d] hover:text-[#2a285a] mr-4"
-          >
-            <FiChevronLeft className="h-5 w-5 mr-1" />
-            {translateWithFallback('sellerDashboard.back', 'Back')}
-          </button>
-          <h2 className="text-xl font-bold text-gray-900">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl shadow-xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="text-lg font-bold text-gray-900">
             {vehicle.year} {vehicle.make} {vehicle.model}
           </h2>
+          <button 
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100"
+          >
+            <FiChevronRight className="h-5 w-5 rotate-180" />
+          </button>
         </div>
-
-        <div className="flex flex-col lg:flex-row">
-          <div className="lg:w-1/3 mb-4 lg:mb-0 lg:pr-6">
-            <div className="relative">
-              <img 
-                src={vehicle.images?.[currentImageIndex] || vehicle.mainImage} 
-                alt={`${vehicle.make} ${vehicle.model}`} 
-                className="w-full h-64 object-cover rounded-lg"
-                onError={(e) => {
-                  e.target.src = '/car1.jpg';
-                }}
-              />
-              {vehicle.images?.length > 1 && (
-                <>
-                  <button 
-                    onClick={prevImage}
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
-                  >
-                    <FiChevronLeft className="h-5 w-5" />
-                  </button>
-                  <button 
-                    onClick={nextImage}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
-                  >
-                    <FiChevronRight className="h-5 w-5" />
-                  </button>
-                  <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-1">
-                    {vehicle.images.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentImageIndex(index)}
-                        className={`w-2 h-2 rounded-full ${index === currentImageIndex ? 'bg-white' : 'bg-white bg-opacity-50'}`}
-                      />
-                    ))}
+        
+        <div className="p-4">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            {/* Image Gallery - Compact */}
+            <div className="lg:col-span-1">
+              <div className="relative mb-3">
+                <img 
+                  src={vehicle.images?.[currentImageIndex] || vehicle.mainImage} 
+                  alt={`${vehicle.make} ${vehicle.model}`} 
+                  className="w-full h-40 object-cover rounded-lg"
+                  onError={(e) => {
+                    e.target.src = '/car1.jpg';
+                  }}
+                />
+                {vehicle.images?.length > 1 && (
+                  <>
+                    <button 
+                      onClick={prevImage}
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1 rounded-full"
+                    >
+                      <FiChevronLeft className="h-4 w-4" />
+                    </button>
+                    <button 
+                      onClick={nextImage}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1 rounded-full"
+                    >
+                      <FiChevronRight className="h-4 w-4" />
+                    </button>
+                  </>
+                )}
+                {vehicle.featured && (
+                  <div className="absolute top-2 right-2 bg-yellow-500 text-white px-1.5 py-0.5 rounded text-xs">
+                    <FiStar className="inline h-3 w-3 mr-0.5" /> Featured
                   </div>
-                </>
-              )}
-              {vehicle.featured && (
-                <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs flex items-center">
-                  <FiStar className="mr-1" /> Featured
+                )}
+              </div>
+              
+              {vehicle.images?.length > 1 && (
+                <div className="grid grid-cols-3 gap-1">
+                  {vehicle.images.slice(0, 3).map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`h-12 w-full ${currentImageIndex === index ? 'ring-1 ring-[#3b396d]' : ''}`}
+                    >
+                      <img 
+                        src={img} 
+                        alt={`${vehicle.make} ${vehicle.model} ${index + 1}`} 
+                        className="h-full w-full object-cover rounded"
+                        onError={(e) => {
+                          e.target.src = '/car1.jpg';
+                        }}
+                      />
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
             
-            <div className="grid grid-cols-3 gap-2 mt-2">
-              {vehicle.images?.slice(0, 3).map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentImageIndex(index)}
-                  className={`h-16 w-full ${currentImageIndex === index ? 'ring-2 ring-[#3b396d]' : ''}`}
-                >
-                  <img 
-                    src={img} 
-                    alt={`${vehicle.make} ${vehicle.model} ${index + 1}`} 
-                    className="h-full w-full object-cover rounded"
-                    onError={(e) => {
-                  e.target.src = '/car1.jpg';
-                    }}
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <div className="lg:w-2/3">
-            <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900">{vehicle.year} {vehicle.make} {vehicle.model}</h3>
-                <p className="text-gray-600">{vehicle.stockNumber}</p>
-                {vehicle.vim && <p className="text-xs text-gray-500 mt-1">VIN: {vehicle.vim}</p>}
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  vehicle.status === 'active' ? 'bg-green-100 text-green-800' :
-                  vehicle.status === 'sold' ? 'bg-blue-100 text-blue-800' :
-                  'bg-gray-100 text-gray-800'
-                }`}>
-                  {vehicle.status === 'active' ? translateWithFallback('sellerDashboard.vehicleStatus.active', 'Active') :
-                   vehicle.status === 'sold' ? translateWithFallback('sellerDashboard.vehicleStatus.sold', 'Sold') :
-                   translateWithFallback('sellerDashboard.vehicleStatus.draft', 'Draft')}
-                </span>
-                <button 
-                  className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
-                  onClick={() => onEdit(vehicle.id)}
-                  title={`edit`}
-                >
-                  <FiEdit className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-
-            {vehicle.description && (
+            {/* Vehicle Details - Compact */}
+            <div className="lg:col-span-3">
               <div className="mb-4">
-                <p className="text-sm text-gray-700">{vehicle.description}</p>
-              </div>
-            )}
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
-              <div>
-                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.mileage', 'Mileage')}</p>
-                <p className="font-medium">{vehicle.mileage?.toLocaleString()} km</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.fuelType', 'Fuel Type')}</p>
-                <p className="font-medium">{vehicle.fuelType}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.transmission', 'Transmission')}</p>
-                <p className="font-medium">{vehicle.transmission}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.color', 'Color')}</p>
-                <p className="font-medium">{vehicle.color}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.condition', 'Condition')}</p>
-                <p className="font-medium">{vehicle.condition}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">{translateWithFallback('sellerDashboard.inventory.location', 'Location')}</p>
-                <p className="font-medium">{vehicle.location}</p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-3 mb-6">
-              {vehicle.status === 'active' && (
-                <>
-                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.currentBid', 'Current Bid')}</p>
-                    <p className="text-2xl font-bold text-[#3b396d]">€{vehicle.currentBid?.toLocaleString()}</p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {translateWithFallback('sellerDashboard.inventory.reservePrice', 'Reserve')}: €{vehicle.reservePrice?.toLocaleString()}
-                    </p>
+                <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">{vehicle.year} {vehicle.make} {vehicle.model}</h3>
+                    <p className="text-gray-600 text-sm">{vehicle.stockNumber}</p>
+                    {vehicle.vim && <p className="text-xs text-gray-500">VIN: {vehicle.vim}</p>}
                   </div>
-                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.auctionEnds', 'Auction Ends')}</p>
-                    <p className="text-lg font-bold text-gray-900">
-                      {vehicle.auctionEnds?.toLocaleDateString()} <br />
-                      <span className="text-sm font-normal">{vehicle.auctionEnds?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                    </p>
-                    <div className="flex items-center mt-1 text-xs text-gray-500">
-                      <FiClock className="mr-1" />
-                      {Math.floor((vehicle.auctionEnds - new Date()) / (1000 * 60 * 60 * 24))} days left
-                    </div>
+                  <div className="flex items-center space-x-2">
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      vehicle.status === 'active' ? 'bg-green-100 text-green-800' :
+                      vehicle.status === 'sold' ? 'bg-blue-100 text-blue-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {vehicle.status === 'active' ? 'Active' :
+                       vehicle.status === 'sold' ? 'Sold' :
+                       'Draft'}
+                    </span>
                   </div>
-                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.bids', 'Bids')}</p>
-                    <p className="text-2xl font-bold text-gray-900">{vehicle.bids?.length || 0}</p>
-                    <button
-                      onClick={() => setShowBidHistory(!showBidHistory)}
-                      className="text-xs text-[#3b396d] hover:text-[#2a285a] font-medium mt-1"
-                    >
-                      {showBidHistory ? 'Hide History' : 'View History'}
-                    </button>
+                </div>
+                
+                {vehicle.description && (
+                  <div className="mb-3 p-2 bg-gray-50 rounded">
+                    <p className="text-xs text-gray-700 line-clamp-2">{vehicle.description}</p>
                   </div>
-                  {vehicle.buyItNowPrice && (
-                    <div className="bg-green-50 rounded-lg p-4 flex-1 min-w-[200px]">
-                      <p className="text-sm text-gray-500 mb-1">Buy It Now Price</p>
-                      <p className="text-2xl font-bold text-green-800">€{vehicle.buyItNowPrice?.toLocaleString()}</p>
+                )}
+                
+                {/* Key Specs in Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-4">
+                  <div>
+                    <p className="text-xs text-gray-500">Mileage</p>
+                    <p className="text-sm font-medium">{vehicle.mileage?.toLocaleString()} km</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Fuel Type</p>
+                    <p className="text-sm font-medium">{vehicle.fuelType}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Transmission</p>
+                    <p className="text-sm font-medium">{vehicle.transmission}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Color</p>
+                    <p className="text-sm font-medium">{vehicle.color}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Condition</p>
+                    <p className="text-sm font-medium">{vehicle.condition}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Location</p>
+                    <p className="text-sm font-medium">{vehicle.location}</p>
+                  </div>
+                  
+                  {/* Price and Auction Info */}
+                  {vehicle.status === 'active' && (
+                    <>
+                      <div>
+                        <p className="text-xs text-gray-500">Current Bid</p>
+                        <p className="text-sm font-bold text-[#3b396d]">€{vehicle.currentBid?.toLocaleString()}</p>
+                        {vehicle.reservePrice && (
+                          <p className="text-xs text-gray-500">Res: €{vehicle.reservePrice?.toLocaleString()}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Auction Ends</p>
+                        <p className="text-sm font-medium">
+                          {vehicle.auctionEnds?.toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Bids</p>
+                        <p className="text-sm font-medium">{vehicle.bids?.length || 0}</p>
+                      </div>
+                      {vehicle.buyItNowPrice && (
+                        <div>
+                          <p className="text-xs text-gray-500">Buy It Now</p>
+                          <p className="text-sm font-bold text-green-600">€{vehicle.buyItNowPrice?.toLocaleString()}</p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {vehicle.status === 'sold' && (
+                    <>
+                      <div>
+                        <p className="text-xs text-gray-500">Final Price</p>
+                        <p className="text-sm font-bold text-[#3b396d]">€{vehicle.finalSalePrice?.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Sold To</p>
+                        <p className="text-sm font-medium">{vehicle.buyer?.name}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Sold Date</p>
+                        <p className="text-sm font-medium">{vehicle.soldDate?.toLocaleDateString()}</p>
+                      </div>
+                    </>
+                  )}
+                  
+                  {vehicle.status === 'draft' && vehicle.askingPrice && (
+                    <div>
+                      <p className="text-xs text-gray-500">Asking Price</p>
+                      <p className="text-sm font-bold text-[#3b396d]">€{vehicle.askingPrice?.toLocaleString()}</p>
                     </div>
                   )}
-                </>
-              )}
-              {vehicle.status === 'sold' && (
-                <>
-                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.finalSalePrice', 'Final Sale Price')}</p>
-                    <p className="text-2xl font-bold text-[#3b396d]">€{vehicle.finalSalePrice?.toLocaleString()}</p>
-                  </div>
-                  <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                    <p className="text-sm text-gray-500 mb-1">{translateWithFallback('sellerDashboard.inventory.soldTo', 'Sold To')}</p>
-                    <p className="font-medium text-gray-900">{vehicle.buyer?.name}</p>
-                    <p className="text-xs text-gray-500">{vehicle.soldDate?.toLocaleDateString()}</p>
-                  </div>
-                </>
-              )}
-              {vehicle.status === 'draft' && vehicle.askingPrice && (
-                <div className="bg-[#f8f9ff] rounded-lg p-4 flex-1 min-w-[200px]">
-                  <p className="text-sm text-gray-500 mb-1">Asking Price</p>
-                  <p className="text-2xl font-bold text-[#3b396d]">€{vehicle.askingPrice?.toLocaleString()}</p>
                 </div>
-              )}
-            </div>
-
-            {showBidHistory && vehicle.bids?.length > 0 && (
-              <div className="mb-6 bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-3">Bid History</h4>
-                <div className="space-y-2">
-                  {vehicle.bids.map((bid, index) => (
-                    <div key={bid.id || index} className="flex justify-between items-center py-2 border-b border-gray-200">
+                
+                {vehicle.auctionType === 'private' && (
+                  <div className="p-2 bg-yellow-50 border border-yellow-200 rounded mb-3">
+                    <div className="flex items-start">
+                      <FiExternalLink className="h-4 w-4 text-yellow-600 mt-0.5 mr-1 flex-shrink-0" />
                       <div>
-                        <p className="font-medium">{bid.bidder || `Bidder #${index + 1}`}</p>
-                        <p className="text-xs text-gray-500">{bid.time?.toLocaleString()}</p>
+                        <p className="text-xs font-medium text-yellow-800">Private Auction Link</p>
+                        <p className="text-xs text-yellow-700 break-all">{vehicle.auctionLink}</p>
+                        <button
+                          onClick={() => copyToClipboard(vehicle.auctionLink)}
+                          className="mt-1 inline-flex items-center px-2 py-0.5 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200"
+                        >
+                          <FiCopy className="mr-1 h-3 w-3" />
+                          Copy Link
+                        </button>
                       </div>
-                      <div className="text-lg font-bold text-[#3b396d]">€{bid.amount?.toLocaleString()}</div>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {vehicle.auctionType === 'private' && (
-              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <div className="flex items-start">
-                  <FiLink className="h-5 w-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-yellow-800">{translateWithFallback('sellerDashboard.inventory.privateAuction', 'Private Auction Link')}</p>
-                    <p className="text-xs text-yellow-700 mt-1 break-all">{vehicle.auctionLink}</p>
-                    <button
-                      onClick={() => copyToClipboard(vehicle.auctionLink)}
-                      className="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                    >
-                      <FiCopy className="mr-1 h-3 w-3" />
-                      {translateWithFallback('sellerDashboard.copyLink', 'Copy Link')}
-                    </button>
                   </div>
+                )}
+                
+                {/* Compact Action Buttons */}
+                <div className="flex flex-wrap gap-2 pt-3 border-t border-gray-200">
+                  <button
+                    onClick={() => onEdit(vehicle.id)}
+                    className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
+                  >
+                    <FiEdit className="mr-1 h-3 w-3" />
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => onToggleFeatured(vehicle.id, !vehicle.featured)}
+                    className={`inline-flex items-center px-3 py-1.5 border text-xs font-medium rounded ${
+                      vehicle.featured 
+                        ? 'border-yellow-400 text-yellow-700 bg-yellow-100 hover:bg-yellow-200' 
+                        : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+                    }`}
+                  >
+                    <FiStar className="mr-1 h-3 w-3" />
+                    {vehicle.featured ? 'Unfeature' : 'Feature'}
+                  </button>
+                  {vehicle.status !== 'sold' && (
+                    <button
+                      onClick={() => setShowDeleteConfirm(true)}
+                      className="inline-flex items-center px-3 py-1.5 border border-red-300 text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50"
+                    >
+                      <FiTrash2 className="mr-1 h-3 w-3" />
+                      Delete
+                    </button>
+                  )}
+                  {vehicle.status === 'draft' && (
+                    <button
+                      onClick={() => onStatusChange(vehicle.id, 'active')}
+                      className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-green-600 hover:bg-green-700"
+                    >
+                      Publish
+                    </button>
+                  )}
+                  {vehicle.status === 'active' && (
+                    <button
+                      onClick={() => onStatusChange(vehicle.id, 'draft')}
+                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
+                    >
+                      Unpublish
+                    </button>
+                  )}
                 </div>
               </div>
-            )}
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button
-                onClick={() => onEdit(vehicle.id)}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
-              >
-                <FiEdit className="mr-2 h-4 w-4" />
-                {translateWithFallback('sellerDashboard.edit', 'Edit')}
-              </button>
-              
-              <button
-                onClick={() => onToggleFeatured(vehicle.id, !vehicle.featured)}
-                className={`inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] ${
-                  vehicle.featured 
-                    ? 'border-yellow-400 text-yellow-700 bg-yellow-100 hover:bg-yellow-200' 
-                    : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
-                }`}
-              >
-                <FiStar className="mr-2 h-4 w-4" />
-                {vehicle.featured ? 'Unfeature' : 'Feature'}
-              </button>
-              
-              {vehicle.status !== 'sold' && (
-                <button
-                  onClick={() => setShowDeleteConfirm(true)}
-                  className="inline-flex items-center px-4 py-2 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                >
-                  <FiTrash2 className="mr-2 h-4 w-4" />
-                  {translateWithFallback('sellerDashboard.delete', 'Delete')}
-                </button>
-              )}
-              
-              {vehicle.status === 'draft' && (
-                <button
-                  onClick={() => onStatusChange(vehicle.id, 'active')}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                >
-                  {translateWithFallback('sellerDashboard.inventory.publish', 'Publish')}
-                </button>
-              )}
-              
-              {vehicle.status === 'active' && (
-                <button
-                  onClick={() => onStatusChange(vehicle.id, 'draft')}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
-                >
-                  {translateWithFallback('sellerDashboard.inventory.unpublish', 'Unpublish')}
-                </button>
-              )}
             </div>
           </div>
         </div>
       </div>
-
+      
       <DeleteConfirmationModal
         isOpen={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
@@ -482,23 +430,23 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
     featured: false
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Allow user to change
   const [deletingId, setDeletingId] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-    const [editingVehicleId, setEditingVehicleId] = useState(null); // State for editing vehicle
-
+  const [editingVehicleId, setEditingVehicleId] = useState(null);
+  const [expandedRow, setExpandedRow] = useState(null);
+  const [showFilters, setShowFilters] = useState(true); // Toggle for filters
 
   // Fetch vehicles on component mount and when filters change
   useEffect(() => {
     loadVehicles();
   }, [filters.status, filters.sortBy, filters.sortOrder, filters.featured]);
-
+  
   const loadVehicles = async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true);
       else setRefreshing(true);
-      
       const data = await VehicleService.fetchVehicles(filters);
       setVehicles(data);
       setError(null);
@@ -510,17 +458,16 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
       setRefreshing(false);
     }
   };
-  // Handle edit vehicle within the tab
+  
   const handleBackFromEdit = () => {
     setEditingVehicleId(null);
-    // Refresh the vehicle list after editing
     loadVehicles(false);
   };
+  
   const handleDeleteVehicle = async (vehicleId) => {
     try {
       setDeletingId(vehicleId);
       const result = await VehicleService.deleteVehicle(vehicleId);
-      
       if (result.success) {
         setVehicles(prevVehicles => prevVehicles.filter(v => v.id !== vehicleId));
         setShowDeleteConfirm(null);
@@ -535,11 +482,10 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
       setDeletingId(null);
     }
   };
-
+  
   const handleStatusChange = async (vehicleId, newStatus) => {
     try {
       const result = await VehicleService.updateVehicleStatus(vehicleId, newStatus);
-      
       if (result.success) {
         setVehicles(prevVehicles => 
           prevVehicles.map(v => 
@@ -555,11 +501,10 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
       console.error('Error updating status:', err);
     }
   };
-
+  
   const handleToggleFeatured = async (vehicleId, featured) => {
     try {
       const result = await VehicleService.toggleFeatured(vehicleId);
-      
       if (result.success) {
         setVehicles(prevVehicles => 
           prevVehicles.map(v => 
@@ -575,12 +520,15 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
       console.error('Error updating featured status:', err);
     }
   };
-// In InventoryTab.jsx, replace the handleEditVehicle function:
-const handleEditVehicle = (vehicleId) => {
-  setEditingVehicleId(vehicleId); // Set the editing state instead of navigating
-};
- 
-
+  
+  const handleEditVehicle = (vehicleId) => {
+    setEditingVehicleId(vehicleId);
+  };
+  
+  const handleViewDetails = (vehicle) => {
+    setExpandedRow(expandedRow === vehicle.id ? null : vehicle.id);
+  };
+  
   const filteredVehicles = useMemo(() => {
     return vehicles.filter(vehicle => {
       const matchesStatus = filters.status === 'all' || vehicle.status === filters.status;
@@ -592,42 +540,52 @@ const handleEditVehicle = (vehicleId) => {
       return matchesStatus && matchesSearch && matchesFeatured;
     });
   }, [vehicles, filters]);
-
+  
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentVehicles = filteredVehicles.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredVehicles.length / itemsPerPage);
-
+  
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+  
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
     setCurrentPage(1);
   };
-
+  
   const getStatusOptions = () => [
     { value: 'all', label: t('sellerDashboard.all') || 'All Vehicles' },
     { value: 'active', label: t('sellerDashboard.active') || 'Active' },
     { value: 'sold', label: t('sellerDashboard.sold') || 'Sold' },
     { value: 'draft', label: t('sellerDashboard.draft') || 'Draft' }
   ];
-
+  
   const getSortOptions = () => [
     { value: 'year', label: t('sellerDashboard.inventory.sort.year') || 'Year' },
     { value: 'make', label: t('sellerDashboard.inventory.sort.make') || 'Make' },
     { value: 'mileage', label: t('sellerDashboard.inventory.sort.mileage') || 'Mileage' }
   ];
-
+  
   const translateWithFallback = (key, fallback) => {
     const translation = t(key);
     return translation && !translation.includes('missing') ? translation : fallback;
   };
- if (editingVehicleId) {
+  
+  // Handle sorting
+  const handleSort = (field) => {
+    setFilters(prev => ({
+      ...prev,
+      sortBy: field,
+      sortOrder: prev.sortBy === field && prev.sortOrder === 'desc' ? 'asc' : 'desc'
+    }));
+  };
+  
+  if (editingVehicleId) {
     return (
-      <div className="p-6">
+      <div className="p-4">
         <EditCarListing 
           id={editingVehicleId} 
           onBack={handleBackFromEdit} 
@@ -635,108 +593,125 @@ const handleEditVehicle = (vehicleId) => {
       </div>
     );
   }
-  if (selectedVehicle) {
-    return (
-      <VehicleDetailView
-        vehicle={selectedVehicle}
-        onBack={() => setSelectedVehicle(null)}
-        onEdit={handleEditVehicle}
-        onDelete={handleDeleteVehicle}
-        onStatusChange={handleStatusChange}
-        onToggleFeatured={handleToggleFeatured}
-        t={t}
-      />
-    );
-  }
-
+  
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-xl font-bold text-gray-900">
-          {translateWithFallback('sellerDashboard.sidebar.inventory', 'My Inventory')}
-        </h2>
-       
-      </div>
-
-      {/* Filters */}
-      <div >
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="relative md:col-span-2">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiSearch className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder={translateWithFallback('sellerDashboard.inventory.searchPlaceholder', "Search vehicles...")}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] text-sm"
-              value={filters.search}
-              onChange={(e) => handleFilterChange('search', e.target.value)}
-            />
-          </div>
-          
-          <select
-            value={filters.status}
-            onChange={(e) => handleFilterChange('status', e.target.value)}
-            className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] sm:text-sm rounded-md"
+    <div className="space-y-4">
+      {/* Compact Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div className="flex items-center">
+          <h2 className="text-xl font-bold text-gray-900">
+            {translateWithFallback('sellerDashboard.sidebar.inventory', 'My Inventory')}
+          </h2>
+          <span className="ml-2 bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs">
+            {filteredVehicles.length} {filteredVehicles.length === 1 ? 'item' : 'items'}
+          </span>
+        </div>
+        <div className="flex space-x-2">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
           >
-            {getStatusOptions().map(option => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </select>
-          
-          <select
-            value={filters.sortBy}
-            onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-            className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] sm:text-sm rounded-md"
+            <FiFilter className="mr-1 h-4 w-4" />
+            {showFilters ? 'Hide Filters' : 'Show Filters'}
+          </button>
+          <button
+            onClick={handleAddVehicle}
+            className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#3b396d] hover:bg-[#2a285a]"
           >
-            {getSortOptions().map(option => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </select>
-          
-          <div className="flex space-x-2">
-            <button 
-              onClick={() => loadVehicles(false)}
-              disabled={refreshing}
-              className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] disabled:opacity-50"
-            >
-              <FiRefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-            </button>
-            <div className="flex items-center px-3 border border-gray-300 rounded-md">
-              <input
-                id="featured-filter"
-                type="checkbox"
-                checked={filters.featured}
-                onChange={(e) => handleFilterChange('featured', e.target.checked)}
-                className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
-              />
-              <label htmlFor="featured-filter" className="ml-2 block text-sm text-gray-700">
-                <FiStar className="inline h-4 w-4 mr-1" />
-                
-              </label>
-            </div>
-          </div>
+            <FiPlus className="mr-1 h-4 w-4" />
+            Add Vehicle
+          </button>
         </div>
       </div>
-
-      {/* Loading and Error States */}
-      {loading && (
-        <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3b396d]"></div>
+      
+      {/* Compact Filters */}
+      {showFilters && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3">
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
+            <div className="relative md:col-span-2">
+              <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
+                <FiSearch className="h-4 w-4 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder={translateWithFallback('sellerDashboard.inventory.searchPlaceholder', "Search...")}
+                className="block w-full pl-8 pr-2.5 py-1.5 border border-gray-300 rounded text-xs bg-white placeholder-gray-500 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d]"
+                value={filters.search}
+                onChange={(e) => handleFilterChange('search', e.target.value)}
+              />
+            </div>
+            <select
+              value={filters.status}
+              onChange={(e) => handleFilterChange('status', e.target.value)}
+              className="block w-full pl-2.5 pr-8 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] rounded"
+            >
+              {getStatusOptions().map(option => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+            <select
+              value={filters.sortBy}
+              onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+              className="block w-full pl-2.5 pr-8 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] rounded"
+            >
+              {getSortOptions().map(option => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
+              className="block w-full pl-2.5 pr-8 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] rounded"
+            >
+              <option value={5}>5 per page</option>
+              <option value={10}>10 per page</option>
+              <option value={20}>20 per page</option>
+              <option value={50}>50 per page</option>
+            </select>
+            <div className="flex space-x-1">
+              <button 
+                onClick={() => loadVehicles(false)}
+                disabled={refreshing}
+                className="flex-1 inline-flex items-center justify-center px-2 py-1.5 border border-gray-300 text-xs rounded text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+              >
+                <FiRefreshCw className={`h-3 w-3 ${refreshing ? 'animate-spin' : ''}`} />
+              </button>
+              <div className="flex items-center px-2 border border-gray-300 rounded">
+                <input
+                  id="featured-filter"
+                  type="checkbox"
+                  checked={filters.featured}
+                  onChange={(e) => handleFilterChange('featured', e.target.checked)}
+                  className="h-3 w-3 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
+                />
+                <label htmlFor="featured-filter" className="ml-1 block text-xs text-gray-700">
+                  <FiStar className="inline h-3 w-3 mr-0.5" />
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
       )}
-
+      
+      {/* Loading State */}
+      {loading && (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#3b396d]"></div>
+        </div>
+      )}
+      
+      {/* Error State */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+        <div className="bg-red-50 border border-red-200 rounded p-3">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <svg className="h-4 w-4 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
             </div>
-            <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">{error}</h3>
-              <div className="mt-2 text-sm text-red-700">
+            <div className="ml-2">
+              <h3 className="text-xs font-medium text-red-800">{error}</h3>
+              <div className="mt-1 text-xs text-red-700">
                 <button 
                   onClick={() => loadVehicles()}
                   className="font-medium text-red-800 hover:text-red-900"
@@ -748,49 +723,76 @@ const handleEditVehicle = (vehicleId) => {
           </div>
         </div>
       )}
-
-      {/* Vehicle Grid/Table */}
+      
+      {/* Compact Vehicle Table - Matches Buy Car layout */}
       {!loading && !error && (
-        <>
-          <div className="bg-white rounded-lg shadow border border-gray-100 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200 text-xs">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <button 
+                      onClick={() => handleSort('year')}
+                      className="flex items-center hover:text-gray-700"
+                    >
+                      Vehicle
+                      {filters.sortBy === 'year' && (
+                        <FiChevronUp className={`ml-1 h-3 w-3 ${filters.sortOrder === 'desc' ? 'rotate-180' : ''}`} />
+                      )}
+                    </button>
+                  </th>
+                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <button 
+                      onClick={() => handleSort('stockNumber')}
+                      className="flex items-center hover:text-gray-700"
+                    >
+                      Stock #
+                      {filters.sortBy === 'stockNumber' && (
+                        <FiChevronUp className={`ml-1 h-3 w-3 ${filters.sortOrder === 'desc' ? 'rotate-180' : ''}`} />
+                      )}
+                    </button>
+                  </th>
+                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <button 
+                      onClick={() => handleSort('mileage')}
+                      className="flex items-center hover:text-gray-700"
+                    >
+                      Mileage
+                      {filters.sortBy === 'mileage' && (
+                        <FiChevronUp className={`ml-1 h-3 w-3 ${filters.sortOrder === 'desc' ? 'rotate-180' : ''}`} />
+                      )}
+                    </button>
+                  </th>
+                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Price/Bid
+                  </th>
+                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {currentVehicles.length === 0 ? (
                   <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {translateWithFallback('sellerDashboard.inventory.vehicle', 'Vehicle')}
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {translateWithFallback('sellerDashboard.inventory.details', 'Details')}
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {translateWithFallback('sellerDashboard.inventory.status', 'Status')}
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {translateWithFallback('sellerDashboard.inventory.price', 'Price')}
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {translateWithFallback('sellerDashboard.inventory.actions', 'Actions')}
-                    </th>
+                    <td colSpan="6" className="px-3 py-4 text-center text-xs text-gray-500">
+                      {filters.search || filters.status !== 'all' || filters.featured
+                        ? translateWithFallback('sellerDashboard.inventory.noResults', 'No vehicles found') 
+                        : translateWithFallback('sellerDashboard.inventory.noVehicles', 'No vehicles in inventory')}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {currentVehicles.length === 0 ? (
-                    <tr>
-                      <td colSpan="5" className="px-6 py-4 text-center text-sm text-gray-500">
-                        {filters.search || filters.status !== 'all' || filters.featured
-                          ? translateWithFallback('sellerDashboard.inventory.noResults', 'No vehicles found matching your criteria') 
-                          : translateWithFallback('sellerDashboard.inventory.noVehicles', 'No vehicles in inventory')}
-                      </td>
-                    </tr>
-                  ) : (
-                    currentVehicles.map((vehicle) => (
-                      <tr key={vehicle.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
+                ) : (
+                  currentVehicles.map((vehicle) => (
+                    <React.Fragment key={vehicle.id}>
+                      <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => handleViewDetails(vehicle)}>
+                        <td className="px-3 py-2 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="flex-shrink-0 h-12 w-16 relative">
+                            <div className="flex-shrink-0 h-10 w-12 relative">
                               <img 
-                                className="h-12 w-16 object-cover rounded" 
+                                className="h-10 w-12 object-cover rounded" 
                                 src={vehicle.mainImage} 
                                 alt={`${vehicle.make} ${vehicle.model}`}
                                 onError={(e) => {
@@ -798,173 +800,295 @@ const handleEditVehicle = (vehicleId) => {
                                 }}
                               />
                               {vehicle.featured && (
-                                <div className="absolute top-0 right-0 bg-yellow-500 text-white rounded-bl-md p-1">
-                                  <FiStar className="h-3 w-3" />
+                                <div className="absolute top-0 right-0 bg-yellow-500 text-white rounded-bl text-[10px] px-0.5 py-0.5">
+                                  <FiStar className="h-2 w-2 inline" />
                                 </div>
                               )}
                             </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{vehicle.make} {vehicle.model}</div>
-                              <div className="text-sm text-gray-500">{vehicle.stockNumber}</div>
+                            <div className="ml-2">
+                              <div className="text-xs font-medium text-gray-900">{vehicle.year} {vehicle.make}</div>
+                              <div className="text-xs text-gray-500">{vehicle.model}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{vehicle.year}</div>
-                          <div className="text-sm text-gray-500">{vehicle.mileage?.toLocaleString()} km • {vehicle.fuelType}</div>
+                        <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                          {vehicle.stockNumber}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            vehicle.status === 'active' ? 'bg-green-100 text-green-800' :
-                            vehicle.status === 'sold' ? 'bg-blue-100 text-blue-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {vehicle.status === 'active' ? translateWithFallback('sellerDashboard.vehicleStatus.active', 'Active') :
-                             vehicle.status === 'sold' ? translateWithFallback('sellerDashboard.vehicleStatus.sold', 'Sold') :
-                             translateWithFallback('sellerDashboard.vehicleStatus.draft', 'Draft')}
-                          </span>
-                          {vehicle.auctionType === 'private' && (
-                            <div className="mt-1 flex items-center text-xs text-yellow-600">
-                              <FiLink className="mr-1 h-3 w-3" />
-                              {translateWithFallback('sellerDashboard.inventory.private', 'Private')}
-                            </div>
-                          )}
+                        <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                          {vehicle.mileage?.toLocaleString()} km
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {vehicle.status === 'sold' ? (
-                            <div className="flex items-center">
-                              <FiDollarSign className="h-4 w-4 text-green-600 mr-1" />
-                              <span>€{vehicle.finalSalePrice?.toLocaleString()}</span>
-                            </div>
-                          ) : vehicle.status === 'active' ? (
-                            <div>
-                              <div className="flex items-center">
-                                <FiDollarSign className="h-4 w-4 text-[#3b396d] mr-1" />
-                                <span>€{vehicle.currentBid?.toLocaleString()}</span>
+                        <td className="px-3 py-2 whitespace-nowrap">
+                          <div className="text-xs text-gray-900">
+                            {vehicle.status === 'sold' ? (
+                              <div className="flex items-center text-green-600 font-medium">
+                                <FiDollarSign className="h-3 w-3 mr-0.5" />
+                                €{vehicle.finalSalePrice?.toLocaleString()}
                               </div>
-                              <div className="text-gray-500 text-xs">Reserve: €{vehicle.reservePrice?.toLocaleString()}</div>
-                            </div>
-                          ) : vehicle.askingPrice ? (
-                            <div className="flex items-center">
-                              <FiDollarSign className="h-4 w-4 text-gray-600 mr-1" />
-                              <span>€{vehicle.askingPrice?.toLocaleString()}</span>
-                            </div>
-                          ) : (
-                            <span className="text-gray-500">No price set</span>
-                          )}
+                            ) : vehicle.status === 'active' ? (
+                              <div>
+                                <div className="flex items-center text-[#3b396d] font-medium">
+                                  <FiDollarSign className="h-3 w-3 mr-0.5" />
+                                  €{vehicle.currentBid?.toLocaleString()}
+                                </div>
+                                {vehicle.reservePrice && (
+                                  <div className="text-[10px] text-gray-500">Res: €{vehicle.reservePrice?.toLocaleString()}</div>
+                                )}
+                              </div>
+                            ) : vehicle.askingPrice ? (
+                              <div className="flex items-center text-gray-600 font-medium">
+                                <FiDollarSign className="h-3 w-3 mr-0.5" />
+                                €{vehicle.askingPrice?.toLocaleString()}
+                              </div>
+                            ) : (
+                              <span className="text-gray-500 text-[10px]">No price</span>
+                            )}
+                          </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex items-center space-x-2">
+                        <td className="px-3 py-2 whitespace-nowrap">
+                          <div>
+                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
+                              vehicle.status === 'active' ? 'bg-green-100 text-green-800' :
+                              vehicle.status === 'sold' ? 'bg-blue-100 text-blue-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {vehicle.status === 'active' ? 'Active' :
+                               vehicle.status === 'sold' ? 'Sold' :
+                               'Draft'}
+                            </span>
+                            {vehicle.auctionType === 'private' && (
+                              <div className="mt-0.5">
+                                <span className="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-yellow-100 text-yellow-800">
+                                  <FiExternalLink className="h-2 w-2 mr-0.5" />
+                                  Private
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-3 py-2 whitespace-nowrap text-xs font-medium">
+                          <div className="flex items-center space-x-1">
                             <button
-                              onClick={() => handleViewVehicle(vehicle)}
-                              className="text-[#3b396d] hover:text-[#2a285a]"
-                              title={translateWithFallback('sellerDashboard.view', 'View')}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEditVehicle(vehicle.id);
+                              }}
+                              className="text-gray-500 hover:text-gray-700 p-0.5 rounded hover:bg-gray-100"
+                              title="Edit"
                             >
-                              <FiEye className="h-5 w-5" />
-                            </button>
-                            <button 
-                              className="text-gray-500 hover:text-gray-700"
-                              onClick={() => handleEditVehicle(vehicle.id)}
-                              title={translateWithFallback('sellerDashboard.edit', 'Edit')}
-                            >
-                              <FiEdit className="h-5 w-5" />
+                              <FiEdit className="h-3.5 w-3.5" />
                             </button>
                             <button
-                              onClick={() => handleToggleFeatured(vehicle.id, !vehicle.featured)}
-                              className={`${vehicle.featured ? 'text-yellow-500 hover:text-yellow-700' : 'text-gray-400 hover:text-gray-600'}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleFeatured(vehicle.id, !vehicle.featured);
+                              }}
+                              className={`${vehicle.featured ? 'text-yellow-500 hover:text-yellow-700' : 'text-gray-400 hover:text-gray-600'} p-0.5 rounded hover:bg-gray-100`}
                               title={vehicle.featured ? 'Unfeature' : 'Feature'}
                             >
-                              <FiStar className="h-5 w-5" />
+                              <FiStar className="h-3.5 w-3.5" />
                             </button>
                             {vehicle.status !== 'sold' && (
                               <button
-                                onClick={() => setShowDeleteConfirm(vehicle.id)}
-                                className="text-red-500 hover:text-red-700"
-                                title={translateWithFallback('sellerDashboard.delete', 'Delete')}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setShowDeleteConfirm(vehicle.id);
+                                }}
+                                className="text-red-500 hover:text-red-700 p-0.5 rounded hover:bg-gray-100"
+                                title="Delete"
                                 disabled={deletingId === vehicle.id}
                               >
                                 {deletingId === vehicle.id ? (
-                                  <FiRefreshCw className="h-5 w-5 animate-spin" />
+                                  <FiRefreshCw className="h-3.5 w-3.5 animate-spin" />
                                 ) : (
-                                  <FiTrash2 className="h-5 w-5" />
+                                  <FiTrash2 className="h-3.5 w-3.5" />
                                 )}
+                              </button>
+                            )}
+                            {vehicle.status === 'draft' && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(vehicle.id, 'active');
+                                }}
+                                className="hidden sm:inline-flex items-center px-1.5 py-0.5 border border-transparent text-[10px] font-medium rounded text-white bg-green-600 hover:bg-green-700"
+                                title="Publish"
+                              >
+                                Publish
+                              </button>
+                            )}
+                            {vehicle.status === 'active' && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(vehicle.id, 'draft');
+                                }}
+                                className="hidden sm:inline-flex items-center px-1.5 py-0.5 border border-gray-300 text-[10px] font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
+                                title="Unpublish"
+                              >
+                                Unpublish
                               </button>
                             )}
                           </div>
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+                      
+                      {/* Expanded Row for Details - Compact */}
+                      {expandedRow === vehicle.id && (
+                        <tr>
+                          <td colSpan="6" className="px-3 py-2 bg-gray-50 border-t">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-[10px]">
+                              <div>
+                                <p className="text-gray-500 font-medium">Fuel</p>
+                                <p className="font-medium text-gray-900">{vehicle.fuelType}</p>
+                              </div>
+                              <div>
+                                <p className="text-gray-500 font-medium">Trans</p>
+                                <p className="font-medium text-gray-900">{vehicle.transmission}</p>
+                              </div>
+                              <div>
+                                <p className="text-gray-500 font-medium">Color</p>
+                                <p className="font-medium text-gray-900">{vehicle.color}</p>
+                              </div>
+                              <div>
+                                <p className="text-gray-500 font-medium">Cond</p>
+                                <p className="font-medium text-gray-900">{vehicle.condition}</p>
+                              </div>
+                              <div>
+                                <p className="text-gray-500 font-medium">Loc</p>
+                                <p className="font-medium text-gray-900">{vehicle.location}</p>
+                              </div>
+                              {vehicle.status === 'active' && (
+                                <>
+                                  <div>
+                                    <p className="text-gray-500 font-medium">Ends</p>
+                                    <p className="font-medium text-gray-900">
+                                      {vehicle.auctionEnds?.toLocaleDateString()}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-gray-500 font-medium">Bids</p>
+                                    <p className="font-medium text-gray-900">{vehicle.bids?.length || 0}</p>
+                                  </div>
+                                </>
+                              )}
+                              {vehicle.status === 'sold' && (
+                                <div>
+                                  <p className="text-gray-500 font-medium">Sold</p>
+                                  <p className="font-medium text-gray-900">{vehicle.soldDate?.toLocaleDateString()}</p>
+                                </div>
+                              )}
+                              {vehicle.auctionType === 'private' && (
+                                <div className="md:col-span-2">
+                                  <p className="text-gray-500 font-medium">Private</p>
+                                  <p className="font-medium text-gray-900 break-all text-[10px]">{vehicle.auctionLink}</p>
+                                </div>
+                              )}
+                            </div>
+                            <div className="mt-2 flex justify-end">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleViewDetails(vehicle);
+                                }}
+                                className="inline-flex items-center text-[#3b396d] hover:text-[#2a285a] text-[10px] font-medium"
+                              >
+                                View Details
+                                <FiChevronRight className="ml-0.5 h-3 w-3" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between bg-white px-4 py-3 border-t border-gray-200 sm:px-6 rounded-lg shadow">
-              <div className="flex flex-1 justify-between sm:hidden">
+        </div>
+      )}
+      
+      {/* Compact Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between bg-white px-3 py-2 border-t border-gray-200 rounded-lg text-xs">
+          <div className="flex flex-1 justify-between sm:hidden">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="relative inline-flex items-center px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="relative ml-2 inline-flex items-center px-2.5 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p className="text-gray-700">
+                <span className="font-medium">{indexOfFirstItem + 1}</span>-<span className="font-medium">{Math.min(indexOfLastItem, filteredVehicles.length)}</span> of <span className="font-medium">{filteredVehicles.length}</span>
+              </p>
+            </div>
+            <div>
+              <nav className="isolate inline-flex -space-x-px rounded shadow-sm" aria-label="Pagination">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
+                  className="relative inline-flex items-center rounded-l px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50"
                 >
-                  {translateWithFallback('sellerDashboard.previous', 'Previous')}
+                  <FiChevronLeft className="h-3 w-3" />
                 </button>
+                {[...Array(Math.min(totalPages, 5))].map((_, index) => {
+                  const pageNumber = index + 1;
+                  return (
+                    <button
+                      key={pageNumber}
+                      onClick={() => handlePageChange(pageNumber)}
+                      className={`relative inline-flex items-center px-2 py-1.5 text-xs font-medium ${
+                        currentPage === pageNumber
+                          ? 'z-10 bg-[#3b396d] text-white'
+                          : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+                {totalPages > 5 && (
+                  <span className="relative inline-flex items-center px-2 py-1.5 text-xs text-gray-700">
+                    ...
+                  </span>
+                )}
+                {totalPages > 5 && (
+                  <button
+                    onClick={() => handlePageChange(totalPages)}
+                    className={`relative inline-flex items-center px-2 py-1.5 text-xs font-medium ${
+                      currentPage === totalPages
+                        ? 'z-10 bg-[#3b396d] text-white'
+                        : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {totalPages}
+                  </button>
+                )}
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="relative ml-3 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50"
+                  className="relative inline-flex items-center rounded-r px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50"
                 >
-                  {translateWithFallback('sellerDashboard.next', 'Next')}
+                  <FiChevronRight className="h-3 w-3" />
                 </button>
-              </div>
-              <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-sm text-gray-700">
-                    {translateWithFallback('sellerDashboard.inventory.showing', 'Showing')} <span className="font-medium">{indexOfFirstItem + 1}</span> {translateWithFallback('sellerDashboard.to', 'to')} <span className="font-medium">{Math.min(indexOfLastItem, filteredVehicles.length)}</span> {translateWithFallback('sellerDashboard.of', 'of')} <span className="font-medium">{filteredVehicles.length}</span> {translateWithFallback('sellerDashboard.results', 'results')}
-                  </p>
-                </div>
-                <div>
-                  <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
-                    >
-                      <FiChevronLeft className="h-5 w-5" />
-                    </button>
-                    {[...Array(totalPages)].map((_, index) => {
-                      const pageNumber = index + 1;
-                      return (
-                        <button
-                          key={pageNumber}
-                          onClick={() => handlePageChange(pageNumber)}
-                          className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
-                            currentPage === pageNumber
-                              ? 'z-10 bg-[#3b396d] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3b396d]'
-                              : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0'
-                          }`}
-                        >
-                          {pageNumber}
-                        </button>
-                      );
-                    })}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
-                    >
-                      <FiChevronRight className="h-5 w-5" />
-                    </button>
-                  </nav>
-                </div>
-              </div>
+              </nav>
             </div>
-          )}
-        </>
+          </div>
+        </div>
       )}
-
+      
+      {/* Delete Confirmation Modal */}
       <DeleteConfirmationModal
         isOpen={!!showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(null)}
@@ -972,6 +1096,19 @@ const handleEditVehicle = (vehicleId) => {
         isDeleting={deletingId === showDeleteConfirm}
         t={t}
       />
+      
+      {/* Full Detail Drawer */}
+      {expandedRow && (
+        <VehicleDetailDrawer
+          vehicle={vehicles.find(v => v.id === expandedRow)}
+          onClose={() => setExpandedRow(null)}
+          onEdit={handleEditVehicle}
+          onDelete={handleDeleteVehicle}
+          onStatusChange={handleStatusChange}
+          onToggleFeatured={handleToggleFeatured}
+          t={t}
+        />
+      )}
     </div>
   );
 };

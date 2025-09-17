@@ -169,7 +169,7 @@ const SellerDashboard = () => {
       }`} style={{
         marginLeft: sidebarOpen ? '16rem' : '5rem'
       }}>
-        <div className="py-8 max-w-7xl px-12 mx-auto">
+        <div className="py-8 max-w-8xl px-16  mx-auto">
           {renderActiveTab()}
         </div>
       </main>

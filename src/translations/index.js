@@ -1,6 +1,12 @@
+import { newsLatterTranslations } from "./components/NewsLatter";
 
 export const translations = {
+  
   en: {
+
+
+        ...newsLatterTranslations.en
+,
      notificationsBid: {
     title: "Notifications",
     newBid: "You have a new bid",
@@ -757,19 +763,9 @@ availableAgents: "Available Agents",
       "companyNamePlaceholder": "Your Company Name",
       "vatNumberPlaceholder": "VAT123456789",
       "uboPlaceholder": "Ultimate Beneficial Owner",
-      // --- NEW PLACEHOLDERS ---
-    
-      // --- END NEW PLACEHOLDERS ---
-      // Note: Placeholders for 'street', 'city', 'postalCode' exist in the original data
-      // but are less relevant if using the combined 'companyAddress' field.
-      // They are omitted here to focus on the newly requested and combined fields.
-      // If you need them, they were:
-      // "streetPlaceholder": "123 Main Street",
-      // "cityPlaceholder": "New York",
-      // "postalCodePlaceholder": "10001",
+
       
       "errors": {
-        // Existing Errors
 
         "firstNameRequired": "First name is required",
         "lastNameRequired": "Last name is required",
@@ -892,7 +888,10 @@ availableAgents: "Available Agents",
       vehiclesSold: 'Vehicles Sold',
       totalRevenue: 'Total Revenue',
       sellThroughRate: 'Sell-Through Rate',
-      avgSellingPrice: 'Avg. Selling Price'
+      avgSellingPrice: 'Avg. Selling Price',
+"myAuctions": "My Auctions",
+      "totalAuctions": "Total Auctions",
+      "favourites": "Favourites"
     },
 
     // Overview Tab
@@ -1271,6 +1270,8 @@ addCarListing: {
 
   },
   de: {
+            ...newsLatterTranslations.de,
+
       notificationsBid: {
     title: "Benachrichtigungen",
     newBid: "Sie haben ein neues Gebot",
@@ -2068,7 +2069,10 @@ buyCar: 'Auto kaufen'
       vehiclesSold: 'Verkaufte Fahrzeuge',
       totalRevenue: 'Gesamtumsatz',
       sellThroughRate: 'Verkaufsrate',
-      avgSellingPrice: 'Durchschn. Verkaufspreis'
+      avgSellingPrice: 'Durchschn. Verkaufspreis',
+ "myAuctions": "Meine Auktionen",
+      "totalAuctions": "Gesamtauktionen",
+      "favourites": "Favoriten"
     },
 
     // Overview Tab
@@ -2426,6 +2430,9 @@ step7: 'Überprüfen & Veröffentlichen'
   
   },
   nl: {
+        ...newsLatterTranslations.nl,
+
+
     notificationsBid: {
     title: "Meldingen",
     newBid: "U heeft een nieuw bod",
@@ -3200,7 +3207,10 @@ buyCar: 'Auto kopen'
       vehiclesSold: 'Verkochte Voertuigen',
       totalRevenue: 'Totale Omzet',
       sellThroughRate: 'Verkooppercentage',
-      avgSellingPrice: 'Gem. Verkoopprijs'
+      avgSellingPrice: 'Gem. Verkoopprijs',
+ "myAuctions": "Mijn veilingen",
+      "totalAuctions": "Totaal veilingen",
+      "favourites": "Favorieten"
     },
 
     // Overview Tab

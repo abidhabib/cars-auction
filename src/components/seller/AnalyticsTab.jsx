@@ -2,33 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { loadMockCarsData } from '../../mock/data/mockCarsData';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-} from 'chart.js';
-import { Bar, Doughnut } from 'react-chartjs-2';
-import { FiBarChart2, FiDollarSign, FiCheck, FiDownload, FiAward } from 'react-icons/fi';
-
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
+import { FiBarChart2, FiDollarSign, FiCheck, FiDownload, FiAward, FiHeart, FiShoppingCart, FiUsers, FiInfo } from 'react-icons/fi';
+import NewsLatter from './NewsLatter';
+import { Bar } from 'react-chartjs-2';
 
 // Helper functions for data processing
 const calculateStats = (cars) => {
@@ -36,19 +12,24 @@ const calculateStats = (cars) => {
   const vehiclesSold = cars.length;
   const avgSellingPrice = vehiclesSold > 0 ? Math.round(totalRevenue / vehiclesSold) : 0;
   
-  // Mock sell-through rate (assuming 62.5% of inventory sold)
+  // Mock data for new stats
+  const myAuctions = Math.floor(Math.random() * 15) + 3;
+  const favourites = Math.floor(Math.random() * 25) + 5;
+  const totalPlatformAuctions = Math.floor(Math.random() * 200) + 150;
   const sellThroughRate = '62.5%';
   
   return {
     totalRevenue,
     vehiclesSold,
     sellThroughRate,
-    avgSellingPrice
+    avgSellingPrice,
+    myAuctions,
+    favourites,
+    totalPlatformAuctions
   };
 };
 
 const generateRevenueData = (cars) => {
-  // Group cars by month (using registration date)
   const monthlyData = {};
   
   cars.forEach(car => {
@@ -58,20 +39,19 @@ const generateRevenueData = (cars) => {
     const key = `${month} ${year}`;
     
     if (!monthlyData[key]) {
-      monthlyData[key] = { grossSales: 0, netEarnings: 0 };
+      monthlyData[key] = { grossSales: 0, grossBought: 0 };
     }
     
-    // Assume 10% platform fees
-    const gross = car.price;
-    const net = gross * 0.9;
+    const grossSales = car.price;
+    const grossBought = grossSales * (0.5 + Math.random());
     
-    monthlyData[key].grossSales += gross;
-    monthlyData[key].netEarnings += net;
+    monthlyData[key].grossSales += grossSales;
+    monthlyData[key].grossBought += grossBought;
   });
   
   const labels = Object.keys(monthlyData);
-  const grossSales = labels.map(label => monthlyData[label].grossSales);
-  const netEarnings = labels.map(label => monthlyData[label].netEarnings);
+  const grossSales = labels.map(label => Math.round(monthlyData[label].grossSales));
+  const grossBought = labels.map(label => Math.round(monthlyData[label].grossBought));
   
   return {
     labels,
@@ -84,10 +64,10 @@ const generateRevenueData = (cars) => {
         borderWidth: 1,
       },
       {
-        label: 'Net Earnings (€)',
-        data: netEarnings,
-        backgroundColor: 'rgba(42, 40, 90, 0.7)',
-        borderColor: 'rgba(42, 40, 90, 1)',
+        label: 'Gross Bought (€)',
+        data: grossBought,
+        backgroundColor: 'rgba(239, 68, 68, 0.7)',
+        borderColor: 'rgba(239, 68, 68, 1)',
         borderWidth: 1,
       },
     ],
@@ -95,7 +75,6 @@ const generateRevenueData = (cars) => {
 };
 
 const generateTopModelsData = (cars) => {
-  // Count models
   const modelCount = {};
   
   cars.forEach(car => {
@@ -103,7 +82,6 @@ const generateTopModelsData = (cars) => {
     modelCount[model] = (modelCount[model] || 0) + 1;
   });
   
-  // Sort by count and take top 5
   const sortedModels = Object.entries(modelCount)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
@@ -135,50 +113,6 @@ const generateTopModelsData = (cars) => {
       },
     ],
   };
-};
-
-const generateFinancialSummary = (cars) => {
-  // Group by month for financial summary
-  const monthlySummary = {};
-  
-  cars.forEach(car => {
-    const date = new Date(car.registrationDate);
-    const month = date.toLocaleString('default', { month: 'long' });
-    const year = date.getFullYear();
-    const period = `${month} ${year}`;
-    
-    if (!monthlySummary[period]) {
-      monthlySummary[period] = { grossSales: 0, fees: 0, netEarnings: 0 };
-    }
-    
-    const gross = car.price;
-    const fees = gross * 0.1;
-    const net = gross * 0.9;
-    
-    monthlySummary[period].grossSales += gross;
-    monthlySummary[period].fees += fees;
-    monthlySummary[period].netEarnings += net;
-  });
-  
-  // Convert to array format
-  const summary = Object.entries(monthlySummary).map(([period, data]) => ({
-    period,
-    ...data
-  }));
-  
-  return summary;
-};
-
-const calculateYTDTotals = (summary) => {
-  return summary.reduce(
-    (totals, row) => {
-      totals.grossSales += row.grossSales;
-      totals.fees += row.fees;
-      totals.netEarnings += row.netEarnings;
-      return totals;
-    },
-    { grossSales: 0, fees: 0, netEarnings: 0 }
-  );
 };
 
 // Chart Options
@@ -298,22 +232,19 @@ const AnalyticsTab = () => {
     totalRevenue: 0,
     vehiclesSold: 0,
     sellThroughRate: '0%',
-    avgSellingPrice: 0
+    avgSellingPrice: 0,
+    myAuctions: 0,
+    favourites: 0,
+    totalPlatformAuctions: 0
   });
   const [revenueChartData, setRevenueChartData] = useState({ labels: [], datasets: [] });
   const [topModelsChartData, setTopModelsChartData] = useState({ labels: [], datasets: [] });
-  const [financialSummary, setFinancialSummary] = useState([]);
-  const [ytdTotals, setYtdTotals] = useState({ grossSales: 0, fees: 0, netEarnings: 0 });
 
   useEffect(() => {
-    // Load data from mock cars
     const cars = loadMockCarsData();
-    
-    // Calculate statistics
     const calculatedStats = calculateStats(cars);
     setStats(calculatedStats);
     
-    // Generate chart data
     const revenueData = generateRevenueData(cars);
     const topModelsData = generateTopModelsData(cars);
     
@@ -332,26 +263,30 @@ const AnalyticsTab = () => {
         label: t(`sellerDashboard.analytics.${ds.label.toLowerCase().replace(/[^a-z0-9]/g, '')}`) || ds.label
       }))
     });
-    
-    // Generate financial summary
-    const summary = generateFinancialSummary(cars);
-    setFinancialSummary(summary);
-    
-    // Calculate YTD totals
-    const totals = calculateYTDTotals(summary);
-    setYtdTotals(totals);
   }, [t, language]);
 
   const revenueChartOptions = getChartOptions(t, 'sellerDashboard.analytics.revenueChartTitle', true);
   const topModelsChartOptions = doughnutOptions(t, 'sellerDashboard.analytics.topModelsChartTitle');
 
+  const handleFavouritesClick = () => {
+    alert(t('sellerDashboard.goToFavourites') || 'Navigating to Favourites page...');
+  };
+
+  const handlePlatformAuctionsClick = () => {
+    alert(t('sellerDashboard.viewAllAuctions') || 'Navigating to All Auctions page...');
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h2 className="text-xl font-bold text-gray-900">{t('sellerDashboard.sidebar.analytics') || 'Analytics & Reports'}</h2>
+        <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+          <FiBarChart2 className="mr-2 h-6 w-6" />
+          {t('sellerDashboard.sidebar.analytics') || 'Analytics & Reports'}
+        </h2>
         <button
-          onClick={() => alert(t('sellerDashboard.downloadReport') || 'Downloading report...')}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#3b396d] hover:bg-[#2a285a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]"
+          onClick={() => alert(t('sellerDashboard.downloadReport') || 'Downloading comprehensive report...')}
+          className="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-[#3b396d] to-[#2a285a] hover:from-[#2a285a] hover:to-[#1e1c47] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] transition-all duration-200 transform hover:scale-105"
         >
           <FiDownload className="-ml-1 mr-2 h-5 w-5" />
           {t('downloadReport') || 'Download Report'}
@@ -359,118 +294,93 @@ const AnalyticsTab = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg shadow border border-gray-100">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        <div className="bg-white px-5 py-8 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-3 bg-[#3b396d]/10 rounded-lg mr-4">
+            <div className="p-3 bg-[#3b396d]/10 rounded-xl mr-4">
               <FiDollarSign className="h-6 w-6 text-[#3b396d]" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">{t('sellerDashboard.stats.totalRevenue') || 'Total Revenue'}</p>
+              <p className="text-sm text-gray-500 font-medium">{t('sellerDashboard.stats.totalRevenue') || 'Total Revenue'}</p>
               <p className="text-xl font-bold text-gray-900">€{stats.totalRevenue.toLocaleString('de-DE')}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow border border-gray-100">
+        
+        <div className="bg-white px-5 py-8 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-3 bg-[#3b396d]/10 rounded-lg mr-4">
-              <FiCheck className="h-6 w-6 text-[#3b396d]" />
+            <div className="p-3 bg-orange-100 rounded-xl mr-4">
+              <FiShoppingCart className="h-6 w-6 text-orange-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">{t('sellerDashboard.stats.vehiclesSold') || 'Vehicles Sold'}</p>
+              <p className="text-sm text-gray-500 font-medium">{t('sellerDashboard.stats.myAuctions') || 'My Auctions'}</p>
+              <p className="text-xl font-bold text-gray-900">{stats.myAuctions}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white px-5 py-8 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+          <div className="flex items-center cursor-pointer" onClick={handleFavouritesClick}>
+            <div className="p-3 bg-red-100 rounded-xl mr-4">
+              <FiHeart className="h-6 w-6 text-red-600" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 font-medium">{t('sellerDashboard.stats.favourites') || 'Favourites'}</p>
+              <p className="text-xl font-bold text-gray-900">{stats.favourites}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white px-5 py-8 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+          <div className="flex items-center cursor-pointer" onClick={handlePlatformAuctionsClick}>
+            <div className="p-3 bg-blue-100 rounded-xl mr-4">
+              <FiUsers className="h-6 w-6 text-blue-600" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 font-medium">{t('sellerDashboard.stats.totalAuctions') || 'Total Auctions'}</p>
+              <p className="text-xl font-bold text-gray-900">{stats.totalPlatformAuctions}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white px-5 py-8 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+          <div className="flex items-center">
+            <div className="p-3 bg-green-100 rounded-xl mr-4">
+              <FiCheck className="h-6 w-6 text-green-600" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500 font-medium">{t('sellerDashboard.stats.vehiclesSold') || 'Vehicles Sold'}</p>
               <p className="text-xl font-bold text-gray-900">{stats.vehiclesSold}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow border border-gray-100">
+        
+        <div className="bg-white px-5 py-8 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300">
           <div className="flex items-center">
-            <div className="p-3 bg-[#3b396d]/10 rounded-lg mr-4">
-              <FiBarChart2 className="h-6 w-6 text-[#3b396d]" />
+            <div className="p-3 bg-purple-100 rounded-xl mr-4">
+              <FiAward className="h-6 w-6 text-purple-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">{t('sellerDashboard.stats.sellThroughRate') || 'Sell-Through Rate'}</p>
-              <p className="text-xl font-bold text-gray-900">{stats.sellThroughRate}</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow border border-gray-100">
-          <div className="flex items-center">
-            <div className="p-3 bg-[#3b396d]/10 rounded-lg mr-4">
-              <FiAward className="h-6 w-6 text-[#3b396d]" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">{t('sellerDashboard.stats.avgSellingPrice') || 'Avg. Selling Price'}</p>
+              <p className="text-sm text-gray-500 font-medium">{t('sellerDashboard.stats.avgSellingPrice') || 'Avg. Selling Price'}</p>
               <p className="text-xl font-bold text-gray-900">€{stats.avgSellingPrice.toLocaleString('de-DE')}</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Revenue Chart */}
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">{t('sellerDashboard.analytics.revenueTitle') || 'Revenue Overview'}</h3>
-          <div className="h-80">
-            {revenueChartData.labels.length > 0 ? (
-              <Bar data={revenueChartData} options={revenueChartOptions} />
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-gray-500">{t('loading') || 'Loading chart...'}</p>
-              </div>
-            )}
-          </div>
+      {/* === COMPANY PROFILE & NEWS SECTION === */}
+      <div className="pt-2">
+        <div className="border-t border-gray-200 pt-8 mb-6">
+          <h2 className="text-xl font-bold text-gray-900 flex items-center">
+            <FiInfo className="mr-3 h-5 w-5 text-[#3b396d]" />
+            { 'Company Profile & Latest News'}
+          </h2>
+          <p className="text-gray-600 mt-1">
+            { 'Manage your business information and stay updated with platform news.'}
+          </p>
         </div>
-
-        {/* Top Models Chart */}
-        <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">{t('sellerDashboard.analytics.topModels') || 'Top Selling Models'}</h3>
-          <div className="h-80">
-            {topModelsChartData.labels.length > 0 ? (
-              <Doughnut data={topModelsChartData} options={topModelsChartOptions} />
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-gray-500">{t('loading') || 'Loading chart...'}</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Financial Summary Table */}
-      <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium text-gray-900">{t('sellerDashboard.analytics.financialSummary') || 'Financial Summary'}</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('sellerDashboard.analytics.period') || 'Period'}</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('sellerDashboard.analytics.grosssales') || 'Gross Sales'}</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('sellerDashboard.analytics.fees') || 'Platform Fees'}</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('sellerDashboard.analytics.netearnings') || 'Net Earnings'}</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {financialSummary.map((row, index) => (
-                <tr key={index} className={index === financialSummary.length - 1 ? 'bg-gray-50 font-semibold' : ''}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{row.period}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€{row.grossSales.toLocaleString('de-DE')}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€{row.fees.toLocaleString('de-DE')}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#3b396d]">€{row.netEarnings.toLocaleString('de-DE')}</td>
-                </tr>
-              ))}
-              {/* YTD Total Row */}
-              <tr className="bg-gray-50 font-semibold">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{t('sellerDashboard.analytics.ytdTotal') || 'YTD Total'}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€{ytdTotals.grossSales.toLocaleString('de-DE')}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">€{ytdTotals.fees.toLocaleString('de-DE')}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#3b396d]">€{ytdTotals.netEarnings.toLocaleString('de-DE')}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        
+        <NewsLatter />
       </div>
     </div>
   );
