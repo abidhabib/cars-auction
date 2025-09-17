@@ -805,6 +805,14 @@ availableAgents: "Available Agents",
     },
 
   sellerDashboard: {
+    "tabs": {
+      "basic": "Basic",
+      "pricing": "Pricing",
+      "technical": "Technical",
+      "condition": "Condition",
+      "media": "Media",
+      "features": "Features"
+    },
     of:'of',
     results:'results',
     make: 'Make',
@@ -902,6 +910,22 @@ availableAgents: "Available Agents",
 
     // Inventory Tab
     inventory: {
+      "conditionHistory": "Condition History",
+    "technicalCondition": "Technical Condition",
+    "interiorCondition": "Interior Condition",
+    "tyreReport": "Tyre Report",
+    "serviceHistory": "Service History",
+    "hasAccident": "Has Accident",
+    "accidentDetails": "Accident Details",
+    "mediaDescription": "Media Description",
+    "headline": "Headline",
+    "description": "Description",
+    "images": "Images",
+    "addImages": "Add Images",
+    "featuresOptions": "Feature Options",
+    "currentImages": "Current Images",
+    "addFeature": "Add Feature",
+    "selectedOptions": "Selected Options",
       year:'year',
       addVehicle: 'Add Vehicle',
       editVehicle:'Edit Vehicle',
@@ -2026,7 +2050,14 @@ reviews: 'Bewertungen',
 
   sellerDashboard: {
     // Alerts & Messages
-
+"tabs": {
+      "basic": "Grunddaten",
+      "pricing": "Preisgestaltung",
+      "technical": "Technisch",
+      "condition": "Zustand",
+      "media": "Medien",
+      "features": "Ausstattung"
+    },
      view: 'Ansehen',
   edit: 'Bearbeiten',
   delete: 'Löschen',
@@ -2084,6 +2115,22 @@ buyCar: 'Auto kaufen'
     // Inventory Tab
     inventory: {
             year:'year',
+    "conditionHistory": "Zustandshistorie",
+    "technicalCondition": "Technischer Zustand",
+    "interiorCondition": "Innenraumzustand",
+    "tyreReport": "Reifenbericht",
+    "serviceHistory": "Servicehistorie",
+    "hasAccident": "Unfall gehabt",
+    "accidentDetails": "Unfalldetails",
+    "mediaDescription": "Medienbeschreibung",
+    "headline": "Überschrift",
+    "description": "Beschreibung",
+    "images": "Bilder",
+    "addImages": "Bilder hinzufügen",
+    "featuresOptions": "Ausstattungsoptionen",
+    "currentImages": "Aktuelle Bilder",
+    "addFeature": "Funktion hinzufügen",
+    "selectedOptions": "Ausgewählte Optionen",
 
       addVehicle: 'Fahrzeug hinzufügen',
       vehicleDetails: 'Fahrzeugdetails',
@@ -3164,6 +3211,14 @@ verifiedSeller:'Geverifieerde Verkoper',
       }
     },
   sellerDashboard: {
+    "tabs": {
+      "basic": "Basis",
+      "pricing": "Prijzen",
+      "technical": "Technisch",
+      "condition": "Conditie",
+      "media": "Media",
+      "features": "Functies"
+    },
      view: 'Bekijken',
   edit: 'Bewerken',
   delete: 'Verwijderen',
@@ -3222,7 +3277,22 @@ buyCar: 'Auto kopen'
     // Inventory Tab
     inventory: {
             year:'year',
-
+"conditionHistory": "Conditiegeschiedenis",
+    "technicalCondition": "Technische staat",
+    "interiorCondition": "Interieurconditie",
+    "tyreReport": "Bandenrapport",
+    "serviceHistory": "Onderhoudsgeschiedenis",
+    "hasAccident": "Heeft een ongeluk gehad",
+    "accidentDetails": "Ongevaldetails",
+    "mediaDescription": "Mediabeschrijving",
+    "headline": "Koptekst",
+    "description": "Beschrijving",
+    "images": "Afbeeldingen",
+    "addImages": "Afbeeldingen toevoegen",
+    "featuresOptions": "Opties",
+    "currentImages": "Huidige afbeeldingen",
+    "addFeature": "Optie toevoegen",
+    "selectedOptions": "Geselecteerde opties",
       addVehicle: 'Voertuig toevoegen',
       vehicleDetails: 'Voertuigdetails',
       mileage: 'Kilometerstand',

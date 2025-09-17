@@ -8,7 +8,6 @@ const AddCarListing = () => {
   const { t } = useLanguage();
 
 
-  // --- Use the custom hook to get state, functions, and constants ---
   const {
     // State (now managed by the hook)
     saleType, setSaleType,
@@ -28,14 +27,6 @@ const AddCarListing = () => {
     TOTAL_STEPS,
     SALE_TYPES,
     AUCTION_PRESETS,
-    INITIAL_AUCTION_TIMING,
-    INITIAL_VEHICLE_IDENTIFICATION,
-    INITIAL_MEDIA_AND_DESCRIPTION,
-    INITIAL_CONDITION_ASSESSMENT,
-
-    // Utility Functions (provided by the hook)
-    calculateDatesFromPreset,
-    validateStep,
 
     // Core Logic Functions (provided by the hook)
     handleSaleTypeSelect,
