@@ -20,10 +20,13 @@ import {
   FiCamera,
   FiImage,
   FiZoomIn,
+  FiCheckCircle,
+  FiStar,
+  FiUser,
 } from 'react-icons/fi';
-import { loadMockCarsData  } from '../../mock/data/mockCarsData';
 import { FaArrowAltCircleLeft, FaLevelUpAlt } from 'react-icons/fa';
-import BiddingModal from './BiddingModal'; // We'll create this component next
+import BiddingModal from './BiddingModal';
+import { loadMockCarsData } from '../../mock/data/mockCarsData';
 
 const BuyCarsTab = ({ 
   searchTerm, 
@@ -40,21 +43,20 @@ const BuyCarsTab = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
   const [internalSelectedCar, setInternalSelectedCar] = useState(null);
-  const [biddingCar, setBiddingCar] = useState(null); // State for bidding modal
-  const [isBiddingModalOpen, setIsBiddingModalOpen] = useState(false); // State for modal visibility
+  const [biddingCar, setBiddingCar] = useState(null);
+  const [isBiddingModalOpen, setIsBiddingModalOpen] = useState(false);
+
   const carsPerPage = 8;
-  
   const effectiveSelectedCar = externalSelectedCar || internalSelectedCar;
-  
+
   useEffect(() => {
     const mockCars = loadMockCarsData();
     setAllCars(mockCars);
     setFilteredCars(mockCars);
   }, []);
-  
+
   useEffect(() => {
     let filtered = [...allCars];
-    
     Object.entries(activeFilters).forEach(([key, value]) => {
       if (value) {
         switch (key) {
@@ -85,12 +87,21 @@ const BuyCarsTab = ({
           case 'country':
             filtered = filtered.filter(car => car.country === value);
             break;
+          case 'auctionType':
+            filtered = filtered.filter(car => car.saleType === value);
+            break;
+          case 'carType':
+            filtered = filtered.filter(car => car.carType === value);
+            break;
+          case 'vatStatus':
+            filtered = filtered.filter(car => car.vatStatus === value);
+            break;
           default:
             break;
         }
       }
     });
-    
+
     if (searchTerm) {
       const termLower = searchTerm.toLowerCase();
       filtered = filtered.filter(car => 
@@ -100,15 +111,16 @@ const BuyCarsTab = ({
         car.location.toLowerCase().includes(termLower)
       );
     }
+
     setFilteredCars(filtered);
     setCurrentPage(1);
   }, [activeFilters, allCars, searchTerm]);
-  
+
   const makes = [...new Set(allCars.map(car => car.vehicleIdentification.make))];
   const getModelsByMake = (make) => {
     return [...new Set(allCars.filter(car => car.vehicleIdentification.make === make).map(car => car.vehicleIdentification.model))];
   };
-  
+
   const handleFilterChange = (filterName, value) => {
     setActiveFilters(prev => ({
       ...prev,
@@ -123,7 +135,7 @@ const BuyCarsTab = ({
       }));
     }
   };
-  
+
   const clearAllFilters = () => {
     setActiveFilters({});
     setSearchTerm('');
@@ -131,125 +143,116 @@ const BuyCarsTab = ({
     setSelectedModel('');
     setCurrentPage(1);
   };
-  
+
   const toggleFilterPanel = () => {
     setFilterPanelOpen(!filterPanelOpen);
   };
-  
+
   const handleViewCar = (carId) => {
     const car = allCars.find(c => c.id === carId);
     setInternalSelectedCar(car);
     if (externalSelectedCar && onBackToList) {
-       onBackToList();
+      onBackToList();
     }
   };
-  
-  // Handle place bid - opens the bidding modal
+
   const handlePlaceBid = (carId) => {
     const car = allCars.find(c => c.id === carId);
     setBiddingCar(car);
     setIsBiddingModalOpen(true);
   };
-  
-  // Handle bid submission
+
   const handleBidSubmit = (bidAmount) => {
     console.log(`Bid placed on car ${biddingCar.id} with amount: €${bidAmount}`);
-    // Here you would typically make an API call to submit the bid
-    // For now, we'll just close the modal
     setIsBiddingModalOpen(false);
-    // You might want to update the car's bid information here
   };
-  
+
   const handleBackToListInternal = () => {
     setInternalSelectedCar(null);
     if (onBackToList) {
       onBackToList();
     }
   };
-  
+
   const totalPages = Math.ceil(filteredCars.length / carsPerPage);
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
   const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  
-  // --- Car Image Slider Component ---
+
+  // --- Car Image Slider Component (for list view) ---
   const CarImageSlider = ({ car }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imageLoaded, setImageLoaded] = useState({});
     const images = car.mediaAndDescription?.photos || [car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80'];
-    
+
     useEffect(() => {
-        setCurrentImageIndex(0);
-        setImageLoaded({});
-    }, [car.id, images.length]);
-    
+      setCurrentImageIndex(0);
+      setImageLoaded({});
+    }, [car.id]);
+
     const nextImage = () => {
-      setCurrentImageIndex((prevIndex) => 
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      );
+      setCurrentImageIndex((prevIndex) => prevIndex === images.length - 1 ? 0 : prevIndex + 1);
     };
-    
+
     const prevImage = () => {
-      setCurrentImageIndex((prevIndex) => 
-        prevIndex === 0 ? images.length - 1 : prevIndex - 1
-      );
+      setCurrentImageIndex((prevIndex) => prevIndex === 0 ? images.length - 1 : prevIndex - 1);
     };
-    
+
     const handleImageLoad = (index) => {
-        setImageLoaded(prev => ({ ...prev, [index]: true }));
+      setImageLoaded(prev => ({ ...prev, [index]: true }));
     };
-    
+
     const handleImageError = (e, index) => {
-        e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
-        setImageLoaded(prev => ({ ...prev, [index]: true }));
+      e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
+      setImageLoaded(prev => ({ ...prev, [index]: true }));
     };
-    
+
     return (
       <div className="relative w-full h-48 overflow-hidden rounded-t-xl bg-gray-100">
         {images.map((imgSrc, index) => (
-            <div 
-                key={index} 
-                className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-            >
-                 {!imageLoaded[index] && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="animate-pulse bg-gray-200 rounded-xl w-full h-full" />
-                    </div>
-                )}
-                <img
-                    src={imgSrc}
-                    alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model} - Image ${index + 1}`}
-                    className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
-                    onLoad={() => handleImageLoad(index)}
-                    onError={(e) => handleImageError(e, index)}
-                    style={{ display: index === currentImageIndex ? 'block' : 'none' }}
-                />
-            </div>
+          <div 
+            key={index} 
+            className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+          >
+            {!imageLoaded[index] && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="animate-pulse bg-gray-200 rounded-xl w-full h-full" />
+              </div>
+            )}
+            <img
+              src={imgSrc}
+              alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model} - Image ${index + 1}`}
+              className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
+              onLoad={() => handleImageLoad(index)}
+              onError={(e) => handleImageError(e, index)}
+              style={{ display: index === currentImageIndex ? 'block' : 'none' }}
+            />
+          </div>
         ))}
         {images.length > 1 && (
           <>
             <button
               onClick={(e) => { e.stopPropagation(); prevImage(); }}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-[#3b396d] rounded-full p-1.5 shadow-md transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
-              aria-label={"Previous image"}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-[#3b396d] rounded-full p-1.5 shadow-md transition-all duration-200 hover:scale-105"
+              aria-label="Previous image"
             >
               <FiChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); nextImage(); }}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-[#3b396d] rounded-full p-1.5 shadow-md transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
-              aria-label={"Next"}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-[#3b396d] rounded-full p-1.5 shadow-md transition-all duration-200 hover:scale-105"
+              aria-label="Next"
             >
               <FiChevronRight className="h-4 w-4" />
             </button>
             <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1.5">
               {images.map((_, index) => (
                 <button
-                    key={index}
-                    onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${index === currentImageIndex ? 'bg-[#3b396d] scale-125' : 'bg-white/60 hover:bg-white'}`}
-                    aria-label={`Go to image ${index + 1}`}
+                  key={index}
+                  onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${index === currentImageIndex ? 'bg-[#3b396d] scale-125' : 'bg-white/60 hover:bg-white'}`}
+                  aria-label={`Go to image ${index + 1}`}
                 />
               ))}
             </div>
@@ -258,57 +261,57 @@ const BuyCarsTab = ({
       </div>
     );
   };
-  
-  // --- Car Detail View Component ---
+
+  // --- Car Detail View Component (Your Approved Layout + All Data) ---
   const CarDetailView = ({ car }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [fullscreenImage, setFullscreenImage] = useState(null);
     const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
     const [imageLoaded, setImageLoaded] = useState({});
     const images = car.mediaAndDescription?.photos || [car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80'];
-    
+
     useEffect(() => {
-        setCurrentImageIndex(0);
-        setSelectedPhotoIndex(0);
-        setImageLoaded({});
+      setCurrentImageIndex(0);
+      setSelectedPhotoIndex(0);
+      setImageLoaded({});
     }, [car.id]);
-    
+
     const nextImage = () => {
       const newIndex = (currentImageIndex + 1) % images.length;
       setCurrentImageIndex(newIndex);
       setSelectedPhotoIndex(newIndex);
     };
-    
+
     const prevImage = () => {
       const newIndex = (currentImageIndex - 1 + images.length) % images.length;
       setCurrentImageIndex(newIndex);
       setSelectedPhotoIndex(newIndex);
     };
-    
+
     const goToImage = (index) => {
-        setCurrentImageIndex(index);
-        setSelectedPhotoIndex(index);
+      setCurrentImageIndex(index);
+      setSelectedPhotoIndex(index);
     };
-    
-    const handleImageLoad = (index) => {
-        setImageLoaded(prev => ({ ...prev, [index]: true }));
+
+    const openFullscreenImage = (imageSrc, index) => {
+      setFullscreenImage(imageSrc);
+      setSelectedPhotoIndex(index);
     };
-    
-    const handleImageError = (e, index) => {
-        e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
-        setImageLoaded(prev => ({ ...prev, [index]: true }));
+
+    const closeFullscreenImage = () => {
+      setFullscreenImage(null);
     };
-    
+
     const formatDate = (date) => {
       return new Date(date).toLocaleDateString(language === 'de' ? 'de-DE' : 'en-US');
     };
-    
+
     const formatDateTime = (dateString) => {
       const date = new Date(dateString);
       return date.toLocaleDateString(language === 'de' ? 'de-DE' : 'en-US') + 
              ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
-    
+
     const getConditionColor = (condition) => {
       switch (condition) {
         case 'good': return 'text-green-600';
@@ -319,11 +322,11 @@ const BuyCarsTab = ({
         default: return 'text-gray-600';
       }
     };
-    
+
     const getConditionText = (condition) => {
       return t(`addCarListing.condition.rating.${condition}`) || condition;
     };
-    
+
     const renderDamagePoints = () => {
       if (!car.damagePoints || car.damagePoints.length === 0) {
         return <span className="text-green-600">{t('buyCars.noDamage') || 'No damage reported'}</span>;
@@ -338,7 +341,7 @@ const BuyCarsTab = ({
         </div>
       );
     };
-    
+
     const renderSelectedOptions = () => {
       if (!car.selectedOptions || car.selectedOptions.length === 0) {
         return <span className="text-gray-500">{t('buyCars.noOptions') || 'No options selected'}</span>;
@@ -353,16 +356,7 @@ const BuyCarsTab = ({
         </div>
       );
     };
-    
-    const openFullscreenImage = (imageSrc, index) => {
-      setFullscreenImage(imageSrc);
-      setSelectedPhotoIndex(index);
-    };
-    
-    const closeFullscreenImage = () => {
-      setFullscreenImage(null);
-    };
-    
+
     const photoPositions = [
       t('addCarListing.media.frontLeft') || 'Front left',
       t('addCarListing.media.frontRight') || 'Front right',
@@ -372,7 +366,69 @@ const BuyCarsTab = ({
       t('addCarListing.media.odometer') || 'Odometer',
       t('addCarListing.media.interior') || 'Interior'
     ];
-    
+
+    // RDW History Timeline
+    const renderRDWHistory = () => {
+      if (!car.rdwHistory || car.rdwHistory.length === 0) return null;
+      return (
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+            <FiInfo className="mr-2 text-[#3b396d]" />
+            {t('buyCars.rdwHistory') || 'RDW History'}
+          </h3>
+          <div className="space-y-3">
+            {car.rdwHistory.map((event, index) => (
+              <div key={index} className="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 rounded-r-lg">
+                <div className="font-medium text-blue-800">{event.type}</div>
+                <div className="text-sm text-gray-700 mt-1">{formatDate(event.date)}</div>
+                <div className="text-sm text-gray-600 mt-1">{event.description}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    // Damage Grid Table
+    const renderDamageGrid = () => {
+      if (!car.damageGrid || car.damageGrid.length === 0) return null;
+      return (
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+            <FiTool className="mr-2 text-[#3b396d]" />
+            {t('buyCars.damageReport') || 'Damage Report'}
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Part</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Damage Type</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Photo</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {car.damageGrid.map((item, index) => (
+                  <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{item.part}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{item.type}</td>
+                    <td className="px-4 py-3">
+                      <img 
+                        src={item.photo} 
+                        alt="Damage" 
+                        className="w-20 h-16 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => openFullscreenImage(item.photo, index)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    };
+
     return (
       <div className="p-4">
         <button
@@ -382,396 +438,485 @@ const BuyCarsTab = ({
           <FaArrowAltCircleLeft className="mr-2 text-lg" /> 
           Back to List
         </button>
+
         <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-          <div className="relative h-96 w-full overflow-hidden bg-gray-100">
-            {!imageLoaded[currentImageIndex] && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* LEFT: Image Gallery */}
+            <div className="relative">
+              {!imageLoaded[currentImageIndex] && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="animate-pulse bg-gray-200 rounded-xl w-full h-full" />
+                  <div className="animate-pulse bg-gray-200 rounded-xl w-full h-full" />
                 </div>
-            )}
-            <img
-              src={images[currentImageIndex]}
-              alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model} - Main Image`}
-              className={`w-full h-full object-contain transition-opacity duration-500 ${imageLoaded[currentImageIndex] ? 'opacity-100' : 'opacity-0'}`}
-              onLoad={() => handleImageLoad(currentImageIndex)}
-              onError={(e) => handleImageError(e, currentImageIndex)}
-            />
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-[#3b396d] rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
-                  aria-label={ "Previous image"}
-                >
-                  <FiChevronLeft className="h-6 w-6" />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-[#3b396d] rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
-              aria-label={"Next"}
-                >
-                  <FiChevronRight className="h-6 w-6" />
-                </button>
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 max-w-[90%] overflow-x-auto pb-1 hide-scrollbar">
-                  {images.map((photo, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToImage(index)}
-                      className={`flex-shrink-0 w-16 h-16 border-2 rounded-lg overflow-hidden transition-all duration-200 ${
-                        index === currentImageIndex 
-                          ? 'border-[#3b396d] scale-105 shadow-md' 
-                          : 'border-gray-300 hover:border-gray-400'
-                      }`}
-                      aria-label={`${ 'Thumbnail for'} ${index + 1}`}
-                    >
-                      {!imageLoaded[index] && (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+              )}
+              <img
+                src={images[currentImageIndex]}
+                alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model}`}
+                className={`w-full  object-contain transition-opacity duration-500 ${imageLoaded[currentImageIndex] ? 'opacity-100' : 'opacity-0'}`}
+                onLoad={() => setImageLoaded(prev => ({ ...prev, [currentImageIndex]: true }))}
+                onError={(e) => {
+                  e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
+                  setImageLoaded(prev => ({ ...prev, [currentImageIndex]: true }));
+                }}
+              />
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-[#3b396d] rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-105"
+                  >
+                    <FiChevronLeft className="h-6 w-6" />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-[#3b396d] rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-105"
+                  >
+                    <FiChevronRight className="h-6 w-6" />
+                  </button>
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 max-w-[90%] overflow-x-auto pb-1 hide-scrollbar">
+                    {images.map((photo, index) => (
+                      <button
+                        key={index}
+                        onClick={() => goToImage(index)}
+                        className={`flex-shrink-0 w-16 h-16 border-2 rounded-lg overflow-hidden transition-all duration-200 ${
+                          index === currentImageIndex 
+                            ? 'border-[#3b396d] scale-105 shadow-md' 
+                            : 'border-gray-300 hover:border-gray-400'
+                        }`}
+                      >
+                        {!imageLoaded[index] && (
+                          <div className="w-full h-full flex items-center justify-center bg-gray-100">
                             <div className="animate-pulse bg-gray-200 w-full h-full" />
-                        </div>
-                      )}
-                      <img 
-                        src={photo} 
-                        alt={`Thumbnail ${index + 1}`} 
-                        className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
-                        onLoad={() => handleImageLoad(index)}
-                        onError={(e) => handleImageError(e, index)}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-          <div className="p-6">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
+                          </div>
+                        )}
+                        <img 
+                          src={photo} 
+                          alt={`Thumbnail ${index + 1}`} 
+                          className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
+                          onLoad={() => setImageLoaded(prev => ({ ...prev, [index]: true }))}
+                          onError={(e) => {
+                            e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
+                            setImageLoaded(prev => ({ ...prev, [index]: true }));
+                          }}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* RIGHT: Specs & Info */}
+            <div className="p-6 flex flex-col justify-between">
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
                   {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
                   {car.vehicleIdentification.trim && (
-                    <span className="text-lg md:text-xl font-normal text-gray-600 ml-2">({car.vehicleIdentification.trim})</span>
+                    <span className="text-lg font-normal text-gray-600 ml-2">({car.vehicleIdentification.trim})</span>
                   )}
                 </h1>
-                <div className="flex items-center mt-2 text-gray-600">
-                  <FiMapPin className="mr-1.5 text-gray-500 flex-shrink-0" />
+                <div className="flex items-center text-gray-600 mb-4">
+                  <FiMapPin className="mr-1.5 text-gray-500" />
                   <span>{car.location}</span>
                 </div>
-              </div>
-              <div className="mt-4 md:mt-0 text-right">
-                <div className="text-3xl md:text-4xl font-bold text-[#3b396d]">
-                  €{car.price?.toLocaleString()}
-                </div>
-                {car.saleType === 'direct-buy' && car.mediaAndDescription?.directBuyPrice && (
-                  <div className="text-gray-600 mt-1">
-                    {t('buyCars.buyItNow')}: €{parseInt(car.mediaAndDescription.directBuyPrice)?.toLocaleString()}
+
+                <div className="mb-6">
+                  <div className="text-2xl font-bold text-[#3b396d]">
+                    €{car.price?.toLocaleString()}
                   </div>
-                )}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('buyCars.mileage') || 'Mileage'}</div>
-                <div className="font-semibold text-gray-900">{parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} {car.vehicleIdentification.mileageUnit}</div>
-              </div>
-              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('buyCars.fuelType') || 'Fuel Type'}</div>
-                <div className="font-semibold text-gray-900">{car.fuelType}</div>
-              </div>
-              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('buyCars.transmission') || 'Transmission'}</div>
-                <div className="font-semibold text-gray-900">{car.transmission}</div>
-              </div>
-              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('buyCars.condition') || 'Condition'}</div>
-                <div className="font-semibold text-gray-900">{car.condition}</div>
-              </div>
-            </div>
-            {car.saleType === 'general-auction' && (
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5 mb-6 shadow-sm">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <div>
-                    <h3 className="font-semibold text-blue-800 text-lg">{t('buyCars.auctionInfo') || 'Auction Information'}</h3>
-                    <p className="text-sm text-blue-600 mt-1">
-                      {t('buyCars.auctionEnds')}: {formatDateTime(car.auctionTiming.endDate + 'T' + car.auctionTiming.endTime)}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-[#3b396d]">
-                      {car.bids} {t('buyCars.bids') || 'Bids'}
+                  {car.saleType === 'direct-buy' && car.mediaAndDescription?.directBuyPrice && (
+                    <div className="text-gray-600 mt-1">
+                      {t('buyCars.buyItNow')}: €{parseInt(car.mediaAndDescription.directBuyPrice)?.toLocaleString()}
                     </div>
-                    <div className="text-sm text-gray-600">
-                      {t('buyCars.highestBid')}: €{car.highestBid?.toLocaleString()}
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-4 flex flex-col sm:flex-row gap-3">
-                  <button
-                    onClick={() => handlePlaceBid(car.id)}
-                    className="flex-1 bg-[#3b396d] text-white py-3 px-4 rounded-lg hover:bg-[#2a285a] transition-colors duration-200 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] flex items-center justify-center"
-                  >
-                    <FaLevelUpAlt className="mr-2" />
-                    {t('buyCars.placeBid') || 'Place Bid'}
-                  </button>
-                  {car.buyItNowPrice && (
-                    <button className="flex-1 border-2 border-[#3b396d] text-[#3b396d] py-3 px-4 rounded-lg hover:bg-[#3b396d] hover:text-white transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]">
-                      {t('buyCars.buyItNow') || 'Buy It Now'}
-                    </button>
                   )}
                 </div>
-              </div>
-            )}
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
-                <FiCamera className="mr-2 text-[#3b396d]" />
-                {t('addCarListing.stepDetails.step4.title') || 'Visual Documentation & Description'}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-900 mb-2">{t('addCarListing.media.headlineLabel') || 'Listing Headline'}</h4>
-                  <p className="text-gray-700">{car.mediaAndDescription?.headline}</p>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-900 mb-2">{t('addCarListing.media.descriptionLabel') || 'Full Description'}</h4>
-                  <p className="text-gray-700 whitespace-pre-line">{car.mediaAndDescription?.description}</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-900 mb-2">{t('buyCars.serviceHistory') || 'Service History'}</h4>
-                  <p className="text-gray-700 capitalize">{car.mediaAndDescription?.serviceHistory || '-'}</p>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-900 mb-2">{t('buyCars.accidentHistory') || 'Accident History'}</h4>
-                  <p className="text-gray-700">
-                    {car.mediaAndDescription?.hasAccident 
-                      ? t('yes') || 'Yes' 
-                      : t('no') || 'No'}
-                  </p>
-                  {car.mediaAndDescription?.hasAccident && car.mediaAndDescription?.accidentDetails && (
-                    <p className="text-gray-700 mt-2 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-sm">{car.mediaAndDescription.accidentDetails}</p>
-                  )}
-                </div>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900 mb-3 flex items-center pb-1 border-b border-gray-100">
-                  <FiImage className="mr-2 text-[#3b396d]" />
-                  Photos
-                </h4>
-                {images.length > 0 ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                    {images.map((photo, index) => {
-                        let label = `Additional Photo ${index - photoPositions.length + 1}`;
-                        if (index < photoPositions.length) {
-                        label = photoPositions[index];
-                        }
-                        return (
-                        <div 
-                            key={index} 
-                            className="flex flex-col items-center cursor-pointer group"
-                            onClick={() => openFullscreenImage(photo, index)}
-                        >
-                            <div className="relative w-full aspect-[4/3] border border-gray-200 rounded-lg overflow-hidden bg-gray-50 shadow-sm hover:shadow-md transition-shadow duration-200">
-                            {!imageLoaded[index] && (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="animate-pulse bg-gray-200 w-full h-full" />
-                                </div>
-                            )}
-                            <img 
-                                src={photo} 
-                                alt={label} 
-                                className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
-                                onLoad={() => handleImageLoad(index)}
-                                onError={(e) => handleImageError(e, index)}
-                            />
-                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center">
-                                <FiZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xl" />
-                            </div>
-                            </div>
-                            <span className="text-xs text-gray-600 mt-1.5 text-center truncate w-full px-1">
-                            {label}
-                            </span>
+
+                {/* Auction Timer */}
+                {car.saleType === 'general-auction' && (
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5 mb-6 shadow-sm">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                      <div>
+                        <h3 className="font-semibold text-blue-800 text-lg">{t('buyCars.auctionInfo') || 'Auction Information'}</h3>
+                        <p className="text-sm text-blue-600 mt-1">
+                          {t('buyCars.auctionEnds')}: {formatDateTime(car.auctionTiming.endDate + 'T' + car.auctionTiming.endTime)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-[#3b396d]">
+                          {car.bids} {t('buyCars.bids') || 'Bids'}
                         </div>
-                        );
-                    })}
+                        <div className="text-sm text-gray-600">
+                          {t('buyCars.highestBid')}: €{car.highestBid?.toLocaleString()}
+                        </div>
+                      </div>
                     </div>
-                ) : (
-                    <p className="text-gray-500 italic">{t('buyCars.noPhotos') || 'No photos available for this vehicle.'}</p>
+                    <div className="mt-4 flex flex-col sm:flex-row gap-3">
+                      <button
+                        onClick={() => handlePlaceBid(car.id)}
+                        className="flex-1 bg-[#3b396d] text-white py-3 px-4 rounded-lg hover:bg-[#2a285a] transition-colors duration-200 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] flex items-center justify-center"
+                      >
+                        <FaLevelUpAlt className="mr-2" />
+                        {t('buyCars.placeBid') || 'Place Bid'}
+                      </button>
+                      {car.buyItNowPrice && (
+                        <button className="flex-1 border-2 border-[#3b396d] text-[#3b396d] py-3 px-4 rounded-lg hover:bg-[#3b396d] hover:text-white transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]">
+                          {t('buyCars.buyItNow') || 'Buy It Now'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* VAT Info */}
+                {car.vatStatus === 'deductible' && (
+                  <div className="mb-6 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center">
+                    <FiCheckCircle className="mr-2 text-green-600" />
+                    <span className="text-green-800">Btw aftrekbaar (21%)</span>
+                  </div>
+                )}
+
+             {/* Spec Table */}
+<div className="space-y-2 mb-6">
+  {[
+    { 
+      label: t('stockId', 'Stock ID:'), 
+      value: car.stockId || t('common.na', 'N/A') 
+    },
+    { 
+      label: t('buildYear', 'Bouwjaar / modeljaar (CvO):'), 
+      value: car.vehicleIdentification.year 
+    },
+    { 
+      label: t('firstRegistration', 'Eerste toelating:'), 
+      value: car.vehicleIdentification.registrationDate || t('common.na', 'N/A') 
+    },
+    { 
+      label: t('mileage', 'Afgelezen kilometerstand:'), 
+      value: `${parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} km` 
+    },
+    { 
+      label: t('fuelType', 'Brandstoftype:'), 
+      value: car.fuelType 
+    },
+    { 
+      label: t('power', 'Vermogen:'), 
+      value: `${car.conditionAssessment?.tyreReport?.frontLeft?.brand || t('common.na', 'N/A')} kW / ${car.conditionAssessment?.tyreReport?.frontLeft?.treadDepth || t('common.na', 'N/A')} PK` 
+    },
+    { 
+      label: t('engineCapacity', 'Cilinderinhoud:'), 
+      value: car.conditionAssessment?.tyreReport?.frontLeft?.condition || t('common.na', 'N/A') 
+    },
+    { 
+      label: t('transmission', 'Transmissie:'), 
+      value: car.transmission 
+    },
+    { 
+      label: t('recentInspection', 'Inspectie vernieuwd in de laatste 6 maanden:'), 
+      value: t('common.yes', 'Ja') 
+    },
+    { 
+      label: t('bodyType', 'Carrosserietype:'), 
+      value: car.carType 
+    }
+  ].map((row, i) => (
+    <div key={i} className="flex justify-between py-1 border-b border-gray-200 last:border-0">
+      <span className="text-sm text-gray-700">{row.label}</span>
+      <span className="text-sm font-medium text-gray-900">{row.value}</span>
+    </div>
+  ))}
+</div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="mt-6 flex gap-3">
+                <button className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                  FAVORITEN
+                </button>
+                <button 
+                  onClick={() => handlePlaceBid(car.id)}
+                  className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                >
+                  PLAATS EEN BOD
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* --- ALL OTHER SECTIONS PRESERVED --- */}
+          
+          {/* RDW History */}
+          {renderRDWHistory()}
+
+          {/* Damage Grid */}
+          {renderDamageGrid()}
+
+          {/* Vehicle Identification */}
+          <div className="p-6 border-t border-gray-200">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+              <FiInfo className="mr-2 text-[#3b396d]" />
+              {t('buyCars.vehicleIdentification') || 'Vehicle Identification'}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.makeLabel') || 'Make'}</div>
+                <div className="font-semibold text-gray-900">{car.vehicleIdentification?.make || '-'}</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.modelLabel') || 'Model'}</div>
+                <div className="font-semibold text-gray-900">{car.vehicleIdentification?.model || '-'}</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.yearLabel') || 'Year'}</div>
+                <div className="font-semibold text-gray-900">{car.vehicleIdentification?.year || '-'}</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.trimLabel') || 'Trim'}</div>
+                <div className="font-semibold text-gray-900">{car.vehicleIdentification?.trim || '-'}</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.mileageLabel') || 'Mileage'}</div>
+                <div className="font-semibold text-gray-900">{parseInt(car.vehicleIdentification?.mileage, 10)?.toLocaleString() || '0'} {car.vehicleIdentification?.mileageUnit || 'km'}</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.licensePlateLabel') || 'License Plate'}</div>
+                <div className="font-semibold text-gray-900">{car.vehicleIdentification?.licensePlate || '-'}</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.registrationDateLabel') || 'Registration Date'}</div>
+                <div className="font-semibold text-gray-900">{car.vehicleIdentification?.registrationDate || '-'}</div>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.previousOwnersLabel') || 'Previous Owners'}</div>
+                <div className="font-semibold text-gray-900">{car.vehicleIdentification?.previousOwners || '0'}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Condition Assessment */}
+          <div className="p-6 border-t border-gray-200">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+              <FiTool className="mr-2 text-[#3b396d]" />
+              {t('buyCars.conditionAssessment') || 'Condition Assessment'}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.condition.technicalChecklist.title') || 'Technical Checklist'}</h4>
+                <div className="space-y-2">
+                  {Object.entries(car.conditionAssessment?.technicalChecklist || {}).map(([key, value]) => (
+                    <div key={key} className="flex justify-between items-center py-1.5 border-b border-gray-100 last:border-0">
+                      <span className="text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span>
+                      <span className={`font-medium ${getConditionColor(value)}`}>
+                        {getConditionText(value)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.condition.interiorChecklist.title') || 'Interior Checklist'}</h4>
+                <div className="space-y-2">
+                  {Object.entries(car.conditionAssessment?.interiorChecklist || {}).map(([key, value]) => (
+                    <div key={key} className="flex justify-between items-center py-1.5 border-b border-gray-100 last:border-0">
+                      <span className="text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span>
+                      <span className={`font-medium ${getConditionColor(value)}`}>
+                        {getConditionText(value)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.condition.tyreReport.title') || 'Tyre Report'}</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+              {Object.entries(car.conditionAssessment?.tyreReport || {}).map(([position, tyreData]) => (
+                <div key={position} className="border border-gray-200 rounded-lg p-3 bg-gray-50 shadow-sm">
+                  <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+                    {position.replace(/([A-Z])/g, ' $1').trim()}
+                  </h5>
+                  <div className="space-y-1.5">
+                    <div className="text-xs flex justify-between">
+                      <span className="text-gray-500">{t('addCarListing.condition.tyreReport.brand') || 'Brand'}:</span>
+                      <span className="font-medium truncate max-w-[50%]">{tyreData.brand || '-'}</span>
+                    </div>
+                    <div className="text-xs flex justify-between">
+                      <span className="text-gray-500">{t('addCarListing.condition.tyreReport.treadDepth') || 'Tread'}:</span>
+                      <span className="font-medium">{tyreData.treadDepth ? `${tyreData.treadDepth}mm` : '-'}</span>
+                    </div>
+                    <div className="text-xs flex justify-between">
+                      <span className="text-gray-500">{t('addCarListing.condition.tyreReport.condition') || 'Condition'}:</span>
+                      <span className={`font-medium ${getConditionColor(tyreData.condition)}`}>
+                        {getConditionText(tyreData.condition)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Exterior Options & Damages */}
+          <div className="p-6 border-t border-gray-200">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+              <FiSettings className="mr-2 text-[#3b396d]" />
+              {t('buyCars.exteriorOptions') || 'Exterior Options & Damages'}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.exterior.damageTitle') || 'Damages'}</h4>
+                {renderDamagePoints()}
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.exterior.optionsTitle') || 'Options'}</h4>
+                {renderSelectedOptions()}
+              </div>
+            </div>
+          </div>
+
+          {/* Visual Documentation & Description */}
+          <div className="p-6 border-t border-gray-200">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+              <FiCamera className="mr-2 text-[#3b396d]" />
+              {t('addCarListing.stepDetails.step4.title') || 'Visual Documentation & Description'}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-2">{t('addCarListing.media.headlineLabel') || 'Listing Headline'}</h4>
+                <p className="text-gray-700">{car.mediaAndDescription?.headline}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-2">{t('addCarListing.media.descriptionLabel') || 'Full Description'}</h4>
+                <p className="text-gray-700 whitespace-pre-line">{car.mediaAndDescription?.description}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-2">{t('buyCars.serviceHistory') || 'Service History'}</h4>
+                <p className="text-gray-700 capitalize">{car.mediaAndDescription?.serviceHistory || '-'}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-2">{t('buyCars.accidentHistory') || 'Accident History'}</h4>
+                <p className="text-gray-700">
+                  {car.mediaAndDescription?.hasAccident 
+                    ? t('yes') || 'Yes' 
+                    : t('no') || 'No'}
+                </p>
+                {car.mediaAndDescription?.hasAccident && car.mediaAndDescription?.accidentDetails && (
+                  <p className="text-gray-700 mt-2 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-sm">{car.mediaAndDescription.accidentDetails}</p>
                 )}
               </div>
             </div>
-            <div className="mb-8">
+            <div>
+              <h4 className="font-medium text-gray-900 mb-3 flex items-center pb-1 border-b border-gray-100">
+                <FiImage className="mr-2 text-[#3b396d]" />
+                Photos
+              </h4>
+              {images.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                  {images.map((photo, index) => {
+                    let label = `Additional Photo ${index - photoPositions.length + 1}`;
+                    if (index < photoPositions.length) {
+                      label = photoPositions[index];
+                    }
+                    return (
+                      <div 
+                        key={index} 
+                        className="flex flex-col items-center cursor-pointer group"
+                        onClick={() => openFullscreenImage(photo, index)}
+                      >
+                        <div className="relative w-full aspect-[4/3] border border-gray-200 rounded-lg overflow-hidden bg-gray-50 shadow-sm hover:shadow-md transition-shadow duration-200">
+                          {!imageLoaded[index] && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="animate-pulse bg-gray-200 w-full h-full" />
+                            </div>
+                          )}
+                          <img 
+                            src={photo} 
+                            alt={label} 
+                            className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
+                            onLoad={() => setImageLoaded(prev => ({ ...prev, [index]: true }))}
+                            onError={(e) => {
+                              e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
+                              setImageLoaded(prev => ({ ...prev, [index]: true }));
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center">
+                            <FiZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xl" />
+                          </div>
+                        </div>
+                        <span className="text-xs text-gray-600 mt-1.5 text-center truncate w-full px-1">
+                          {label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-gray-500 italic">{t('buyCars.noPhotos') || 'No photos available for this vehicle.'}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Auction Timing */}
+          {car.saleType === 'general-auction' && (
+            <div className="p-6 border-t border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
-                <FiInfo className="mr-2 text-[#3b396d]" />
-                {t('buyCars.vehicleIdentification') || 'Vehicle Identification'}
+                <FiCalendar className="mr-2 text-[#3b396d]" />
+                {t('buyCars.auctionTiming') || 'Auction Timing'}
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.makeLabel') || 'Make'}</div>
-                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.make || '-'}</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.auctionTiming.startDateLabel') || 'Start Date'}</div>
+                  <div className="font-semibold text-gray-900">{formatDateTime(car.auctionTiming?.startDate + 'T' + car.auctionTiming?.startTime)}</div>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.modelLabel') || 'Model'}</div>
-                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.model || '-'}</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.auctionTiming.endDateLabel') || 'End Date'}</div>
+                  <div className="font-semibold text-gray-900">{formatDateTime(car.auctionTiming?.endDate + 'T' + car.auctionTiming?.endTime)}</div>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.yearLabel') || 'Year'}</div>
-                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.year || '-'}</div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.trimLabel') || 'Trim'}</div>
-                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.trim || '-'}</div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.mileageLabel') || 'Mileage'}</div>
-                  <div className="font-semibold text-gray-900">{parseInt(car.vehicleIdentification?.mileage, 10)?.toLocaleString() || '0'} {car.vehicleIdentification?.mileageUnit || 'km'}</div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.licensePlateLabel') || 'License Plate'}</div>
-                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.licensePlate || '-'}</div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.registrationDateLabel') || 'Registration Date'}</div>
-                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.registrationDate || '-'}</div>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.previousOwnersLabel') || 'Previous Owners'}</div>
-                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.previousOwners || '0'}</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.auctionTiming.timezoneLabel') || 'Timezone'}</div>
+                  <div className="font-semibold text-gray-900">{car.auctionTiming?.timezone || '-'}</div>
                 </div>
               </div>
             </div>
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
-                <FiTool className="mr-2 text-[#3b396d]" />
-                {t('buyCars.conditionAssessment') || 'Condition Assessment'}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.condition.technicalChecklist.title') || 'Technical Checklist'}</h4>
-                  <div className="space-y-2">
-                    {Object.entries(car.conditionAssessment?.technicalChecklist || {}).map(([key, value]) => (
-                      <div key={key} className="flex justify-between items-center py-1.5 border-b border-gray-100 last:border-0">
-                        <span className="text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span>
-                        <span className={`font-medium ${getConditionColor(value)}`}>
-                          {getConditionText(value)}
-                        </span>
-                      </div>
+          )}
+
+          {/* Seller Information (Uncommented) */}
+          <div className="p-6 border-t border-gray-200">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+              <FiUser className="mr-2 text-[#3b396d]" />
+              {t('buyCars.sellerInfo') || 'Seller Information'}
+            </h3>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center">
+              <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex-shrink-0" />
+              <div className="ml-0 sm:ml-4 mt-3 sm:mt-0">
+                <div className="flex items-center flex-wrap">
+                  <h4 className="font-semibold text-lg">{car.seller?.name || 'Unknown Seller'}</h4>
+                  {car.seller?.verified && (
+                    <FiCheckCircle className="ml-2 text-green-500 text-lg" title={t('buyCars.verifiedSeller') || 'Verified Seller'} />
+                  )}
+                </div>
+                <div className="flex items-center mt-2 flex-wrap">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => (
+                      <FiStar
+                        key={i}
+                        className={`${i < Math.floor(car.seller?.rating) ? 'fill-current' : ''} text-lg`}
+                      />
                     ))}
                   </div>
+                  <span className="ml-2 text-gray-600">
+                    {car.seller?.rating ? car.seller.rating.toFixed(1) : 'N/A'} 
+                    {car.seller?.reviews && ` (${car.seller.reviews} ${t('buyCars.reviews') || 'reviews'})`}
+                  </span>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.condition.interiorChecklist.title') || 'Interior Checklist'}</h4>
-                  <div className="space-y-2">
-                    {Object.entries(car.conditionAssessment?.interiorChecklist || {}).map(([key, value]) => (
-                      <div key={key} className="flex justify-between items-center py-1.5 border-b border-gray-100 last:border-0">
-                        <span className="text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span>
-                        <span className={`font-medium ${getConditionColor(value)}`}>
-                          {getConditionText(value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.condition.tyreReport.title') || 'Tyre Report'}</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                {Object.entries(car.conditionAssessment?.tyreReport || {}).map(([position, tyreData]) => (
-                  <div key={position} className="border border-gray-200 rounded-lg p-3 bg-gray-50 shadow-sm">
-                    <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
-                      {position.replace(/([A-Z])/g, ' $1').trim()}
-                    </h5>
-                    <div className="space-y-1.5">
-                      <div className="text-xs flex justify-between">
-                        <span className="text-gray-500">{t('addCarListing.condition.tyreReport.brand') || 'Brand'}:</span>
-                        <span className="font-medium truncate max-w-[50%]">{tyreData.brand || '-'}</span>
-                      </div>
-                      <div className="text-xs flex justify-between">
-                        <span className="text-gray-500">{t('addCarListing.condition.tyreReport.treadDepth') || 'Tread'}:</span>
-                        <span className="font-medium">{tyreData.treadDepth ? `${tyreData.treadDepth}mm` : '-'}</span>
-                      </div>
-                      <div className="text-xs flex justify-between">
-                        <span className="text-gray-500">{t('addCarListing.condition.tyreReport.condition') || 'Condition'}:</span>
-                        <span className={`font-medium ${getConditionColor(tyreData.condition)}`}>
-                          {getConditionText(tyreData.condition)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
-                <FiSettings className="mr-2 text-[#3b396d]" />
-                {t('buyCars.exteriorOptions') || 'Exterior Options & Damages'}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.exterior.damageTitle') || 'Damages'}</h4>
-                  {renderDamagePoints()}
-                </div>
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.exterior.optionsTitle') || 'Options'}</h4>
-                  {renderSelectedOptions()}
+                <div className="text-sm text-gray-600 mt-2">
+                  {t('buyCars.memberSince') || 'Member since'}: {car.seller?.memberSince ? formatDate(car.seller.memberSince) : 'N/A'}
                 </div>
               </div>
             </div>
-            {car.saleType === 'general-auction' && (
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
-                  <FiCalendar className="mr-2 text-[#3b396d]" />
-                  {t('buyCars.auctionTiming') || 'Auction Timing'}
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.auctionTiming.startDateLabel') || 'Start Date'}</div>
-                    <div className="font-semibold text-gray-900">{formatDateTime(car.auctionTiming?.startDate + 'T' + car.auctionTiming?.startTime)}</div>
-                  </div>
-                  <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.auctionTiming.endDateLabel') || 'End Date'}</div>
-                    <div className="font-semibold text-gray-900">{formatDateTime(car.auctionTiming?.endDate + 'T' + car.auctionTiming?.endTime)}</div>
-                  </div>
-                  <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.auctionTiming.timezoneLabel') || 'Timezone'}</div>
-                    <div className="font-semibold text-gray-900">{car.auctionTiming?.timezone || '-'}</div>
-                  </div>
-                </div>
-              </div>
-            )}
-            {/* <div className="border-t border-gray-200 pt-6 mt-2">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
-                <FiUser className="mr-2 text-[#3b396d]" />
-                {t('buyCars.sellerInfo') || 'Seller Information'}
-              </h3>
-              <div className="flex flex-col sm:flex-row items-start sm:items-center">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex-shrink-0" />
-                <div className="ml-0 sm:ml-4 mt-3 sm:mt-0">
-                  <div className="flex items-center flex-wrap">
-                    <h4 className="font-semibold text-lg">{car.seller?.name || 'Unknown Seller'}</h4>
-                    {car.seller?.verified && (
-                      <FiCheckCircle className="ml-2 text-green-500 text-lg" title={t('buyCars.verifiedSeller') || 'Verified Seller'} />
-                    )}
-                  </div>
-                  <div className="flex items-center mt-2 flex-wrap">
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <FiStar
-                          key={i}
-                          className={`${i < Math.floor(car.seller?.rating) ? 'fill-current' : ''} text-lg`}
-                        />
-                      ))}
-                    </div>
-                    <span className="ml-2 text-gray-600">
-                      {car.seller?.rating ? car.seller.rating.toFixed(1) : 'N/A'} 
-                      {car.seller?.reviews && ` (${car.seller.reviews} ${t('buyCars.reviews') || 'reviews'})`}
-                    </span>
-                  </div>
-                  <div className="text-sm text-gray-600 mt-2">
-                    {t('buyCars.memberSince') || 'Member since'}: {car.seller?.memberSince ? formatDate(car.seller.memberSince) : 'N/A'}
-                  </div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
+
+        {/* Fullscreen Image Modal */}
         {fullscreenImage && (
           <div 
             className="fixed inset-0 bg-black bg-opacity-95 z-[100] flex items-center justify-center p-4"
@@ -801,7 +946,7 @@ const BuyCarsTab = ({
                       setSelectedPhotoIndex(newIndex);
                       openFullscreenImage(images[newIndex], newIndex);
                     }}
-                    aria-label={ "Previous image"}
+                    aria-label="Previous image"
                   >
                     <FiChevronLeft />
                   </button>
@@ -813,7 +958,7 @@ const BuyCarsTab = ({
                       setSelectedPhotoIndex(newIndex);
                       openFullscreenImage(images[newIndex], newIndex);
                     }}
-              aria-label={"Next"}
+                    aria-label="Next"
                   >
                     <FiChevronRight />
                   </button>
@@ -825,14 +970,14 @@ const BuyCarsTab = ({
       </div>
     );
   };
-  
+
   if (effectiveSelectedCar) {
     return <CarDetailView car={effectiveSelectedCar} />;
   }
-  
+
   return (
     <div>
-      {/* Add BiddingModal component */}
+      {/* Bidding Modal */}
       {biddingCar && (
         <BiddingModal
           isOpen={isBiddingModalOpen}
@@ -842,8 +987,9 @@ const BuyCarsTab = ({
           t={t}
         />
       )}
-      
+
       <div className="flex flex-col lg:flex-row">
+        {/* Filters Panel */}
         <div className={`lg:w-64 bg-white border-r border-gray-200 p-4 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto ${
           filterPanelOpen ? 'block' : 'hidden lg:block'
         }`}>
@@ -858,14 +1004,16 @@ const BuyCarsTab = ({
               {t('buyCars.clearAll') || 'Clear All'}
             </button>
           </div>
+
+          {/* Make */}
           <div className="border-b border-gray-200 mb-4">
-            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors duration-200">
-              <span className="font-medium text-gray-900 text-sm">{t('buyCars.make') || 'Make'}</span>
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <span className="font-medium text-gray-900 text-sm">Make</span>
               <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
             </div>
             <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
               {makes.map(make => (
-                <label key={make} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded transition-colors duration-150 cursor-pointer">
+                <label key={make} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
                   <input
                     type="checkbox"
                     checked={activeFilters.make === make}
@@ -877,15 +1025,17 @@ const BuyCarsTab = ({
               ))}
             </div>
           </div>
+
+          {/* Model */}
           {selectedMake && (
             <div className="border-b border-gray-200 mb-4">
-              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors duration-200">
-                <span className="font-medium text-gray-900 text-sm">{t('buyCars.model') || 'Model'}</span>
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">Model</span>
                 <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
               </div>
               <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
                 {getModelsByMake(selectedMake).map(model => (
-                  <label key={model} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded transition-colors duration-150 cursor-pointer">
+                  <label key={model} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
                     <input
                       type="checkbox"
                       checked={activeFilters.model === model}
@@ -898,86 +1048,80 @@ const BuyCarsTab = ({
               </div>
             </div>
           )}
+
+          {/* Year */}
           <div className="border-b border-gray-200 mb-4">
-            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors duration-200">
-              <span className="font-medium text-gray-900 text-sm">{t('buyCars.year') || 'Year'}</span>
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <span className="font-medium text-gray-900 text-sm">Year</span>
               <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
             </div>
             <div className="p-3 space-y-3 bg-gray-50 rounded-b-lg">
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label htmlFor="yearFrom" className="block text-xs text-gray-500 mb-1">
-                    {t('buyCars.from') || 'From'}
-                  </label>
+                  <label className="block text-xs text-gray-500 mb-1">From</label>
                   <input
                     type="number"
-                    id="yearFrom"
                     value={activeFilters.yearFrom || ''}
                     onChange={(e) => handleFilterChange('yearFrom', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-shadow duration-200"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
                     placeholder="2020"
                   />
                 </div>
                 <div>
-                  <label htmlFor="yearTo" className="block text-xs text-gray-500 mb-1">
-                    {t('buyCars.to') || 'To'}
-                  </label>
+                  <label className="block text-xs text-gray-500 mb-1">To</label>
                   <input
                     type="number"
-                    id="yearTo"
                     value={activeFilters.yearTo || ''}
                     onChange={(e) => handleFilterChange('yearTo', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-shadow duration-200"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
                     placeholder="2024"
                   />
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Price */}
           <div className="border-b border-gray-200 mb-4">
-            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors duration-200">
-              <span className="font-medium text-gray-900 text-sm">{t('buyCars.price') || 'Price'}</span>
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <span className="font-medium text-gray-900 text-sm">Price</span>
               <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
             </div>
             <div className="p-3 space-y-3 bg-gray-50 rounded-b-lg">
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label htmlFor="priceFrom" className="block text-xs text-gray-500 mb-1">
-                    {t('buyCars.from') || 'From'}
-                  </label>
+                  <label className="block text-xs text-gray-500 mb-1">From</label>
                   <input
                     type="number"
-                    id="priceFrom"
                     value={activeFilters.priceFrom || ''}
                     onChange={(e) => handleFilterChange('priceFrom', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-shadow duration-200"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
                     placeholder="€0"
                   />
                 </div>
                 <div>
-                  <label htmlFor="priceTo" className="block text-xs text-gray-500 mb-1">
-                    {t('buyCars.to') || 'To'}
-                  </label>
+                  <label className="block text-xs text-gray-500 mb-1">To</label>
                   <input
                     type="number"
-                    id="priceTo"
                     value={activeFilters.priceTo || ''}
                     onChange={(e) => handleFilterChange('priceTo', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-shadow duration-200"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
                     placeholder="€100,000"
                   />
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Fuel Type */}
           <div className="border-b border-gray-200 mb-4">
-            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors duration-200">
-              <span className="font-medium text-gray-900 text-sm">{t('buyCars.fuelType') || 'Fuel Type'}</span>
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <span className="font-medium text-gray-900 text-sm">Fuel Type</span>
               <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
             </div>
             <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
               {['Petrol', 'Diesel', 'Hybrid', 'Electric'].map(fuel => (
-                <label key={fuel} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded transition-colors duration-150 cursor-pointer">
+                <label key={fuel} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
                   <input
                     type="radio"
                     name="fuelType"
@@ -991,14 +1135,16 @@ const BuyCarsTab = ({
               ))}
             </div>
           </div>
+
+          {/* Transmission */}
           <div className="border-b border-gray-200 mb-4">
-            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors duration-200">
-              <span className="font-medium text-gray-900 text-sm">{t('buyCars.transmission') || 'Transmission'}</span>
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <span className="font-medium text-gray-900 text-sm">Transmission</span>
               <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
             </div>
             <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
               {['Automatic', 'Manual'].map(transmission => (
-                <label key={transmission} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded transition-colors duration-150 cursor-pointer">
+                <label key={transmission} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
                   <input
                     type="radio"
                     name="transmission"
@@ -1012,67 +1158,134 @@ const BuyCarsTab = ({
               ))}
             </div>
           </div>
+
+          {/* Country */}
           <div className="border-b border-gray-200 mb-4">
-            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors duration-200">
-              <span className="font-medium text-gray-900 text-sm">{t('buyCars.country') || 'Country'}</span>
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <span className="font-medium text-gray-900 text-sm">Country</span>
               <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
             </div>
             <div className="p-3 bg-gray-50 rounded-b-lg">
               <select
                 value={activeFilters.country || ''}
                 onChange={(e) => handleFilterChange('country', e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition-shadow duration-200"
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
               >
-                <option value="">{t('buyCars.allCountries') || 'All Countries'}</option>
+                <option value="">All Countries</option>
                 <option value="DE">Germany</option>
                 <option value="NL">Netherlands</option>
               </select>
             </div>
           </div>
+
+          {/* Auction Type */}
+          <div className="border-b border-gray-200 mb-4">
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <span className="font-medium text-gray-900 text-sm">Auction Type</span>
+              <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+            </div>
+            <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+              {['general-auction', 'direct-buy'].map(type => (
+                <label key={type} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                  <input
+                    type="radio"
+                    name="auctionType"
+                    value={type}
+                    checked={activeFilters.auctionType === type}
+                    onChange={() => handleFilterChange('auctionType', activeFilters.auctionType === type ? '' : type)}
+                    className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
+                  />
+                  <span className="ml-3 text-sm text-gray-700">{type.replace('-', ' ').toUpperCase()}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Car Type */}
+          <div className="border-b border-gray-200 mb-4">
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <span className="font-medium text-gray-900 text-sm">Car Type</span>
+              <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+            </div>
+            <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+              {['Sedan', 'SUV', 'Van', 'Truck', 'Coupe'].map(type => (
+                <label key={type} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={activeFilters.carType === type}
+                    onChange={() => handleFilterChange('carType', activeFilters.carType === type ? '' : type)}
+                    className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
+                  />
+                  <span className="ml-3 text-sm text-gray-700">{type}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* VAT Status */}
+          <div className="border-b border-gray-200 mb-4">
+            <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <span className="font-medium text-gray-900 text-sm">VAT Status</span>
+              <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+            </div>
+            <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+              {['deductible', 'not-deductible'].map(status => (
+                <label key={status} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                  <input
+                    type="radio"
+                    name="vatStatus"
+                    value={status}
+                    checked={activeFilters.vatStatus === status}
+                    onChange={() => handleFilterChange('vatStatus', activeFilters.vatStatus === status ? '' : status)}
+                    className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
+                  />
+                  <span className="ml-3 text-sm text-gray-700">{status.replace('-', ' ').toUpperCase()}</span>
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
+
+        {/* Main Content */}
         <div className="flex-1">
+          {/* Sticky Header */}
           <div className="bg-white border-b border-gray-200 py-3 px-4 sticky top-16 z-10">
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <button
-                  onClick={toggleFilterPanel}
-                  className="flex items-center text-sm font-medium text-[#3b396d] hover:text-[#2a285a] transition-colors duration-200 lg:hidden"
-                >
-                  <FiFilter className="mr-2 h-4 w-4" />
-                  {t('buyCars.filters') || 'Filters'}
-                  <FiChevronDown className={`ml-1 h-4 w-4 transition-transform ${
-                    filterPanelOpen ? 'rotate-180' : ''
-                  }`} />
-                </button>
-                <div className="ml-4 text-sm text-gray-500 hidden sm:block">
-                  {filteredCars.length} {t('buyCars.resultsFound') || 'results found'}
-                </div>
+              <button
+                onClick={toggleFilterPanel}
+                className="flex items-center text-sm font-medium text-[#3b396d] hover:text-[#2a285a] lg:hidden"
+              >
+                <FiFilter className="mr-2 h-4 w-4" />
+                Filters
+                <FiChevronDown className={`ml-1 h-4 w-4 transition-transform ${filterPanelOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <div className="ml-4 text-sm text-gray-500 hidden sm:block">
+                {filteredCars.length} results found
               </div>
             </div>
           </div>
+
+          {/* Active Filters */}
           {(Object.keys(activeFilters).length > 0 || searchTerm) && (
             <div className="bg-white border-b border-gray-200 py-3 px-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <span className="text-sm font-medium text-gray-900">
-                    {t('buyCars.activeFilters') || 'Active Filters'} ({Object.keys(activeFilters).filter(key => activeFilters[key]).length + (searchTerm ? 1 : 0)})
-                  </span>
-                </div>
+                <span className="text-sm font-medium text-gray-900">
+                  Active Filters ({Object.keys(activeFilters).filter(key => activeFilters[key]).length + (searchTerm ? 1 : 0)})
+                </span>
                 <button
                   onClick={clearAllFilters}
-                  className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
+                  className="text-sm text-red-600 hover:text-red-800 font-medium"
                 >
-                  {t('buyCars.clearAll') || 'Clear All'}
+                  Clear All
                 </button>
               </div>
               <div className="flex flex-wrap gap-2 mt-2">
                 {searchTerm && (
                   <div className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-[#3b396d] text-white">
-                    {t('search.searchTerm') || 'Search'}: "{searchTerm}"
+                    Search: "{searchTerm}"
                     <button
                       onClick={() => setSearchTerm('')}
-                      className="ml-2 text-white hover:text-gray-200 transition-colors duration-200"
-                      aria-label={t('buyCars.clearFilter') || "Clear filter"}
+                      className="ml-2 text-white hover:text-gray-200"
                     >
                       <FiX className="h-3.5 w-3.5" />
                     </button>
@@ -1084,8 +1297,7 @@ const BuyCarsTab = ({
                       {key}: {value}
                       <button
                         onClick={() => handleFilterChange(key, '')}
-                        className="ml-2 text-white hover:text-gray-200 transition-colors duration-200"
-                        aria-label={t('buyCars.clearFilter') || "Clear filter"}
+                        className="ml-2 text-white hover:text-gray-200"
                       >
                         <FiX className="h-3.5 w-3.5" />
                       </button>
@@ -1095,10 +1307,12 @@ const BuyCarsTab = ({
               </div>
             </div>
           )}
+
+          {/* Car Grid */}
           <div className="p-4">
             {filteredCars.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4 sm:gap-4 mt-8">
+                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
                   {currentCars.map((car) => (
                     <div
                       key={car.id}
@@ -1110,11 +1324,11 @@ const BuyCarsTab = ({
                       </div>
                       <div className="p-4 flex flex-col flex-grow">
                         <div className="flex justify-between items-start mb-2 flex-shrink-0">
-                          <h3 className="text-base font-semibold text-gray-900 group-hover:text-[#3b396d] transition-colors duration-200 line-clamp-2">
+                          <h3 className="text-base font-semibold text-gray-900 group-hover:text-[#3b396d] line-clamp-2">
                             {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
                           </h3>
                           <div className="flex items-center flex-shrink-0 ml-2">
-                            <FiDollarSign className="h-4 w-4 text-[#3b396d] mr-0.5 flex-shrink-0" />
+                            <FiDollarSign className="h-4 w-4 text-[#3b396d] mr-0.5" />
                             <span className="text-base font-bold text-[#3b396d] whitespace-nowrap">
                               €{car.price?.toLocaleString()}
                             </span>
@@ -1125,62 +1339,59 @@ const BuyCarsTab = ({
                         </div>
                         <div className="text-xs text-gray-500 mb-4 space-y-1 flex-grow">
                           <div className="flex items-start">
-                            <FiMapPin className="h-3.5 w-3.5 mr-1.5 mt-0.5 flex-shrink-0 text-gray-400" />
+                            <FiMapPin className="h-3.5 w-3.5 mr-1.5 mt-0.5 text-gray-400" />
                             <span className="truncate">{car.location}</span>
                           </div>
                           {car.auctionEnds && (
                             <div className="flex items-start">
-                              <FiClock className="h-3.5 w-3.5 mr-1.5 mt-0.5 flex-shrink-0 text-gray-400" />
+                              <FiClock className="h-3.5 w-3.5 mr-1.5 mt-0.5 text-gray-400" />
                               <span>{new Date(car.auctionEnds).toLocaleDateString()}</span>
                             </div>
                           )}
                         </div>
                         <div className="space-y-2 mb-4 flex-grow">
-                          <div className="text-xs text-gray-600">
-                            <div className="flex items-start">
-                              <FiTag className="h-3.5 w-3.5 mr-1.5 mt-0.5 flex-shrink-0 text-gray-400" />
-                              <span className="truncate">{car.tags?.join(', ') || 'N/A'}</span>
+                          {car.stockId && (
+                            <div className="text-xs text-gray-600">
+                              <div className="flex items-start">
+                                <FiInfo className="h-3.5 w-3.5 mr-1.5 mt-0.5 text-gray-400" />
+                                <span>Stock ID: {car.stockId}</span>
+                              </div>
                             </div>
-                          </div>
-                          <div className="text-xs text-gray-600">
-                            <div className="flex items-start">
-                              <FiAward className="h-3.5 w-3.5 mr-1.5 mt-0.5 flex-shrink-0 text-gray-400" />
-                              <span>{car.status === 'active' ? t('buyCars.active') || 'Active' : t('buyCars.closed') || 'Closed'}</span>
-                            </div>
-                          </div>
+                          )}
                         </div>
                         <div className="flex gap-2 mt-auto flex-shrink-0">
                           <button
                             onClick={(e) => { e.stopPropagation(); handleViewCar(car.id); }}
-                            className="flex-1 flex items-center justify-center px-3 py-2 bg-[#3b396d] text-white text-xs font-medium rounded-lg hover:bg-[#2a285a] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] min-h-[36px]"
+                            className="flex-1 flex items-center justify-center px-3 py-2 bg-[#3b396d] text-white text-xs font-medium rounded-lg hover:bg-[#2a285a] min-h-[36px]"
                           >
                             <FiEye className="mr-1 h-3.5 w-3.5" />
-                            {t('buyCars.view') || 'View'}
+                            View
                           </button>
                           <button
                             onClick={(e) => { e.stopPropagation(); handlePlaceBid(car.id); }}
-                            className="flex-1 flex items-center justify-center px-3 py-2 border border-[#3b396d] text-[#3b396d] text-xs font-medium rounded-lg hover:bg-[#3b396d] hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] min-h-[36px]"
+                            className="flex-1 flex items-center justify-center px-3 py-2 border border-[#3b396d] text-[#3b396d] text-xs font-medium rounded-lg hover:bg-[#3b396d] hover:text-white min-h-[36px]"
                           >
                             <FaLevelUpAlt className="mr-1 h-3.5 w-3.5" />
-                            {t('buyCars.bid') || 'Bid'}
+                            Bid
                           </button>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
+
+                {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex justify-center mt-8 md:mt-10">
-                    <nav className="inline-flex items-center space-x-0.5 sm:space-x-1 bg-white p-1 rounded-lg shadow-sm border border-gray-200">
+                  <div className="flex justify-center mt-8">
+                    <nav className="inline-flex items-center space-x-0.5 bg-white p-1 rounded-lg shadow-sm border border-gray-200">
                       <button
                         onClick={() => paginate(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className={`px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center justify-center ${
+                        className={`px-2.5 py-1.5 rounded-md text-sm font-medium transition-colors ${
                           currentPage === 1
                             ? 'text-gray-400 cursor-not-allowed'
                             : 'text-gray-700 hover:bg-gray-100'
                         }`}
-                        aria-label={t('buyCars.previousPage') || "Previous page"}
                       >
                         <FiChevronLeft className="h-4 w-4" />
                       </button>
@@ -1197,7 +1408,7 @@ const BuyCarsTab = ({
                             <button
                               key={i}
                               onClick={() => paginate(pageNum)}
-                              className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-md text-sm font-medium transition-colors duration-200 min-w-[36px] sm:min-w-[42px] flex items-center justify-center ${
+                              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors min-w-[36px] ${
                                 currentPage === pageNum
                                   ? 'bg-[#3b396d] text-white shadow-sm'
                                   : 'text-gray-700 hover:bg-gray-100'
@@ -1208,7 +1419,7 @@ const BuyCarsTab = ({
                           );
                         } else if (showEllipsisBefore || showEllipsisAfter) {
                           return (
-                            <span key={i} className="px-2 py-1.5 sm:px-2 sm:py-2 text-gray-400">
+                            <span key={i} className="px-2 py-1.5 text-gray-400">
                               ...
                             </span>
                           );
@@ -1218,12 +1429,11 @@ const BuyCarsTab = ({
                       <button
                         onClick={() => paginate(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className={`px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center justify-center ${
+                        className={`px-2.5 py-1.5 rounded-md text-sm font-medium transition-colors ${
                           currentPage === totalPages
                             ? 'text-gray-400 cursor-not-allowed'
                             : 'text-gray-700 hover:bg-gray-100'
                         }`}
-                        aria-label={t('buyCars.nextPage') || "Next page"}
                       >
                         <FiChevronRight className="h-4 w-4" />
                       </button>
@@ -1234,21 +1444,22 @@ const BuyCarsTab = ({
             ) : (
               <div className="text-center py-16">
                 <FiInfo className="mx-auto h-16 w-16 text-gray-400" />
-                <h3 className="mt-4 text-xl font-medium text-gray-900">{t('buyCars.noResults') || 'No cars found'}</h3>
+                <h3 className="mt-4 text-xl font-medium text-gray-900">No cars found</h3>
                 <p className="mt-2 text-gray-500 max-w-md mx-auto">
-                  {t('buyCars.tryDifferentFilters') || 'Try adjusting your filters or search term'}
+                  Try adjusting your filters or search term
                 </p>
                 <button
                   onClick={clearAllFilters}
-                  className="mt-6 px-5 py-2.5 bg-[#3b396d] text-white font-medium rounded-lg hover:bg-[#2a285a] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] shadow-sm"
+                  className="mt-6 px-5 py-2.5 bg-[#3b396d] text-white font-medium rounded-lg hover:bg-[#2a285a] shadow-sm"
                 >
-                  {t('buyCars.resetFilters') || 'Reset Filters'}
+                  Reset Filters
                 </button>
               </div>
             )}
           </div>
         </div>
       </div>
+
       <style jsx>{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;

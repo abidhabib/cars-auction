@@ -822,7 +822,7 @@ const InventoryTab = ({ selectedVehicle, setSelectedVehicle, handleAddVehicle, h
                     ) : (
                       currentVehicles.map((vehicle) => (
                         <React.Fragment key={vehicle.id}>
-                          <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => handleViewDetails(vehicle)}>
+                          <tr className="hover:bg-gray-50 cursor-pointer">
                             <td className="px-3 py-2 whitespace-nowrap">
                               <div className="flex items-center">
                                 <div className="flex-shrink-0 h-10 w-12 relative">
