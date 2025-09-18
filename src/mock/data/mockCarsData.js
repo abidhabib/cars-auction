@@ -139,7 +139,6 @@ export const loadMockCarsData = () => {
         headline: '2023 Mercedes-Benz GLE 450e Hybrid AMG Line - Brand New!',
         description: 'Absolutely stunning and nearly new 2023 Mercedes-Benz GLE 450e Hybrid from the AMG Line. This vehicle is in pristine showroom condition with only 18,000km on the odometer. It comes equipped with the latest MBUX infotainment system, Burmester 3D surround sound, massage seats, air suspension, and the powerful plug-in hybrid powertrain offering an electric range of approximately 80km. A full Mercedes-Benz service history is included.',
         photos: [
-          'https://images.unsplash.com/photo-1563720223489-2301176c2e6d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=772&q=80',
           'https://images.unsplash.com/photo-1622933017736-231a5a17f6c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
           'https://images.unsplash.com/photo-1622933017736-231a5a17f6c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
           'https://images.unsplash.com/photo-1555212697-194d092e3b8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
@@ -196,7 +195,8 @@ export const loadMockCarsData = () => {
       transmission: 'Automatic',
       color: 'White',
       condition: 'Like New',
-      image: 'https://images.unsplash.com/photo-1563720223489-2301176c2e6d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=772&q=80',
+      image:          'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
+
       seller: {
         id: 'seller_002',
         name: 'Luxury Motors Ltd.',

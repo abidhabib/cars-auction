@@ -1,67 +1,93 @@
-// src/components/seller/BiddingModal.jsx
 import React, { useState, useEffect } from 'react';
 import { FaLevelUpAlt } from 'react-icons/fa';
-import { FiX, FiInfo, FiDollarSign } from 'react-icons/fi';
+import { FiX, FiInfo, FiDollarSign, FiAlertCircle } from 'react-icons/fi';
+import { MdOutlineNoteAdd } from 'react-icons/md';
 
 const BiddingModal = ({ isOpen, onClose, car, onBidSubmit, t }) => {
   const [bidAmount, setBidAmount] = useState('');
+  const [note, setNote] = useState('');
+  const [selectedBroker, setSelectedBroker] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+  const [showSuccess, setShowSuccess] = useState(false);
+
   // Reset form when car changes or modal opens
   useEffect(() => {
     if (isOpen) {
       setBidAmount('');
+      setNote('');
+      setSelectedBroker('');
       setError('');
+      setShowSuccess(false);
     }
   }, [isOpen, car]);
-  
-  if (!isOpen || !car) return null;
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Validate bid amount
+
     const amount = parseFloat(bidAmount);
     if (isNaN(amount) || amount <= 0) {
       setError(t('bidding.invalidAmount') || 'Please enter a valid bid amount');
       return;
     }
-    
-    // Check if bid is higher than current highest bid
+
     if (car.highestBid && amount <= car.highestBid) {
       setError(t('bidding.bidTooLow') || `Bid must be higher than current highest bid (€${car.highestBid.toLocaleString()})`);
       return;
     }
-    
-    // Check minimum bid increment (example: 100 euros)
+
     const minIncrement = 100;
     if (car.highestBid && amount < car.highestBid + minIncrement) {
       setError(t('bidding.minimumIncrement', { amount: minIncrement }) || `Minimum bid increment is €${minIncrement}`);
       return;
     }
-    
+
     setError('');
     setIsSubmitting(true);
-    
+
     // Simulate API call
     setTimeout(() => {
-      onBidSubmit(amount);
+      onBidSubmit({ bidAmount: amount, note, broker: selectedBroker });
+      setShowSuccess(true);
       setIsSubmitting(false);
+      setTimeout(() => {
+        setShowSuccess(false);
+        onClose();
+      }, 2500);
     }, 800);
   };
-  
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'EUR'
+      currency: 'EUR',
+      minimumFractionDigits: 2,
     }).format(amount);
   };
-  
+
+  // Calculate total cost including fees (example: 3% auction fee)
+  const calculateTotalCost = () => {
+    const amount = parseFloat(bidAmount) || 0;
+    const auctionFee = amount * 0.03; // Example: 3% fee
+    return amount + auctionFee;
+  };
+
+  const totalCost = calculateTotalCost();
+
+  // Broker options (mock data)
+  const brokers = [
+    'van den Broek Automotive bemiddeling',
+    'AutoTrade International',
+    'Luxury Cars BV',
+    'EuroCar Sales'
+  ];
+
+  if (!isOpen || !car) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
-      <div 
-        className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+      <div
+        className="bg-white  shadow-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -78,11 +104,26 @@ const BiddingModal = ({ isOpen, onClose, car, onBidSubmit, t }) => {
             <FiX className="h-6 w-6" />
           </button>
         </div>
-        
+
+        {/* Success Message */}
+        {showSuccess && (
+          <div className="p-4 bg-green-50 border-t border-green-200">
+            <div className="flex items-center">
+              <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span className="text-sm font-medium text-green-800">
+                {t('bidding.bidSubmitted') || 'Your bid has been submitted successfully!'}
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Modal Body */}
-        <div className="p-5">
+        <div className="p-5 space-y-5">
           {/* Car Info */}
           <div className="flex items-center mb-5 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            
             <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex-shrink-0" />
             <div className="ml-4">
               <h4 className="font-semibold text-gray-900">
@@ -94,9 +135,10 @@ const BiddingModal = ({ isOpen, onClose, car, onBidSubmit, t }) => {
                   {formatCurrency(car.price)}
                 </span>
               </div>
+              
             </div>
           </div>
-          
+
           {/* Auction Info */}
           {car.saleType === 'general-auction' && (
             <div className="mb-5 p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -112,10 +154,11 @@ const BiddingModal = ({ isOpen, onClose, car, onBidSubmit, t }) => {
               </div>
             </div>
           )}
-          
+
           {/* Bid Form */}
           <form onSubmit={handleSubmit}>
-            <div className="mb-5">
+            {/* Bid Amount Input */}
+            <div className="mb-4">
               <label htmlFor="bidAmount" className="block text-sm font-medium text-gray-700 mb-2">
                 {t('bidding.bidAmount') || 'Bid Amount'} *
               </label>
@@ -139,16 +182,71 @@ const BiddingModal = ({ isOpen, onClose, car, onBidSubmit, t }) => {
                 <p className="mt-2 text-sm text-red-600">{error}</p>
               )}
             </div>
-            
-            {/* Info Box */}
-            <div className="mb-5 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-              <div className="flex">
-                <FiInfo className="flex-shrink-0 h-5 w-5 text-yellow-400 mt-0.5" />
+
+            {/* Total Cost Display */}
+            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-yellow-800">
+                  {t('bidding.totalCost') || 'Total cost including fees:'}
+                </span>
+                <span className="font-bold text-yellow-700">
+                  {formatCurrency(totalCost)}
+                </span>
+              </div>
+              <div className="text-xs text-yellow-600 mt-1">
+                {t('bidding.feeNote') || 'Includes 3% auction fee'}
+              </div>
+            </div>
+
+            {/* Leave a Note */}
+            <div className="mb-4">
+              <label htmlFor="note" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <MdOutlineNoteAdd className="h-4 w-4 mr-1 text-gray-500" />
+                {t('bidding.leaveNote') || 'Optional note for seller'}
+              </label>
+              <textarea
+                id="note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                rows={3}
+                maxLength={300}
+                placeholder={t('bidding.notePlaceholder') || 'Your message will only be visible to you and the seller. Max 300 characters.'}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
+              />
+              <div className="text-xs text-gray-500 mt-1">
+                {note.length}/300
+              </div>
+            </div>
+
+            {/* Broker Selection */}
+            <div className="mb-5">
+              <label htmlFor="broker" className="block text-sm font-medium text-gray-700 mb-2">
+                {t('bidding.broker') || 'Broker / Intermediary'}
+              </label>
+              <select
+                id="broker"
+                value={selectedBroker}
+                onChange={(e) => setSelectedBroker(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d]"
+              >
+                <option value="">-- Select --</option>
+                {brokers.map((broker) => (
+                  <option key={broker} value={broker}>
+                    {broker}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Important Info */}
+            <div className="mb-5 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-start">
+                <FiAlertCircle className="flex-shrink-0 h-5 w-5 text-red-500 mt-0.5" />
                 <div className="ml-3">
-                  <h4 className="text-sm font-medium text-yellow-800">
+                  <h4 className="text-sm font-medium text-gray-800">
                     {t('bidding.bidInfoTitle') || 'Important Information'}
                   </h4>
-                  <div className="mt-2 text-sm text-yellow-700">
+                  <div className="mt-2 text-sm text-gray-700">
                     <ul className="list-disc pl-5 space-y-1">
                       <li>{t('bidding.bidInfo1') || 'Your bid is binding once submitted'}</li>
                       <li>{t('bidding.bidInfo2') || 'You will be notified if you are outbid'}</li>
@@ -158,7 +256,7 @@ const BiddingModal = ({ isOpen, onClose, car, onBidSubmit, t }) => {
                 </div>
               </div>
             </div>
-            
+
             {/* Action Buttons */}
             <div className="flex gap-3">
               <button

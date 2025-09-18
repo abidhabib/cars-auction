@@ -108,7 +108,7 @@ const SellerSidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab })
               className={`w-full flex items-center transition-all duration-200 rounded-xl text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-10 ${
                 sidebarOpen ? 'px-4 py-3' : 'justify-center h-12 mx-auto'
               }`}
-              title={sidebarOpen ? (t('sidebar.collapse') || 'Collapse') : (t('sidebar.expand') || 'Expand')}
+              title={sidebarOpen ? ('Collapse') : (t('sidebar.expand') || 'Expand')}
             >
               <span className="flex-shrink-0">
                 {sidebarOpen ? <FiChevronLeft className="h-5 w-5" /> : <FiChevronRight className="h-5 w-5" />}

@@ -10,6 +10,8 @@ export const translations = {
     ...BuyCarTranslation.en
 
     ,
+
+
     notificationsBid: {
       title: "Notifications",
       newBid: "You have a new bid",
@@ -17,26 +19,32 @@ export const translations = {
       carSold: "Your car has been sold",
       viewAll: "View all"
     },
-    "bidding": {
-      "placeBid": "Place Bid",
-      "close": "Close",
-      "currentHighestBid": "Current highest bid",
-      "noBids": "No bids yet",
-      "yourBids": "Your bids",
-      "bidAmount": "Bid Amount",
-      "bidInfoTitle": "Important Information",
-      "bidInfo1": "Your bid is binding once submitted",
-      "bidInfo2": "You will be notified if you are outbid",
-      "bidInfo3": "Bids must be higher than the current highest bid",
-      "cancel": "Cancel",
-      "submitBid": "Submit Bid",
-      "submitting": "Submitting...",
-      "invalidAmount": "Please enter a valid bid amount",
-      "bidTooLow": "Bid must be higher than current highest bid",
-      "minimumIncrement": "Minimum bid increment is €{amount}",
-      "bidSuccess": "Bid placed successfully!",
-      "bidError": "Failed to place bid. Please try again."
-    },
+    bidding: {
+  totalCost: "Total Cost",
+  placeBid: "Place Bid",
+  close: "Close",
+  currentHighestBid: "Current Highest Bid",
+  noBids: "No bids yet",
+  yourBids: "Your Bids",
+  bidAmount: "Bid Amount",
+  bidInfoTitle: "Important Information",
+  bidInfo1: "Your bid is binding once submitted",
+  bidInfo2: "You will be notified if you are outbid",
+  bidInfo3: "Bids must be higher than the current highest bid",
+  cancel: "Cancel",
+  submitBid: "Submit Bid",
+  submitting: "Submitting...",
+  invalidAmount: "Please enter a valid bid amount",
+  bidTooLow: "Bid must be higher than the current highest bid",
+  minimumIncrement: "Minimum increment is €{amount}",
+  bidSuccess: "Bid placed successfully!",
+  bidError: "Failed to place bid. Please try again.",
+
+  // Added
+  feeNote: "Additional fees may apply",
+  leaveNote: "Leave a note",
+  broker: "Broker fee"
+},
 
     cookies: {
       message: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies as described in our Cookie Policy.",
@@ -1315,26 +1323,33 @@ export const translations = {
     }
     ,
 
-    bidding: {
-      placeBid: "Gebot abgeben",
-      close: "Schließen",
-      currentHighestBid: "Aktuell höchstes Gebot",
-      noBids: "Noch keine Gebote",
-      yourBids: "Ihre Gebote",
-      bidAmount: "Gebotsbetrag",
-      bidInfoTitle: "Wichtige Informationen",
-      bidInfo1: "Ihr Gebot ist verbindlich, sobald es eingereicht wurde",
-      bidInfo2: "Sie werden benachrichtigt, wenn Sie überboten werden",
-      bidInfo3: "Gebote müssen höher sein als das aktuell höchste Gebot",
-      cancel: "Abbrechen",
-      submitBid: "Gebot einreichen",
-      submitting: "Wird eingereicht...",
-      invalidAmount: "Bitte geben Sie einen gültigen Gebotsbetrag ein",
-      bidTooLow: "Gebot muss höher sein als das aktuell höchste Gebot",
-      minimumIncrement: "Mindeststeigerung ist €{amount}",
-      bidSuccess: "Gebot erfolgreich abgegeben!",
-      bidError: "Fehler beim Abgeben des Gebots. Bitte versuchen Sie es erneut."
-    },
+  bidding: {
+  totalCost: "Gesamtkosten",
+  placeBid: "Gebot abgeben",
+  close: "Schließen",
+  currentHighestBid: "Aktuelles Höchstgebot",
+  noBids: "Noch keine Gebote",
+  yourBids: "Ihre Gebote",
+  bidAmount: "Gebotsbetrag",
+  bidInfoTitle: "Wichtige Informationen",
+  bidInfo1: "Ihr Gebot ist bindend, sobald es eingereicht wurde",
+  bidInfo2: "Sie werden benachrichtigt, wenn Sie überboten werden",
+  bidInfo3: "Gebote müssen höher sein als das aktuelle Höchstgebot",
+  cancel: "Abbrechen",
+  submitBid: "Gebot einreichen",
+  submitting: "Einreichen...",
+  invalidAmount: "Bitte geben Sie einen gültigen Gebotsbetrag ein",
+  bidTooLow: "Gebot muss höher sein als das aktuelle Höchstgebot",
+  minimumIncrement: "Mindestschritt für Gebote ist €{amount}",
+  bidSuccess: "Gebot erfolgreich abgegeben!",
+  bidError: "Fehler beim Abgeben des Gebots. Bitte erneut versuchen.",
+
+  // Added
+  feeNote: "Zusätzliche Gebühren können anfallen",
+  leaveNote: "Hinterlassen Sie eine Notiz",
+  broker: "Maklergebühr"
+},
+
     cookies: {
       message: "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern. Durch die Nutzung unserer Website stimmen Sie unserer Cookie-Richtlinie zu.",
       accept: "Alle akzeptieren",
@@ -2504,26 +2519,33 @@ export const translations = {
       viewAll: "Alles bekijken"
     }
     ,
-    bidding: {
-      placeBid: "Bod plaatsen",
-      close: "Sluiten",
-      currentHighestBid: "Huidig hoogste bod",
-      noBids: "Nog geen biedingen",
-      yourBids: "Uw biedingen",
-      bidAmount: "Bodbedrag",
-      bidInfoTitle: "Belangrijke informatie",
-      bidInfo1: "Uw bod is bindend zodra het is ingediend",
-      bidInfo2: "U wordt op de hoogte gebracht als u overboden wordt",
-      bidInfo3: "Biedingen moeten hoger zijn dan het huidige hoogste bod",
-      cancel: "Annuleren",
-      submitBid: "Bod indienen",
-      submitting: "Indienen...",
-      invalidAmount: "Voer een geldig bodbedrag in",
-      bidTooLow: "Bod moet hoger zijn dan het huidige hoogste bod",
-      minimumIncrement: "Minimale biedstap is €{amount}",
-      bidSuccess: "Bod succesvol geplaatst!",
-      bidError: "Plaatsen van bod mislukt. Probeer opnieuw."
-    },
+  bidding: {
+  totalCost: "Totale kosten",
+  placeBid: "Bod plaatsen",
+  close: "Sluiten",
+  currentHighestBid: "Huidig hoogste bod",
+  noBids: "Nog geen biedingen",
+  yourBids: "Uw biedingen",
+  bidAmount: "Bodbedrag",
+  bidInfoTitle: "Belangrijke informatie",
+  bidInfo1: "Uw bod is bindend zodra het is ingediend",
+  bidInfo2: "U wordt op de hoogte gebracht als u overboden wordt",
+  bidInfo3: "Biedingen moeten hoger zijn dan het huidige hoogste bod",
+  cancel: "Annuleren",
+  submitBid: "Bod indienen",
+  submitting: "Indienen...",
+  invalidAmount: "Voer een geldig bodbedrag in",
+  bidTooLow: "Bod moet hoger zijn dan het huidige hoogste bod",
+  minimumIncrement: "Minimale biedstap is €{amount}",
+  bidSuccess: "Bod succesvol geplaatst!",
+  bidError: "Plaatsen van bod mislukt. Probeer opnieuw.",
+
+  // Added
+  feeNote: "Extra kosten kunnen van toepassing zijn",
+  leaveNote: "Laat een opmerking achter",
+  broker: "Makelaarskosten"
+},
+
     "search": {
       "gridView": "Rasterweergave",       // nl
       "listView": "Lijstweergave",

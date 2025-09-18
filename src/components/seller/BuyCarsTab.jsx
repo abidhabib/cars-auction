@@ -1,5 +1,5 @@
 // src/components/seller/BuyCarsTab.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   FiFilter, 
@@ -28,6 +28,102 @@ import { FaArrowAltCircleLeft, FaLevelUpAlt } from 'react-icons/fa';
 import BiddingModal from './BiddingModal';
 import { loadMockCarsData } from '../../mock/data/mockCarsData';
 
+// Memoized Car Image Slider Component
+const CarImageSlider = memo(({ car }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState({});
+  
+  // Use useCallback to prevent unnecessary re-creation of functions
+  const nextImage = useCallback(() => {
+    setCurrentImageIndex(prevIndex => {
+      const images = car.mediaAndDescription?.photos || [car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80'];
+      return prevIndex === images.length - 1 ? 0 : prevIndex + 1;
+    });
+  }, [car.id]); // Only re-create when car.id changes
+
+  const prevImage = useCallback(() => {
+    setCurrentImageIndex(prevIndex => {
+      const images = car.mediaAndDescription?.photos || [car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80'];
+      return prevIndex === 0 ? images.length - 1 : prevIndex - 1;
+    });
+  }, [car.id]);
+
+  const handleImageLoad = useCallback((index) => {
+    setImageLoaded(prev => ({ ...prev, [index]: true }));
+  }, []);
+
+  const handleImageError = useCallback((e, index) => {
+    e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
+    setImageLoaded(prev => ({ ...prev, [index]: true }));
+  }, []);
+
+  // Get images array
+  const images = car.mediaAndDescription?.photos || [car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80'];
+
+  // Reset to first image when car changes
+  useEffect(() => {
+    setCurrentImageIndex(0);
+    setImageLoaded({});
+  }, [car.id]);
+
+  return (
+    <div className="relative w-full h-48 overflow-hidden rounded-t-xl bg-gray-100">
+      {images.map((imgSrc, index) => (
+        <div 
+          key={index} 
+          className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+        >
+          {!imageLoaded[index] && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="animate-pulse bg-gray-200 rounded-xl w-full h-full" />
+            </div>
+          )}
+          <img
+            src={imgSrc}
+            alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model} - Image ${index + 1}`}
+            className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => handleImageLoad(index)}
+            onError={(e) => handleImageError(e, index)}
+            style={{ display: index === currentImageIndex ? 'block' : 'none' }}
+          />
+        </div>
+      ))}
+      
+      {images.length > 1 && (
+        <>
+          <button
+            onClick={(e) => { e.stopPropagation(); prevImage(); }}
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-[#3b396d] rounded-full p-1.5 shadow-md transition-all duration-200 hover:scale-105"
+            aria-label="Previous image"
+          >
+            <FiChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); nextImage(); }}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-[#3b396d] rounded-full p-1.5 shadow-md transition-all duration-200 hover:scale-105"
+            aria-label="Next"
+          >
+            <FiChevronRight className="h-4 w-4" />
+          </button>
+          <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1.5">
+            {images.map((_, index) => (
+              <button
+                key={index}
+                onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${index === currentImageIndex ? 'bg-[#3b396d] scale-125' : 'bg-white/60 hover:bg-white'}`}
+                aria-label={`Go to image ${index + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}, (prevProps, nextProps) => {
+  // Only re-render if car.id changes
+  return prevProps.car.id === nextProps.car.id;
+});
+
 const BuyCarsTab = ({ 
   searchTerm, 
   setSearchTerm,  
@@ -45,7 +141,6 @@ const BuyCarsTab = ({
   const [internalSelectedCar, setInternalSelectedCar] = useState(null);
   const [biddingCar, setBiddingCar] = useState(null);
   const [isBiddingModalOpen, setIsBiddingModalOpen] = useState(false);
-
   const carsPerPage = 8;
   const effectiveSelectedCar = externalSelectedCar || internalSelectedCar;
 
@@ -57,6 +152,7 @@ const BuyCarsTab = ({
 
   useEffect(() => {
     let filtered = [...allCars];
+    
     Object.entries(activeFilters).forEach(([key, value]) => {
       if (value) {
         switch (key) {
@@ -180,89 +276,7 @@ const BuyCarsTab = ({
   const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // --- Car Image Slider Component (for list view) ---
-  const CarImageSlider = ({ car }) => {
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [imageLoaded, setImageLoaded] = useState({});
-    const images = car.mediaAndDescription?.photos || [car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80'];
-
-    useEffect(() => {
-      setCurrentImageIndex(0);
-      setImageLoaded({});
-    }, [car.id]);
-
-    const nextImage = () => {
-      setCurrentImageIndex((prevIndex) => prevIndex === images.length - 1 ? 0 : prevIndex + 1);
-    };
-
-    const prevImage = () => {
-      setCurrentImageIndex((prevIndex) => prevIndex === 0 ? images.length - 1 : prevIndex - 1);
-    };
-
-    const handleImageLoad = (index) => {
-      setImageLoaded(prev => ({ ...prev, [index]: true }));
-    };
-
-    const handleImageError = (e, index) => {
-      e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
-      setImageLoaded(prev => ({ ...prev, [index]: true }));
-    };
-
-    return (
-      <div className="relative w-full h-48 overflow-hidden rounded-t-xl bg-gray-100">
-        {images.map((imgSrc, index) => (
-          <div 
-            key={index} 
-            className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-          >
-            {!imageLoaded[index] && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="animate-pulse bg-gray-200 rounded-xl w-full h-full" />
-              </div>
-            )}
-            <img
-              src={imgSrc}
-              alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model} - Image ${index + 1}`}
-              className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
-              onLoad={() => handleImageLoad(index)}
-              onError={(e) => handleImageError(e, index)}
-              style={{ display: index === currentImageIndex ? 'block' : 'none' }}
-            />
-          </div>
-        ))}
-        {images.length > 1 && (
-          <>
-            <button
-              onClick={(e) => { e.stopPropagation(); prevImage(); }}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-[#3b396d] rounded-full p-1.5 shadow-md transition-all duration-200 hover:scale-105"
-              aria-label="Previous image"
-            >
-              <FiChevronLeft className="h-4 w-4" />
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); nextImage(); }}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-[#3b396d] rounded-full p-1.5 shadow-md transition-all duration-200 hover:scale-105"
-              aria-label="Next"
-            >
-              <FiChevronRight className="h-4 w-4" />
-            </button>
-            <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1.5">
-              {images.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${index === currentImageIndex ? 'bg-[#3b396d] scale-125' : 'bg-white/60 hover:bg-white'}`}
-                  aria-label={`Go to image ${index + 1}`}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    );
-  };
-
-  // --- Car Detail View Component (Your Approved Layout + All Data) ---
+  // --- Car Detail View Component ---
   const CarDetailView = ({ car }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [fullscreenImage, setFullscreenImage] = useState(null);
@@ -371,7 +385,7 @@ const BuyCarsTab = ({
     const renderRDWHistory = () => {
       if (!car.rdwHistory || car.rdwHistory.length === 0) return null;
       return (
-        <div className="mb-6">
+        <div className="mb-6 p-6 mt-6">
           <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
             <FiInfo className="mr-2 text-[#3b396d]" />
             {t('buyCars.rdwHistory') || 'RDW History'}
@@ -393,10 +407,10 @@ const BuyCarsTab = ({
     const renderDamageGrid = () => {
       if (!car.damageGrid || car.damageGrid.length === 0) return null;
       return (
-        <div className="mb-6">
+        <div className="mb-6 p-6 mt-6">
           <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
             <FiTool className="mr-2 text-[#3b396d]" />
-            {t('buyCars.damageReport') || 'Damage Report'}
+         Damage Report
           </h3>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -429,6 +443,16 @@ const BuyCarsTab = ({
       );
     };
 
+    // Safe translation function that doesn't log errors
+    const safeT = (key, defaultValue = '') => {
+      try {
+        const translation = t(key);
+        return translation !== key ? translation : defaultValue;
+      } catch (error) {
+        return defaultValue;
+      }
+    };
+
     return (
       <div className="p-4">
         <button
@@ -438,7 +462,6 @@ const BuyCarsTab = ({
           <FaArrowAltCircleLeft className="mr-2 text-lg" /> 
           Back to List
         </button>
-
         <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* LEFT: Image Gallery */}
@@ -504,7 +527,7 @@ const BuyCarsTab = ({
                 </>
               )}
             </div>
-
+            
             {/* RIGHT: Specs & Info */}
             <div className="p-6 flex flex-col justify-between">
               <div>
@@ -518,7 +541,6 @@ const BuyCarsTab = ({
                   <FiMapPin className="mr-1.5 text-gray-500" />
                   <span>{car.location}</span>
                 </div>
-
                 <div className="mb-6">
                   <div className="text-2xl font-bold text-[#3b396d]">
                     €{car.price?.toLocaleString()}
@@ -529,7 +551,7 @@ const BuyCarsTab = ({
                     </div>
                   )}
                 </div>
-
+                
                 {/* Auction Timer */}
                 {car.saleType === 'general-auction' && (
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5 mb-6 shadow-sm">
@@ -565,7 +587,7 @@ const BuyCarsTab = ({
                     </div>
                   </div>
                 )}
-
+                
                 {/* VAT Info */}
                 {car.vatStatus === 'deductible' && (
                   <div className="mb-6 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center">
@@ -573,59 +595,59 @@ const BuyCarsTab = ({
                     <span className="text-green-800">Btw aftrekbaar (21%)</span>
                   </div>
                 )}
-
-             {/* Spec Table */}
-<div className="space-y-2 mb-6">
-  {[
-    { 
-      label: t('stockId', 'Stock ID:'), 
-      value: car.stockId || t('common.na', 'N/A') 
-    },
-    { 
-      label: t('buildYear', 'Bouwjaar / modeljaar (CvO):'), 
-      value: car.vehicleIdentification.year 
-    },
-    { 
-      label: t('firstRegistration', 'Eerste toelating:'), 
-      value: car.vehicleIdentification.registrationDate || t('common.na', 'N/A') 
-    },
-    { 
-      label: t('mileage', 'Afgelezen kilometerstand:'), 
-      value: `${parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} km` 
-    },
-    { 
-      label: t('fuelType', 'Brandstoftype:'), 
-      value: car.fuelType 
-    },
-    { 
-      label: t('power', 'Vermogen:'), 
-      value: `${car.conditionAssessment?.tyreReport?.frontLeft?.brand || t('common.na', 'N/A')} kW / ${car.conditionAssessment?.tyreReport?.frontLeft?.treadDepth || t('common.na', 'N/A')} PK` 
-    },
-    { 
-      label: t('engineCapacity', 'Cilinderinhoud:'), 
-      value: car.conditionAssessment?.tyreReport?.frontLeft?.condition || t('common.na', 'N/A') 
-    },
-    { 
-      label: t('transmission', 'Transmissie:'), 
-      value: car.transmission 
-    },
-    { 
-      label: t('recentInspection', 'Inspectie vernieuwd in de laatste 6 maanden:'), 
-      value: t('common.yes', 'Ja') 
-    },
-    { 
-      label: t('bodyType', 'Carrosserietype:'), 
-      value: car.carType 
-    }
-  ].map((row, i) => (
-    <div key={i} className="flex justify-between py-1 border-b border-gray-200 last:border-0">
-      <span className="text-sm text-gray-700">{row.label}</span>
-      <span className="text-sm font-medium text-gray-900">{row.value}</span>
-    </div>
-  ))}
-</div>
+                
+                {/* Spec Table */}
+                <div className="space-y-2 mb-6">
+                  {[
+                    { 
+                      label: t('stockId', 'Stock ID:'), 
+                      value: car.stockId || t('common.na', 'N/A') 
+                    },
+                    { 
+                      label: t('buildYear', 'Bouwjaar / modeljaar (CvO):'), 
+                      value: car.vehicleIdentification.year 
+                    },
+                    { 
+                      label: t('firstRegistration', 'Eerste toelating:'), 
+                      value: car.vehicleIdentification.registrationDate || t('common.na', 'N/A') 
+                    },
+                    { 
+                      label: t('mileage', 'Afgelezen kilometerstand:'), 
+                      value: `${parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} km` 
+                    },
+                    { 
+                      label: t('fuelType', 'Brandstoftype:'), 
+                      value: car.fuelType 
+                    },
+                    { 
+                      label: t('power', 'Vermogen:'), 
+                      value: `${car.conditionAssessment?.tyreReport?.frontLeft?.brand || t('common.na', 'N/A')} kW / ${car.conditionAssessment?.tyreReport?.frontLeft?.treadDepth || t('common.na', 'N/A')} PK` 
+                    },
+                    { 
+                      label: t('engineCapacity', 'Cilinderinhoud:'), 
+                      value: car.conditionAssessment?.tyreReport?.frontLeft?.condition || t('common.na', 'N/A') 
+                    },
+                    { 
+                      label: t('transmission', 'Transmissie:'), 
+                      value: car.transmission 
+                    },
+                    { 
+                      label: 'Inspectie vernieuwd in de laatste 6 maanden:', 
+                      value: safeT('common.yes', 'Ja') // Fixed: Use safeT to avoid console errors
+                    },
+                    { 
+                      label: t('bodyType', 'Carrosserietype:'), 
+                      value: car.carType 
+                    }
+                  ].map((row, i) => (
+                    <div key={i} className="flex justify-between py-1 border-b border-gray-200 last:border-0">
+                      <span className="text-sm text-gray-700">{row.label}</span>
+                      <span className="text-sm font-medium text-gray-900">{row.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-
+              
               {/* Action Buttons */}
               <div className="mt-6 flex gap-3">
                 <button className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
@@ -640,15 +662,14 @@ const BuyCarsTab = ({
               </div>
             </div>
           </div>
-
-          {/* --- ALL OTHER SECTIONS PRESERVED --- */}
           
+          {/* --- ALL OTHER SECTIONS PRESERVED --- */}
           {/* RDW History */}
           {renderRDWHistory()}
-
+          
           {/* Damage Grid */}
           {renderDamageGrid()}
-
+          
           {/* Vehicle Identification */}
           <div className="p-6 border-t border-gray-200">
             <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
@@ -690,7 +711,7 @@ const BuyCarsTab = ({
               </div>
             </div>
           </div>
-
+          
           {/* Condition Assessment */}
           <div className="p-6 border-t border-gray-200">
             <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
@@ -752,7 +773,7 @@ const BuyCarsTab = ({
               ))}
             </div>
           </div>
-
+          
           {/* Exterior Options & Damages */}
           <div className="p-6 border-t border-gray-200">
             <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
@@ -770,7 +791,7 @@ const BuyCarsTab = ({
               </div>
             </div>
           </div>
-
+          
           {/* Visual Documentation & Description */}
           <div className="p-6 border-t border-gray-200">
             <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
@@ -796,8 +817,8 @@ const BuyCarsTab = ({
                 <h4 className="font-medium text-gray-900 mb-2">{t('buyCars.accidentHistory') || 'Accident History'}</h4>
                 <p className="text-gray-700">
                   {car.mediaAndDescription?.hasAccident 
-                    ? t('yes') || 'Yes' 
-                    : t('no') || 'No'}
+                    ? safeT('common.yes', 'Yes') // Fixed: Use safeT to avoid console errors
+                    : safeT('common.no', 'No')} // Fixed: Use safeT to avoid console errors
                 </p>
                 {car.mediaAndDescription?.hasAccident && car.mediaAndDescription?.accidentDetails && (
                   <p className="text-gray-700 mt-2 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-sm">{car.mediaAndDescription.accidentDetails}</p>
@@ -854,7 +875,7 @@ const BuyCarsTab = ({
               )}
             </div>
           </div>
-
+          
           {/* Auction Timing */}
           {car.saleType === 'general-auction' && (
             <div className="p-6 border-t border-gray-200">
@@ -878,7 +899,7 @@ const BuyCarsTab = ({
               </div>
             </div>
           )}
-
+          
           {/* Seller Information (Uncommented) */}
           <div className="p-6 border-t border-gray-200">
             <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
@@ -915,7 +936,7 @@ const BuyCarsTab = ({
             </div>
           </div>
         </div>
-
+        
         {/* Fullscreen Image Modal */}
         {fullscreenImage && (
           <div 
@@ -987,7 +1008,6 @@ const BuyCarsTab = ({
           t={t}
         />
       )}
-
       <div className="flex flex-col lg:flex-row">
         {/* Filters Panel */}
         <div className={`lg:w-64 bg-white border-r border-gray-200 p-4 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto ${
@@ -1004,7 +1024,6 @@ const BuyCarsTab = ({
               {t('buyCars.clearAll') || 'Clear All'}
             </button>
           </div>
-
           {/* Make */}
           <div className="border-b border-gray-200 mb-4">
             <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
@@ -1025,7 +1044,6 @@ const BuyCarsTab = ({
               ))}
             </div>
           </div>
-
           {/* Model */}
           {selectedMake && (
             <div className="border-b border-gray-200 mb-4">
@@ -1048,7 +1066,6 @@ const BuyCarsTab = ({
               </div>
             </div>
           )}
-
           {/* Year */}
           <div className="border-b border-gray-200 mb-4">
             <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
@@ -1080,7 +1097,6 @@ const BuyCarsTab = ({
               </div>
             </div>
           </div>
-
           {/* Price */}
           <div className="border-b border-gray-200 mb-4">
             <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
@@ -1112,7 +1128,6 @@ const BuyCarsTab = ({
               </div>
             </div>
           </div>
-
           {/* Fuel Type */}
           <div className="border-b border-gray-200 mb-4">
             <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
@@ -1135,7 +1150,6 @@ const BuyCarsTab = ({
               ))}
             </div>
           </div>
-
           {/* Transmission */}
           <div className="border-b border-gray-200 mb-4">
             <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
@@ -1158,7 +1172,6 @@ const BuyCarsTab = ({
               ))}
             </div>
           </div>
-
           {/* Country */}
           <div className="border-b border-gray-200 mb-4">
             <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
@@ -1177,7 +1190,6 @@ const BuyCarsTab = ({
               </select>
             </div>
           </div>
-
           {/* Auction Type */}
           <div className="border-b border-gray-200 mb-4">
             <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
@@ -1200,7 +1212,6 @@ const BuyCarsTab = ({
               ))}
             </div>
           </div>
-
           {/* Car Type */}
           <div className="border-b border-gray-200 mb-4">
             <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
@@ -1221,7 +1232,6 @@ const BuyCarsTab = ({
               ))}
             </div>
           </div>
-
           {/* VAT Status */}
           <div className="border-b border-gray-200 mb-4">
             <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
@@ -1245,7 +1255,6 @@ const BuyCarsTab = ({
             </div>
           </div>
         </div>
-
         {/* Main Content */}
         <div className="flex-1">
           {/* Sticky Header */}
@@ -1264,7 +1273,6 @@ const BuyCarsTab = ({
               </div>
             </div>
           </div>
-
           {/* Active Filters */}
           {(Object.keys(activeFilters).length > 0 || searchTerm) && (
             <div className="bg-white border-b border-gray-200 py-3 px-4">
@@ -1307,7 +1315,6 @@ const BuyCarsTab = ({
               </div>
             </div>
           )}
-
           {/* Car Grid */}
           <div className="p-4">
             {filteredCars.length > 0 ? (
@@ -1379,7 +1386,6 @@ const BuyCarsTab = ({
                     </div>
                   ))}
                 </div>
-
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <div className="flex justify-center mt-8">
@@ -1459,7 +1465,6 @@ const BuyCarsTab = ({
           </div>
         </div>
       </div>
-
       <style jsx>{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
