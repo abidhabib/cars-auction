@@ -3339,6 +3339,7 @@ buyCars: {
         complianceInfo: "Locatie & naleving", // Nieuwe sectietitel
         complianceInfoDesc: "Selecteer uw land en geef relevante details op", // Nieuwe sectiebeschrijving
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
          "firstNamePlaceholder": "Voer uw voornaam in",
       "lastNamePlaceholder": "Voer uw achternaam in",
       "emailPlaceholder": "jouw.email@voorbeeld.nl",
@@ -3374,6 +3375,8 @@ buyCars: {
       countryPlaceholder: "Selecteer uw land",
       // --- EINDE NIEUWE PLACEHOLDERS ---
 =======
+=======
+>>>>>>> Stashed changes
         "rights": "Geïnteresseerd in",
       "rightBuy": "Kopen",
       "rightSell": "Verkopen",

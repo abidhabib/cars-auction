@@ -148,7 +148,18 @@ const handleRightsChange = (right) => {
     const newErrors = {};
     switch (step) {
       case 1:
+         if (!formData.firstName) newErrors.firstName = t('auth.register.errors.firstNameRequired');
+  if (!formData.lastName) newErrors.lastName = t('auth.register.errors.lastNameRequired');
+  if (!formData.email) {
+    newErrors.email = t('auth.register.errors.emailRequired');
+  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    newErrors.email = t('auth.register.errors.emailInvalid');
+  }
+  if (!formData.phone) newErrors.phone = t('auth.register.errors.phoneRequired');
         // ... (Personal Info validation - unchanged)
+          if (selectedRights.length === 0) {
+      newErrors.rights = t('auth.register.errors.rightsRequired') || 'Please select at least one right (Buy, Sell, or Both).';
+  }
         break;
       case 2: // Business Info (Split Address)
         if (!formData.companyName) newErrors.companyName = t('auth.register.errors.companyNameRequired');

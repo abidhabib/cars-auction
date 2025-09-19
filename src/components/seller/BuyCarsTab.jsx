@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 // src/components/seller/BuyCarsTab.jsx
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
@@ -326,6 +327,77 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
       setImageLoaded({});
     }, [car.id]);
 
+=======
+  // src/components/seller/BuyCarsTab.jsx
+  import React, { useState, useEffect, useCallback, memo } from 'react';
+  import { useLanguage } from '../../context/LanguageContext';
+  import { 
+    FiFilter, 
+    FiChevronDown, 
+    FiChevronLeft, 
+    FiChevronRight, 
+    FiDollarSign, 
+    FiMapPin, 
+    FiClock, 
+    FiEye, 
+    FiTag, 
+    FiX,
+    FiAward,
+    FiInfo,
+    FiCalendar,
+    FiTool,
+    FiSettings,
+    FiCamera,
+    FiImage,
+    FiZoomIn,
+    FiCheckCircle,
+    FiStar,
+    FiUser,
+  } from 'react-icons/fi';
+  import { FaArrowAltCircleLeft, FaLevelUpAlt } from 'react-icons/fa';
+  import BiddingModal from './BiddingModal';
+  import { loadMockCarsData } from '../../mock/data/mockCarsData';
+
+  // Memoized Car Image Slider Component
+  const CarImageSlider = memo(({ car }) => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [imageLoaded, setImageLoaded] = useState({});
+
+    
+    // Use useCallback to prevent unnecessary re-creation of functions
+    const nextImage = useCallback(() => {
+      setCurrentImageIndex(prevIndex => {
+        const images = car.mediaAndDescription?.photos || [car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80'];
+        return prevIndex === images.length - 1 ? 0 : prevIndex + 1;
+      });
+    }, [car.id]); // Only re-create when car.id changes
+
+    const prevImage = useCallback(() => {
+      setCurrentImageIndex(prevIndex => {
+        const images = car.mediaAndDescription?.photos || [car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80'];
+        return prevIndex === 0 ? images.length - 1 : prevIndex - 1;
+      });
+    }, [car.id]);
+
+    const handleImageLoad = useCallback((index) => {
+      setImageLoaded(prev => ({ ...prev, [index]: true }));
+    }, []);
+
+    const handleImageError = useCallback((e, index) => {
+      e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
+      setImageLoaded(prev => ({ ...prev, [index]: true }));
+    }, []);
+
+    // Get images array
+    const images = car.mediaAndDescription?.photos || [car.image || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80'];
+
+    // Reset to first image when car changes
+    useEffect(() => {
+      setCurrentImageIndex(0);
+      setImageLoaded({});
+    }, [car.id]);
+
+>>>>>>> Stashed changes
     return (
       <div className="relative w-full h-48 overflow-hidden rounded-t-xl bg-gray-100">
         {images.map((imgSrc, index) => (
@@ -830,6 +902,81 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                             {t('buyCars.highestBid')}: €{car.highestBid?.toLocaleString()}
                           </div>
                         </div>
+<<<<<<< Updated upstream
+                      </div>
+                      <div className="mt-4 flex flex-col sm:flex-row gap-3">
+                        <button
+                          onClick={() => handlePlaceBid(car.id)}
+                          className="flex-1 bg-[#3b396d] text-white py-3 px-4 rounded-lg hover:bg-[#2a285a] transition-colors duration-200 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d] flex items-center justify-center"
+                        >
+                          <FaLevelUpAlt className="mr-2" />
+                          {t('buyCars.placeBid') || 'Place Bid'}
+                        </button>
+                        {car.buyItNowPrice && (
+                          <button className="flex-1 border-2 border-[#3b396d] text-[#3b396d] py-3 px-4 rounded-lg hover:bg-[#3b396d] hover:text-white transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b396d]">
+                            {t('buyCars.buyItNow') || 'Buy It Now'}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* VAT Info */}
+                  {car.vatStatus === 'deductible' && (
+                    <div className="mb-6 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center">
+                      <FiCheckCircle className="mr-2 text-green-600" />
+                      <span className="text-green-800">Btw aftrekbaar (21%)</span>
+                    </div>
+                  )}
+                  
+                  {/* Spec Table */}
+                  <div className="space-y-2 mb-6">
+                    {[
+                      { 
+                        label: t('stockId', 'Stock ID:'), 
+                        value: car.stockId || t('common.na', 'N/A') 
+                      },
+                      { 
+                        label: t('buildYear', 'Bouwjaar / modeljaar (CvO):'), 
+                        value: car.vehicleIdentification.year 
+                      },
+                      { 
+                        label: t('firstRegistration', 'Eerste toelating:'), 
+                        value: car.vehicleIdentification.registrationDate || t('common.na', 'N/A') 
+                      },
+                      { 
+                        label: t('mileage', 'Afgelezen kilometerstand:'), 
+                        value: `${parseInt(car.vehicleIdentification.mileage)?.toLocaleString()} km` 
+                      },
+                      { 
+                        label: t('fuelType', 'Brandstoftype:'), 
+                        value: car.fuelType 
+                      },
+                      { 
+                        label: t('power', 'Vermogen:'), 
+                        value: `${car.conditionAssessment?.tyreReport?.frontLeft?.brand || t('common.na', 'N/A')} kW / ${car.conditionAssessment?.tyreReport?.frontLeft?.treadDepth || t('common.na', 'N/A')} PK` 
+                      },
+                      { 
+                        label: t('engineCapacity', 'Cilinderinhoud:'), 
+                        value: car.conditionAssessment?.tyreReport?.frontLeft?.condition || t('common.na', 'N/A') 
+                      },
+                      { 
+                        label: t('transmission', 'Transmissie:'), 
+                        value: car.transmission 
+                      },
+                      { 
+                        label: 'Inspectie vernieuwd in de laatste 6 maanden:', 
+                        value: safeT('common.yes', 'Ja') // Fixed: Use safeT to avoid console errors
+                      },
+                      { 
+                        label: t('bodyType', 'Carrosserietype:'), 
+                        value: car.carType 
+                      }
+                    ].map((row, i) => (
+                      <div key={i} className="flex justify-between py-1 border-b border-gray-200 last:border-0">
+                        <span className="text-sm text-gray-700">{row.label}</span>
+                        <span className="text-sm font-medium text-gray-900">{row.value}</span>
+=======
                       </div>
                       <div className="mt-4 flex flex-col sm:flex-row gap-3">
                         <button
@@ -923,6 +1070,152 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
               </div>
             </div>
             
+            {/* --- ALL OTHER SECTIONS PRESERVED --- */}
+            {/* RDW History */}
+            {renderRDWHistory()}
+            
+            {/* Damage Grid */}
+            {renderDamageGrid()}
+            
+            {/* Vehicle Identification */}
+            <div className="p-6 border-t border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+                <FiInfo className="mr-2 text-[#3b396d]" />
+                {t('buyCars.vehicleIdentification') || 'Vehicle Identification'}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.makeLabel') || 'Make'}</div>
+                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.make || '-'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.modelLabel') || 'Model'}</div>
+                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.model || '-'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.yearLabel') || 'Year'}</div>
+                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.year || '-'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.trimLabel') || 'Trim'}</div>
+                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.trim || '-'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.mileageLabel') || 'Mileage'}</div>
+                  <div className="font-semibold text-gray-900">{parseInt(car.vehicleIdentification?.mileage, 10)?.toLocaleString() || '0'} {car.vehicleIdentification?.mileageUnit || 'km'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.licensePlateLabel') || 'License Plate'}</div>
+                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.licensePlate || '-'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.registrationDateLabel') || 'Registration Date'}</div>
+                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.registrationDate || '-'}</div>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.vehicleId.previousOwnersLabel') || 'Previous Owners'}</div>
+                  <div className="font-semibold text-gray-900">{car.vehicleIdentification?.previousOwners || '0'}</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Condition Assessment */}
+            <div className="p-6 border-t border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+                <FiTool className="mr-2 text-[#3b396d]" />
+                {t('buyCars.conditionAssessment') || 'Condition Assessment'}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.condition.technicalChecklist.title') || 'Technical Checklist'}</h4>
+                  <div className="space-y-2">
+                    {Object.entries(car.conditionAssessment?.technicalChecklist || {}).map(([key, value]) => (
+                      <div key={key} className="flex justify-between items-center py-1.5 border-b border-gray-100 last:border-0">
+                        <span className="text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span>
+                        <span className={`font-medium ${getConditionColor(value)}`}>
+                          {getConditionText(value)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.condition.interiorChecklist.title') || 'Interior Checklist'}</h4>
+                  <div className="space-y-2">
+                    {Object.entries(car.conditionAssessment?.interiorChecklist || {}).map(([key, value]) => (
+                      <div key={key} className="flex justify-between items-center py-1.5 border-b border-gray-100 last:border-0">
+                        <span className="text-gray-700 capitalize">{key.replace(/-/g, ' ')}</span>
+                        <span className={`font-medium ${getConditionColor(value)}`}>
+                          {getConditionText(value)}
+                        </span>
+>>>>>>> Stashed changes
+                      </div>
+                    ))}
+                  </div>
+                </div>
+<<<<<<< Updated upstream
+                
+                {/* Action Buttons */}
+                <div className="mt-6 flex gap-3">
+                  <button className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    FAVORITEN
+                  </button>
+                  <button 
+                    onClick={() => handlePlaceBid(car.id)}
+                    className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                  >
+                    PLAATS EEN BOD
+                  </button>
+=======
+              </div>
+              <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.condition.tyreReport.title') || 'Tyre Report'}</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                {Object.entries(car.conditionAssessment?.tyreReport || {}).map(([position, tyreData]) => (
+                  <div key={position} className="border border-gray-200 rounded-lg p-3 bg-gray-50 shadow-sm">
+                    <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+                      {position.replace(/([A-Z])/g, ' $1').trim()}
+                    </h5>
+                    <div className="space-y-1.5">
+                      <div className="text-xs flex justify-between">
+                        <span className="text-gray-500">{t('addCarListing.condition.tyreReport.brand') || 'Brand'}:</span>
+                        <span className="font-medium truncate max-w-[50%]">{tyreData.brand || '-'}</span>
+                      </div>
+                      <div className="text-xs flex justify-between">
+                        <span className="text-gray-500">{t('addCarListing.condition.tyreReport.treadDepth') || 'Tread'}:</span>
+                        <span className="font-medium">{tyreData.treadDepth ? `${tyreData.treadDepth}mm` : '-'}</span>
+                      </div>
+                      <div className="text-xs flex justify-between">
+                        <span className="text-gray-500">{t('addCarListing.condition.tyreReport.condition') || 'Condition'}:</span>
+                        <span className={`font-medium ${getConditionColor(tyreData.condition)}`}>
+                          {getConditionText(tyreData.condition)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Exterior Options & Damages */}
+            <div className="p-6 border-t border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+                <FiSettings className="mr-2 text-[#3b396d]" />
+                {t('buyCars.exteriorOptions') || 'Exterior Options & Damages'}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.exterior.damageTitle') || 'Damages'}</h4>
+                  {renderDamagePoints()}
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-3 pb-1 border-b border-gray-200">{t('addCarListing.exterior.optionsTitle') || 'Options'}</h4>
+                  {renderSelectedOptions()}
+>>>>>>> Stashed changes
+                </div>
+              </div>
+            </div>
+            
+<<<<<<< Updated upstream
             {/* --- ALL OTHER SECTIONS PRESERVED --- */}
             {/* RDW History */}
             {renderRDWHistory()}
@@ -1877,6 +2170,518 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                     <div className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-[#3b396d] text-white">
                       Search: "{searchTerm}"
                       <button
+=======
+            {/* Visual Documentation & Description */}
+            <div className="p-6 border-t border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+                <FiCamera className="mr-2 text-[#3b396d]" />
+                {t('addCarListing.stepDetails.step4.title') || 'Visual Documentation & Description'}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-2">{t('addCarListing.media.headlineLabel') || 'Listing Headline'}</h4>
+                  <p className="text-gray-700">{car.mediaAndDescription?.headline}</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-2">{t('addCarListing.media.descriptionLabel') || 'Full Description'}</h4>
+                  <p className="text-gray-700 whitespace-pre-line">{car.mediaAndDescription?.description}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-2">{t('buyCars.serviceHistory') || 'Service History'}</h4>
+                  <p className="text-gray-700 capitalize">{car.mediaAndDescription?.serviceHistory || '-'}</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <h4 className="font-medium text-gray-900 mb-2">{t('buyCars.accidentHistory') || 'Accident History'}</h4>
+                  <p className="text-gray-700">
+                    {car.mediaAndDescription?.hasAccident 
+                      ? safeT('common.yes', 'Yes') // Fixed: Use safeT to avoid console errors
+                      : safeT('common.no', 'No')} // Fixed: Use safeT to avoid console errors
+                  </p>
+                  {car.mediaAndDescription?.hasAccident && car.mediaAndDescription?.accidentDetails && (
+                    <p className="text-gray-700 mt-2 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-sm">{car.mediaAndDescription.accidentDetails}</p>
+                  )}
+                </div>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3 flex items-center pb-1 border-b border-gray-100">
+                  <FiImage className="mr-2 text-[#3b396d]" />
+                  Photos
+                </h4>
+                {images.length > 0 ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    {images.map((photo, index) => {
+                      let label = `Additional Photo ${index - photoPositions.length + 1}`;
+                      if (index < photoPositions.length) {
+                        label = photoPositions[index];
+                      }
+                      return (
+                        <div 
+                          key={index} 
+                          className="flex flex-col items-center cursor-pointer group"
+                          onClick={() => openFullscreenImage(photo, index)}
+                        >
+                          <div className="relative w-full aspect-[4/3] border border-gray-200 rounded-lg overflow-hidden bg-gray-50 shadow-sm hover:shadow-md transition-shadow duration-200">
+                            {!imageLoaded[index] && (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="animate-pulse bg-gray-200 w-full h-full" />
+                              </div>
+                            )}
+                            <img 
+                              src={photo} 
+                              alt={label} 
+                              className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
+                              onLoad={() => setImageLoaded(prev => ({ ...prev, [index]: true }))}
+                              onError={(e) => {
+                                e.target.src = 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=80';
+                                setImageLoaded(prev => ({ ...prev, [index]: true }));
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center">
+                              <FiZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xl" />
+                            </div>
+                          </div>
+                          <span className="text-xs text-gray-600 mt-1.5 text-center truncate w-full px-1">
+                            {label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 italic">{t('buyCars.noPhotos') || 'No photos available for this vehicle.'}</p>
+                )}
+              </div>
+            </div>
+            
+            {/* Auction Timing */}
+            {car.saleType === 'general-auction' && (
+              <div className="p-6 border-t border-gray-200">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+                  <FiCalendar className="mr-2 text-[#3b396d]" />
+                  {t('buyCars.auctionTiming') || 'Auction Timing'}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.auctionTiming.startDateLabel') || 'Start Date'}</div>
+                    <div className="font-semibold text-gray-900">{formatDateTime(car.auctionTiming?.startDate + 'T' + car.auctionTiming?.startTime)}</div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.auctionTiming.endDateLabel') || 'End Date'}</div>
+                    <div className="font-semibold text-gray-900">{formatDateTime(car.auctionTiming?.endDate + 'T' + car.auctionTiming?.endTime)}</div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <div className="text-xs text-gray-500 uppercase tracking-wide">{t('addCarListing.auctionTiming.timezoneLabel') || 'Timezone'}</div>
+                    <div className="font-semibold text-gray-900">{car.auctionTiming?.timezone || '-'}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Seller Information (Uncommented) */}
+            <div className="p-6 border-t border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center pb-2 border-b border-gray-200">
+                <FiUser className="mr-2 text-[#3b396d]" />
+                {t('buyCars.sellerInfo') || 'Seller Information'}
+              </h3>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex-shrink-0" />
+                <div className="ml-0 sm:ml-4 mt-3 sm:mt-0">
+                  <div className="flex items-center flex-wrap">
+                    <h4 className="font-semibold text-lg">{car.seller?.name || 'Unknown Seller'}</h4>
+                    {car.seller?.verified && (
+                      <FiCheckCircle className="ml-2 text-green-500 text-lg" title={t('buyCars.verifiedSeller') || 'Verified Seller'} />
+                    )}
+                  </div>
+                  <div className="flex items-center mt-2 flex-wrap">
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <FiStar
+                          key={i}
+                          className={`${i < Math.floor(car.seller?.rating) ? 'fill-current' : ''} text-lg`}
+                        />
+                      ))}
+                    </div>
+                    <span className="ml-2 text-gray-600">
+                      {car.seller?.rating ? car.seller.rating.toFixed(1) : 'N/A'} 
+                      {car.seller?.reviews && ` (${car.seller.reviews} ${t('buyCars.reviews') || 'reviews'})`}
+                    </span>
+                  </div>
+                  <div className="text-sm text-gray-600 mt-2">
+                    {t('buyCars.memberSince') || 'Member since'}: {car.seller?.memberSince ? formatDate(car.seller.memberSince) : 'N/A'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Fullscreen Image Modal */}
+          {fullscreenImage && (
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-95 z-[100] flex items-center justify-center p-4"
+              onClick={closeFullscreenImage}
+            >
+              <button 
+                className="absolute top-4 right-4 text-white text-3xl p-2 rounded-full hover:bg-gray-700 transition-colors duration-200 z-10"
+                onClick={closeFullscreenImage}
+                aria-label={t('buyCars.closeFullscreen') || "Close fullscreen view"}
+              >
+                <FiX />
+              </button>
+              <div className="relative w-full h-full flex items-center justify-center">
+                <img 
+                  src={fullscreenImage} 
+                  alt={t('buyCars.fullscreenImage') || "Fullscreen view"} 
+                  className="max-w-full max-h-full object-contain"
+                  onClick={(e) => e.stopPropagation()}
+                />
+                {images.length > 1 && (
+                  <>
+                    <button
+                      className="absolute left-4 text-white text-4xl p-3 rounded-full hover:bg-gray-700 hover:bg-opacity-50 transition-all duration-200 z-10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const newIndex = (selectedPhotoIndex - 1 + images.length) % images.length;
+                        setSelectedPhotoIndex(newIndex);
+                        openFullscreenImage(images[newIndex], newIndex);
+                      }}
+                      aria-label="Previous image"
+                    >
+                      <FiChevronLeft />
+                    </button>
+                    <button
+                      className="absolute right-4 text-white text-4xl p-3 rounded-full hover:bg-gray-700 hover:bg-opacity-50 transition-all duration-200 z-10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const newIndex = (selectedPhotoIndex + 1) % images.length;
+                        setSelectedPhotoIndex(newIndex);
+                        openFullscreenImage(images[newIndex], newIndex);
+                      }}
+                      aria-label="Next"
+                    >
+                      <FiChevronRight />
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+              {/* Bidding Modal */}
+        {biddingCar && (
+          <BiddingModal
+            isOpen={isBiddingModalOpen}
+            onClose={() => setIsBiddingModalOpen(false)}
+            car={biddingCar}
+            onBidSubmit={handleBidSubmit}
+            t={t}
+          />
+        )}
+        </div>
+      );
+    };
+
+    if (effectiveSelectedCar) {
+      return <CarDetailView car={effectiveSelectedCar} />;
+    }
+
+    return (
+      <div>
+        {/* Bidding Modal */}
+        {biddingCar && (
+          <BiddingModal
+            isOpen={isBiddingModalOpen}
+            onClose={() => setIsBiddingModalOpen(false)}
+            car={biddingCar}
+            onBidSubmit={handleBidSubmit}
+            t={t}
+          />
+        )}
+        <div className="flex flex-col lg:flex-row">
+          {/* Filters Panel */}
+          <div className={`lg:w-64 bg-white border-r border-gray-200 p-4 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto ${
+            filterPanelOpen ? 'block' : 'hidden lg:block'
+          }`}>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">
+                {t('buyCars.filters') || 'Filters'}
+              </h2>
+              <button
+                onClick={clearAllFilters}
+                className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
+              >
+                {t('buyCars.clearAll') || 'Clear All'}
+              </button>
+            </div>
+            {/* Make */}
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">Make</span>
+                <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+              </div>
+              <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+                {makes.map(make => (
+                  <label key={make} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={activeFilters.make === make}
+                      onChange={() => handleFilterChange('make', activeFilters.make === make ? '' : make)}
+                      className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
+                    />
+                    <span className="ml-3 text-sm text-gray-700">{make}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            {/* Model */}
+            {selectedMake && (
+              <div className="border-b border-gray-200 mb-4">
+                <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                  <span className="font-medium text-gray-900 text-sm">Model</span>
+                  <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+                </div>
+                <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+                  {getModelsByMake(selectedMake).map(model => (
+                    <label key={model} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={activeFilters.model === model}
+                        onChange={() => handleFilterChange('model', activeFilters.model === model ? '' : model)}
+                        className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
+                      />
+                      <span className="ml-3 text-sm text-gray-700">{model}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* Year */}
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">Year</span>
+                <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+              </div>
+              <div className="p-3 space-y-3 bg-gray-50 rounded-b-lg">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">From</label>
+                    <input
+                      type="number"
+                      value={activeFilters.yearFrom || ''}
+                      onChange={(e) => handleFilterChange('yearFrom', e.target.value)}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
+                      placeholder="2020"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">To</label>
+                    <input
+                      type="number"
+                      value={activeFilters.yearTo || ''}
+                      onChange={(e) => handleFilterChange('yearTo', e.target.value)}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
+                      placeholder="2024"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Price */}
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">Price</span>
+                <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+              </div>
+              <div className="p-3 space-y-3 bg-gray-50 rounded-b-lg">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">From</label>
+                    <input
+                      type="number"
+                      value={activeFilters.priceFrom || ''}
+                      onChange={(e) => handleFilterChange('priceFrom', e.target.value)}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
+                      placeholder="€0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">To</label>
+                    <input
+                      type="number"
+                      value={activeFilters.priceTo || ''}
+                      onChange={(e) => handleFilterChange('priceTo', e.target.value)}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
+                      placeholder="€100,000"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Fuel Type */}
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">Fuel Type</span>
+                <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+              </div>
+              <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+                {['Petrol', 'Diesel', 'Hybrid', 'Electric'].map(fuel => (
+                  <label key={fuel} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                    <input
+                      type="radio"
+                      name="fuelType"
+                      value={fuel}
+                      checked={activeFilters.fuelType === fuel}
+                      onChange={() => handleFilterChange('fuelType', activeFilters.fuelType === fuel ? '' : fuel)}
+                      className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
+                    />
+                    <span className="ml-3 text-sm text-gray-700">{fuel}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            {/* Transmission */}
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">Transmission</span>
+                <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+              </div>
+              <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+                {['Automatic', 'Manual'].map(transmission => (
+                  <label key={transmission} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                    <input
+                      type="radio"
+                      name="transmission"
+                      value={transmission}
+                      checked={activeFilters.transmission === transmission}
+                      onChange={() => handleFilterChange('transmission', activeFilters.transmission === transmission ? '' : transmission)}
+                      className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
+                    />
+                    <span className="ml-3 text-sm text-gray-700">{transmission}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            {/* Country */}
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">Country</span>
+                <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+              </div>
+              <div className="p-3 bg-gray-50 rounded-b-lg">
+                <select
+                  value={activeFilters.country || ''}
+                  onChange={(e) => handleFilterChange('country', e.target.value)}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#3b396d]"
+                >
+                  <option value="">All Countries</option>
+                  <option value="DE">Germany</option>
+                  <option value="NL">Netherlands</option>
+                </select>
+              </div>
+            </div>
+            {/* Auction Type */}
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">Auction Type</span>
+                <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+              </div>
+              <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+                {['general-auction', 'direct-buy'].map(type => (
+                  <label key={type} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                    <input
+                      type="radio"
+                      name="auctionType"
+                      value={type}
+                      checked={activeFilters.auctionType === type}
+                      onChange={() => handleFilterChange('auctionType', activeFilters.auctionType === type ? '' : type)}
+                      className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
+                    />
+                    <span className="ml-3 text-sm text-gray-700">{type.replace('-', ' ').toUpperCase()}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            {/* Car Type */}
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">Car Type</span>
+                <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+              </div>
+              <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+                {['Sedan', 'SUV', 'Van', 'Truck', 'Coupe'].map(type => (
+                  <label key={type} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={activeFilters.carType === type}
+                      onChange={() => handleFilterChange('carType', activeFilters.carType === type ? '' : type)}
+                      className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300 rounded"
+                    />
+                    <span className="ml-3 text-sm text-gray-700">{type}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            {/* VAT Status */}
+            <div className="border-b border-gray-200 mb-4">
+              <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <span className="font-medium text-gray-900 text-sm">VAT Status</span>
+                <FiChevronDown className="h-4 w-4 text-[#3b396d] rotate-180" />
+              </div>
+              <div className="p-3 space-y-2 bg-gray-50 rounded-b-lg">
+                {['deductible', 'not-deductible'].map(status => (
+                  <label key={status} className="flex items-center py-1.5 hover:bg-gray-100 px-2 rounded cursor-pointer">
+                    <input
+                      type="radio"
+                      name="vatStatus"
+                      value={status}
+                      checked={activeFilters.vatStatus === status}
+                      onChange={() => handleFilterChange('vatStatus', activeFilters.vatStatus === status ? '' : status)}
+                      className="h-4 w-4 text-[#3b396d] focus:ring-[#3b396d] border-gray-300"
+                    />
+                    <span className="ml-3 text-sm text-gray-700">{status.replace('-', ' ').toUpperCase()}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* Sticky Header */}
+            <div className="bg-white border-b border-gray-200 py-3 px-4 sticky top-16 z-10">
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={toggleFilterPanel}
+                  className="flex items-center text-sm font-medium text-[#3b396d] hover:text-[#2a285a] lg:hidden"
+                >
+                  <FiFilter className="mr-2 h-4 w-4" />
+                  Filters
+                  <FiChevronDown className={`ml-1 h-4 w-4 transition-transform ${filterPanelOpen ? 'rotate-180' : ''}`} />
+                </button>
+                <div className="ml-4 text-sm text-gray-500 hidden sm:block">
+                  {filteredCars.length} results found
+                </div>
+              </div>
+            </div>
+            {/* Active Filters */}
+            {(Object.keys(activeFilters).length > 0 || searchTerm) && (
+              <div className="bg-white border-b border-gray-200 py-3 px-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-900">
+                    Active Filters ({Object.keys(activeFilters).filter(key => activeFilters[key]).length + (searchTerm ? 1 : 0)})
+                  </span>
+                  <button
+                    onClick={clearAllFilters}
+                    className="text-sm text-red-600 hover:text-red-800 font-medium"
+                  >
+                    Clear All
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {searchTerm && (
+                    <div className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-[#3b396d] text-white">
+                      Search: "{searchTerm}"
+                      <button
+>>>>>>> Stashed changes
                         onClick={() => setSearchTerm('')}
                         className="ml-2 text-white hover:text-gray-200"
 >>>>>>> Stashed changes
@@ -1884,6 +2689,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                         <FiX className="h-3 w-3" />
                       </button>
                     </div>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                   )
                 ))}
@@ -2016,6 +2822,23 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
                 >
                   {t('buyCars.resetFilters') || 'Reset Filters'}
                 </button>
+=======
+                  )}
+                  {Object.entries(activeFilters).map(([key, value]) => (
+                    value && (
+                      <div key={key} className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-[#3b396d] text-white">
+                        {key}: {value}
+                        <button
+                          onClick={() => handleFilterChange(key, '')}
+                          className="ml-2 text-white hover:text-gray-200"
+                        >
+                          <FiX className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    )
+                  ))}
+                </div>
+>>>>>>> Stashed changes
 =======
                   )}
                   {Object.entries(activeFilters).map(([key, value]) => (
@@ -2186,11 +3009,14 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
           </div>
         </div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       </div>
     </div>
   );
 };
 =======
+=======
+>>>>>>> Stashed changes
         <style jsx>{`
           .hide-scrollbar::-webkit-scrollbar {
             display: none;
@@ -2200,6 +3026,9 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => {
             scrollbar-width: none;
           }
         `}</style>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
       
