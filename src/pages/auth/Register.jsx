@@ -24,9 +24,11 @@ const Register = () => {
   // --- New state for Dealer Locations and Role ---
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedRole, setSelectedRole] = useState('');
-  // --- End New State ---
+  const [selectedRights, setSelectedRights] = useState([]); // Initialize as an empty array
 
   const [formData, setFormData] = useState({
+      rights: [], // Initialize as an empty array
+
     // Step 1: Personal Information
     firstName: '',
     lastName: '',
@@ -70,7 +72,23 @@ const Register = () => {
     { id: 'admin', name: 'Administrator', description: 'Full access' },
   ];
   // --- End Mock Data ---
+// Handler for rights selection (Checkbox Group)
+const handleRightsChange = (right) => {
+  setSelectedRights(prevSelectedRights => {
+    if (prevSelectedRights.includes(right)) {
+      // If already selected, remove it
+      return prevSelectedRights.filter(r => r !== right);
+    } else {
+    
+      return [...prevSelectedRights, right];
+    }
+  });
 
+  // Clear specific error when user interacts
+  if (errors.rights) {
+    setErrors(prevErrors => ({ ...prevErrors, rights: '' }));
+  }
+};
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -125,6 +143,21 @@ const Register = () => {
     switch (step) {
       case 1:
         // ... (Personal Info validation - unchanged)
+         if (!formData.firstName) newErrors.firstName = t('auth.register.errors.firstNameRequired');
+  if (!formData.lastName) newErrors.lastName = t('auth.register.errors.lastNameRequired');
+  if (!formData.email) {
+    newErrors.email = t('auth.register.errors.emailRequired');
+  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    newErrors.email = t('auth.register.errors.emailInvalid');
+  }
+  if (!formData.phone) newErrors.phone = t('auth.register.errors.phoneRequired');
+  
+  // --- NEW VALIDATION FOR RIGHTS ---
+  // Check if the local selectedRights array (from UI state) has at least one item selected
+  if (selectedRights.length === 0) {
+      newErrors.rights = t('auth.register.errors.rightsRequired') || 'Please select at least one right (Buy, Sell, or Both).';
+  }
+  // --- END NEW VALIDATION ---
         break;
       case 2: // Business Info (Split Address)
         // ... (Business Info validation - unchanged)
@@ -289,6 +322,38 @@ const Register = () => {
               <h3 className="text-xl font-bold text-gray-900">{t('auth.register.personalInfo')}</h3>
               <p className="text-gray-500 text-sm">{t('auth.register.personalInfoDesc')}</p>
             </div>
+            <div className="flex justify-center"> {/* <--- Added classes here */}
+  <div className="w-full max-w-md"> {/* Optional: Add a max-width container if needed for better control */}
+    <label className="block text-xs font-medium text-gray-700 mb-2 text-center"> {/* Ensure label is also centered if it's a block */}
+      {t('auth.register.rights') || 'Rights'} *
+    </label>
+    <div className="flex flex-wrap justify-center gap-4"> {/* Ensure checkboxes are centered within their container */}
+      <label className="inline-flex items-center">
+        <input
+          type="checkbox"
+          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          checked={selectedRights.includes('buy')}
+          onChange={() => handleRightsChange('buy')}
+          disabled={isLoading}
+        />
+        <span className="ml-2 text-sm text-gray-700">{t('auth.register.rightBuy') || 'Buy'}</span>
+      </label>
+      <label className="inline-flex items-center">
+        <input
+          type="checkbox"
+          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          checked={selectedRights.includes('sell')}
+          onChange={() => handleRightsChange('sell')}
+          disabled={isLoading}
+        />
+        <span className="ml-2 text-sm text-gray-700">{t('auth.register.rightSell') || 'Sell'}</span>
+      </label>
+      {/* Optional: Add 'Both' checkbox */}
+    </div>
+    {errors.rights && <p className="mt-1 text-xs text-red-600 text-center">{errors.rights}</p>} {/* Center error message */}
+  </div>
+</div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="firstName" className="block text-xs font-medium text-gray-700 mb-1">
@@ -906,7 +971,7 @@ const Register = () => {
                 <div className="ml-2 text-xs">
                   <label htmlFor="termsAccepted" className="text-gray-700">
                     {t('auth.register.acceptTerms')}{' '}
-                    <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">
+                    <a href="/terms" className="text-blue-600 hover:text-blue-800 font-medium">
                       {t('auth.register.termsAndConditions')}
                     </a>
                   </label>
@@ -928,7 +993,7 @@ const Register = () => {
                 <div className="ml-2 text-xs">
                   <label htmlFor="privacyAccepted" className="text-gray-700">
                     {t('auth.register.acceptPrivacy')}{' '}
-                    <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">
+                    <a href="/privacy" className="text-blue-600 hover:text-blue-800 font-medium">
                       {t('auth.register.privacyPolicy')}
                     </a>
                   </label>
