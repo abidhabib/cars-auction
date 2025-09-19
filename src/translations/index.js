@@ -684,6 +684,11 @@ export const translations = {
         confirmPasswordPlaceholder: "Confirm your password",
         passwordHint: "Use at least 8 characters with a mix of letters, numbers & symbols",
         // Section Titles & Descriptions
+         "rights": "Interested In",
+      "rightBuy": "Buy",
+      "rightSell": "Sell",
+      "rightBoth": "Both",
+      "rightsInfo": "Select whether you want to buy, sell, or both. You can change this later.",
         "personalInfo": "Personal Information",
         "personalInfoDesc": "Tell us about yourself",
         "businessInfo": "Business Information",
@@ -790,6 +795,8 @@ export const translations = {
           // Errors for potentially separate address fields (if used)
           "streetRequired": "Street address is required",
           "cityRequired": "City is required",
+                  "rightsRequired": "Please select at least one right (Buy, Sell, or Both).",
+
           "postalCodeRequired": "Postal code is required",
           "countryRequired": "Country is required",
           // Existing Account Security Errors
@@ -1944,6 +1951,12 @@ export const translations = {
         step3: "Standort", // Neue Abschnittsüberschrift
         step4: "Aktionäre",
         step5: "Kontosicherheit",
+              "rights": "Interessiert an",
+      "rightBuy": "Kaufen",
+      "rightSell": "Verkaufen",
+      "rightBoth": "Beides",
+      "rightsInfo": "Wählen Sie aus, ob Sie kaufen, verkaufen oder beides möchten. Sie können dies später ändern.",
+ 
         passwordPlaceholder: "Erstellen Sie ein sicheres Passwort",
         confirmPasswordPlaceholder: "Bestätigen Sie Ihr Passwort",
         passwordHint: "Verwenden Sie mindestens 8 Zeichen mit einer Mischung aus Buchstaben, Zahlen & Symbolen",
@@ -2063,6 +2076,8 @@ export const translations = {
           shareholdersRequired: "Mindestens ein Aktionär ist erforderlich",
           shareholderNameRequired: "Name des Aktionärs ist erforderlich",
           shareholderIdRequired: "Identitätsdokument des Aktionärs ist erforderlich",
+                  "rightsRequired": "Bitte wählen Sie mindestens ein Recht aus (Kaufen, Verkaufen oder Beides).",
+
           // --- NEUE FEHLERMELDUNGEN ---
           companyAddressRequired: "Firmenadresse ist erforderlich", // Fehler für neues Feld
           invoiceEmailRequired: "Rechnungs-E-Mail-Adresse ist erforderlich", // Fehler für neues Feld
@@ -3129,6 +3144,11 @@ export const translations = {
       },
       register: {
         title: "Maak uw account aan",
+                  "rights": "Geïnteresseerd in",
+      "rightBuy": "Kopen",
+      "rightSell": "Verkopen",
+      "rightBoth": "Beide",
+      "rightsInfo": "Selecteer of u wilt kopen, verkopen of beide. U kunt dit later wijzigen.",
         subtitle: "Word lid van Europa's grootste automarktplaats",
         passwordPlaceholder: "Maak een veilig wachtwoord aan",
         confirmPasswordPlaceholder: "Bevestig uw wachtwoord",
@@ -3237,6 +3257,8 @@ export const translations = {
           streetRequired: "Straat is verplicht",
           cityRequired: "Stad is verplicht",
           postalCodeRequired: "Postcode is verplicht",
+                  "rightsRequired": "Selecteer minstens één recht (Kopen, Verkopen of Beide).",
+
           countryRequired: "Land is verplicht",
           passwordRequired: "Wachtwoord is verplicht",
           passwordTooShort: "Wachtwoord moet minimaal 8 tekens bevatten",
