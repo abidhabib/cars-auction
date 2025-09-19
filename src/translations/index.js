@@ -2,6 +2,59 @@ import { steps } from "framer-motion";
 
 export const translations = {
   en: {
+<<<<<<< Updated upstream
+=======
+
+
+    ...newsLatterTranslations.en,
+    ...BuyCarTranslation.en
+
+    ,
+
+
+    notificationsBid: {
+      title: "Notifications",
+      newBid: "You have a new bid",
+      timeAgo: "{time} ago",
+      carSold: "Your car has been sold",
+      viewAll: "View all"
+    },
+    bidding: {
+  totalCost: "Total Cost",
+  placeBid: "Place Bid",
+  close: "Close",
+  currentHighestBid: "Current Highest Bid",
+  noBids: "No bids yet",
+  yourBids: "Your Bids",
+    bidSubmitted: "Your bid has been submitted successfully!",
+    invalidAmount: "Please enter a valid bid amount",
+    bidTooLow: "Bid must be higher than current highest bid (€{{highestBid}})",
+    minimumIncrement: "Minimum bid increment is €{{amount}}",
+    bidSubmitError: "Failed to submit bid. Please try again.",
+  bidAmount: "Bid Amount",
+  bidInfoTitle: "Important Information",
+  bidInfo1: "Your bid is binding once submitted",
+  bidInfo2: "You will be notified if you are outbid",
+  bidInfo3: "Bids must be higher than the current highest bid",
+  cancel: "Cancel",
+   
+  submitBid: "Submit Bid",
+  submitting: "Submitting...",
+  invalidAmount: "Please enter a valid bid amount",
+  bidTooLow: "Bid must be higher than the current highest bid",
+  minimumIncrement: "Minimum increment is €{amount}",
+  bidSuccess: "Bid placed successfully!",
+  bidError: "Failed to place bid. Please try again.",
+
+  // Added
+  feeNote: "Additional fees may apply",
+  leaveNote: "Leave a note",
+  broker: "Broker fee",
+  notePlaceholder: "Your message will only be visible to you and the seller. Max 300 characters."
+
+},
+
+>>>>>>> Stashed changes
     cookies: {
       message: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies as described in our Cookie Policy.",
       accept: "Accept",
@@ -587,6 +640,7 @@ phonePlaceholder:"+3412345671",
         }
       },
 
+<<<<<<< Updated upstream
     register: {
       // Existing Steps (Labels might be slightly adjusted for clarity)
       "step1": "Personal",
@@ -714,10 +768,71 @@ phonePlaceholder:"+3412345671",
         "vatNumberRequired": "VAT number is required",
         "UBORequired": "UBO number is required",
         // Errors for potentially separate address fields (if used)
+=======
+      register: {
+        // Existing Steps (Labels might be slightly adjusted for clarity)
+        "step1": "Personal",
+        "step2": "Business",
+        "step3": "Location",
+        "step4": "Shareholders",
+        "step5": "Account Security",
+        title: "Create your account",
+        passwordPlaceholder: "Create a strong password",
+        joinMarketplace: "Join the Marketplace",
+        confirmPasswordPlaceholder: "Confirm your password",
+        passwordHint: "Use at least 8 characters with a mix of letters, numbers & symbols",
+        // Section Titles & Descriptions
+         "rights": "Interested In",
+      "rightBuy": "Buy",
+      "rightSell": "Sell",
+      "rightBoth": "Both",
+      "rightsInfo": "Select whether you want to buy, sell, or both. You can change this later.",
+        "personalInfo": "Personal Information",
+        "personalInfoDesc": "Tell us about yourself",
+        "businessInfo": "Business Information",
+        "businessInfoDesc": "Tell us about your company",
+        "complianceInfo": "Location & Compliance", // New section title
+        "complianceInfoDesc": "Select your country and provide relevant details", // New section description
+        "shareholdersInfo": "Shareholders Information",
+        "shareholdersInfoDesc": "Please provide details of all shareholders and upload identification documents",
+        "accountSecurity": "Account Security",
+        "accountSecurityDesc": "Create a secure password",
+        // Existing Personal Info Fields
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email address",
+        "phone": "Phone number",
+        // Existing Business Info Fields
+        "companyName": "Company name",
+        "vatNumber": "VAT number",
+        "UBO": "Ultimate Beneficial Owner number",
+        // --- NEW FIELDS ---
+        "companyAddress": "Company Address", // New field label
+        "companyAddressPlaceholder": "Enter your full company address", // New placeholder
+        "companyAddressRequired": "Company address is required", // New error message
+        "invoiceEmail": "Invoice Email Address", // New field label
+        "invoiceEmailPlaceholder": "billing@yourcompany.com", // New placeholder
+        "invoiceEmailRequired": "Invoice email address is required", // New error message
+        // --- END NEW FIELDS ---
+        // Existing Address Info Fields (Moved/Contextualized)
+        // Note: 'street', 'city', 'postalCode' might be less relevant if using 'companyAddress'
+        // But kept for potential separate use or backend structure
+        "street": "Street address",
+        "houseNumber": "House number",
+        "streetPlaceholder": "123 Main Street",
+        "houseNumberPlaceholder": "Apt, suite",
+        "city": "City",
+        "cityPlaceholder": "Amsterdam",
+        "postalCode": "Postal code",
+        "country": "Country",
+        "postalCodePlaceholder": "10001",
+        "countryPlaceholder": "Select your country",
+>>>>>>> Stashed changes
         "streetRequired": "Street address is required",
         "cityRequired": "City is required",
         "postalCodeRequired": "Postal code is required",
         "countryRequired": "Country is required",
+<<<<<<< Updated upstream
         // Existing Account Security Errors
         "passwordRequired": "Password is required",
         "passwordTooShort": "Password must be at least 8 characters long",
@@ -736,6 +851,92 @@ phonePlaceholder:"+3412345671",
         "invoiceEmailInvalid": "Please enter a valid invoice email address", // Reuse/variant of emailInvalid
         "rdwNumberRequired": "RDW Number is required for Netherlands" // Error for new conditional field
         // --- END NEW ERROR MESSAGES ---
+=======
+        "selectCountry": "Select a country",
+        // --- NEW FIELD FOR NL ---
+        "rdwNumber": "RDW Number", // New conditional field label
+        "rdwNumberPlaceholder": "Enter RDW Number", // New conditional placeholder
+        "rdwNumberRequired": "RDW Number is required for Netherlands", // New conditional error
+
+        "rdwInfo": "Required for vehicle registration in the Netherlands.", // Optional info text
+        dealerLocations: "Dealer Locations",
+        dealerLocationsPlaceholder: "Enter all your dealer locations",
+        dealerLocationsRequired: "Dealer locations are required",
+        roleAccess: "Role Access",
+        roleAccessDesc: "Select your role to access relevant features",
+        roleFunction: "Role/Function",
+        roleFunctionPlaceholder: "Select your role/function",
+        roleFunctionRequired: "Role/Function is required",
+        // --- END NEW FIELD FOR NL ---
+        // Existing Account Security Fields
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "acceptTerms": "I accept the",
+        "termsAndConditions": "Terms and Conditions",
+        "acceptPrivacy": "I accept the",
+        "privacyPolicy": "Privacy Policy",
+        "acceptMarketing": "I want to receive marketing communications",
+        // Existing Shareholder Fields
+        "shareholder": "Shareholder",
+        "shareholderFullName": "Full Name",
+        "shareholderIdUpload": "Identification Document",
+        "enterFullName": "Enter full name",
+        "uploadFile": "Upload a file",
+        "dragAndDrop": "or drag and drop",
+        "fileTypes": "PNG, JPG, PDF up to 10MB",
+        "addAnotherShareholder": "Add Another Shareholder",
+        "removeLastShareholder": "Remove Last",
+        // Action Buttons
+        "createAccount": "Create account",
+        "alreadyHaveAccount": "Already have an account?",
+        "loginHere": "Log in here",
+        // Errors (Including new ones)
+        "firstNamePlaceholder": "Enter your first name",
+        "lastNamePlaceholder": "Enter your last name",
+        "emailPlaceholder": "your.email@example.com",
+        "phonePlaceholder": "+1 (555) 123-4567",
+        "companyNamePlaceholder": "Your Company Name",
+        "vatNumberPlaceholder": "VAT123456789",
+        "uboPlaceholder": "Ultimate Beneficial Owner",
+
+
+        "errors": {
+
+          "firstNameRequired": "First name is required",
+          "lastNameRequired": "Last name is required",
+          "emailRequired": "Email address is required",
+          "emailInvalid": "Please enter a valid email address",
+          "phoneRequired": "Phone number is required",
+          "companyNameRequired": "Company name is required",
+          "vatNumberRequired": "VAT number is required",
+          "UBORequired": "UBO number is required",
+          // Errors for potentially separate address fields (if used)
+          "streetRequired": "Street address is required",
+          "cityRequired": "City is required",
+          "postalCodeRequired": "Postal code is required",
+          "countryRequired": "Country is required",
+          // Existing Account Security Errors
+          "passwordRequired": "Password is required",
+          "passwordTooShort": "Password must be at least 8 characters long",
+          "confirmPasswordRequired": "Please confirm your password",
+          "passwordsDoNotMatch": "Passwords do not match",
+          "termsRequired": "You must accept the Terms and Conditions",
+          "privacyRequired": "You must accept the Privacy Policy",
+          "registrationFailed": "Registration failed. Please try again.",
+          // Existing Shareholder Errors
+          "shareholdersRequired": "At least one shareholder is required",
+          "shareholderNameRequired": "Shareholder name is required",
+          "shareholderIdRequired": "Shareholder ID document is required",
+                  "rightsRequired": "Please select at least one right (Buy, Sell, or Both).",
+
+          // --- NEW ERROR MESSAGES ---
+          "companyAddressRequired": "Company address is required", // Error for new field
+          "invoiceEmailRequired": "Invoice email address is required", // Error for new field
+          "invoiceEmailInvalid": "Please enter a valid invoice email address", // Reuse/variant of emailInvalid
+          "rdwNumberRequired": "RDW Number is required for Netherlands" // Error for new conditional field
+          // --- END NEW ERROR MESSAGES ---
+        }
+>>>>>>> Stashed changes
       }
     }
   
@@ -1153,6 +1354,54 @@ addCarListing: {
 
   },
   de: {
+<<<<<<< Updated upstream
+=======
+    ...newsLatterTranslations.de,
+
+    notificationsBid: {
+      title: "Benachrichtigungen",
+      newBid: "Sie haben ein neues Gebot",
+      timeAgo: "vor {time}",
+      carSold: "Ihr Auto wurde verkauft",
+      viewAll: "Alle anzeigen"
+    }
+    ,
+
+  bidding: {
+  totalCost: "Gesamtkosten",
+  placeBid: "Gebot abgeben",
+  close: "Schließen",
+  currentHighestBid: "Aktuelles Höchstgebot",
+  noBids: "Noch keine Gebote",
+  yourBids: "Ihre Gebote",
+  bidAmount: "Gebotsbetrag",
+  bidInfoTitle: "Wichtige Informationen",
+  bidInfo1: "Ihr Gebot ist bindend, sobald es eingereicht wurde",
+  bidInfo2: "Sie werden benachrichtigt, wenn Sie überboten werden",
+  bidInfo3: "Gebote müssen höher sein als das aktuelle Höchstgebot",
+  cancel: "Abbrechen",
+  submitBid: "Gebot einreichen",
+  submitting: "Einreichen...",
+   bidSubmitted: "Ihr Gebot wurde erfolgreich abgegeben!",
+    invalidAmount: "Bitte geben Sie einen gültigen Gebotsbetrag ein",
+    bidTooLow: "Das Gebot muss höher als das aktuelle Höchstgebot sein (€{{highestBid}})",
+    minimumIncrement: "Die Mindestgebotserhöhung beträgt €{{amount}}",
+    bidSubmitError: "Fehler beim Abgeben des Gebots. Bitte versuchen Sie es erneut.",
+  invalidAmount: "Bitte geben Sie einen gültigen Gebotsbetrag ein",
+  bidTooLow: "Gebot muss höher sein als das aktuelle Höchstgebot",
+  minimumIncrement: "Mindestschritt für Gebote ist €{amount}",
+  bidSuccess: "Gebot erfolgreich abgegeben!",
+  bidError: "Fehler beim Abgeben des Gebots. Bitte erneut versuchen.",
+
+  // Added
+  feeNote: "Zusätzliche Gebühren können anfallen",
+  leaveNote: "Hinterlassen Sie eine Notiz",
+  broker: "Maklergebühr",
+  notePlaceholder: "Ihre Nachricht ist nur für Sie und den Verkäufer sichtbar. Max. 300 Zeichen."
+
+},
+
+>>>>>>> Stashed changes
     cookies: {
       message: "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern. Durch die Nutzung unserer Website stimmen Sie unserer Cookie-Richtlinie zu.",
       accept: "Alle akzeptieren",
@@ -1758,6 +2007,7 @@ phonePlaceholder:"+3412345671",
         invoiceEmailRequired: "Rechnungs-E-Mail-Adresse ist erforderlich", // Neue Fehlermeldung
         // --- ENDE NEUE FELDER ---
         // Bestehende Adressinfo-Felder (Verschoben/Kontextualisiert)
+<<<<<<< Updated upstream
       street: "Straße",
       city: "Stadt",
       postalCode: "Postleitzahl",
@@ -1803,6 +2053,278 @@ phonePlaceholder:"+3412345671",
       alreadyHaveAccount: "Haben Sie bereits ein Konto?",
       loginHere: "Hier anmelden",
       // Fehler (Einschließlich neuer)
+=======
+        street: "Straße",
+        city: "Stadt",
+        postalCode: "Postleitzahl",
+        country: "Land",
+        selectCountry: "Land auswählen",
+        streetPlaceholder: "Geben Sie Ihre Straße und Hausnummer ein",
+        cityPlaceholder: "Geben Sie Ihre Stadt ein",
+        postalCodePlaceholder: "Geben Sie Ihre Postleitzahl ein",
+        roleAccess: "Rollen-Zugriff",
+        roleAccessRequired: "Rollen-Zugriff ist erforderlich",
+        dealerLocation: "Händlerstandort",
+        dealerLocationRequired: "Mindestens ein Händlerstandort ist erforderlich",
+        roleFunction: "Rollenfunktion",
+        // --- ENDE Bestehende Adressinfo-Felder ---
+        // --- NEUE FELDER FÜR NL ---
+        countryNetherlands: "Niederlande", // Neue Länderoption
+        showRdwField: "RDW Nummer anzeigen", // Neue bedingte Logikbezeichnung
+        // --- NEUES FELD FÜR NL ---
+        rdwNumber: "RDW Nummer", // Neue bedingte Feldbezeichnung
+        rdwNumberRequired: "RDW Nummer ist für die Niederlande erforderlich", // Neue bedingte Fehlermeldung
+        rdwInfo: "Erforderlich für die Fahrzeugzulassung in den Niederlanden.", // Optionaler Infotext
+        // --- ENDE NEUES FELD FÜR NL ---
+        // Bestehende Kontosicherheitsfelder
+        password: "Passwort",
+        confirmPassword: "Passwort bestätigen",
+        acceptTerms: "Ich akzeptiere die",
+        termsAndConditions: "Allgemeinen Geschäftsbedingungen",
+        acceptPrivacy: "Ich akzeptiere die",
+        privacyPolicy: "Datenschutzrichtlinie",
+        acceptMarketing: "Ich möchte Marketingmitteilungen erhalten",
+        // Bestehende Aktionärsfelder
+        shareholder: "Aktionär",
+        shareholderFullName: "Vollständiger Name",
+        shareholderIdUpload: "Identifikationsdokument",
+        enterFullName: "Vollständigen Namen eingeben",
+        uploadFile: "Eine Datei hochladen",
+        dragAndDrop: "oder per Drag & Drop ablegen",
+        fileTypes: "PNG, JPG, PDF bis zu 10MB",
+        addAnotherShareholder: "Weiteren Aktionär hinzufügen",
+        removeLastShareholder: "Letzten entfernen",
+        // Aktionsbuttons
+        createAccount: "Konto erstellen",
+        alreadyHaveAccount: "Haben Sie bereits ein Konto?",
+        loginHere: "Hier anmelden",
+        
+            "rights": "Interessiert an",
+      "rightBuy": "Kaufen",
+      "rightSell": "Verkaufen",
+      "rightBoth": "Beides",
+      "rightsInfo": "Wählen Sie aus, ob Sie kaufen, verkaufen oder beides möchten. Sie können dies später ändern.",
+        // Fehler (Einschließlich neuer)
+        errors: {
+          // Bestehende Fehler
+          firstNameRequired: "Vorname ist erforderlich",
+          lastNameRequired: "Nachname ist erforderlich",
+          emailRequired: "E-Mail-Adresse ist erforderlich",
+          emailInvalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+          phoneRequired: "Telefonnummer ist erforderlich",
+          companyNameRequired: "Firmenname ist erforderlich",
+          vatNumberRequired: "Umsatzsteuer-ID ist erforderlich",
+          UBORequired: "UBO-Nummer ist erforderlich",
+          streetRequired: "Straße ist erforderlich",
+          cityRequired: "Stadt ist erforderlich",
+          postalCodeRequired: "Postleitzahl ist erforderlich",
+          countryRequired: "Land ist erforderlich",
+          passwordRequired: "Passwort ist erforderlich",
+          passwordTooShort: "Das Passwort muss mindestens 8 Zeichen lang sein",
+          confirmPasswordRequired: "Bitte bestätigen Sie Ihr Passwort",
+          passwordsDoNotMatch: "Passwörter stimmen nicht überein",
+          termsRequired: "Sie müssen die Allgemeinen Geschäftsbedingungen akzeptieren",
+          privacyRequired: "Sie müssen die Datenschutzrichtlinie akzeptieren",
+          registrationFailed: "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+          shareholdersRequired: "Mindestens ein Aktionär ist erforderlich",
+          shareholderNameRequired: "Name des Aktionärs ist erforderlich",
+          shareholderIdRequired: "Identitätsdokument des Aktionärs ist erforderlich",
+          // --- NEUE FEHLERMELDUNGEN ---
+                  "rightsRequired": "Bitte wählen Sie mindestens ein Recht aus (Kaufen, Verkaufen oder Beides).",
+          companyAddressRequired: "Firmenadresse ist erforderlich", // Fehler für neues Feld
+          invoiceEmailRequired: "Rechnungs-E-Mail-Adresse ist erforderlich", // Fehler für neues Feld
+          invoiceEmailInvalid: "Bitte geben Sie eine gültige Rechnungs-E-Mail-Adresse ein", // Variante von emailInvalid
+          rdwNumberRequired: "RDW Nummer ist für die Niederlande erforderlich" // Fehler für neues bedingtes Feld
+          // --- ENDE NEUE FEHLERMELDUNGEN ---
+        }
+      }
+
+
+    },
+
+    sellerDashboard: {
+      // Alerts & Messages
+      "tabs": {
+        "basic": "Grunddaten",
+        "pricing": "Preisgestaltung",
+        "technical": "Technisch",
+        "condition": "Zustand",
+        "media": "Medien",
+        "features": "Ausstattung"
+      },
+      view: 'Ansehen',
+      edit: 'Bearbeiten',
+      delete: 'Löschen',
+      cancel: 'Abbrechen',
+      retry: 'Erneut versuchen',
+      deleting: 'Wird gelöscht...',
+      previous: 'Zurück',
+      next: 'Weiter',
+      to: 'bis',
+      of: 'von',
+      results: 'Ergebnisse',
+      back: 'Zurück',
+      copyLink: 'Link kopieren',
+      viewDetails: 'Details anzeigen',
+      filters: 'Filter',
+      addVehicleAlert: 'Weiterleitung zum Fahrzeug hinzufügen Formular...',
+      linkCopied: 'Link in die Zwischenablage kopiert!',
+      linkCopyFailed: 'Link konnte nicht kopiert werden.',
+      logoutAlert: 'Abmelden...',
+      viewBidHistoryAlert: 'Gebotshistorie öffnen...',
+
+      // Sidebar Navigation
+      sidebar: {
+        overview: 'Übersicht',
+        inventory: 'Mein Inventar',
+        myAuctions: 'Meine Auktionen',
+        sales: 'Verkäufe & Transaktionen',
+        messages: 'Nachrichten',
+        analytics: 'Analyse',
+        settings: 'Einstellungen',
+        addVehicle: 'Fahrzeug hinzufügen',
+        buyCar: 'Auto kaufen'
+
+      },
+
+      // Stats Cards
+      stats: {
+        totalListings: 'Gesamtangebote',
+        activeAuctions: 'Aktive Auktionen',
+        vehiclesSold: 'Verkaufte Fahrzeuge',
+        totalRevenue: 'Gesamtumsatz',
+        sellThroughRate: 'Verkaufsrate',
+        avgSellingPrice: 'Durchschn. Verkaufspreis',
+        "myAuctions": "Meine Auktionen",
+        "totalAuctions": "Gesamtauktionen",
+        "favourites": "Favoriten"
+      },
+
+      // Overview Tab
+      overview: {
+        recentVehicles: 'Neueste Fahrzeuge',
+        recentMessages: 'Neueste Nachrichten'
+      },
+
+      // Inventory Tab
+      inventory: {
+        year: 'year',
+        "conditionHistory": "Zustandshistorie",
+        "technicalCondition": "Technischer Zustand",
+        "interiorCondition": "Innenraumzustand",
+        "tyreReport": "Reifenbericht",
+        "serviceHistory": "Servicehistorie",
+        "hasAccident": "Unfall gehabt",
+        "accidentDetails": "Unfalldetails",
+        "mediaDescription": "Medienbeschreibung",
+        "headline": "Überschrift",
+        "description": "Beschreibung",
+        "images": "Bilder",
+        "addImages": "Bilder hinzufügen",
+        "featuresOptions": "Ausstattungsoptionen",
+        "currentImages": "Aktuelle Bilder",
+        "addFeature": "Funktion hinzufügen",
+        "selectedOptions": "Ausgewählte Optionen",
+
+        addVehicle: 'Fahrzeug hinzufügen',
+        vehicleDetails: 'Fahrzeugdetails',
+        mileage: 'Laufleistung',
+        fuelType: 'Kraftstoffart',
+        transmission: 'Getriebe',
+        color: 'Farbe',
+        condition: 'Zustand',
+        location: 'Standort',
+        currentBid: 'Aktuelles Gebot',
+        reservePrice: 'Mindestpreis',
+        auctionEnds: 'Auktion endet',
+        bids: 'Gebote',
+        finalSalePrice: 'Verkaufspreis',
+        soldTo: 'Verkauft an',
+        privateAuction: 'Privater Auktionslink',
+        searchPlaceholder: 'Fahrzeuge suchen...',
+        vehicle: 'Fahrzeug',
+        details: 'Details',
+        status: 'Status',
+        price: 'Preis',
+        actions: 'Aktionen',
+        private: 'Privat',
+        publish: 'Veröffentlichen',
+        unpublish: 'Veröffentlichung aufheben',
+        loadError: 'Fahrzeuge konnten nicht geladen werden',
+        deleteSuccess: 'Fahrzeug erfolgreich gelöscht',
+        deleteError: 'Fahrzeug konnte nicht gelöscht werden',
+        statusUpdateSuccess: 'Fahrzeugstatus erfolgreich aktualisiert',
+        statusUpdateError: 'Status konnte nicht aktualisiert werden',
+        noResults: 'Keine Fahrzeuge gefunden',
+        noVehicles: 'Keine Fahrzeuge im Inventar',
+        showing: 'Angezeigt',
+        sort: {
+          year: 'Jahr',
+          make: 'Marke',
+          price: 'Preis',
+          mileage: 'Laufleistung'
+        },
+        deleteConfirmTitle: 'Fahrzeug löschen',
+        deleteConfirmText: 'Sind Sie sicher, dass Sie dieses Fahrzeug löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
+      },
+
+      // Vehicle Statuses
+      vehicleStatus: {
+        active: 'Aktiv',
+        sold: 'Verkauft',
+        draft: 'Entwurf'
+      },
+
+
+
+      // Messages/Chat Tab
+      messages: {
+        typeMessage: 'Nachricht eingeben...',
+        conversations: 'Konversationen',
+        selectConversation: 'Konversation auswählen',
+        selectConversationDesc: 'Wählen Sie eine Konversation aus der Liste, um zu chatten.'
+      },
+
+      // Analytics Tab
+      analytics: {
+        revenueTitle: 'Umsatzübersicht',
+        chartPlaceholder: 'Umsatzdiagramm Platzhalter',
+        totalRevenue: 'Gesamtumsatz',
+        vehiclesSold: 'Verkaufte Fahrzeuge',
+        sellThroughRate: 'Verkaufsrate',
+        topModels: 'Top-Verkaufsmodelle',
+        units: 'Einheiten',
+        financialSummary: 'Finanzübersicht',
+        period: 'Zeitraum',
+        grossSales: 'Bruttoumsatz',
+        unitsSold: 'Verkaufte Einheiten',
+
+        fees: 'Plattformgebühren',
+        netEarnings: 'Nettoertrag',
+        ytdTotal: 'Jahresgesamt',
+        revenueChartTitle: 'Monatlicher Umsatztrend',
+        topModelsChartTitle: 'Verkaufsverteilung nach Modell',
+        avgSellingPrice: 'Durchschn. Verkaufspreis',
+        grosssale: 'Bruttoverkauf',
+        netearning: 'Nettoeinnahme'
+      },
+
+      // Generic UI
+      downloadReport: 'Bericht herunterladen',
+      comingSoon: 'Demnächst verfügbar',
+      comingSoonDesc: 'Dieser Bereich befindet sich in der Entwicklung.',
+      viewAll: 'Alle anzeigen',
+
+    }
+
+    ,
+
+    addCarListing: {
+
+      title: 'Neues Fahrzeug inserieren',
+      subtitle: 'Folgen Sie den Schritten, um Ihr Fahrzeug zum Verkauf anzubieten.',
+      unknownStep: 'Unbekannter Schritt',
+>>>>>>> Stashed changes
       errors: {
         // Bestehende Fehler
         firstNameRequired: "Vorname ist erforderlich",
@@ -2203,6 +2725,64 @@ phonePlaceholder:"+3412345671",
   
   },
   nl: {
+<<<<<<< Updated upstream
+=======
+    ...newsLatterTranslations.nl,
+
+
+    notificationsBid: {
+      title: "Meldingen",
+      newBid: "U heeft een nieuw bod",
+      timeAgo: "{time} geleden",
+      carSold: "Uw auto is verkocht",
+      viewAll: "Alles bekijken"
+    }
+    ,
+  bidding: {
+  totalCost: "Totale kosten",
+  placeBid: "Bod plaatsen",
+  close: "Sluiten",
+  currentHighestBid: "Huidig hoogste bod",
+  noBids: "Nog geen biedingen",
+  yourBids: "Uw biedingen",
+  bidAmount: "Bodbedrag",
+  bidInfoTitle: "Belangrijke informatie",
+  bidInfo1: "Uw bod is bindend zodra het is ingediend",
+  bidInfo2: "U wordt op de hoogte gebracht als u overboden wordt",
+  bidInfo3: "Biedingen moeten hoger zijn dan het huidige hoogste bod",
+  cancel: "Annuleren",
+  submitBid: "Bod indienen",
+     bidSubmitted: "Uw bod is succesvol ingediend!",
+    invalidAmount: "Voer een geldig bodbedrag in",
+    bidTooLow: "Bod moet hoger zijn dan het huidige hoogste bod (€{{highestBid}})",
+    minimumIncrement: "Minimale boddverhoging is €{{amount}}",
+    bidSubmitError: "Het indienen van het bod is mislukt. Probeer het opnieuw.",
+  submitting: "Indienen...",
+  invalidAmount: "Voer een geldig bodbedrag in",
+  bidTooLow: "Bod moet hoger zijn dan het huidige hoogste bod",
+  minimumIncrement: "Minimale biedstap is €{amount}",
+  bidSuccess: "Bod succesvol geplaatst!",
+  bidError: "Plaatsen van bod mislukt. Probeer opnieuw.",
+    notePlaceholder: "Uw bericht is alleen zichtbaar voor u en de verkoper. Max 300 tekens.",
+
+  // Added
+  feeNote: "Extra kosten kunnen van toepassing zijn",
+  leaveNote: "Laat een opmerking achter",
+  broker: "Makelaarskosten"
+},
+
+    "search": {
+      "gridView": "Rasterweergave",       // nl
+      "listView": "Lijstweergave",
+      "clear": "Zoekopdracht wissen",
+      "searching": "Zoeken...",
+      "results": "Resultaten",
+      "viewAllResults": "Alle resultaten bekijken",
+      "noResults": "Geen auto's gevonden",
+      "tryDifferent": "Probeer een andere zoekterm"
+    },
+
+>>>>>>> Stashed changes
     languageName: "Nederlands",
     cookies: {
       message: "We gebruiken cookies om uw ervaring te verbeteren. Door onze site te blijven gebruiken, gaat u akkoord met ons gebruik van cookies.",
@@ -2758,6 +3338,7 @@ buyCars: {
         rdwInfo: "Vereist voor voertuigregistratie in Nederland.", // Optionele informatieve tekst
         complianceInfo: "Locatie & naleving", // Nieuwe sectietitel
         complianceInfoDesc: "Selecteer uw land en geef relevante details op", // Nieuwe sectiebeschrijving
+<<<<<<< Updated upstream
          "firstNamePlaceholder": "Voer uw voornaam in",
       "lastNamePlaceholder": "Voer uw achternaam in",
       "emailPlaceholder": "jouw.email@voorbeeld.nl",
@@ -2792,6 +3373,47 @@ buyCars: {
       invoiceEmailInfo: "Alle facturen en betalingsbewijzen worden naar dit e-mailadres gestuurd.", // Optionele informatieve tekst
       countryPlaceholder: "Selecteer uw land",
       // --- EINDE NIEUWE PLACEHOLDERS ---
+=======
+        "rights": "Geïnteresseerd in",
+      "rightBuy": "Kopen",
+      "rightSell": "Verkopen",
+      "rightBoth": "Beide",
+      "rightsInfo": "Selecteer of u wilt kopen, verkopen of beide. U kunt dit later wijzigen.",
+        "firstNamePlaceholder": "Voer uw voornaam in",
+        "lastNamePlaceholder": "Voer uw achternaam in",
+        "emailPlaceholder": "jouw.email@voorbeeld.nl",
+        "phonePlaceholder": "+31 (0)6 12345678",
+        "companyNamePlaceholder": "Uw Bedrijfsnaam",
+        "vatNumberPlaceholder": "NL123456789B01",
+        "uboPlaceholder": "Ultimate Beneficial Owner",
+        dealerLocations: "Dealer Locaties",
+        dealerLocationsDesc: "Voeg alle locaties toe waar uw bedrijf actief is",
+        addLocation: "Locatie toevoegen",
+        // --- NIEUWE PLACEHOLDERS ---
+        "companyAddressPlaceholder": "Voer uw volledige bedrijfsadres in",
+        "invoiceEmailPlaceholder": "facturatie@uwbedrijf.nl",
+        "rdwNumberPlaceholder": "Voer RDW Nummer in",
+        streetPlaceholder: "Straat en huisnummer",
+        cityPlaceholder: "Stad",
+        postalCodePlaceholder: "Postcode",
+        houseNumberPlaceholder: "Huisnummer",
+        houseNumber: "Huisnummer",
+        roleAccess: "Rol & Toegang", // Nieuwe sectietitel
+        roleAccessDesc: "Selecteer uw rol en accounttoegang", // Nieuwe sectiebeschrijving
+        role: "Rol", // Nieuwe veldnaam
+        rolePlaceholder: "Selecteer uw rol", // Nieuwe placeholder
+        roles: {
+          owner: "Eigenaar",
+          manager: "Manager",
+          staff: "Medewerker"
+        },
+        invoiceDetails: "Facturatiegegevens", // Nieuwe sectietitel
+        invoiceDetailsDesc: "Geef de facturatie-e-mail op voor uw account", // Nieuwe sectiebeschrijving
+        invoiceEmail: "Facturatie-e-mailadres", // Nieuwe veldnaam
+        invoiceEmailInfo: "Alle facturen en betalingsbewijzen worden naar dit e-mailadres gestuurd.", // Optionele informatieve tekst
+        countryPlaceholder: "Selecteer uw land",
+        // --- EINDE NIEUWE PLACEHOLDERS ---
+>>>>>>> Stashed changes
         // --- EINDE NIEUWE PLACEHOLDERS ---
         // Sectie titels & beschrijvingen
         personalInfo: "Persoonlijke informatie",
@@ -2866,7 +3488,9 @@ buyCars: {
           privacyRequired: "U moet het privacybeleid accepteren",
           registrationFailed: "Registratie mislukt. Probeer het opnieuw.",
           shareholderNameRequired: "Naam van de aandeelhouder is verplicht",
-          shareholderIdRequired: "Identiteitsbewijs van de aandeelhouder is verplicht"
+          shareholderIdRequired: "Identiteitsbewijs van de aandeelhouder is verplicht",
+                  "rightsRequired": "Selecteer minstens één recht (Kopen, Verkopen of Beide)."
+
         }
       }
     },

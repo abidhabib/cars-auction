@@ -7,10 +7,14 @@ import Button from "./Button";
 
 // Import Lottie
 import lottie from "lottie-web";
+// --- Import the useAuth hook ---
+import { useAuth } from "../../context/AuthContext"; // Adjust the path if your AuthContext is located elsewhere
 
 const HeroSection = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  // --- Use the useAuth hook to get login status ---
+  const { isLoggedIn } = useAuth(); // Assuming your AuthContext provides an `isLoggedIn` boolean
   const [isVisible, setIsVisible] = useState(false);
   const lottieContainer = useRef(null);
 
@@ -51,29 +55,45 @@ const HeroSection = () => {
     }
   }, []);
 
+  // --- Handler for Action Card clicks ---
+  const handleActionCardClick = (actionType) => {
+    if (isLoggedIn) {
+      // If logged in, navigate to the dashboard with hash
+      if (actionType === 'buy') {
+        navigate('/Dashboard#buy'); // Adjust '/dashboard' path if needed
+      } else if (actionType === 'sell') {
+        navigate('/Dashboard#add'); // Adjust '/dashboard' path if needed
+        // Or if you have a specific route for adding cars:
+        // navigate('/dashboard/add-car'); 
+      }
+    } else {
+      // If not logged in, navigate to the login page
+      navigate('/login'); // Adjust '/login' path if needed
+    }
+  };
+
   return (
     <section className="w-full min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden font-sans bg-logo-dark-blue">
       
-{/* Background Video with Fallback */}
-<div className="absolute inset-0 w-full h-full">
-  <video
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="absolute inset-0 w-full h-full object-cover"
-    poster="./hero_bg.png" 
-  >
-    <source src="./hero_bg.mp4" type="video/mp4" />
-    {/* If video is not supported */}
-    <img
-      src="./hero_bg.jpg"
-      alt="Background"
-      className="absolute inset-0 w-full h-full object-cover"
-    />
-  </video>
-</div>
-
+      {/* Background Video with Fallback */}
+      <div className="absolute inset-0 w-full h-full">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          poster="./hero_bg.png" 
+        >
+          <source src="./hero_bg.mp4" type="video/mp4" />
+          {/* If video is not supported */}
+          <img
+            src="./hero_bg.jpg"
+            alt="Background"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </video>
+      </div>
 
       {/* Floating Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-indigo-600/5 z-10 animate-pulse"></div>
@@ -83,7 +103,6 @@ const HeroSection = () => {
 
         {/* LEFT COLUMN: Text Content */}
         <div className={`flex-1 max-w-2xl transition-all duration-1000 ease-out ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
-          {/* Same as before */}
           {/* Tagline Badge */}
           <div className="mb-6">
             <span className="inline-flex items-center px-5 py-2.5 text-sm font-semibold tracking-wide border text-white rounded-full shadow-lg shadow-white/10 backdrop-blur-sm">
@@ -155,36 +174,41 @@ const HeroSection = () => {
             </Button>
           </div>
         </div>
-{/* RIGHT COLUMN: Action Cards */}
-<div className="flex flex-col gap-6 w-full md:w-96">
-  {actionCards.map((card) => (
-    <div
-      key={card.id}
-      className="relative rounded-xl overflow-hidden bg-white/30 shadow-2xl transform transition-all duration-300 hover:scale-105"
-      style={{
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        height: '200px'
-      }}
-    >
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-      
-      <div className="relative z-10 p-6 flex flex-col h-full justify-between text-white">
-        <div>
-          <h3 className="text-2xl font-bold">{card.title}</h3>
-          <p className="mt-2 text-blue-100 text-sm">{card.subtitle}</p>
+
+        {/* RIGHT COLUMN: Action Cards */}
+        {/* Updated to use handleActionCardClick */}
+        <div className="flex flex-col gap-6 w-full md:w-96">
+          {actionCards.map((card) => (
+            <div
+              key={card.id}
+              className="relative rounded-xl overflow-hidden bg-white/30 shadow-2xl transform transition-all duration-300 hover:scale-105 cursor-pointer" // Added cursor-pointer
+              style={{
+                backgroundImage: `url(${card.backgroundImage})`, // Apply background image via style
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                height: '200px'
+              }}
+              // Use the new handler
+              onClick={() => handleActionCardClick(card.type)} 
+            >
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+              
+              <div className="relative z-10 p-6 flex flex-col h-full justify-between text-white">
+                <div>
+                  <h3 className="text-2xl font-bold">{card.title}</h3>
+                  <p className="mt-2 text-blue-100 text-sm">{card.subtitle}</p>
+                </div>
+                
+                <button
+                  // Removed onClick from button, handled by parent div
+                  className="mt-4 py-3 px-6 rounded-lg font-semibold bg-white text-logo-dark-blue hover:bg-gray-100 transition-colors duration-300 shadow-lg"
+                >
+                  {card.cta}
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-        
-        <button
-          onClick={() => navigate(`/${card.type}`)}
-          className="mt-4 py-3 px-6 rounded-lg font-semibold bg-white text-logo-dark-blue hover:bg-gray-100 transition-colors duration-300 shadow-lg"
-        >
-          {card.cta}
-        </button>
-      </div>
-    </div>
-  ))}
-</div>
       </div>
     </section>
   );
