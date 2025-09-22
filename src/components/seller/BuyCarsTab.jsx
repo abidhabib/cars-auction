@@ -986,8 +986,18 @@ const BuyCarsTab = ({
                 </>
               )}
             </div>
+            
           </div>
         )}
+         {biddingCar && (
+        <BiddingModal
+          isOpen={isBiddingModalOpen}
+          onClose={() => setIsBiddingModalOpen(false)}
+          car={biddingCar}
+          onBidSubmit={handleBidSubmit}
+          t={t}
+        />
+      )}
       </div>
     );
   };
