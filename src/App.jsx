@@ -14,6 +14,7 @@ import SplashScreen from './components/common/SplashScreen';
 import AppLayout from './components/layout/AppLayout';
 import SellerDashboard from './pages/seller/SellerDashboard';
 import NewsletterPage from './pages/NewsletterPage/NewsletterPage';
+import CarDetailPage from './components/seller/CarDetailPage';
 
 
 // Lazy load all pages and components

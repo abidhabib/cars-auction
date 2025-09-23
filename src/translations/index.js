@@ -356,7 +356,30 @@ export const translations = {
       // Filter Placeholders
       from: 'From',
       to: 'To',
+       "favorites": "Favorites",
+    "myFavorites": "My Favorite Cars",
+    "noFavorites": "No favorites yet",
+    "addFavorites": "Add cars to your favorites to see them here.",
+    "removeFavorite": "Remove from favorites",
+    "addToFavorites": "Add to favorites",
+    "loginToFavorite": "Please log in to add favorites.",
+    "browseCars": "Browse Cars",
+    "favoritesTab": "Favorites Tab",
+    "favoritesTabDesc": "This tab now navigates to the Car Detail Page when you click \"View\".",
 
+    // --- Bids Related ---
+    "myBids": "My Bids",
+    "noBids": "No bids yet",
+    "placeBids": "Place bids on cars to see them here.",
+    "yourBid": "Your Bid",
+    "outbid": "Outbid",
+    "updateBid": "Update",
+    "removeBid": "Remove Bid",
+    "loginToBids": "Please log in to view your bids.",
+    "myBidsTab": "My Bids Tab",
+    "myBidsTabDesc": "This tab now navigates to the Car Detail Page when you click \"View\" or \"Update Bid\".",
+    "currentHighest": "Current Highest",
+    "currentHighestBid": "Current Highest Bid", // Might also be used
       // Vehicle Status
       vehicleStatus: {
         active: 'Active',
@@ -905,7 +928,12 @@ export const translations = {
         analytics: 'Analytics',
         settings: 'Settings',
         addVehicle: 'Publish Vehicle',
-        buyCar: 'Buy Car'
+        buyCar: 'Buy Car',
+        "favorites": "My Favorites",
+        "bids": "My Bids",
+         "collapse": "Collapse",
+        "expand": "Expand",
+         "close": "Close"
       },
 
       // Stats Cards
@@ -1763,6 +1791,31 @@ export const translations = {
       // Filter Placeholders
       from: 'Von',
       to: 'Bis',
+       // --- Favorites Related ---
+    "favorites": "Favoriten",
+    "myFavorites": "Meine Lieblingsautos",
+    "noFavorites": "Noch keine Favoriten",
+    "addFavorites": "Fügen Sie Autos zu Ihren Favoriten hinzu, um sie hier zu sehen.",
+    "removeFavorite": "Aus Favoriten entfernen",
+    "addToFavorites": "Zu Favoriten hinzufügen",
+    "loginToFavorite": "Bitte melden Sie sich an, um Favoriten hinzuzufügen.",
+    "browseCars": "Autos durchsuchen",
+    "favoritesTab": "Favoriten-Tab",
+    "favoritesTabDesc": "Dieser Tab navigiert nun zur Fahrzeugdetailseite, wenn Sie auf \"Ansehen\" klicken.",
+
+    // --- Bids Related ---
+    "myBids": "Meine Gebote",
+    "noBids": "Noch keine Gebote",
+    "placeBids": "Bieten Sie auf Autos, um sie hier zu sehen.",
+    "yourBid": "Ihr Gebot",
+    "outbid": "Überboten",
+    "updateBid": "Aktualisieren",
+    "removeBid": "Gebot entfernen",
+    "loginToBids": "Bitte melden Sie sich an, um Ihre Gebote anzuzeigen.",
+    "myBidsTab": "Meine Gebote-Tab",
+    "myBidsTabDesc": "Dieser Tab navigiert nun zur Fahrzeugdetailseite, wenn Sie auf \"Ansehen\" oder \"Gebot aktualisieren\" klicken.",
+    "currentHighest": "Aktuell Höchstes",
+    "currentHighestBid": "Aktuell Höchstes Gebot",
 
       // Vehicle Status
       vehicleStatus: {
@@ -2131,7 +2184,12 @@ export const translations = {
         analytics: 'Analyse',
         settings: 'Einstellungen',
         addVehicle: 'Fahrzeug hinzufügen',
-        buyCar: 'Auto kaufen'
+        buyCar: 'Auto kaufen',
+         "favorites": "Meine Favoriten",
+      "bids": "Meine Gebote",
+        "collapse": "Einklappen",
+    "expand": "Erweitern",
+    "close": "Schließen"
 
       },
 
@@ -2901,6 +2959,31 @@ export const translations = {
       next: 'Volgende',
       page: 'Pagina',
       of: 'van',
+       // --- Favorites Related ---
+    "favorites": "Favorieten",
+    "myFavorites": "Mijn Favoriete Auto's",
+    "noFavorites": "Nog geen favorieten",
+    "addFavorites": "Voeg auto's toe aan je favorieten om ze hier te zien.",
+    "removeFavorite": "Verwijder uit favorieten",
+    "addToFavorites": "Toevoegen aan favorieten",
+    "loginToFavorite": "Log in om favorieten toe te voegen.",
+    "browseCars": "Auto's Bladeren",
+    "favoritesTab": "Favorieten Tabblad",
+    "favoritesTabDesc": "Dit tabblad navigeert nu naar de detailpagina van de auto wanneer je op \"Bekijk\" klikt.",
+
+    // --- Bids Related ---
+    "myBids": "Mijn Biedingen",
+    "noBids": "Nog geen biedingen",
+    "placeBids": "Plaats biedingen op auto's om ze hier te zien.",
+    "yourBid": "Je Bod",
+    "outbid": "Overboden",
+    "updateBid": "Bijwerken",
+    "removeBid": "Verwijder Bod",
+    "loginToBids": "Log in om je biedingen te bekijken.",
+    "myBidsTab": "Mijn Biedingen Tabblad",
+    "myBidsTabDesc": "Dit tabblad navigeert nu naar de detailpagina van de auto wanneer je op \"Bekijk\" of \"Bod bijwerken\" klikt.",
+    "currentHighest": "Huidig Hoogste",
+    "currentHighestBid": "Huidig Hoogste Bod",
 
       // Error Messages
       linkCopied: 'Link gekopieerd naar klembord!',
@@ -3313,7 +3396,12 @@ export const translations = {
         analytics: 'Analyse',
         settings: 'Instellingen',
         addVehicle: 'Voertuig toevoegen',
-        buyCar: 'Auto kopen'
+        buyCar: 'Auto kopen',
+          "favorites": "Mijn Favorieten",
+      "bids": "Mijn Biedingen",
+       "collapse": "Inklappen",
+    "expand": "Uitbreiden",
+    "close": "Sluiten"
 
       },
 

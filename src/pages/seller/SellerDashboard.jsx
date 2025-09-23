@@ -10,9 +10,12 @@ import InventoryTab from '../../components/seller/InventoryTab';
 import MessagesTab from '../../components/seller/MessagesTab';
 import AnalyticsTab from '../../components/seller/AnalyticsTab';
 import BuyCarsTab from '../../components/seller/BuyCarsTab';
-import Profile from '../profile/Profile'; // Import the Profile component
+import Profile from '../profile/Profile';
 import { FiSettings } from 'react-icons/fi';
 import AddCarListing from '../../components/seller/AddCarListing';
+// --- Import new components ---
+import FavoritesTab from '../../components/seller/FavoritesTab'; // Make sure this path is correct
+import BidsTab from '../../components/seller/BidsTab';         // Make sure this path is correct
 
 const SellerDashboard = () => {
   const navigate = useNavigate();
@@ -29,7 +32,8 @@ const SellerDashboard = () => {
   // Set active tab based on URL hash
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
-    if (hash && ['overview', 'inventory','add', 'messages', 'analytics', 'buy', 'profile'].includes(hash)) {
+    // Include new tabs in the check
+    if (hash && ['overview', 'inventory','add', 'messages', 'analytics', 'buy', 'profile', 'favorites', 'bids'].includes(hash)) {
       setActiveTab(hash);
     }
   }, [setActiveTab]);
@@ -101,8 +105,42 @@ const SellerDashboard = () => {
           externalSelectedCar={carSelectedFromSearch}
           onBackToList={handleBackToListFromSearch}
         />;
+      // --- New Cases for Favorites and Bids ---
+      case 'favorites':
+        return <FavoritesTab 
+          onViewCar={(carId) => {
+            // Example: Navigate to BuyCarsTab and view the specific car
+            // You might need to adjust this based on how BuyCarsTab handles external car selection
+            // For now, we'll just switch tabs
+            setActiveTab('buy');
+            // Logic to select the car in BuyCarsTab would go here if needed
+          }}
+          onPlaceBid={(carId) => {
+            // Example: Navigate to BuyCarsTab and open bid modal for this car
+            setActiveTab('buy');
+            // Logic to trigger bid modal for the car would go here if needed
+          }}
+          onRemoveFavorite={(carId) => {
+            console.log("Removed favorite car:", carId);
+            // Optional: Show a notification or update UI
+          }}
+        />;
+      case 'bids':
+        return <BidsTab 
+          onViewCar={(carId) => {
+            setActiveTab('buy');
+          }}
+          onPlaceBid={(carId) => {
+            // This will be "Update Bid"
+            setActiveTab('buy');
+          }}
+          onRemoveBid={(carId) => {
+            console.log("Removed bid for car:", carId);
+            // Optional: Show a notification or update UI
+          }}
+        />;
+      // --- End New Cases ---
       case 'profile':
-        // Render the Profile component when profile tab is active
         return <Profile />;
       case 'settings':
         return (
