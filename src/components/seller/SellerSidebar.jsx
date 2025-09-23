@@ -14,7 +14,8 @@ import {
   FiChevronLeft,
   FiChevronRight,
   FiUser, // Import FiUser for Profile
-  FiArrowLeftCircle
+  FiHeart, // Import for Favorites
+  FiList   // Import for Bids
 } from 'react-icons/fi';
 
 const SellerSidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) => {
@@ -25,6 +26,10 @@ const SellerSidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab })
     { id: 'inventory', label: t('sellerDashboard.sidebar.inventory') || 'My Inventory', icon: <FiPackage className="h-5 w-5" /> },
     { id: 'add', label: t('sellerDashboard.sidebar.addVehicle') || 'Add Vehicle', icon: <FiPlus className="h-5 w-5" /> },
     { id: 'buy', label: t('sellerDashboard.sidebar.buyCar') || 'Buy Cars', icon: <FiShoppingCart className="h-5 w-5" /> },
+    // --- New Tabs ---
+    { id: 'favorites', label: t('sellerDashboard.sidebar.favorites') || 'My Favorites', icon: <FiHeart className="h-5 w-5" /> },
+    { id: 'bids', label: t('sellerDashboard.sidebar.bids') || 'My Bids', icon: <FiList className="h-5 w-5" /> },
+    // --- End New Tabs ---
     // { id: 'auctions', label: t('sellerDashboard.sidebar.myAuctions') || 'My Auctions', icon: <FiBarChart2 className="h-5 w-5" /> },
     // { id: 'sales', label: t('sellerDashboard.sidebar.sales') || 'Sales & Transactions', icon: <FiDollarSign className="h-5 w-5" /> },
     { id: 'messages', label: t('sellerDashboard.sidebar.messages') || 'Messages', icon: <FiMessageSquare className="h-5 w-5" /> }
@@ -108,14 +113,14 @@ const SellerSidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab })
               className={`w-full flex items-center transition-all duration-200 rounded-xl text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-10 ${
                 sidebarOpen ? 'px-4 py-3' : 'justify-center h-12 mx-auto'
               }`}
-              title={sidebarOpen ? ('Collapse') : (t('sidebar.expand') || 'Expand')}
+              title={sidebarOpen ? (t('sellerDashboard.sidebar.collapse') || 'Collapse') : (t('sellerDashboard.sidebar.expand') || 'Expand')}
             >
               <span className="flex-shrink-0">
                 {sidebarOpen ? <FiChevronLeft className="h-5 w-5" /> : <FiChevronRight className="h-5 w-5" />}
               </span>
               {sidebarOpen && (
                 <span className="ml-3 text-sm font-medium">
-                  Close
+                  {t('sellerDashboard.sidebar.close') || 'Close'}
                 </span>
               )}
             </button>
