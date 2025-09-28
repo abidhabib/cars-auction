@@ -3,7 +3,7 @@
 // Define the first few vehicles explicitly with IDs 001, 002, 003
 const demoVehicles = [
   {
-    id: 'veh_001',
+    id: 1,
     stockNumber: 'STK2023-001',
     make: 'BMW',
     model: 'X5',
@@ -33,7 +33,7 @@ const demoVehicles = [
     // ... other properties as needed
   },
   {
-    id: 'veh_002',
+    id: 2,
     stockNumber: 'STK2023-002',
     make: 'Mercedes-Benz',
     model: 'GLE',
@@ -61,7 +61,7 @@ const demoVehicles = [
     // ... other properties as needed
   },
   {
-    id: 'veh_003',
+    id: 3,
     stockNumber: 'STK2023-003',
     make: 'Audi',
     model: 'Q7',
@@ -98,7 +98,7 @@ for (let i = 4; i <= 50; i++) {
   const model = models[i % models.length];
   
   // Ensure the ID is unique and follows the pattern
-  const vehicleId = `veh_${String(i).padStart(3, '0')}`;
+  const vehicleId =i;
   
   // Optional: Add a check to see if ID already exists (though it shouldn't with this logic)
   // const idExists = demoVehicles.some(v => v.id === vehicleId);
