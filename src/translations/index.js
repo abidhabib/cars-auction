@@ -39,11 +39,33 @@ export const translations = {
   minimumIncrement: "Minimum increment is €{amount}",
   bidSuccess: "Bid placed successfully!",
   bidError: "Failed to place bid. Please try again.",
+"backToDetails": "Back to Car Details",
 
+  "reservePrice": "Reserve Price",
+  "noReserve": "No reserve",
+  "auctionEnds": "Auction Ends",
+
+  "includesAuctionFee": "Includes 3% auction processing fee",
+  "leaveNote": "Optional note for seller",
+  "notePlaceholder": "Visible only to you and the seller. Max 300 characters.",
+  "broker": "Broker / Intermediary",
+  "selectBroker": "-- Select broker --",
+  "important": "Important",
+  "bidIsBinding": "Your bid is legally binding once submitted.",
+  "willBeNotified": "You will be notified immediately if outbid.",
+  "incrementRule": "Bids must exceed the current highest by at least €100.",
+  "confirmationEmail": "You’ll receive a confirmation email after submission.",
+  "confirmBid": "Confirm Bid",
+  "bidSubmitted": "Bid placed successfully!",
+  "submitFailed": "Failed to place bid. Please try again.",
+
+  "reserveNotMet": "Bid must meet reserve price of €{reserve}.",
+  "auctionClosed": "Auction Closed",
+  "noBiddingAllowed": "Bidding is no longer allowed for this vehicle.",
+  "viewDetails": "View Details",
   // Added
   feeNote: "Additional fees may apply",
-  leaveNote: "Leave a note",
-  broker: "Broker fee"
+
 },
 
     cookies: {
@@ -1343,11 +1365,31 @@ export const translations = {
   minimumIncrement: "Mindestschritt für Gebote ist €{amount}",
   bidSuccess: "Gebot erfolgreich abgegeben!",
   bidError: "Fehler beim Abgeben des Gebots. Bitte erneut versuchen.",
+"backToDetails": "Zurück zu den Fahrzeuginformationen",
+  "reservePrice": "Mindestpreis",
+  "noReserve": "Kein Mindestpreis",
+  "auctionEnds": "Auktion endet",
+  "includesAuctionFee": "Beinhaltet 3% Auktionsgebühr",
+  "leaveNote": "Optionale Nachricht an den Verkäufer",
+  "notePlaceholder": "Nur für Sie und den Verkäufer sichtbar. Max. 300 Zeichen.",
+  "broker": "Makler / Vermittler",
+  "selectBroker": "-- Makler auswählen --",
+  "important": "Wichtig",
+  "bidIsBinding": "Ihr Gebot ist nach Abgabe rechtlich bindend.",
+  "willBeNotified": "Sie werden sofort benachrichtigt, wenn Sie überboten werden.",
+  "incrementRule": "Gebote müssen das aktuelle Höchstgebot um mindestens 100 € übersteigen.",
+  "confirmationEmail": "Nach Abgabe erhalten Sie eine Bestätigungs-E-Mail.",
+  "confirmBid": "Gebot bestätigen",
+  "bidSubmitted": "Gebot erfolgreich abgegeben!",
+  "submitFailed": "Gebot konnte nicht abgegeben werden. Bitte versuchen Sie es erneut.",
 
+  "reserveNotMet": "Das Gebot muss den Mindestpreis von €{reserve} erreichen.",
+  "auctionClosed": "Auktion beendet",
+  "noBiddingAllowed": "Für dieses Fahrzeug sind keine Gebote mehr möglich.",
+  "viewDetails": "Details anzeigen",
   // Added
   feeNote: "Zusätzliche Gebühren können anfallen",
-  leaveNote: "Hinterlassen Sie eine Notiz",
-  broker: "Maklergebühr"
+
 },
 
     cookies: {
@@ -2539,7 +2581,27 @@ export const translations = {
   minimumIncrement: "Minimale biedstap is €{amount}",
   bidSuccess: "Bod succesvol geplaatst!",
   bidError: "Plaatsen van bod mislukt. Probeer opnieuw.",
+ "backToDetails": "Terug naar voertuigdetails",
+  "reservePrice": "Minimumprijs",
+  "noReserve": "Geen minimumprijs",
+  "auctionEnds": "Veiling eindigt",
 
+  "includesAuctionFee": "Inclusief 3% veilingkosten",
+  "notePlaceholder": "Alleen zichtbaar voor u en de verkoper. Max. 300 tekens.",
+  "selectBroker": "-- Selecteer makelaar --",
+  "important": "Belangrijk",
+  "bidIsBinding": "Uw bod is juridisch bindend zodra het is geplaatst.",
+  "willBeNotified": "U wordt direct op de hoogte gebracht als u overboden wordt.",
+  "incrementRule": "Biedingen moeten minimaal €100 boven het huidige hoogste bod liggen.",
+  "confirmationEmail": "Na het plaatsen ontvangt u een bevestigingsmail.",
+  "confirmBid": "Bevestig bod",
+  "bidSubmitted": "Bod succesvol geplaatst!",
+  "submitFailed": "Bod plaatsen mislukt. Probeer het opnieuw.",
+
+  "reserveNotMet": "Bod moet voldoen aan de minimumprijs van €{reserve}.",
+  "auctionClosed": "Veiling gesloten",
+  "noBiddingAllowed": "Bieden is niet meer mogelijk voor dit voertuig.",
+  "viewDetails": "Bekijk details",
   // Added
   feeNote: "Extra kosten kunnen van toepassing zijn",
   leaveNote: "Laat een opmerking achter",

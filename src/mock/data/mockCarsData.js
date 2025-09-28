@@ -3,7 +3,7 @@ export const loadMockCarsData = () => {
   return [
     // Car 1: BMW X5
     {
-      id: 'car_001',
+      id:1,
       saleType: 'general-auction',
       auctionTiming: {
         preset: '7-days',
@@ -118,7 +118,7 @@ export const loadMockCarsData = () => {
     },
     // Car 2: Mercedes-Benz GLE
     {
-      id: 'car_002',
+      id:2,
       saleType: 'direct-buy',
       auctionTiming: null,
       vehicleIdentification: {
@@ -216,7 +216,7 @@ export const loadMockCarsData = () => {
     },
     // Car 3: Audi Q7
     {
-      id: 'car_003',
+      id: 3,
       saleType: 'private-sale',
       auctionTiming: null,
       vehicleIdentification: {
@@ -316,7 +316,7 @@ export const loadMockCarsData = () => {
     },
     // Car 4: BMW 3 Series
     {
-      id: 'car_004',
+      id:4,
       saleType: 'general-auction',
       auctionTiming: {
         preset: '5-days',
@@ -425,7 +425,7 @@ export const loadMockCarsData = () => {
     },
     // Car 5: Volkswagen Tiguan
     {
-      id: 'car_005',
+      id: 5,
       saleType: 'general-auction',
       auctionTiming: {
         preset: '10-days',
@@ -537,7 +537,7 @@ export const loadMockCarsData = () => {
     },
     // Car 6: Tesla Model 3
     {
-      id: 'car_006',
+      id:6,
       saleType: 'direct-buy',
       auctionTiming: null,
       vehicleIdentification: {
@@ -635,7 +635,7 @@ export const loadMockCarsData = () => {
     },
     // Car 7: Porsche 911
     {
-      id: 'car_007',
+      id:7,
       saleType: 'general-auction',
       auctionTiming: {
         preset: '3-days',

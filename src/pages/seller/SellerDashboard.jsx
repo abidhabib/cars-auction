@@ -5,7 +5,6 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
 import SellerSidebar from '../../components/seller/SellerSidebar';
 import SellerHeader from '../../components/seller/SellerHeader';
-import { FiSettings } from 'react-icons/fi';
 
 const SellerDashboard = () => {
   const navigate = useNavigate();
@@ -15,9 +14,6 @@ const SellerDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
 
-  const handleAddVehicle = () => {
-    navigate('/Dashboard/add');
-  };
 
   // Optional: Handle global search → redirect to /Dashboard/buy
   const handleCarSelectFromSearch = (car) => {

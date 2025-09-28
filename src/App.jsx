@@ -37,7 +37,8 @@ import Profile from './pages/profile/Profile';
 import { FiSettings } from 'react-icons/fi';
 import VehicleDetailPage from './components/seller/VehicleDetailPage';
 import EditCarListingWrapper from './components/seller/EditCarListingWrapper';
-// --- Settings Page Component ---
+import BuyCarDetailPage from './components/seller/BuyCarDetailPage';
+import BiddingPage from './components/seller/BiddingPage';
 const SettingsPage = () => {
   const { t } = useLanguage();
   return (
@@ -217,6 +218,8 @@ function App() {
   <Route path="messages" element={<MessagesTab />} />
   <Route path="analytics" element={<AnalyticsTab />} />
   <Route path="buy" element={<BuyCarsTab />} />
+    <Route path="buy/:id" element={<BuyCarDetailPage />} />
+  <Route path="buy/:id/bid" element={<BiddingPage />} />
   <Route path="profile" element={<Profile />} />
   <Route path="settings" element={<SettingsPage />} />
   <Route path="*" element={<Navigate to="/Dashboard" replace />} />
