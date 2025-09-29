@@ -33,7 +33,29 @@ export const loadMockCarsData = () => {
       };
     }).filter(bid => bid.amount > reserve);
   };
-
+// Inside loadMockCarsData()
+const generateInvoiceData = (car, bid) => {
+  const now = new Date();
+  return {
+    proforma: {
+      id: `PRO-${car.id}`,
+      amount: bid.amount,
+      vat: Math.round(bid.amount * 0.21),
+      total: Math.round(bid.amount * 1.21),
+      issuedAt: now.toISOString(),
+      dueAt: new Date(now.getTime() + 48 * 60 * 60 * 1000).toISOString(),
+      pdfUrl: `https://example.com/invoices/proforma-${car.id}.pdf`,
+      from: 'Car Network Europe B.V.',
+      to: car.seller.name
+    },
+    final: {
+      id: null,
+      uploadedAt: null,
+      status: 'pending', // 'pending' | 'paid'
+      pdfUrl: null
+    }
+  };
+};
   // Helper to generate sale process data based on location type and status
   const generateSaleProcess = (car, status) => {
     const baseData = {
@@ -104,7 +126,8 @@ const generateMockBids = (car) => {
     {
       id: 1,
   mockBids: generateMockBids({ id: 1, highestBid: 54800, reservePrice: 50000, price: 55000 }),
-      saleType: 'general-auction',
+    
+  saleType: 'general-auction',
       auctionTiming: {
         preset: '7-days',
         startDate: '2024-07-10',

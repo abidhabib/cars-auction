@@ -17,7 +17,6 @@ import AppLayout from './components/layout/AppLayout';
 import SellerDashboard from './pages/seller/SellerDashboard';
 import NewsletterPage from './pages/NewsletterPage/NewsletterPage';
 import AwardCarPage from './components/seller/AwardCarPage';
-import InvoicePage from './components/seller/InvoicePage';
 import PaymentSuccessPage from './components/seller/PaymentSuccessPage';
 import PaymentFailedPage from './components/seller/PaymentFailedPage';
 // Lazy-loaded public pages
@@ -42,6 +41,7 @@ import VehicleDetailPage from './components/seller/VehicleDetailPage';
 import EditCarListingWrapper from './components/seller/EditCarListingWrapper';
 import BuyCarDetailPage from './components/seller/BuyCarDetailPage';
 import BiddingPage from './components/seller/BiddingPage';
+import SellerInvoicePage from './components/seller/SellerInvoicePage';
 const SettingsPage = () => {
   const { t } = useLanguage();
   return (
@@ -226,10 +226,9 @@ function App() {
   <Route path="profile" element={<Profile />} />
   <Route path="settings" element={<SettingsPage />} />
   <Route path="inventory/award" element={<AwardCarPage />} />
-<Route path="inventory/:id/invoice" element={<InvoicePage />} />
-<Route path="buy/:id/invoice" element={<InvoicePage />} />
 <Route path="payment/success" element={<PaymentSuccessPage />} />
 <Route path="payment/failed" element={<PaymentFailedPage />} />
+<Route path="/Dashboard/inventory/invoice/:carId" element={<SellerInvoicePage />} />
   <Route path="*" element={<Navigate to="/Dashboard" replace />} />
 </Route>
                   {/* Root redirect */}

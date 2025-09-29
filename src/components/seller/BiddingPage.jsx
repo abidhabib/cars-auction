@@ -12,6 +12,7 @@ import {
   FiClock,
 } from 'react-icons/fi';
 import { MdOutlineNoteAdd } from 'react-icons/md';
+import Toast from '../ui/Toast'; // 👈 import toast
 
 const BiddingPage = () => {
   const { id } = useParams();
@@ -23,8 +24,8 @@ const BiddingPage = () => {
   const [selectedBroker, setSelectedBroker] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState(null); // { message, type }
 
-  // Flat broker list (could come from API later)
   const brokers = [
     'van den Broek Automotive bemiddeling',
     'AutoTrade International',
@@ -44,19 +45,21 @@ const BiddingPage = () => {
     const auctionEnded = new Date(foundCar.auctionEnds) < now;
     const isAwarded = foundCar.status === 'awarded';
 
-    if (auctionEnded || isAwarded) {
-      // Redirect or show message — but for now, just disable bidding
-      setCar({ ...foundCar, _biddingClosed: true });
-    } else {
-      setCar(foundCar);
-    }
+    setCar({ ...foundCar, _biddingClosed: auctionEnded || isAwarded });
   }, [id, navigate]);
+
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+  };
+
+  const hideToast = () => {
+    setToast(null);
+  };
 
   if (!car) return null;
 
-  const isBiddingClosed = car._biddingClosed || car.status === 'awarded' || new Date(car.auctionEnds) < new Date();
+  const isBiddingClosed = car._biddingClosed;
 
-  // --- Validation ---
   const validateBid = (value) => {
     const num = parseFloat(value);
     if (!value || isNaN(num) || num <= 0) {
@@ -87,7 +90,7 @@ const BiddingPage = () => {
 
   const calculateTotal = () => {
     const amount = parseFloat(bidAmount) || 0;
-    return amount * 1.03; // 3% fee
+    return amount * 1.03;
   };
 
   const formatCurrency = (num) => {
@@ -104,12 +107,18 @@ const BiddingPage = () => {
 
     setIsSubmitting(true);
     try {
-      // TODO: API call
-      console.log('Bid submitted:', { bidAmount, note, broker: selectedBroker, carId: car.id });
-      alert(t('bidding.bidSubmitted'));
-      navigate(`/Dashboard/buy/${id}`);
-    } catch {
-      setError(t('bidding.submitFailed'));
+      // ✅ Simulate API call (replace with real API later)
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // ✅ Simulate 90% success rate
+      if (Math.random() > 0.1) {
+        showToast(t('bidding.bidSubmitted'));
+        setTimeout(() => navigate(`/Dashboard/buy/${id}`), 1500);
+      } else {
+        throw new Error('Network error');
+      }
+    } catch (err) {
+      showToast(t('bidding.submitFailed'), 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -127,7 +136,6 @@ const BiddingPage = () => {
       </button>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        {/* Header */}
         <div className="p-6 border-b border-gray-100">
           <h1 className="text-2xl font-bold text-gray-900">
             {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
@@ -139,10 +147,9 @@ const BiddingPage = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2">
-          {/* Car Image */}
           <div className="p-6 border-r border-gray-100 bg-gray-50">
             <img
-              src={car.image}
+              src={car.image?.trim() || 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=600&q=80'}
               alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model}`}
               className="w-full h-60 object-cover rounded-lg bg-white"
               onError={(e) => {
@@ -151,7 +158,6 @@ const BiddingPage = () => {
             />
           </div>
 
-          {/* Bidding Form */}
           <div className="p-6">
             {isBiddingClosed ? (
               <div className="text-center py-8">
@@ -171,7 +177,6 @@ const BiddingPage = () => {
               <>
                 <h2 className="text-xl font-semibold text-gray-900 mb-5">{t('bidding.placeBid')}</h2>
 
-                {/* Auction Summary */}
                 <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100 space-y-2.5">
                   <div className="flex justify-between">
                     <span className="text-gray-600">{t('bidding.currentHighestBid')}:</span>
@@ -192,7 +197,6 @@ const BiddingPage = () => {
                 </div>
 
                 <form onSubmit={handleSubmit}>
-                  {/* Bid Input */}
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       {t('bidding.bidAmount')} *
@@ -215,7 +219,6 @@ const BiddingPage = () => {
                     {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
                   </div>
 
-                  {/* Total Cost */}
                   {bidAmount && (
                     <div className="mb-5 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                       <div className="flex justify-between">
@@ -226,7 +229,6 @@ const BiddingPage = () => {
                     </div>
                   )}
 
-                  {/* Note */}
                   <div className="mb-4">
                     <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                       <MdOutlineNoteAdd className="mr-1.5 text-gray-500" />
@@ -243,7 +245,6 @@ const BiddingPage = () => {
                     <div className="text-xs text-gray-500 mt-1 text-right">{note.length}/300</div>
                   </div>
 
-                  {/* Broker */}
                   <div className="mb-5">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       {t('bidding.broker')}
@@ -262,7 +263,6 @@ const BiddingPage = () => {
                     </select>
                   </div>
 
-                  {/* Info Notice */}
                   <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <div className="flex">
                       <FiAlertCircle className="text-red-500 mt-0.5 mr-2 flex-shrink-0" />
@@ -305,6 +305,9 @@ const BiddingPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
     </div>
   );
 };
