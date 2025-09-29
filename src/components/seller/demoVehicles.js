@@ -100,12 +100,7 @@ for (let i = 4; i <= 50; i++) {
   // Ensure the ID is unique and follows the pattern
   const vehicleId =i;
   
-  // Optional: Add a check to see if ID already exists (though it shouldn't with this logic)
-  // const idExists = demoVehicles.some(v => v.id === vehicleId);
-  // if (idExists) {
-  //   console.warn(`Duplicate ID detected: ${vehicleId}. Skipping.`);
-  //   continue; // Skip adding this vehicle
-  // }
+
 
   demoVehicles.push({
     id: vehicleId, // Use the generated unique ID

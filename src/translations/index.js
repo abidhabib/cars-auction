@@ -4,7 +4,45 @@ import { newsLatterTranslations } from "./components/NewsLatter";
 export const translations = {
 
   en: {
-
+  "award": {
+    "biddingRequests": "Bidding Requests",
+    "activeBids": "Active Bids",
+    "recentlySold": "Recently Sold",
+    "noActiveBids": "No active bidding requests.",
+    "noSoldCars": "No cars sold yet.",
+    "selectConversation": "Select a bidding request to continue.",
+    "awardCar": "Award Car",
+    "carDetails": "Car Details",
+    "highest": "Highest",
+    "broker": "Broker",
+    "awardedTo": "Awarded to",
+    "soldOn": "Sold on",
+    "awardToSelected": "Award to Selected Bidder",
+    "awarding": "Awarding...",
+    "success": "Car successfully awarded!",
+    "failed": "Failed to award car. Please try again.",
+      "carAvailableNow": "Car is immediately available. Payment due within 48 hours.",
+    "carAtNetwork": "Car is at Car Network Europe. Payment due 48h after delivery.",
+    "deliveryPending": "Delivery in progress",
+    "reserve": "Reserve",
+    "highestBid": "Highest Bid"
+  },
+  "saleType": {
+    "title": "Select Sale Type",
+    "description": "Choose how you want to sell your vehicle.",
+    "directBuy": {
+      "label": "Direct Buy",
+      "description": "Set a fixed price. Users can buy it immediately or make bids, which you can choose to accept or decline."
+    },
+    "generalAuction": {
+      "label": "General Auction",
+      "description": "Run a blind auction with a defined time window. Bidders won't see others' offers. You are not obligated to accept the highest bid."
+    },
+    "privateSale": {
+      "label": "Private Sale",
+      "description": "Your listing will be hidden from the public. Only people with your unique link can view and bid on it."
+    }
+  },
 
     ...newsLatterTranslations.en,
     ...BuyCarTranslation.en
@@ -920,7 +958,9 @@ export const translations = {
         analytics: 'Analytics',
         settings: 'Settings',
         addVehicle: 'Publish Vehicle',
-        buyCar: 'Buy Car'
+        buyCar: 'Buy Car',
+        allInventory:'All Inventory',
+        runningAuctions:'Running Auctions'
       },
 
       // Stats Cards
@@ -1334,6 +1374,45 @@ export const translations = {
 
   },
   de: {
+     "award": {
+        "carAvailableNow": "Das Auto ist sofort verfügbar. Zahlung innerhalb von 48 Stunden fällig.",
+  "carAtNetwork": "Das Auto befindet sich im Car Network Europe. Zahlung 48h nach Lieferung fällig.",
+  "deliveryPending": "Lieferung in Bearbeitung",
+  "reserve": "Reservieren",
+  "highestBid": "Höchstes Gebot",
+    "biddingRequests": "Gebotsanfragen",
+    "activeBids": "Aktive Gebote",
+    "recentlySold": "Kürzlich Verkauft",
+    "noActiveBids": "Keine aktiven Gebotsanfragen.",
+    "noSoldCars": "Noch keine Fahrzeuge verkauft.",
+    "selectConversation": "Wählen Sie eine Gebotsanfrage aus, um fortzufahren.",
+    "awardCar": "Fahrzeug Zuschlagen",
+    "carDetails": "Fahrzeugdetails",
+    "highest": "Höchstes",
+    "broker": "Makler",
+    "awardedTo": "Zugeschlagen an",
+    "soldOn": "Verkauft am",
+    "awardToSelected": "An ausgewählten Bieter zuschlagen",
+    "awarding": "Wird zugeschlagen...",
+    "success": "Fahrzeug erfolgreich zugeschlagen!",
+    "failed": "Fehler beim Zuschlagen des Fahrzeugs. Bitte erneut versuchen."
+  },
+  "saleType": {
+    "title": "Verkaufsart auswählen",
+    "description": "Wählen Sie, wie Sie Ihr Fahrzeug verkaufen möchten.",
+    "directBuy": {
+      "label": "Direktkauf",
+      "description": "Legen Sie einen Festpreis fest. Nutzer können sofort kaufen oder Gebote abgeben, die Sie annehmen oder ablehnen können."
+    },
+    "generalAuction": {
+      "label": "Allgemeine Auktion",
+      "description": "Führen Sie eine blinde Auktion mit festgelegtem Zeitfenster durch. Bieter sehen die Angebote anderer nicht. Sie sind nicht verpflichtet, das höchste Gebot anzunehmen."
+    },
+    "privateSale": {
+      "label": "Privatverkauf",
+      "description": "Ihre Anzeige ist für die Öffentlichkeit verborgen. Nur Personen mit Ihrem einzigartigen Link können sie sehen und bieten."
+    }
+  },
     ...newsLatterTranslations.de,
 
     notificationsBid: {
@@ -2158,7 +2237,10 @@ export const translations = {
         analytics: 'Analyse',
         settings: 'Einstellungen',
         addVehicle: 'Fahrzeug hinzufügen',
-        buyCar: 'Auto kaufen'
+        buyCar: 'Auto kaufen',
+        allInventory: "Gesamter Bestand",
+runningAuctions: "Laufende Auktionen"
+
 
       },
 
@@ -2550,8 +2632,48 @@ export const translations = {
 
   },
   nl: {
+    "award": {
+  "carAvailableNow": "De auto is direct beschikbaar. Betaling binnen 48 uur verschuldigd.",
+  "carAtNetwork": "De auto bevindt zich bij Car Network Europe. Betaling 48u na levering verschuldigd.",
+  "deliveryPending": "Levering bezig",
+  "reserve": "Reserveren",
+  "highestBid": "Hoogste bod",
+  "biddingRequests": "Biedingsaanvragen",
+  "activeBids": "Actieve biedingen",
+  "recentlySold": "Recent verkocht",
+  "noActiveBids": "Geen actieve biedingsaanvragen.",
+  "noSoldCars": "Nog geen auto's verkocht.",
+  "selectConversation": "Selecteer een biedingsaanvraag om verder te gaan.",
+  "awardCar": "Auto toewijzen",
+  "carDetails": "Autogegevens",
+  "highest": "Hoogste",
+  "broker": "Makelaar",
+  "awardedTo": "Toegewezen aan",
+  "soldOn": "Verkocht op",
+  "awardToSelected": "Toewijzen aan geselecteerde bieder",
+  "awarding": "Wordt toegewezen...",
+  "success": "Auto succesvol toegewezen!",
+  "failed": "Fout bij het toewijzen van de auto. Probeer het opnieuw."
+}
+,
     ...newsLatterTranslations.nl,
 
+  "saleType": {
+    "title": "Selecteer Verkoopmethode",
+    "description": "Kies hoe u uw voertuig wilt verkopen.",
+    "directBuy": {
+      "label": "Direct Kopen",
+      "description": "Stel een vaste prijs in. Gebruikers kunnen direct kopen of biedingen doen, die u kunt accepteren of weigeren."
+    },
+    "generalAuction": {
+      "label": "Algemene Veiling",
+      "description": "Voer een blinde veiling uit met een vast tijdsvenster. Bieders zien elkaars biedingen niet. U bent niet verplicht het hoogste bod te accepteren."
+    },
+    "privateSale": {
+      "label": "Privéverkoop",
+      "description": "Uw aanbod is verborgen voor het publiek. Alleen mensen met uw unieke link kunnen het bekijken en bieden."
+    }
+  },
 
     notificationsBid: {
       title: "Meldingen",
@@ -3353,7 +3475,10 @@ export const translations = {
         analytics: 'Analyse',
         settings: 'Instellingen',
         addVehicle: 'Voertuig toevoegen',
-        buyCar: 'Auto kopen'
+        buyCar: 'Auto kopen',
+        allInventory: "Alle voorraad",
+runningAuctions: "Lopende veilingen"
+
 
       },
 

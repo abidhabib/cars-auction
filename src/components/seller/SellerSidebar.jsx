@@ -1,8 +1,8 @@
 // src/components/seller/SellerSidebar.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { useAuth } from '../../context/AuthContext'; // For logout
+import { useAuth } from '../../context/AuthContext';
 import { 
   FiHome, 
   FiPackage, 
@@ -15,19 +15,34 @@ import {
   FiPlus,
   FiChevronLeft,
   FiChevronRight,
-  FiUser
+  FiUser,
+  FiChevronDown,
+  FiChevronUp
 } from 'react-icons/fi';
 
 const SellerSidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const { t } = useLanguage();
-  const { logout } = useAuth(); // Assuming you have a logout function in AuthContext
+  const { logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Map sidebar items to routes
+  // State to control inventory submenu
+  const [inventoryExpanded, setInventoryExpanded] = useState(() => {
+    return location.pathname.startsWith('/Dashboard/inventory');
+  });
+
   const topItems = [
     { id: 'overview', label: t('sellerDashboard.sidebar.overview') || 'Overview', icon: <FiHome className="h-5 w-5" />, path: '/Dashboard' },
-    { id: 'inventory', label: t('sellerDashboard.sidebar.inventory') || 'My Inventory', icon: <FiPackage className="h-5 w-5" />, path: '/Dashboard/inventory' },
+    {
+      id: 'inventory',
+      label: t('sellerDashboard.sidebar.inventory') || 'My Inventory',
+      icon: <FiPackage className="h-5 w-5" />,
+      hasSubmenu: true,
+      submenu: [
+        { id: 'all', label: t('sellerDashboard.sidebar.allInventory') || 'All Inventory', path: '/Dashboard/inventory' },
+        { id: 'biddings', label: t('sellerDashboard.sidebar.runningAuctions') || 'Running Auctions', path: '/Dashboard/inventory/award' }
+      ]
+    },
     { id: 'add', label: t('sellerDashboard.sidebar.addVehicle') || 'Add Vehicle', icon: <FiPlus className="h-5 w-5" />, path: '/Dashboard/add' },
     { id: 'buy', label: t('sellerDashboard.sidebar.buyCar') || 'Buy Cars', icon: <FiShoppingCart className="h-5 w-5" />, path: '/Dashboard/buy' },
     { id: 'messages', label: t('sellerDashboard.sidebar.messages') || 'Messages', icon: <FiMessageSquare className="h-5 w-5" />, path: '/Dashboard/messages' }
@@ -43,23 +58,21 @@ const SellerSidebar = ({ sidebarOpen, setSidebarOpen }) => {
     if (item.id === 'logout') {
       if (window.confirm(t('sellerDashboard.logoutConfirm') || 'Are you sure you want to log out?')) {
         logout();
-        // AuthProvider should handle redirect to /login
       }
       return;
     }
 
-    // Navigate to the route
-    navigate(item.path);
+    if (item.hasSubmenu) {
+      setInventoryExpanded(!inventoryExpanded);
+    } else {
+      navigate(item.path);
+    }
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const isActive = (path) => location.pathname === path;
+  const isInventoryActive = location.pathname.startsWith('/Dashboard/inventory');
 
-  // Helper: Check if current path matches item path (exact match)
-  const isActive = (path) => {
-    return location.pathname === path;
-  };
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   return (
     <div className={`h-full flex flex-col transition-all duration-300 ${sidebarOpen ? 'p-4' : 'p-2'}`}>
@@ -67,21 +80,44 @@ const SellerSidebar = ({ sidebarOpen, setSidebarOpen }) => {
         <nav className="flex-1 py-6 overflow-y-auto">
           <div className="space-y-1 px-2">
             {topItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleItemClick(item)}
-                className={`w-full flex items-center transition-all duration-200 rounded-xl ${
-                  isActive(item.path)
-                    ? 'bg-white bg-opacity-20 text-white'
-                    : 'text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-10'
-                } ${sidebarOpen ? 'px-4 py-3' : 'justify-center h-12 mx-auto'}`}
-                title={sidebarOpen ? '' : item.label}
-              >
-                <span className="flex-shrink-0">{item.icon}</span>
-                {sidebarOpen && (
-                  <span className="ml-3 text-sm font-medium">{item.label}</span>
+              <div key={item.id}>
+                <button
+                  onClick={() => handleItemClick(item)}
+                  className={`w-full flex items-center justify-between transition-all duration-200 rounded-xl ${
+                    (isInventoryActive && item.id === 'inventory') || isActive(item.path)
+                      ? 'bg-white bg-opacity-20 text-white'
+                      : 'text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-10'
+                  } ${sidebarOpen ? 'px-4 py-3' : 'justify-center h-12 mx-auto'}`}
+                  title={sidebarOpen ? '' : item.label}
+                >
+                  <span className="flex items-center">
+                    <span className="flex-shrink-0">{item.icon}</span>
+                    {sidebarOpen && <span className="ml-3 text-sm font-medium">{item.label}</span>}
+                  </span>
+                  {sidebarOpen && item.hasSubmenu && (
+                    <span>{inventoryExpanded ? <FiChevronUp className="h-4 w-4" /> : <FiChevronDown className="h-4 w-4" />}</span>
+                  )}
+                </button>
+
+                {/* Submenu */}
+                {item.hasSubmenu && inventoryExpanded && sidebarOpen && (
+                  <div className="ml-4 mt-1 space-y-1">
+                    {item.submenu.map((sub) => (
+                      <button
+                        key={sub.id}
+                        onClick={() => navigate(sub.path)}
+                        className={`w-full text-left px-4 py-2 text-sm rounded-lg transition-colors ${
+                          isActive(sub.path)
+                            ? 'bg-white bg-opacity-20 text-white'
+                            : 'text-white text-opacity-80 hover:bg-white hover:bg-opacity-10'
+                        }`}
+                      >
+                        {sub.label}
+                      </button>
+                    ))}
+                  </div>
                 )}
-              </button>
+              </div>
             ))}
           </div>
         </nav>
@@ -100,13 +136,10 @@ const SellerSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 title={sidebarOpen ? '' : item.label}
               >
                 <span className="flex-shrink-0">{item.icon}</span>
-                {sidebarOpen && (
-                  <span className="ml-3 text-sm font-medium">{item.label}</span>
-                )}
+                {sidebarOpen && <span className="ml-3 text-sm font-medium">{item.label}</span>}
               </button>
             ))}
-            
-            {/* Collapse/Expand Button */}
+
             <button
               onClick={toggleSidebar}
               className={`w-full flex items-center transition-all duration-200 rounded-xl text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-10 ${
@@ -130,4 +163,4 @@ const SellerSidebar = ({ sidebarOpen, setSidebarOpen }) => {
   );
 };
 
-export default SellerSidebar; 
+export default SellerSidebar;

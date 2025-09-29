@@ -1,9 +1,109 @@
-// src/data/mockCarsData.js
+// src/mock/data/mockCarsData.js
 export const loadMockCarsData = () => {
+  const now = new Date();
+
+  // Helper to generate realistic bids per car
+  const generateBids = (car, count = 6) => {
+    const base = car.highestBid || car.price || 50000;
+    const reserve = car.reservePrice || base * 0.9;
+    const names = [
+      'AutoTrade GmbH',
+      'Luxury Motors Ltd.',
+      'EuroCar Sales',
+      'Private Buyer',
+      'Global Auto Imports',
+      'DeutschAuto',
+      'Premium Wheels',
+      'City Motors',
+      'Elite Car Group',
+      'Bavarian Autos',
+      'Amsterdam Auto BV',
+      'Brussels Car Trade',
+    ];
+
+    return Array.from({ length: count }, (_, i) => {
+      const amount = Math.max(reserve + 500, base - i * Math.floor(Math.random() * 1800));
+      return {
+        id: `bid_${car.id}_${i + 1}`,
+        buyerName: names[(car.id * 10 + i) % names.length],
+        amount,
+        note: i === 0 ? 'Ready for immediate payment' : i === 2 ? 'Need 5 days for financing' : '',
+        broker: i % 3 === 0 ? 'AutoTrade International' : i % 3 === 1 ? 'EuroCar Sales' : '',
+        timestamp: new Date(now.getTime() - Math.floor(Math.random() * 7) * 86400000),
+      };
+    }).filter(bid => bid.amount > reserve);
+  };
+
+  // Helper to generate sale process data based on location type and status
+  const generateSaleProcess = (car, status) => {
+    const baseData = {
+      status,
+      awardedTo: status !== 'active' ? {
+        buyerName: generateBids(car, 1)[0]?.buyerName || 'AutoTrade GmbH',
+        bidId: `bid_${car.id}_1`,
+        amount: car.highestBid || car.price
+      } : null,
+      paymentDeadline: status !== 'active' ? new Date(now.getTime() + 7 * 86400000) : null,
+      delivery: status !== 'active' ? {
+        status: car.locationType === 'in-stock' ? 'ready-for-pickup' : 'scheduled',
+        expectedAt: car.locationType === 'in-stock' ? new Date(now.getTime() + 2 * 86400000) : new Date(now.getTime() + 14 * 86400000),
+        trackingId: car.locationType === 'network' ? `TRK${car.id.toString().padStart(6, '0')}` : null
+      } : null,
+      documents: {
+        proformaSent: status !== 'active',
+        sellerInvoiceUploaded: status === 'delivered' || status === 'closed',
+        ascriptionCode: status === 'closed' ? `ASC${car.id.toString().padStart(6, '0')}` : ''
+      }
+    };
+
+    return baseData;
+  };
+
+  // Helper to generate invoice data
+  const generateInvoices = (car, saleProcessStatus) => {
+    const amount = car.highestBid || car.price;
+    const baseUrl = `https://api.example.com/invoices/${car.id}`;
+    
+    return {
+      proforma: saleProcessStatus !== 'active' ? {
+        id: `PROF${car.id.toString().padStart(6, '0')}`,
+        amount,
+        pdfUrl: `${baseUrl}/proforma.pdf`
+      } : null,
+      final: (saleProcessStatus === 'delivered' || saleProcessStatus === 'closed') ? {
+        id: `INV${car.id.toString().padStart(6, '0')}`,
+        uploadedAt: new Date(now.getTime() - 2 * 86400000),
+        status: saleProcessStatus === 'closed' ? 'paid' : 'pending',
+        pdfUrl: saleProcessStatus === 'closed' ? `${baseUrl}/final.pdf` : null
+      } : null
+    };
+  };
+// Inside loadMockCarsData(), before `return [...]`
+const generateMockBids = (car) => {
+  const base = car.highestBid || car.price || 50000;
+  const reserve = car.reservePrice || base * 0.9;
+  const count = Math.floor(Math.random() * 4) + 3; // 3–6 bids
+  const names = [
+    'AutoTrade GmbH', 'Luxury Motors Ltd.', 'EuroCar Sales', 'Private Buyer',
+    'Global Auto Imports', 'DeutschAuto', 'Premium Wheels', 'City Motors'
+  ];
+  return Array.from({ length: count }, (_, i) => {
+    const amount = Math.max(reserve + 500, base - i * Math.floor(Math.random() * 2000));
+    return {
+      id: `bid_${car.id}_${i + 1}`,
+      buyerName: names[(car.id * 10 + i) % names.length],
+      amount,
+      note: i === 0 ? 'Ready for immediate payment' : i === 2 ? 'Need 5 days for financing' : '',
+      broker: i % 3 === 0 ? 'AutoTrade International' : i % 3 === 1 ? 'EuroCar Sales' : '',
+      timestamp: new Date(Date.now() - Math.floor(Math.random() * 5) * 86400000),
+    };
+  }).filter(bid => bid.amount > reserve);
+};
   return [
-    // Car 1: BMW X5
+    // Car 1: BMW X5 — in-stock (awarded, ready for payment)
     {
-      id:1,
+      id: 1,
+  mockBids: generateMockBids({ id: 1, highestBid: 54800, reservePrice: 50000, price: 55000 }),
       saleType: 'general-auction',
       auctionTiming: {
         preset: '7-days',
@@ -28,46 +128,20 @@ export const loadMockCarsData = () => {
       },
       mediaAndDescription: {
         headline: '2022 BMW X5 xDrive40d M Sport in Excellent Condition',
-        description: 'Presenting a stunning 2022 BMW X5 xDrive40d M Sport. This vehicle has been meticulously maintained with a full BMW service history. It features a powerful 3.0L diesel engine, luxurious Vernasca leather interior, panoramic sunroof, Harman Kardon sound system, and advanced driver assistance technologies like adaptive cruise control and lane departure warning. The M Sport package gives it a distinctive and sporty appearance. Perfect for family adventures or executive travel.',
+        description: 'Presenting a stunning 2022 BMW X5 xDrive40d M Sport. This vehicle has been meticulously maintained with a full BMW service history.',
         photos: [
           'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1603712610494-73e5516d75f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80',
-          'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80'
+          'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80'
         ],
         serviceHistory: 'full',
         hasAccident: false,
         accidentDetails: ''
       },
       damagePoints: [],
-      selectedOptions: [
-        'alloy-wheels',
-        'led-lighting',
-        'panoramic-roof',
-        'parking-sensors',
-        'backup-camera',
-        'tow-hitch'
-      ],
+      selectedOptions: ['alloy-wheels', 'led-lighting', 'panoramic-roof', 'parking-sensors', 'backup-camera', 'tow-hitch'],
       conditionAssessment: {
-        technicalChecklist: {
-          engine: 'good',
-          transmission: 'good',
-          brakes: 'good',
-          suspension: 'good',
-          electrics: 'good',
-          exhaust: 'good'
-        },
-        interiorChecklist: {
-          seats: 'good',
-          dashboard: 'good',
-          carpets: 'good',
-          headliner: 'good',
-          controls: 'good'
-        },
+        technicalChecklist: { engine: 'good', transmission: 'good', brakes: 'good', suspension: 'good', electrics: 'good', exhaust: 'good' },
+        interiorChecklist: { seats: 'good', dashboard: 'good', carpets: 'good', headliner: 'good', controls: 'good' },
         tyreReport: {
           frontLeft: { brand: 'Michelin', treadDepth: 7.0, condition: 'good' },
           frontRight: { brand: 'Michelin', treadDepth: 7.0, condition: 'good' },
@@ -85,7 +159,7 @@ export const loadMockCarsData = () => {
       auctionType: 'public',
       carType: 'SUV',
       vatStatus: 'deductible',
-      status: 'active',
+      status: 'awarded', // Changed from 'active'
       price: 55000,
       currency: 'EUR',
       fuelType: 'Diesel',
@@ -102,23 +176,25 @@ export const loadMockCarsData = () => {
         location: 'Berlin, Germany',
         memberSince: '2018-03-15'
       },
-      // --- NEW FIELDS ---
       rdwHistory: [
         { type: 'Import', date: '2022-05-10', description: 'Vehicle imported from factory in Germany' },
-        { type: 'Registration', date: '2022-06-15', description: 'First registered in Berlin' },
-        { type: 'APK', date: '2023-06-10', description: 'Passed annual inspection with no remarks' },
-        { type: 'Owner Change', date: '2023-08-20', description: 'Transferred to current owner' },
-        { type: 'APK', date: '2024-06-12', description: 'Passed annual inspection with no remarks' }
+        { type: 'Registration', date: '2022-06-15', description: 'First registered in Berlin' }
       ],
       damageGrid: [
-        { part: 'Front Bumper', type: 'Minor Scratch', photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80' },
-        { part: 'Rear Left Fender', type: 'Paint Chip', photo: 'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80' }
+        { part: 'Front Bumper', type: 'Minor Scratch', photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80' }
       ],
-      stockId: 'STK-BMW-X5-001'
+      stockId: 'STK-BMW-X5-001',
+      locationType: 'in-stock',
+      saleProcess: generateSaleProcess({ id: 1, highestBid: 54800, price: 55000, locationType: 'in-stock' }, 'awarded'),
+      invoices: generateInvoices({ id: 1, highestBid: 54800, price: 55000 }, 'awarded'),
+      mockBids: generateBids({ id: 1, highestBid: 54800, reservePrice: 50000 })
     },
-    // Car 2: Mercedes-Benz GLE
+
+    // Car 2: Mercedes-Benz GLE — at network (delivered, awaiting payment)
     {
-      id:2,
+      id: 2,
+        mockBids: generateMockBids({ id: 2, highestBid: 54700, reservePrice: 60000, price: 88000 }),
+
       saleType: 'direct-buy',
       auctionTiming: null,
       vehicleIdentification: {
@@ -137,45 +213,19 @@ export const loadMockCarsData = () => {
       mediaAndDescription: {
         directBuyPrice: 62000,
         headline: '2023 Mercedes-Benz GLE 450e Hybrid AMG Line - Brand New!',
-        description: 'Absolutely stunning and nearly new 2023 Mercedes-Benz GLE 450e Hybrid from the AMG Line. This vehicle is in pristine showroom condition with only 18,000km on the odometer. It comes equipped with the latest MBUX infotainment system, Burmester 3D surround sound, massage seats, air suspension, and the powerful plug-in hybrid powertrain offering an electric range of approximately 80km. A full Mercedes-Benz service history is included.',
+        description: 'Absolutely stunning and nearly new 2023 Mercedes-Benz GLE 450e Hybrid from the AMG Line.',
         photos: [
-          'https://images.unsplash.com/photo-1622933017736-231a5a17f6c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1622933017736-231a5a17f6c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1555212697-194d092e3b8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1622933017736-231a5a17f6c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1555212697-194d092e3b8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80'
+          'https://images.unsplash.com/photo-1622933017736-231a5a17f6c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'
         ],
         serviceHistory: 'full',
         hasAccident: false,
         accidentDetails: ''
       },
       damagePoints: [],
-      selectedOptions: [
-        'alloy-wheels',
-        'led-lighting',
-        'panoramic-roof',
-        'air-suspension',
-        'tow-hitch',
-        'xenon-headlights'
-      ],
+      selectedOptions: ['alloy-wheels', 'led-lighting', 'panoramic-roof', 'air-suspension', 'tow-hitch', 'xenon-headlights'],
       conditionAssessment: {
-        technicalChecklist: {
-          engine: 'good',
-          transmission: 'good',
-          brakes: 'good',
-          suspension: 'good',
-          electrics: 'good',
-          exhaust: 'good'
-        },
-        interiorChecklist: {
-          seats: 'good',
-          dashboard: 'good',
-          carpets: 'good',
-          headliner: 'good',
-          controls: 'good'
-        },
+        technicalChecklist: { engine: 'good', transmission: 'good', brakes: 'good', suspension: 'good', electrics: 'good', exhaust: 'good' },
+        interiorChecklist: { seats: 'good', dashboard: 'good', carpets: 'good', headliner: 'good', controls: 'good' },
         tyreReport: {
           frontLeft: { brand: 'Continental', treadDepth: 8.0, condition: 'good' },
           frontRight: { brand: 'Continental', treadDepth: 8.0, condition: 'good' },
@@ -188,15 +238,14 @@ export const loadMockCarsData = () => {
       auctionType: 'private',
       carType: 'SUV',
       vatStatus: 'deductible',
-      status: 'active',
+      status: 'delivered', // Changed from 'active'
       price: 62000,
       currency: 'EUR',
       fuelType: 'Hybrid',
       transmission: 'Automatic',
       color: 'White',
       condition: 'Like New',
-      image:          'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-
+      image: 'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
       seller: {
         id: 'seller_002',
         name: 'Luxury Motors Ltd.',
@@ -208,15 +257,21 @@ export const loadMockCarsData = () => {
       },
       rdwHistory: [
         { type: 'Import', date: '2023-02-01', description: 'Vehicle imported from factory in Germany' },
-        { type: 'Registration', date: '2023-03-22', description: 'First registered in Hamburg' },
-        { type: 'APK', date: '2024-03-20', description: 'Passed annual inspection with no remarks' }
+        { type: 'Registration', date: '2023-03-22', description: 'First registered in Hamburg' }
       ],
       damageGrid: [],
-      stockId: 'STK-MB-GLE-002'
+      stockId: 'STK-MB-GLE-002',
+      locationType: 'network',
+      saleProcess: generateSaleProcess({ id: 2, highestBid: 62000, price: 62000, locationType: 'network' }, 'delivered'),
+      invoices: generateInvoices({ id: 2, highestBid: 62000, price: 62000 }, 'delivered'),
+      mockBids: generateBids({ id: 2, highestBid: 62000, reservePrice: 58000 })
     },
-    // Car 3: Audi Q7
+
+    // Car 3: Audi Q7 — in-stock (closed, completed sale)
     {
       id: 3,
+              mockBids: generateMockBids({ id: 3, highestBid: 56600, reservePrice: 30000, price: 55900 }),
+
       saleType: 'private-sale',
       auctionTiming: null,
       vehicleIdentification: {
@@ -234,45 +289,19 @@ export const loadMockCarsData = () => {
       },
       mediaAndDescription: {
         headline: '2022 Audi Q7 55 TFSI quattro S Line - Well-Maintained Family SUV',
-        description: 'A spacious and comfortable 2022 Audi Q7 S Line, ideal for family life. This vehicle has been well looked after and comes with a partial Audi service history. Features include tri-zone climate control, MMI Navigation plus, Bang & Olufsen 3D sound system, panoramic sunroof, and Audi\'s renowned quattro all-wheel drive. The third row of seats provides flexibility for larger families or extra cargo space when folded down. Recent maintenance includes new brake pads and an oil change.',
+        description: 'A spacious and comfortable 2022 Audi Q7 S Line, ideal for family life.',
         photos: [
-          'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1603712610494-73e5516d75f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80',
-          'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80'
+          'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'
         ],
         serviceHistory: 'partial',
         hasAccident: true,
-        accidentDetails: 'Minor fender bender on the rear left corner in October 2023. The bumper was professionally repainted to match the original color. No structural damage or mechanical issues resulted from the incident. Repairs were completed at an Audi authorized center.'
+        accidentDetails: 'Minor fender bender on the rear left corner in October 2023...'
       },
       damagePoints: ['rear-left'],
-      selectedOptions: [
-        'alloy-wheels',
-        'metallic-paint',
-        'sunroof',
-        'parking-sensors',
-        'backup-camera'
-      ],
+      selectedOptions: ['alloy-wheels', 'metallic-paint', 'sunroof', 'parking-sensors', 'backup-camera'],
       conditionAssessment: {
-        technicalChecklist: {
-          engine: 'good',
-          transmission: 'good',
-          brakes: 'average',
-          suspension: 'good',
-          electrics: 'good',
-          exhaust: 'good'
-        },
-        interiorChecklist: {
-          seats: 'average',
-          dashboard: 'good',
-          carpets: 'good',
-          headliner: 'good',
-          controls: 'good'
-        },
+        technicalChecklist: { engine: 'good', transmission: 'good', brakes: 'average', suspension: 'good', electrics: 'good', exhaust: 'good' },
+        interiorChecklist: { seats: 'average', dashboard: 'good', carpets: 'good', headliner: 'good', controls: 'good' },
         tyreReport: {
           frontLeft: { brand: 'Bridgestone', treadDepth: 5.5, condition: 'average' },
           frontRight: { brand: 'Bridgestone', treadDepth: 5.5, condition: 'average' },
@@ -285,7 +314,7 @@ export const loadMockCarsData = () => {
       auctionType: 'private',
       carType: 'SUV',
       vatStatus: 'not-deductible',
-      status: 'active',
+      status: 'closed', // Completed sale
       price: 48000,
       currency: 'EUR',
       fuelType: 'Petrol',
@@ -304,19 +333,23 @@ export const loadMockCarsData = () => {
       },
       rdwHistory: [
         { type: 'Import', date: '2021-12-01', description: 'Vehicle imported from factory in Germany' },
-        { type: 'Registration', date: '2022-01-10', description: 'First registered in Munich' },
-        { type: 'APK', date: '2023-01-08', description: 'Passed annual inspection with minor remarks' },
-        { type: 'Owner Change', date: '2023-04-15', description: 'Transferred to current owner' },
-        { type: 'APK', date: '2024-01-10', description: 'Passed annual inspection with no remarks' }
+        { type: 'Registration', date: '2022-01-10', description: 'First registered in Munich' }
       ],
       damageGrid: [
         { part: 'Rear Left Bumper', type: 'Repainted Area', photo: 'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80' }
       ],
-      stockId: 'STK-AUDI-Q7-003'
+      stockId: 'STK-AUDI-Q7-003',
+      locationType: 'in-stock',
+      saleProcess: generateSaleProcess({ id: 3, highestBid: 48000, price: 48000, locationType: 'in-stock' }, 'closed'),
+      invoices: generateInvoices({ id: 3, highestBid: 48000, price: 48000 }, 'closed'),
+      mockBids: generateBids({ id: 3, highestBid: 48000, reservePrice: 45000 })
     },
-    // Car 4: BMW 3 Series
+
+    // Car 4: BMW 3 Series — network (on-route, in transit)
     {
-      id:4,
+      id: 4,
+              mockBids: generateMockBids({ id: 4, highestBid: 54180, reservePrice: 6600, price: 44000 }),
+
       saleType: 'general-auction',
       auctionTiming: {
         preset: '5-days',
@@ -341,45 +374,17 @@ export const loadMockCarsData = () => {
       },
       mediaAndDescription: {
         headline: '2021 BMW 330i M Sport - Sporty Sedan with Premium Package',
-        description: 'A fantastic 2021 BMW 330i M Sport that perfectly balances performance and luxury. This vehicle has been regularly serviced and is in very good condition. It comes with the desirable M Sport package, featuring sport suspension, M aerodynamics kit, and stunning 18" M double-spoke wheels. Inside, you\'ll find Vernasca leather upholstery, a Harman Kardon sound system, wireless Apple CarPlay, and BMW\'s Driving Assistant Professional. Ideal for the driving enthusiast who values both comfort and agility.',
-        photos: [
-          'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1603712610494-73e5516d75f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80',
-          'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80'
-        ],
+        description: 'A fantastic 2021 BMW 330i M Sport that perfectly balances performance and luxury...',
+        photos: ['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'],
         serviceHistory: 'full',
         hasAccident: false,
         accidentDetails: ''
       },
       damagePoints: [],
-      selectedOptions: [
-        'alloy-wheels',
-        'metallic-paint',
-        'led-lighting',
-        'parking-sensors',
-        'backup-camera'
-      ],
+      selectedOptions: ['alloy-wheels', 'metallic-paint', 'led-lighting', 'parking-sensors', 'backup-camera'],
       conditionAssessment: {
-        technicalChecklist: {
-          engine: 'good',
-          transmission: 'good',
-          brakes: 'good',
-          suspension: 'good',
-          electrics: 'good',
-          exhaust: 'good'
-        },
-        interiorChecklist: {
-          seats: 'good',
-          dashboard: 'good',
-          carpets: 'average',
-          headliner: 'good',
-          controls: 'good'
-        },
+        technicalChecklist: { engine: 'good', transmission: 'good', brakes: 'good', suspension: 'good', electrics: 'good', exhaust: 'good' },
+        interiorChecklist: { seats: 'good', dashboard: 'good', carpets: 'average', headliner: 'good', controls: 'good' },
         tyreReport: {
           frontLeft: { brand: 'Goodyear', treadDepth: 4.0, condition: 'average' },
           frontRight: { brand: 'Goodyear', treadDepth: 4.0, condition: 'average' },
@@ -397,7 +402,7 @@ export const loadMockCarsData = () => {
       auctionType: 'public',
       carType: 'Sedan',
       vatStatus: 'deductible',
-      status: 'active',
+      status: 'on-route', // In transit
       price: 38000,
       currency: 'EUR',
       fuelType: 'Petrol',
@@ -416,16 +421,21 @@ export const loadMockCarsData = () => {
       },
       rdwHistory: [
         { type: 'Import', date: '2021-07-15', description: 'Vehicle imported from factory in Germany' },
-        { type: 'Registration', date: '2021-08-20', description: 'First registered in Cologne' },
-        { type: 'APK', date: '2022-08-18', description: 'Passed annual inspection with no remarks' },
-        { type: 'APK', date: '2023-08-22', description: 'Passed annual inspection with no remarks' }
+        { type: 'Registration', date: '2021-08-20', description: 'First registered in Cologne' }
       ],
       damageGrid: [],
-      stockId: 'STK-BMW-330-004'
+      stockId: 'STK-BMW-330-004',
+      locationType: 'network',
+      saleProcess: generateSaleProcess({ id: 4, highestBid: 37500, price: 38000, locationType: 'network' }, 'on-route'),
+      invoices: generateInvoices({ id: 4, highestBid: 37500, price: 38000 }, 'on-route'),
+      mockBids: generateBids({ id: 4, highestBid: 37500, reservePrice: 35000 })
     },
-    // Car 5: Volkswagen Tiguan
+
+    // Car 5: VW Tiguan — in-stock (active auction - no post-award data)
     {
       id: 5,
+              mockBids: generateMockBids({ id: 5, highestBid: 55500, reservePrice: 550000, price: 57000 }),
+
       saleType: 'general-auction',
       auctionTiming: {
         preset: '10-days',
@@ -450,44 +460,17 @@ export const loadMockCarsData = () => {
       },
       mediaAndDescription: {
         headline: '2020 Volkswagen Tiguan 2.0 TSI Life - Reliable Family Crossover',
-        description: 'A practical and reliable 2020 Volkswagen Tiguan Life, perfect for growing families. This vehicle has covered 60,000km and has been maintained according to the manufacturer\'s schedule with a partial service history. It\'s equipped with modern conveniences like keyless entry and start, automatic climate control, a touchscreen infotainment system with App-Connect, and front and rear parking sensors. The 2.0L TSI engine provides a good balance of power and efficiency. Ideal for daily commuting and weekend trips.',
-        photos: [
-          'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1603712610494-73e5516d75f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80',
-          'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80'
-        ],
+        description: 'A practical and reliable 2020 Volkswagen Tiguan Life, perfect for growing families...',
+        photos: ['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'],
         serviceHistory: 'partial',
         hasAccident: true,
-        accidentDetails: 'Minor scratches on the front bumper were noticed and professionally touched up in April 2024. The repair was purely cosmetic and does not affect the structure or function of the bumper. No other damage or repairs are recorded.'
+        accidentDetails: 'Minor scratches on the front bumper...'
       },
       damagePoints: ['front-left', 'front-right'],
-      selectedOptions: [
-        'alloy-wheels',
-        'metallic-paint',
-        'parking-sensors',
-        'backup-camera'
-      ],
+      selectedOptions: ['alloy-wheels', 'metallic-paint', 'parking-sensors', 'backup-camera'],
       conditionAssessment: {
-        technicalChecklist: {
-          engine: 'good',
-          transmission: 'good',
-          brakes: 'good',
-          suspension: 'average',
-          electrics: 'good',
-          exhaust: 'good'
-        },
-        interiorChecklist: {
-          seats: 'average',
-          dashboard: 'good',
-          carpets: 'average',
-          headliner: 'good',
-          controls: 'good'
-        },
+        technicalChecklist: { engine: 'good', transmission: 'good', brakes: 'good', suspension: 'average', electrics: 'good', exhaust: 'good' },
+        interiorChecklist: { seats: 'average', dashboard: 'good', carpets: 'average', headliner: 'good', controls: 'good' },
         tyreReport: {
           frontLeft: { brand: 'Dunlop', treadDepth: 3.0, condition: 'poor' },
           frontRight: { brand: 'Dunlop', treadDepth: 3.0, condition: 'poor' },
@@ -505,7 +488,7 @@ export const loadMockCarsData = () => {
       auctionType: 'public',
       carType: 'SUV',
       vatStatus: 'not-deductible',
-      status: 'active',
+      status: 'active', // Still active auction
       price: 28000,
       currency: 'EUR',
       fuelType: 'Petrol',
@@ -524,222 +507,16 @@ export const loadMockCarsData = () => {
       },
       rdwHistory: [
         { type: 'Import', date: '2020-10-01', description: 'Vehicle imported from factory in Germany' },
-        { type: 'Registration', date: '2020-11-15', description: 'First registered in Frankfurt' },
-        { type: 'APK', date: '2021-11-10', description: 'Passed annual inspection with no remarks' },
-        { type: 'Owner Change', date: '2022-06-05', description: 'Transferred to second owner' },
-        { type: 'APK', date: '2023-11-12', description: 'Passed annual inspection with minor scratches noted' }
+        { type: 'Registration', date: '2020-11-15', description: 'First registered in Frankfurt' }
       ],
       damageGrid: [
-        { part: 'Front Left Bumper', type: 'Scratch', photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80' },
-        { part: 'Front Right Bumper', type: 'Scratch', photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80' }
+        { part: 'Front Left Bumper', type: 'Scratch', photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80' }
       ],
-      stockId: 'STK-VW-TIG-005'
-    },
-    // Car 6: Tesla Model 3
-    {
-      id:6,
-      saleType: 'direct-buy',
-      auctionTiming: null,
-      vehicleIdentification: {
-        method: 'vin',
-        vin: '5YJ3E1EA0JF123456',
-        make: 'Tesla',
-        model: 'Model 3',
-        year: 2023,
-        trim: 'Long Range AWD',
-        mileage: 12000,
-        mileageUnit: 'km',
-        registrationDate: '2023-02-15',
-        previousOwners: 1,
-        licensePlate: 'S-EL 789'
-      },
-      mediaAndDescription: {
-        directBuyPrice: 45000,
-        headline: '2023 Tesla Model 3 Long Range - Low Mileage, Perfect Condition',
-        description: 'Immaculate 2023 Tesla Model 3 Long Range with only 12,000km. This electric vehicle features Autopilot, premium interior with vegan leather, glass roof, and premium audio system. The battery health is at 100% with maximum range maintained. Includes all software upgrades and comes with Tesla\'s remaining warranty. Supercharger capable with free supercharging transferable. A perfect eco-friendly vehicle for daily commuting with minimal running costs.',
-        photos: [
-          'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80',
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1593941707882-a5bba53377fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1603712610494-73e5516d75f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80',
-          'https://images.unsplash.com/photo-1593941707882-a5bba53377fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'
-        ],
-        serviceHistory: 'full',
-        hasAccident: false,
-        accidentDetails: ''
-      },
-      damagePoints: [],
-      selectedOptions: [
-        'alloy-wheels',
-        'led-lighting',
-        'panoramic-roof',
-        'autopilot',
-        'premium-sound'
-      ],
-      conditionAssessment: {
-        technicalChecklist: {
-          engine: 'excellent',
-          transmission: 'excellent',
-          brakes: 'good',
-          suspension: 'good',
-          electrics: 'excellent',
-          exhaust: 'n/a'
-        },
-        interiorChecklist: {
-          seats: 'excellent',
-          dashboard: 'excellent',
-          carpets: 'excellent',
-          headliner: 'excellent',
-          controls: 'excellent'
-        },
-        tyreReport: {
-          frontLeft: { brand: 'Michelin', treadDepth: 6.5, condition: 'good' },
-          frontRight: { brand: 'Michelin', treadDepth: 6.5, condition: 'good' },
-          rearLeft: { brand: 'Michelin', treadDepth: 6.0, condition: 'good' },
-          rearRight: { brand: 'Michelin', treadDepth: 6.0, condition: 'good' }
-        },
-        batteryHealth: '100%'
-      },
-      location: 'Stuttgart, Germany',
-      country: 'DE',
-      auctionType: 'private',
-      carType: 'Sedan',
-      vatStatus: 'deductible',
-      status: 'active',
-      price: 45000,
-      currency: 'EUR',
-      fuelType: 'Electric',
-      transmission: 'Automatic',
-      color: 'Red',
-      condition: 'Like New',
-      image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80',
-      seller: {
-        id: 'seller_006',
-        name: 'Eco Auto Solutions',
-        rating: 4.8,
-        reviews: 94,
-        verified: true,
-        location: 'Stuttgart, Germany',
-        memberSince: '2021-05-10'
-      },
-      rdwHistory: [
-        { type: 'Import', date: '2023-01-10', description: 'Vehicle imported from factory in Netherlands' },
-        { type: 'Registration', date: '2023-02-15', description: 'First registered in Stuttgart' },
-        { type: 'APK', date: '2024-02-10', description: 'Passed annual inspection with no remarks' }
-      ],
-      damageGrid: [],
-      stockId: 'STK-TSL-M3-006'
-    },
-    // Car 7: Porsche 911
-    {
-      id:7,
-      saleType: 'general-auction',
-      auctionTiming: {
-        preset: '3-days',
-        startDate: '2024-07-15',
-        startTime: '12:00',
-        endDate: '2024-07-18',
-        endTime: '15:00',
-        timezone: 'Europe/Berlin'
-      },
-      vehicleIdentification: {
-        method: 'vin',
-        vin: 'WP0ZZZ99ZJS123456',
-        make: 'Porsche',
-        model: '911',
-        year: 2022,
-        trim: 'Carrera S',
-        mileage: 8000,
-        mileageUnit: 'km',
-        registrationDate: '2022-09-05',
-        previousOwners: 1,
-        licensePlate: 'M-SP 911'
-      },
-      mediaAndDescription: {
-        headline: '2022 Porsche 911 Carrera S - Low Mileage Collector\'s Item',
-        description: 'Exceptional 2022 Porsche 911 Carrera S with only 8,000km. This iconic sports car features the Sports Chrono Package, Porsche Active Suspension Management, Porsche Ceramic Composite Brakes, and Burmester High-End Surround Sound System. The vehicle has never been tracked and has been meticulously maintained by Porsche Center. Includes all original documentation, two keys, and Porsche Approved Warranty. A rare opportunity to own one of the finest sports cars in existence.',
-        photos: [
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1603712610494-73e5516d75f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-          'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80',
-          'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80'
-        ],
-        serviceHistory: 'full',
-        hasAccident: false,
-        accidentDetails: ''
-      },
-      damagePoints: [],
-      selectedOptions: [
-        'alloy-wheels',
-        'led-lighting',
-        'sports-package',
-        'premium-sound',
-        'ceramic-brakes'
-      ],
-      conditionAssessment: {
-        technicalChecklist: {
-          engine: 'excellent',
-          transmission: 'excellent',
-          brakes: 'excellent',
-          suspension: 'excellent',
-          electrics: 'excellent',
-          exhaust: 'excellent'
-        },
-        interiorChecklist: {
-          seats: 'excellent',
-          dashboard: 'excellent',
-          carpets: 'excellent',
-          headliner: 'excellent',
-          controls: 'excellent'
-        },
-        tyreReport: {
-          frontLeft: { brand: 'Pirelli', treadDepth: 7.5, condition: 'excellent' },
-          frontRight: { brand: 'Pirelli', treadDepth: 7.5, condition: 'excellent' },
-          rearLeft: { brand: 'Pirelli', treadDepth: 7.0, condition: 'excellent' },
-          rearRight: { brand: 'Pirelli', treadDepth: 7.0, condition: 'excellent' }
-        }
-      },
-      auctionEnds: new Date('2024-07-18T15:00:00+02:00'),
-      bids: 32,
-      highestBid: 112500,
-      reservePrice: 100000,
-      buyItNowPrice: 125000,
-      location: 'Munich, Germany',
-      country: 'DE',
-      auctionType: 'public',
-      carType: 'Coupe',
-      vatStatus: 'deductible',
-      status: 'active',
-      price: 115000,
-      currency: 'EUR',
-      fuelType: 'Petrol',
-      transmission: 'Automatic',
-      color: 'GT Silver',
-      condition: 'Excellent',
-      image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-      seller: {
-        id: 'seller_007',
-        name: 'Premium Sports Cars',
-        rating: 4.9,
-        reviews: 67,
-        verified: true,
-        location: 'Munich, Germany',
-        memberSince: '2018-11-20'
-      },
-      rdwHistory: [
-        { type: 'Import', date: '2022-08-01', description: 'Vehicle imported from factory in Germany' },
-        { type: 'Registration', date: '2022-09-05', description: 'First registered in Munich' },
-        { type: 'APK', date: '2023-09-01', description: 'Passed annual inspection with no remarks' }
-      ],
-      damageGrid: [],
-      stockId: 'STK-POR-911-007'
+      stockId: 'STK-VW-TIG-005',
+      locationType: 'in-stock',
+      saleProcess: generateSaleProcess({ id: 5, highestBid: 27500, price: 28000, locationType: 'in-stock' }, 'active'),
+      invoices: generateInvoices({ id: 5, highestBid: 27500, price: 28000 }, 'active'),
+      mockBids: generateBids({ id: 5, highestBid: 27500, reservePrice: 25000 })
     }
   ];
 };

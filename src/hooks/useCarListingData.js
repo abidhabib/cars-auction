@@ -346,8 +346,7 @@ const useCarListingData = () => {
     }
   };
 
-  // --- Return Values ---
-// --- Return Values ---
+
   return {
     // State
     saleType, setSaleType,

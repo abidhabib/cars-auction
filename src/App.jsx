@@ -16,7 +16,10 @@ import SplashScreen from './components/common/SplashScreen';
 import AppLayout from './components/layout/AppLayout';
 import SellerDashboard from './pages/seller/SellerDashboard';
 import NewsletterPage from './pages/NewsletterPage/NewsletterPage';
-
+import AwardCarPage from './components/seller/AwardCarPage';
+import InvoicePage from './components/seller/InvoicePage';
+import PaymentSuccessPage from './components/seller/PaymentSuccessPage';
+import PaymentFailedPage from './components/seller/PaymentFailedPage';
 // Lazy-loaded public pages
 const Home = React.lazy(() => import('./pages/Home'));
 const Login = React.lazy(() => import('./pages/auth/Login'));
@@ -222,6 +225,11 @@ function App() {
   <Route path="buy/:id/bid" element={<BiddingPage />} />
   <Route path="profile" element={<Profile />} />
   <Route path="settings" element={<SettingsPage />} />
+  <Route path="inventory/award" element={<AwardCarPage />} />
+<Route path="inventory/:id/invoice" element={<InvoicePage />} />
+<Route path="buy/:id/invoice" element={<InvoicePage />} />
+<Route path="payment/success" element={<PaymentSuccessPage />} />
+<Route path="payment/failed" element={<PaymentFailedPage />} />
   <Route path="*" element={<Navigate to="/Dashboard" replace />} />
 </Route>
                   {/* Root redirect */}

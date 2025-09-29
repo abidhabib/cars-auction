@@ -9,15 +9,12 @@ import SellerHeader from '../../components/seller/SellerHeader';
 const SellerDashboard = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
 
 
-  // Optional: Handle global search → redirect to /Dashboard/buy
   const handleCarSelectFromSearch = (car) => {
-    // You can pass car via state or context, or just navigate
     navigate('/Dashboard/buy', { state: { selectedCar: car } });
   };
 
