@@ -307,7 +307,7 @@ const BiddingChatLayout = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-80px)] bg-gray-100">
+    <div className="flex h-[calc(100vh-80px)] bg-gray-100 rounded-lg">
       <div className="w-80 bg-white border-r flex flex-col">
         <div className="p-5 border-b border-gray-200">
           <h1 className="text-lg font-bold text-gray-900">{t('award.biddingRequests') || 'Bidding Requests'}</h1>
@@ -363,4 +363,4 @@ const BiddingChatLayout = () => {
   );
 };
 
-export default BiddingChatLayout;
+export default BiddingChatLayout; 

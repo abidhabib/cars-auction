@@ -33,29 +33,14 @@ import OverviewTab from './components/seller/OverviewTab';
 import InventoryTab from './components/seller/InventoryTab';
 import AddCarListing from './components/seller/AddCarListing';
 import MessagesTab from './components/seller/MessagesTab';
-import AnalyticsTab from './components/seller/AnalyticsTab';
 import BuyCarsTab from './components/seller/BuyCarsTab';
 import Profile from './pages/profile/Profile';
-import { FiSettings } from 'react-icons/fi';
 import VehicleDetailPage from './components/seller/VehicleDetailPage';
 import EditCarListingWrapper from './components/seller/EditCarListingWrapper';
 import BuyCarDetailPage from './components/seller/BuyCarDetailPage';
 import BiddingPage from './components/seller/BiddingPage';
 import SellerInvoicePage from './components/seller/SellerInvoicePage';
-const SettingsPage = () => {
-  const { t } = useLanguage();
-  return (
-    <div className="text-center py-12">
-      <FiSettings className="mx-auto h-12 w-12 text-gray-400" />
-      <h3 className="mt-2 text-lg font-medium text-gray-900">
-        {t('sellerDashboard.sidebar.settings') || 'Settings'}
-      </h3>
-      <p className="mt-1 text-sm text-gray-500">
-        {t('sellerDashboard.comingSoonDesc') || 'This section is under development.'}
-      </p>
-    </div>
-  );
-};
+
 const SellerDashboardLayout = () => {
   return (
     <SellerProtectedRoute>
@@ -219,12 +204,10 @@ function App() {
 
   <Route path="add" element={<AddCarListing />} />
   <Route path="messages" element={<MessagesTab />} />
-  <Route path="analytics" element={<AnalyticsTab />} />
   <Route path="buy" element={<BuyCarsTab />} />
     <Route path="buy/:id" element={<BuyCarDetailPage />} />
   <Route path="buy/:id/bid" element={<BiddingPage />} />
   <Route path="profile" element={<Profile />} />
-  <Route path="settings" element={<SettingsPage />} />
   <Route path="inventory/award" element={<AwardCarPage />} />
 <Route path="payment/success" element={<PaymentSuccessPage />} />
 <Route path="payment/failed" element={<PaymentFailedPage />} />

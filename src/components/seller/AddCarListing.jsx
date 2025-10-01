@@ -105,73 +105,104 @@ const AddCarListing = () => {
     </div>
   );
 
-  const renderStep1_SaleType = () => (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">{t('addCarListing.stepDetails.step1.title') || 'Select Sale Type'}</h2>
-        <p className="text-gray-600 mt-2">{t('addCarListing.stepDetails.step1.description') || 'Choose how you want to sell your vehicle.'}</p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {SALE_TYPES.map((type) => (
-          <div
-            key={type.id}
-            onClick={() => handleSaleTypeSelect(type.id)}
-            className={`border-2 rounded-xl p-6 cursor-pointer transition-all duration-300 ${
-              saleType === type.id
-                ? 'border-[#3b396d] bg-[#3b396d]/5 ring-2 ring-[#3b396d]/20'
-                : 'border-gray-200 hover:border-[#3b396d] hover:bg-gray-50'
-            }`}
-          >
-            <div className="flex flex-col items-center text-center">
-              <div className={`p-3 rounded-full mb-4 ${
-                saleType === type.id ? 'bg-[#3b396d] text-white' : ''
-              }`}>
-                   </div>
-              <h3 className="font-semibold text-gray-900 mb-2">{type.title}</h3>
-              <p className="text-sm text-gray-600">{type.description}</p>
-            </div>
+const renderStep1_SaleType = () => (
+  <div className="space-y-8">
+    {/* Header */}
+    <div className="text-center max-w-2xl mx-auto">
+      <h2 className="text-2xl font-bold text-gray-900">
+        {t('addCarListing.stepDetails.step1.title') || 'Select Sale Type'}
+      </h2>
+      <p className="text-gray-600 mt-2">
+        {t('addCarListing.stepDetails.step1.description') || 'Choose how you want to sell your vehicle.'}
+      </p>
+    </div>
+
+    {/* Sale Type Cards */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {SALE_TYPES.map((type) => (
+        <div
+          key={type.id}
+          onClick={() => handleSaleTypeSelect(type.id)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === 'Enter' && handleSaleTypeSelect(type.id)}
+          className={`border-2 rounded-xl p-6 cursor-pointer transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:ring-offset-2 ${
+            saleType === type.id
+              ? 'border-[#3b396d] bg-[#3b396d]/5 ring-2 ring-[#3b396d]/20'
+              : 'border-gray-200 hover:border-[#3b396d] hover:bg-gray-50'
+          }`}
+        >
+          <div className="flex flex-col items-center text-center">
+            {/* Optional: Add icon here if available */}
+            {/* <div className={`p-3 rounded-full mb-4 ${saleType === type.id ? 'bg-[#3b396d] text-white' : 'bg-gray-100 text-gray-600'}`}>
+              {type.icon}
+            </div> */}
+
+            <h3 className="font-semibold text-gray-900 text-lg mb-2">{type.title}</h3>
+            <p className="text-sm text-gray-600">{type.description}</p>
           </div>
-        ))}
-      </div>
-      {errors.saleType && <p className="text-red-600 text-sm mt-2">{errors.saleType}</p>}
-      {/* Conditional Direct Buy Price Input */}
-      {saleType === 'direct-buy' && (
-        <div className="mt-8 p-6 bg-[#f8f9ff] rounded-lg border border-gray-200">
-          <label htmlFor="directBuyPrice" className="block text-sm font-medium text-gray-700 mb-3">
-            {t('addCarListing.saleTypes.directBuy.title') || 'Direct Buy Price ($)'}
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiDollarSign className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="number"
-              id="directBuyPrice"
-              name="directBuyPrice"
-              value={mediaAndDescription.directBuyPrice || ''}
-              onChange={(e) => setMediaAndDescription(prev => ({ ...prev, directBuyPrice: e.target.value }))}
-              className="block text-sm w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-[#3b396d] focus:border-[#3b396d] transition"
-              placeholder={t('addCarListing.saleTypes.directBuy.description') || 'Enter price'}
-            />
-          </div>
-          {errors.directBuyPrice && <p className="text-red-600 text-sm mt-2">{errors.directBuyPrice}</p>}
         </div>
-      )}
-      {saleType === 'private-sale' && (
-        <div className="mt-6 p-5 bg-yellow-50 rounded-lg border border-yellow-200 flex items-start">
+      ))}
+    </div>
+
+    {/* Validation Error */}
+    {errors.saleType && (
+      <p className="text-red-600 text-sm text-center mt-2">{errors.saleType}</p>
+    )}
+
+    {/* Conditional: Direct Buy Price */}
+    {saleType === 'direct-buy' && (
+      <div className="mt-8 p-6 bg-[#f8f9ff] rounded-lg border border-gray-200 max-w-md mx-auto">
+        <label htmlFor="directBuyPrice" className="block text-sm font-medium text-gray-700 mb-3">
+          {t('addCarListing.saleTypes.directBuy.title') || 'Direct Buy Price ($)'}
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FiDollarSign className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            type="number"
+            id="directBuyPrice"
+            name="directBuyPrice"
+            value={mediaAndDescription.directBuyPrice || ''}
+            onChange={(e) =>
+              setMediaAndDescription((prev) => ({
+                ...prev,
+                directBuyPrice: e.target.value,
+              }))
+            }
+            min="0"
+            step="100"
+            className="block w-full pl-10 pr-3 py-3 text-sm border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#3b396d] focus:border-[#3b396d] transition"
+            placeholder={t('addCarListing.saleTypes.directBuy.description') || 'Enter price'}
+            aria-invalid={!!errors.directBuyPrice}
+          />
+        </div>
+        {errors.directBuyPrice && (
+          <p className="text-red-600 text-sm mt-2">{errors.directBuyPrice}</p>
+        )}
+      </div>
+    )}
+
+    {/* Conditional: Private Sale Note */}
+    {saleType === 'private-sale' && (
+      <div className="mt-6 p-5 bg-yellow-50 rounded-lg border border-yellow-200 max-w-2xl mx-auto">
+        <div className="flex items-start">
           <FiInfo className="h-5 w-5 text-yellow-600 mt-0.5 mr-3 flex-shrink-0" />
           <div>
             <p className="text-sm font-medium text-yellow-800">
               {t('addCarListing.stepDetails.step1.privateSaleNoteTitle') || 'Private Listing Confirmed'}
             </p>
             <p className="text-xs text-yellow-700 mt-1">
-              {t('addCarListing.stepDetails.step1.privateSaleNoteDesc') || 'Your listing will not appear in public searches. You can share the unique link with potential buyers.'}
+              {t('addCarListing.stepDetails.step1.privateSaleNoteDesc') ||
+                'Your listing will not appear in public searches. You can share the unique link with potential buyers.'}
             </p>
           </div>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
 
   const renderStep2_AuctionTiming = () => (
     <div className="space-y-6">
