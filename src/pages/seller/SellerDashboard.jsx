@@ -10,18 +10,17 @@ const SellerDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Close sidebar automatically on mobile
+  // Auto-adjust sidebar on resize
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
+      if (window.innerWidth < 1024) {
         setSidebarOpen(false);
       } else {
-        setSidebarOpen(true); // optional: reopen on desktop
+        setSidebarOpen(true);
       }
     };
 
-    handleResize(); // Run once on mount
-
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -31,9 +30,9 @@ const SellerDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-transparent">
+    <div className="flex h-screen bg-gray-50">
       {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white shadow-md">
+      <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white shadow-sm">
         <SellerHeader
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
@@ -45,27 +44,40 @@ const SellerDashboard = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-16 h-[calc(100vh-4rem)] bg-transparent z-40 overflow-y-auto transition-all duration-300 ease-in-out`}
+        className="fixed z-40 transition-all duration-300 ease-in-out"
         style={{
-          width: sidebarOpen ? '15rem' : '5rem',
-          left: 3,
+          top: '4.5rem', // 4rem header + 0.5rem gap
+          left: '1rem',
+          width: sidebarOpen ? '15rem' : '4rem',
+          height: 'calc(100vh - 6rem)', // 4.5rem top + 1.5rem bottom
+          borderRadius: '1rem',
+          overflow: 'hidden',
+          boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
         }}
       >
-        <SellerSidebar
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-        />
+        <div className="h-full bg-[#3b396d]">
+          <SellerSidebar
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+          />
+        </div>
       </aside>
 
       {/* Main Content */}
       <main
-        className={`flex-1 pt-16 bg-gray-50 h-[calc(100vh-4rem)] overflow-y-auto transition-all duration-300 ease-in-out`}
+        className="flex-1 pt-20 transition-all duration-300 ease-in-out"
         style={{
-          marginLeft: sidebarOpen ? '16rem' : '5rem',
+          marginLeft: sidebarOpen ? '17.5rem' : '6rem', // sidebar width + margins
+          marginRight: '1rem',
+          marginBottom: '1.5rem',
         }}
       >
-        {/* Apply padding to all child components */}
-        <div className="sm:p-16 p-7">
+        {/* Page Title (non-translated) */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Seller Dashboard</h1>
+        </div>
+
+        <div className="rounded-2xl bg-white p-4 sm:p-6 shadow-sm min-h-[calc(100vh-12rem)]">
           <Outlet />
         </div>
       </main>

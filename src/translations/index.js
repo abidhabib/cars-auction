@@ -904,6 +904,8 @@ export const translations = {
     },
 
     sellerDashboard: {
+      manageProfile:'Manage Profile',
+  "companyProfile": "Company Profile",
       "tabs": {
         "basic": "Basic",
         "pricing": "Pricing",
@@ -977,6 +979,7 @@ export const translations = {
       all: 'All',
       // Sidebar Navigation
       sidebar: {
+        collapse:'<',
         overview: 'Overview',
         inventory: 'My Inventory',
         myAuctions: 'My Auctions',
@@ -2251,6 +2254,9 @@ export const translations = {
 
     sellerDashboard: {
       // Alerts & Messages
+        "companyProfile": "Unternehmensprofil",
+      manageProfile:'Profil verwalten',
+
       "tabs": {
         "basic": "Grunddaten",
         "pricing": "Preisgestaltung",
@@ -3514,6 +3520,8 @@ runningAuctions: "Laufende Auktionen"
       }
     },
     sellerDashboard: {
+        "companyProfile": "Bedrijfsprofiel",
+manageProfile:'Profiel beheren',
       "tabs": {
         "basic": "Basis",
         "pricing": "Prijzen",
