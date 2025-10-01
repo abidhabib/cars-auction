@@ -48,7 +48,7 @@ const SellerDashboard = () => {
         style={{
           top: '4.5rem', // 4rem header + 0.5rem gap
           left: '1rem',
-          width: sidebarOpen ? '15rem' : '4rem',
+          width: sidebarOpen ? '15rem' : '5rem',
           height: 'calc(100vh - 6rem)', // 4.5rem top + 1.5rem bottom
           borderRadius: '1rem',
           overflow: 'hidden',
@@ -67,7 +67,7 @@ const SellerDashboard = () => {
       <main
         className="flex-1 pt-20 transition-all duration-300 ease-in-out"
         style={{
-          marginLeft: sidebarOpen ? '17.5rem' : '6rem', // sidebar width + margins
+          marginLeft: sidebarOpen ? '17.5rem' : '5rem', // sidebar width + margins
           marginRight: '1rem',
           marginBottom: '1.5rem',
         }}

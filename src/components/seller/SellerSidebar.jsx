@@ -24,7 +24,6 @@ const SellerSidebar = ({ sidebarOpen: externalSidebarOpen, setSidebarOpen }) => 
   const navigate = useNavigate();
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
-  // On mobile, sidebar is always controlled externally (e.g., via hamburger)
   const sidebarOpen = isMobile ? externalSidebarOpen : externalSidebarOpen;
 
   useEffect(() => {
@@ -82,7 +81,7 @@ const SellerSidebar = ({ sidebarOpen: externalSidebarOpen, setSidebarOpen }) => 
   return (
     <div className="h-full flex flex-col transition-all duration-300 ease-in-out">
       <div className="h-full bg-[#3b396d] text-white rounded-2xl shadow-lg flex flex-col">
-        <nav className="flex-1 py-6 overflow-y-auto px-3">
+        <nav className="flex-1 py-6 overflow-y-auto px-2">
           <div className="space-y-1">
             {topItems.map((item) => (
               <div key={item.id}>
@@ -98,37 +97,41 @@ const SellerSidebar = ({ sidebarOpen: externalSidebarOpen, setSidebarOpen }) => 
                 >
                   <span className="flex items-center">
                     <span className="flex-shrink-0">{item.icon}</span>
-                    {sidebarOpen && <span className="ml-3 text-sm font-medium">{item.label}</span>}
+                    {sidebarOpen && !isMobile && (
+                      <span className="ml-3 text-sm font-medium">{item.label}</span>
+                    )}
                   </span>
-                  {sidebarOpen && item.hasSubmenu && (
+                  {sidebarOpen && !isMobile && item.hasSubmenu && (
                     <span className="text-white/80 group-hover:text-white">
                       {inventoryExpanded ? <FiChevronUp className="h-4 w-4" /> : <FiChevronDown className="h-4 w-4" />}
                     </span>
                   )}
                 </button>
-
-                {/* Submenu: ONLY show if sidebar is open */}
-                {item.hasSubmenu && inventoryExpanded && sidebarOpen && (
-                  <div id="inventory-submenu" className="mt-1 space-y-1">
-                    {item.submenu.map((sub) => (
-                      <button
-                        key={sub.id}
-                        onClick={() => {
-                          navigate(sub.path);
-                          if (isMobile && setSidebarOpen) setSidebarOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2.5 text-sm rounded-lg transition-colors ${
-                          isActive(sub.path)
-                            ? 'bg-white/20 text-white'
-                            : 'text-white/80 hover:bg-white/10'
-                        }`}
-                        style={{ minHeight: '44px' }} // touch-friendly
-                      >
-                        {sub.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
+{/* Only render submenu if it should be visible */}
+{item.hasSubmenu && inventoryExpanded && (sidebarOpen || !isMobile) && (
+  <div id="inventory-submenu" className="mt-1 space-y-1">
+    {item.submenu.map((sub, index) => (
+      <button
+        key={sub.id}
+        onClick={() => {
+          navigate(sub.path);
+          if (isMobile && setSidebarOpen) setSidebarOpen(false);
+        }}
+        className={`w-full flex items-center px-4 py-3 text-sm rounded-lg transition-colors 
+          ${isActive(sub.path)
+            ? "bg-white/20 text-white"
+            : "text-white/80 hover:text-white hover:bg-white/10"
+          }`}
+      >
+        <span className="flex-shrink-0">
+          {index === 0 ? <FiPackage className="h-4 w-4" /> : <FiShoppingCart className="h-4 w-4" />}
+        </span>
+        {/* Show label on desktop OR when sidebar is open on mobile */}
+        {(sidebarOpen || !isMobile) && <span className="ml-3">{sub.label}</span>}
+      </button>
+    ))}
+  </div>
+)}
               </div>
             ))}
           </div>
@@ -147,7 +150,9 @@ const SellerSidebar = ({ sidebarOpen: externalSidebarOpen, setSidebarOpen }) => 
                 } ${sidebarOpen ? 'px-4 py-3' : 'justify-center w-10 h-10 mx-auto'}`}
               >
                 <span className="flex-shrink-0">{item.icon}</span>
-                {sidebarOpen && <span className="ml-3 text-sm font-medium">{item.label}</span>}
+                {sidebarOpen && !isMobile && (
+                  <span className="ml-3 text-sm font-medium">{item.label}</span>
+                )}
               </button>
             ))}
 
@@ -161,7 +166,7 @@ const SellerSidebar = ({ sidebarOpen: externalSidebarOpen, setSidebarOpen }) => 
                 <span className="flex-shrink-0">
                   {sidebarOpen ? <FiChevronLeft className="h-5 w-5" /> : <FiChevronRight className="h-5 w-5" />}
                 </span>
-                {sidebarOpen && <span className="ml-3 text-sm font-medium">Close</span>}
+                {sidebarOpen && !isMobile && <span className="ml-3 text-sm font-medium">Close</span>}
               </button>
             )}
           </div>
