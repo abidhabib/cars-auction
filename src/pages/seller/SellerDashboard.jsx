@@ -64,10 +64,11 @@ const SellerDashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main
+    
+ <main
         className="flex-1 pt-20 transition-all duration-300 ease-in-out"
         style={{
-          marginLeft: sidebarOpen ? '17.5rem' : '5rem', // sidebar width + margins
+          marginLeft: window.innerWidth < 1024 ? '7rem' : (sidebarOpen ? '17.5rem' : '5rem'),
           marginRight: '1rem',
           marginBottom: '1.5rem',
         }}
@@ -81,6 +82,7 @@ const SellerDashboard = () => {
           <Outlet />
         </div>
       </main>
+      
     </div>
   );
 };
