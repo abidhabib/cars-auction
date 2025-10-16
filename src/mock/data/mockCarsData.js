@@ -1,6 +1,7 @@
 // src/mock/data/mockCarsData.js
 export const loadMockCarsData = () => {
   const now = new Date();
+  const myCompanyId = '1'; // This represents the "current user" for whom we want to show bids
 
   // Helper to generate realistic bids per car
   const generateBids = (car, count = 6) => {

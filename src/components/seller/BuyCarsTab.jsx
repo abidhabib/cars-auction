@@ -31,7 +31,7 @@ import BiddingModal from './BiddingModal';
 import { loadMockCarsData } from '../../mock/data/mockCarsData';
 
 // Memoized Car Image Slider Component
-const CarImageSlider = memo(({ car }) => {
+ export const  CarImageSlider = memo(({ car }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState({});
   const nextImage = useCallback(() => {
@@ -72,7 +72,7 @@ const CarImageSlider = memo(({ car }) => {
           )}
           <img
             src={imgSrc}
-            alt={`${car.vehicleIdentification.make} ${car.vehicleIdentification.model} - Image ${index + 1}`}
+            alt={`${car.vehicleIdentification?.make} ${car.vehicleIdentification?.model} - Image ${index + 1}`}
             className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => handleImageLoad(index)}
             onError={(e) => handleImageError(e, index)}
@@ -198,10 +198,11 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => { // 👈 Removed external
     setCurrentPage(1);
   }, [activeFilters, allCars, searchTerm]);
 
-  const makes = [...new Set(allCars.map(car => car.vehicleIdentification.make))];
+ const makes = [...new Set(allCars.map(car => car.vehicleIdentification.make))];
   const getModelsByMake = (make) => {
     return [...new Set(allCars.filter(car => car.vehicleIdentification.make === make).map(car => car.vehicleIdentification.model))];
   };
+  
 
   const handleFilterChange = (filterName, value) => {
     setActiveFilters(prev => ({
@@ -595,7 +596,7 @@ const BuyCarsTab = ({ searchTerm, setSearchTerm }) => { // 👈 Removed external
                             {car.vehicleIdentification.year} {car.vehicleIdentification.make} {car.vehicleIdentification.model}
                           </h3>
                           <div className="flex items-center flex-shrink-0 ml-2">
-                            <FiDollarSign className="h-4 w-4 text-[#3b396d] mr-0.5" />
+                            {/* <FiDollarSign className="h-4 w-4 text-[#3b396d] mr-0.5" /> */}
                             <span className="text-base font-bold text-[#3b396d] whitespace-nowrap">
                               €{car.price?.toLocaleString()}
                             </span>

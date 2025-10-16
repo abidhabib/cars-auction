@@ -75,7 +75,7 @@ const SellerDashboard = () => {
       >
         {/* Page Title (non-translated) */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Seller Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         </div>
 
         <div className="rounded-2xl bg-white p-4 sm:p-6 shadow-sm min-h-[calc(100vh-12rem)]">

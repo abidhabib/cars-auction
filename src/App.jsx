@@ -196,24 +196,35 @@ function App() {
                   />
 
                   {/* Seller Dashboard - Nested Routes */}
-           <Route path="/Dashboard" element={<SellerDashboardLayout />}>
-  <Route index element={<OverviewTab />} />
-  <Route path="inventory" element={<InventoryTab />} />
-  <Route path="inventory/:id" element={<VehicleDetailPage />} /> {/* 👈 ADD THIS */}
-    <Route path="inventory/:id/edit" element={<EditCarListingWrapper />} /> {/* 👈 NEW */}
+                  <Route path="/Dashboard" element={<SellerDashboardLayout />}>
+                    {/* Main Overview Route - Renders OverviewTab with cards */}
+                    <Route index element={<OverviewTab />} />
+                    {/* Nested Detail Routes for OverviewTab - Also render OverviewTab, which handles the logic */}
+                    {/* Note: These paths must match the ones used in OverviewTab's handleBlockClick */}
+                    <Route path="overview/my-auctions" element={<OverviewTab />} />
+                    <Route path="overview/my-bids" element={<OverviewTab />} />
+                    <Route path="overview/my-favorites" element={<OverviewTab />} />
+                    <Route path="overview/order-history" element={<OverviewTab />} />
+                    <Route path="overview/amount-to-pay" element={<OverviewTab />} />
+                    <Route path="overview/amount-to-receive" element={<OverviewTab />} />
 
-  <Route path="add" element={<AddCarListing />} />
-  <Route path="messages" element={<MessagesTab />} />
-  <Route path="buy" element={<BuyCarsTab />} />
-    <Route path="buy/:id" element={<BuyCarDetailPage />} />
-  <Route path="buy/:id/bid" element={<BiddingPage />} />
-  <Route path="profile" element={<Profile />} />
-  <Route path="inventory/award" element={<AwardCarPage />} />
-<Route path="payment/success" element={<PaymentSuccessPage />} />
-<Route path="payment/failed" element={<PaymentFailedPage />} />
-<Route path="/Dashboard/inventory/invoice/:carId" element={<SellerInvoicePage />} />
-  <Route path="*" element={<Navigate to="/Dashboard" replace />} />
-</Route>
+                    {/* Other Seller Dashboard Routes */}
+                    <Route path="inventory" element={<InventoryTab />} />
+                    <Route path="inventory/:id" element={<VehicleDetailPage />} />
+                    <Route path="inventory/:id/edit" element={<EditCarListingWrapper />} />
+                    <Route path="add" element={<AddCarListing />} />
+                    <Route path="messages" element={<MessagesTab />} />
+                    <Route path="buy" element={<BuyCarsTab />} />
+                    <Route path="buy/:id" element={<BuyCarDetailPage />} />
+                    <Route path="buy/:id/bid" element={<BiddingPage />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="inventory/award" element={<AwardCarPage />} />
+                    <Route path="payment/success" element={<PaymentSuccessPage />} />
+                    <Route path="payment/failed" element={<PaymentFailedPage />} />
+                    <Route path="/Dashboard/inventory/invoice/:carId" element={<SellerInvoicePage />} />
+                    <Route path="*" element={<Navigate to="/Dashboard" replace />} />
+                  </Route>
+
                   {/* Root redirect */}
                   <Route path="/" element={<Navigate to="/home" replace />} />
 
